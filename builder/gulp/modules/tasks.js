@@ -126,6 +126,11 @@ const tasks = {
   /** handle templates and templates-parts folders */
   html: () => stripCommentsAndMinify({
     _path: paths.html
+  }),
+
+  /** handle templates and templates-parts folders */
+  partials: () => stripCommentsAndMinify({
+    _path: paths.partials
   })
 }
 

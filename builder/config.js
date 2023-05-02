@@ -6,7 +6,7 @@ const theme = 'purple-wp'
 
 const route = {
   // sources
-  public: path.resolve(__dirname, './../', './theme/public'),
+  publicSrc: path.resolve(__dirname, './../', './theme/public'),
   src: path.resolve(__dirname, './../', './theme/src'),
 
   // destiny

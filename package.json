@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "watch": "gulp watch",
-    "build": "gulp build"
+    "build": "gulp build",
+    "clean": "gulp clean"
   },
   "keywords": [
     "fintech",

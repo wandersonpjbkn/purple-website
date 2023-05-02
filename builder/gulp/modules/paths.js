@@ -1,57 +1,67 @@
 // modules internal
 import { route } from '../../config'
 
+const { src, publicSrc, dist } = route
+
 // source paths
 const paths = {
   js: {
-    watch: `${route.src}/assets/js/src/*.js`,
-    src: `${route.src}/assets/js/*.js`,
-    dist: `${route.dist}/js`
+    watch: `${src}/assets/js/src/*.js`,
+    src: `${src}/assets/js/*.js`,
+    dist: `${dist}/js`
   },
 
   css: {
-    watch: `${route.src}/assets/scss/src/*.scss`,
-    src: `${route.src}/assets/scss/*.scss`,
-    dist: `${route.dist}/css`
+    watch: `${src}/assets/scss/src/*.scss`,
+    src: `${src}/assets/scss/*.scss`,
+    dist: `${dist}/css`
   },
 
   fonts: {
     src: [
-      `${route.src}/assets/fonts/**/*.+(ttf|woff|woff2)`,
-      // `!${route.src}/assets/fonts/{to-ignore}/**`
+      `${src}/assets/fonts/**/*.+(ttf|woff|woff2)`
+      // `!${src}/assets/fonts/{to-ignore}/**`
     ],
-    dist: `${route.dist}/fonts`
+    dist: `${dist}/fonts`
   },
 
   imgs: {
-    src: `${route.src}/assets/imgs/*.+(png|jpg|gif|svg)`,
-    dist: `${route.dist}/img`
+    src: `${src}/assets/imgs/*.+(png|jpg|gif|svg)`,
+    dist: `${dist}/img`
   },
 
   root: {
     src: [
       // public folder
-      `${route.public}/*.+(php|txt|css|html|png|ico)`,
-      `${route.public}/**/*.+(css|js|png|jpg|gif|svg)`,
+      `${publicSrc}/*.+(php|txt|css|html|png|ico)`,
+      `${publicSrc}/**/*.+(css|js|png|jpg|gif|svg)`,
 
       // src folder
-      `${route.src}/functions.php`
+      `${src}/functions.php`
     ],
-    dist: `${route.dist}/`
+    dist: `${dist}/`
   },
 
   functions: {
-    src: `${route.src}/functions/*.php`,
-    dist: `${route.dist}/functions`
+    src: `${src}/functions/*.php`,
+    dist: `${dist}/functions`
   },
 
   html: {
     src: [
-      `${route.src}/templates-parts/*.php`,
-      `${route.src}/templates-pages/*.php`
+      `${src}/partials/*.php`,
+      `${src}/pages/*.php`
     ],
-    dist: `${route.dist}/`
+    dist: `${dist}/`
   },
+
+  partials: {
+    src: [
+      `${src}/template-parts/*.php`,
+      `${src}/template-parts/**/*.php`
+    ],
+    dist: `${dist}/template-parts`
+  }
 }
 
 export {
