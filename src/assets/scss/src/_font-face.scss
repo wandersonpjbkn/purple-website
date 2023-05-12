@@ -1,0 +1,31 @@
+$font_path: '@/assets/fonts/';
+
+@font-face {
+  font-family: 'FiraSansMedium';
+  src: url($font_path + 'fira-sans/medium/FiraSansMedium.eot');
+  src: url($font_path + 'fira-sans/medium/FiraSansMedium.eot') format('embedded-opentype'),
+       url($font_path + 'fira-sans/medium/FiraSansMedium.woff2') format('woff2'),
+       url($font_path + 'fira-sans/medium/FiraSansMedium.woff') format('woff'),
+       url($font_path + 'fira-sans/medium/FiraSansMedium.ttf') format('truetype'),
+       url($font_path + 'fira-sans/medium/FiraSansMedium.svg#FiraSansMedium') format('svg');
+}
+
+@font-face {
+  font-family: 'FiraSansLight';
+  src: url($font_path + 'fira-sans/light/FiraSansLight.eot');
+  src: url($font_path + 'fira-sans/light/FiraSansLight.eot') format('embedded-opentype'),
+       url($font_path + 'fira-sans/light/FiraSansLight.woff2') format('woff2'),
+       url($font_path + 'fira-sans/light/FiraSansLight.woff') format('woff'),
+       url($font_path + 'fira-sans/light/FiraSansLight.ttf') format('truetype'),
+       url($font_path + 'fira-sans/light/FiraSansLight.svg#FiraSansLight') format('svg');
+}
+
+@font-face {
+  font-family: 'FiraSansBold';
+  src: url($font_path + 'fira-sans/bold/FiraSansBold.eot');
+  src: url($font_path + 'fira-sans/bold/FiraSansBold.eot') format('embedded-opentype'),
+       url($font_path + 'fira-sans/bold/FiraSansBold.woff2') format('woff2'),
+       url($font_path + 'fira-sans/bold/FiraSansBold.woff') format('woff'),
+       url($font_path + 'fira-sans/bold/FiraSansBold.ttf') format('truetype'),
+       url($font_path + 'fira-sans/bold/FiraSansBold.svg#FiraSansBold') format('svg');
+}
