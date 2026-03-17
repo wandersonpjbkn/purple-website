@@ -1,0 +1,84 @@
+{
+  "brand": {
+    "name": "Purple Comunicação",
+    "tagline": "Employer Branding, comunicação interna e estratégia com foco nas pessoas."
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Comunicação com foco em pessoas",
+      "title": "Investir nas pessoas colaboradoras gera resultados financeiros",
+      "subtitle": "A Purple Comunicação nasce da certeza de que employer branding, comunicação interna e ações de engajamento podem fortalecer a cultura e os resultados do negócio.",
+      "primaryCta": "Começar agora",
+      "secondaryCta": "Vamos conversar"
+    },
+    "highlight": {
+      "title": "Vamos te ajudar a atingir melhores resultados",
+      "description": "É importante estar antenado com as tendências de mercado e com as necessidades do seu time. Unimos estratégia, conteúdo e escuta para gerar impacto real."
+    },
+    "services": [
+      {
+        "title": "Diagnóstico",
+        "description": "Mapeamos a percepção interna e identificamos oportunidades de melhoria na experiência dos colaboradores.",
+        "cta": "Começar agora"
+      },
+      {
+        "title": "Descrição de cargos",
+        "description": "Ajudamos sua empresa a estruturar descrições mais claras, humanas e alinhadas à marca empregadora.",
+        "cta": "Começar agora"
+      },
+      {
+        "title": "Pesquisas internas",
+        "description": "Entenda melhor as dores, expectativas e o nível de engajamento das equipes para agir com mais precisão.",
+        "cta": "Começar agora"
+      }
+    ],
+    "cta": {
+      "title": "Colaboradores engajados entregam mais e rendem mais",
+      "description": "Quando a comunicação interna funciona e a marca empregadora é cuidada, a empresa cresce de dentro para fora."
+    },
+    "team": [
+      {
+        "name": "Suelen Fernanda",
+        "bio": "Profissional de marketing digital com experiência em conteúdo, mídia e ações voltadas às pessoas colaboradoras.",
+        "quote": "Foi nas ações focadas nas pessoas colaboradoras que encontrei minha verdadeira vocação."
+      },
+      {
+        "name": "Wanderson PJ",
+        "bio": "Pesquisador de Experiência do Usuário com interesse em marketing, design, psicologia e processos centrados em pessoas.",
+        "quote": "As diversas vivências me ensinaram como é importante se lembrar das pessoas em todos os processos."
+      }
+    ]
+  },
+  "about": {
+    "title": "Sobre nós",
+    "intro": "A Purple Comunicação nasce da certeza de que o foco no colaborador e no seu bem-estar é essencial para empresas que desejam crescer com consistência.",
+    "helpTitle": "Como iremos te ajudar",
+    "helpText": "Com todos os desafios do dia a dia, muitas empresas perdem oportunidades ao deixar de olhar para quem move a organização: as pessoas.",
+    "pillars": [
+      {
+        "title": "Foco no colaborador",
+        "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
+      },
+      {
+        "title": "Comunicação clara",
+        "description": "Transformamos estratégia em narrativas, campanhas e rotinas de comunicação mais consistentes."
+      },
+      {
+        "title": "Marca empregadora",
+        "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
+      }
+    ]
+  },
+  "contact": {
+    "title": "Queremos ouvir de você!",
+    "subtitle": "Adoramos que você chegou aqui. Mande uma mensagem e vamos conversar.",
+    "phone": "+55 19 9 9999-9999",
+    "email": "purplecomunica@gmail.com",
+    "address": "Americana, São Paulo"
+  },
+  "footer": {
+    "newsletterTitle": "Fique por dentro das novidades do mercado",
+    "aboutText": "Na busca por vendas e crescimento, muitas empresas esquecem de olhar para dentro. A Purple Comunicação surge para ajudar marcas a cuidarem melhor da experiência das pessoas colaboradoras.",
+    "topics": ["Employer Branding", "Comunicação Interna", "Inovação"]
+  }
+}
