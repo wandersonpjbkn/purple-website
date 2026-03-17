@@ -49,14 +49,27 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
+
+import { usePageMeta } from '@/composables'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import HeroSection from '@/components/sections/HeroSection.vue'
 import TestimonialsSection from '@/components/sections/TestimonialsSection.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import BlogList from '@/components/blog/BlogList.vue'
+
 import site from '@/data/site.json'
 import posts from '@/data/posts.json'
 
 const featuredPosts = posts.slice(0, 3)
+
+usePageMeta(
+  computed(() => ({
+    title: 'Home',
+    description: '',
+    type: 'article' as const,
+  })),
+)
 </script>
