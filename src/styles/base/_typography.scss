@@ -1,15 +1,16 @@
-// ============================================================
-//  base/_typography.scss
-//  Sistema tipográfico — headings, parágrafos, utilitários
-// ============================================================
-
 @use '../abstracts/mixins' as *;
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: var(--font);
   line-height: 1.08;
   color: var(--text);
-  font-feature-settings: 'kern' 1, 'liga' 1;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1;
 }
 
 h1 {
@@ -54,8 +55,12 @@ p {
   max-width: 62ch;
   line-height: 1.7;
 
-  &--narrow { max-width: 50ch; }
-  &--center { text-align: center; }
+  &--narrow {
+    max-width: 50ch;
+  }
+  &--center {
+    text-align: center;
+  }
 }
 
 .section-eyebrow {
@@ -80,7 +85,9 @@ p {
   &:hover {
     gap: 0.6rem;
 
-    &::after { transform: translateX(2px); }
+    &::after {
+      transform: translateX(2px);
+    }
   }
 }
 

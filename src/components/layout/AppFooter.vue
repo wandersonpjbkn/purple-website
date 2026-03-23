@@ -55,6 +55,7 @@
 import { RouterLink } from 'vue-router'
 
 import site from '@/data/site.json'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 
 const currentYear = new Date().getFullYear()

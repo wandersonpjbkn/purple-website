@@ -1,7 +1,3 @@
-// ============================================================
-//  sections/_hero.scss
-// ============================================================
-
 @use '../abstracts/mixins' as *;
 
 .hero {
@@ -12,19 +8,21 @@
   &::before {
     content: '';
     position: absolute;
-    top: -30%; right: -10%;
+    top: -30%;
+    right: -10%;
     width: 55%;
     aspect-ratio: 1;
-    background: radial-gradient(ellipse at center, rgba(139,47,204,0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(139, 47, 204, 0.08) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  @include respond-to(md) { padding: 3.5rem 0 3rem; }
+  @include respond-to(md) {
+    padding: 3.5rem 0 3rem;
+  }
 }
 
 .hero__grid {
   display: grid;
-  // Esquerda cresce; direita tem largura mínima fixa para não espremer o card
   grid-template-columns: 1fr minmax(300px, 420px);
   gap: 4rem;
   align-items: center;
@@ -65,8 +63,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.6; transform: scale(0.85); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.85);
+  }
 }
 
 // ── Título + typewriter ────────────────────────────────────
@@ -78,7 +83,6 @@
     display: inline;
     font-style: normal;
     white-space: nowrap;
-    // color: var(--purple);
 
     // Sublinhado limão — aparece quando o texto está completo
     &::before {
@@ -86,17 +90,14 @@
       position: absolute;
       // bottom: 0.05em;
       top: 100%;
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       width: 100%;
       height: 0.1em;
       background: var(--lime);
       border-radius: 2px;
-      // transform: scaleX(0);
-      // transform-origin: left;
-      // transition: transform 0.3s var(--ease);
     }
   }
-
 }
 
 // Span controlado por JS — recebe o texto letra a letra
@@ -107,7 +108,9 @@
   display: inline;
   // white-space: nowrap;
 
-  &.is-complete::before { transform: scaleX(1); }
+  &.is-complete::before {
+    transform: scaleX(1);
+  }
 
   // Cursor piscante
   &::after {
@@ -120,12 +123,20 @@
   }
 
   // Animação do cursor durante a pausa
-  &.is-paused::after { animation-duration: 1s; opacity: 1; }
+  &.is-paused::after {
+    animation-duration: 1s;
+    opacity: 1;
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 // ── CTAs ───────────────────────────────────────────────────
@@ -172,11 +183,15 @@
   background: var(--border);
   margin: 0 0.5rem;
 
-  @include respond-to(sm) { display: none; }
+  @include respond-to(sm) {
+    display: none;
+  }
 }
 
 // ── Visual card ────────────────────────────────────────────
-.hero__media { position: relative; }
+.hero__media {
+  position: relative;
+}
 
 .hero__card {
   background: var(--surface);
@@ -190,7 +205,9 @@
   &::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 3px;
     background: linear-gradient(90deg, var(--purple), var(--lime));
   }
@@ -274,27 +291,49 @@
   white-space: nowrap;
 
   .icon {
-    width: 28px; height: 28px;
+    width: 28px;
+    height: 28px;
     border-radius: 8px;
-    display: grid; place-items: center;
+    display: grid;
+    place-items: center;
     font-size: 14px;
     background: var(--purple-100);
     flex-shrink: 0;
   }
 
-  &--1 { top: -1rem; right: -1rem; animation: float1 4s ease-in-out infinite; }
-  &--2 { bottom: -0.5rem; left: -1.5rem; animation: float2 5s ease-in-out infinite; }
+  &--1 {
+    top: -1rem;
+    right: -1rem;
+    animation: float1 4s ease-in-out infinite;
+  }
+  &--2 {
+    bottom: -0.5rem;
+    left: -1.5rem;
+    animation: float2 5s ease-in-out infinite;
+  }
 
-  @include respond-to(md) { display: none; }
+  @include respond-to(md) {
+    display: none;
+  }
 }
 
 @keyframes float1 {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 @keyframes float2 {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
 }
 
 // ── Page hero (páginas internas) ───────────────────────────
@@ -303,5 +342,7 @@
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 
-  h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+  h1 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
 }

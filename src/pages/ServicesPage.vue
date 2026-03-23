@@ -6,7 +6,7 @@
         <p class="section-eyebrow">Soluções</p>
         <h1>{{ site.services.title }}</h1>
         <p class="lead lead--narrow">{{ site.services.subtitle }}</p>
-        <div style="margin-top: 2rem;">
+        <div style="margin-top: 2rem">
           <BaseButton tag="RouterLink" to="/contato">Falar com a Purple</BaseButton>
         </div>
       </BaseContainer>
@@ -46,13 +46,13 @@
               </div>
             </div>
 
-            <div style="margin-top: 2rem;">
+            <div style="margin-top: 2rem">
               <BaseButton tag="RouterLink" to="/contato">Quero este serviço</BaseButton>
             </div>
           </div>
 
           <div class="service-detail__visual">
-            <div class="visual-block" style="min-height: 420px;">
+            <div class="visual-block" style="min-height: 420px">
               <div class="visual-block__icon">{{ service.icon }}</div>
             </div>
           </div>
@@ -61,15 +61,12 @@
     </section>
 
     <!-- ── FAQ rápido / diferenciais ─────────────────── -->
-    <section
-      class="section-block"
-      style="background: var(--purple-900); border-radius: 0;"
-    >
+    <section class="section-block" style="background: var(--purple-900); border-radius: 0">
       <BaseContainer>
         <div class="section-header section-header--center">
-          <p class="section-eyebrow" style="color: var(--lime);">Por que a Purple</p>
-          <h2 style="color: #fff;">Uma comunicação saudável começa dentro</h2>
-          <p class="lead" style="color: rgba(255,255,255,0.6); text-align: center;">
+          <p class="section-eyebrow" style="color: var(--lime)">Por que a Purple</p>
+          <h2 style="color: #fff">Uma comunicação saudável começa dentro</h2>
+          <p class="lead" style="color: rgba(255, 255, 255, 0.6); text-align: center">
             Acreditamos que uma comunicação eficaz é aquela que começa dentro para então ir para fora.
           </p>
         </div>
@@ -93,6 +90,8 @@
 </template>
 
 <script setup lang="ts">
+import { usePageMeta } from '@/composables'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
@@ -103,34 +102,39 @@ const differentials = [
   {
     icon: '🎯',
     title: 'Foco em pessoas',
-    description: 'Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica.'
+    description: 'Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica.',
   },
   {
     icon: '🔍',
     title: 'Diagnóstico antes da ação',
-    description: 'Não propomos soluções genéricas. Primeiro entendemos profundamente o seu contexto.'
+    description: 'Não propomos soluções genéricas. Primeiro entendemos profundamente o seu contexto.',
   },
   {
     icon: '📐',
     title: 'Estratégia e execução',
-    description: 'Acompanhamos do planejamento à implementação, garantindo consistência em cada etapa.'
+    description: 'Acompanhamos do planejamento à implementação, garantindo consistência em cada etapa.',
   },
   {
     icon: '📊',
     title: 'Resultados mensuráveis',
-    description: 'Definimos métricas claras e acompanhamos os indicadores para provar o impacto das ações.'
+    description: 'Definimos métricas claras e acompanhamos os indicadores para provar o impacto das ações.',
   },
   {
     icon: '🤝',
     title: 'Parceria de longo prazo',
-    description: 'Construímos relações duradouras, adaptando as estratégias conforme a empresa cresce.'
+    description: 'Construímos relações duradouras, adaptando as estratégias conforme a empresa cresce.',
   },
   {
     icon: '💡',
     title: 'Visão multidisciplinar',
-    description: 'Unimos marketing, psicologia organizacional e design para soluções mais completas.'
-  }
+    description: 'Unimos marketing, psicologia organizacional e design para soluções mais completas.',
+  },
 ]
+
+usePageMeta({
+  title: 'Serviços',
+  description: 'Conheça as soluções da Purple Comunicação em Employer Branding, Endomarketing e mais.',
+})
 </script>
 
 <style scoped>
@@ -220,15 +224,15 @@ const differentials = [
 }
 
 .differential-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
   transition: background 0.2s var(--ease);
 }
 
 .differential-card:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .differential-card__icon {
@@ -243,7 +247,7 @@ const differentials = [
 }
 
 .differential-card p {
-  color: rgba(255,255,255,0.55);
+  color: rgba(255, 255, 255, 0.55);
   font-size: 0.875rem;
   line-height: 1.65;
 }

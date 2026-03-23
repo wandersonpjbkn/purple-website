@@ -1,9 +1,5 @@
-// src/plugins/vite-plugin-blog.ts
-// Plugin Vite — lê .md em content/posts/, parseia frontmatter + Markdown,
-// expõe via módulo virtual 'virtual:blog-posts' (sem dependências externas).
-
 import type { Plugin } from 'vite'
-import fs   from 'node:fs'
+import fs from 'node:fs'
 import path from 'node:path'
 
 // ── Tipos internos (usados só no plugin) ──────────────────
@@ -42,9 +38,12 @@ function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/m)
   if (!match) return { fm: {}, body: raw }
 
+  const yamlBlock = match[1] ?? ''
+  const body = match[2] ?? ''
+
   const fm: RawFrontmatter = {}
 
-  for (const line of match[1].split('\n')) {
+  for (const line of yamlBlock.split('\n')) {
     const colonIdx = line.indexOf(':')
     if (colonIdx === -1) continue
 
@@ -52,11 +51,10 @@ function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
     const rawVal = line.slice(colonIdx + 1).trim()
 
     if (rawVal.startsWith('[')) {
-      // Array YAML inline: ["a", "b"] ou [a, b]
       ;(fm as Record<string, unknown>)[key] = rawVal
         .replace(/^\[|\]$/g, '')
         .split(',')
-        .map(s => s.trim().replace(/^["']|["']$/g, ''))
+        .map((s) => s.trim().replace(/^["']|["']$/g, ''))
         .filter(Boolean)
     } else if (rawVal === 'true') {
       ;(fm as Record<string, unknown>)[key] = true
@@ -69,11 +67,10 @@ function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
     }
   }
 
-  return { fm, body: match[2] }
+  return { fm, body }
 }
 
 // ── Markdown → HTML ───────────────────────────────────────
-// Injeta id="slug-N" nos h2/h3 para o sumário funcionar.
 
 function slugify(text: string): string {
   return text
@@ -89,19 +86,26 @@ function markdownToHtml(md: string): string {
   let html = md
 
   // Tabelas GFM
-  html = html.replace(
-    /^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm,
-    (_, header: string, rows: string) => {
-      const th = header.split('|').filter(Boolean)
-        .map((c: string) => `<th>${c.trim()}</th>`).join('')
-      const trs = rows.trim().split('\n').map((row: string) => {
-        const tds = row.split('|').filter(Boolean)
-          .map((c: string) => `<td>${c.trim()}</td>`).join('')
+  html = html.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_, header: string, rows: string) => {
+    const th = header
+      .split('|')
+      .filter(Boolean)
+      .map((c: string) => `<th>${c.trim()}</th>`)
+      .join('')
+    const trs = rows
+      .trim()
+      .split('\n')
+      .map((row: string) => {
+        const tds = row
+          .split('|')
+          .filter(Boolean)
+          .map((c: string) => `<td>${c.trim()}</td>`)
+          .join('')
         return `<tr>${tds}</tr>`
-      }).join('')
-      return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`
-    }
-  )
+      })
+      .join('')
+    return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`
+  })
 
   // Code blocks (antes de tudo para não processar conteúdo interno)
   html = html.replace(/```[\w]*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
@@ -113,7 +117,7 @@ function markdownToHtml(md: string): string {
   const headingCounters: Record<string, number> = {}
   html = html.replace(/^(#{2,6}) (.+)$/gm, (_, hashes: string, text: string) => {
     const level = hashes.length
-    const base  = slugify(text)
+    const base = slugify(text)
     headingCounters[base] = (headingCounters[base] ?? 0) + 1
     const id = headingCounters[base] > 1 ? `${base}-${headingCounters[base]}` : base
     return `<h${level} id="${id}">${text}</h${level}>`
@@ -124,28 +128,34 @@ function markdownToHtml(md: string): string {
 
   // Listas não ordenadas
   html = html.replace(/^((?:^- .+\n?)+)/gm, (block: string) => {
-    const items = block.trim().split('\n')
-      .map((l: string) => `<li>${l.replace(/^- /, '')}</li>`).join('')
+    const items = block
+      .trim()
+      .split('\n')
+      .map((l: string) => `<li>${l.replace(/^- /, '')}</li>`)
+      .join('')
     return `<ul>${items}</ul>`
   })
 
   // Listas ordenadas
   html = html.replace(/^((?:^\d+\. .+\n?)+)/gm, (block: string) => {
-    const items = block.trim().split('\n')
-      .map((l: string) => `<li>${l.replace(/^\d+\. /, '')}</li>`).join('')
+    const items = block
+      .trim()
+      .split('\n')
+      .map((l: string) => `<li>${l.replace(/^\d+\. /, '')}</li>`)
+      .join('')
     return `<ol>${items}</ol>`
   })
 
   // Inline
-  html = html.replace(/\*\*(.+?)\*\*/g,        '<strong>$1</strong>')
-  html = html.replace(/\*(.+?)\*/g,             '<em>$1</em>')
-  html = html.replace(/`([^`]+)`/g,             '<code>$1</code>')
-  html = html.replace(/\[(.+?)\]\((.+?)\)/g,    '<a href="$2">$1</a>')
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>')
+  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
 
   // Parágrafos
   html = html
     .split(/\n\n+/)
-    .map(block => {
+    .map((block) => {
       block = block.trim()
       if (!block) return ''
       if (/^<(h[1-6]|ul|ol|pre|blockquote|table|hr)/.test(block)) return block
@@ -163,7 +173,7 @@ function countWords(text: string): number {
 // ── Plugin Vite ───────────────────────────────────────────
 
 const VIRTUAL_ID = 'virtual:blog-posts'
-const RESOLVED   = '\0' + VIRTUAL_ID
+const RESOLVED = '\0' + VIRTUAL_ID
 
 export function blogPlugin(): Plugin {
   return {
@@ -188,36 +198,35 @@ export function getAllCategories() { return []; }
 `
       if (!fs.existsSync(postsDir)) return empty
 
-      const files = fs.readdirSync(postsDir)
+      const files = fs
+        .readdirSync(postsDir)
         .filter((f: string) => f.endsWith('.md'))
         .sort()
 
       const blogPosts: BlogPost[] = files.map((file: string) => {
-        const raw          = fs.readFileSync(path.join(postsDir, file), 'utf-8')
+        const raw = fs.readFileSync(path.join(postsDir, file), 'utf-8')
         const { fm, body } = parseFrontmatter(raw)
-        const html         = markdownToHtml(body)
-        const wordCount    = countWords(body)
+        const html = markdownToHtml(body)
+        const wordCount = countWords(body)
 
         return {
-          title:     fm.title     ?? '',
-          slug:      fm.slug      ?? file.replace('.md', ''),
-          excerpt:   fm.excerpt   ?? '',
-          date:      fm.date      ?? '',
-          author:    fm.author    ?? '',
-          category:  fm.category  ?? '',
-          tags:      fm.tags      ?? [],
-          readTime:  fm.readTime  ?? Math.ceil(wordCount / 200),
-          featured:  fm.featured  ?? false,
-          cover:     fm.cover     ?? '',
+          title: fm.title ?? '',
+          slug: fm.slug ?? file.replace('.md', ''),
+          excerpt: fm.excerpt ?? '',
+          date: fm.date ?? '',
+          author: fm.author ?? '',
+          category: fm.category ?? '',
+          tags: fm.tags ?? [],
+          readTime: fm.readTime ?? Math.ceil(wordCount / 200),
+          featured: fm.featured ?? false,
+          cover: fm.cover ?? '',
           html,
           wordCount,
         }
       })
 
       // Mais recente primeiro
-      blogPosts.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      )
+      blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
       return `
 export const posts = ${JSON.stringify(blogPosts, null, 0)};

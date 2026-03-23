@@ -1,21 +1,32 @@
-// ============================================================
-//  abstracts/_mixins.scss
-//  Mixins reutilizáveis
-// ============================================================
-
 // ── Breakpoints ────────────────────────────────────────────
-$bp-xl:  1280px;
-$bp-lg:  1024px;
-$bp-md:  900px;
-$bp-sm:  640px;
-$bp-xs:  420px;
+$bp-xl: 1280px;
+$bp-lg: 1024px;
+$bp-md: 900px;
+$bp-sm: 640px;
+$bp-xs: 420px;
 
 @mixin respond-to($bp) {
-  @if $bp == xl    { @media (max-width: #{$bp-xl}) { @content; } }
-  @else if $bp == lg { @media (max-width: #{$bp-lg}) { @content; } }
-  @else if $bp == md { @media (max-width: #{$bp-md}) { @content; } }
-  @else if $bp == sm { @media (max-width: #{$bp-sm}) { @content; } }
-  @else if $bp == xs { @media (max-width: #{$bp-xs}) { @content; } }
+  @if $bp == xl {
+    @media (max-width: #{$bp-xl}) {
+      @content;
+    }
+  } @else if $bp == lg {
+    @media (max-width: #{$bp-lg}) {
+      @content;
+    }
+  } @else if $bp == md {
+    @media (max-width: #{$bp-md}) {
+      @content;
+    }
+  } @else if $bp == sm {
+    @media (max-width: #{$bp-sm}) {
+      @content;
+    }
+  } @else if $bp == xs {
+    @media (max-width: #{$bp-xs}) {
+      @content;
+    }
+  }
 }
 
 // ── Superfície card ────────────────────────────────────────
@@ -29,7 +40,10 @@ $bp-xs:  420px;
 
 // ── Card hover lift ────────────────────────────────────────
 @mixin card-hover {
-  transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition:
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    border-color 0.2s var(--ease);
 
   &:hover {
     box-shadow: var(--shadow-glow);
@@ -72,7 +86,7 @@ $bp-xs:  420px;
     right: -10%;
     width: 55%;
     aspect-ratio: 1;
-    background: radial-gradient(ellipse at center, rgba(139,47,204,#{$opacity}) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(139, 47, 204, #{$opacity}) 0%, transparent 70%);
     pointer-events: none;
   }
 }
@@ -102,7 +116,11 @@ $bp-xs:  420px;
 
 // ── Clamp fluido de tamanho de fonte ──────────────────────
 @mixin fluid-type($min, $max, $min-vw: 360px, $max-vw: 1200px) {
-  font-size: clamp(#{$min}, calc(#{$min} + (#{strip-unit($max - $min)}) * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})), #{$max});
+  font-size: clamp(
+    #{$min},
+    calc(#{$min} + (#{strip-unit($max - $min)}) * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})),
+    #{$max}
+  );
 }
 
 @function strip-unit($number) {

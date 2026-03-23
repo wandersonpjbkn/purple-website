@@ -8,7 +8,9 @@
           <p class="lead">{{ subtitle }}</p>
           <div class="hero__actions">
             <BaseButton tag="RouterLink" to="/contato">{{ primaryCta }}</BaseButton>
-            <BaseButton v-if="secondaryCta" tag="RouterLink" to="/sobre" variant="secondary">{{ secondaryCta }}</BaseButton>
+            <BaseButton v-if="secondaryCta" tag="RouterLink" to="/sobre" variant="secondary">{{
+              secondaryCta
+            }}</BaseButton>
           </div>
         </div>
         <div class="hero__media" aria-hidden="true">

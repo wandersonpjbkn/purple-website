@@ -5,7 +5,9 @@
       :disabled="page === 1"
       aria-label="Página anterior"
       @click="$emit('change', page - 1)"
-    >← Anterior</button>
+    >
+      ← Anterior
+    </button>
 
     <div class="pagination-pages">
       <template v-for="n in displayedPages" :key="n">
@@ -17,7 +19,9 @@
           :aria-label="`Página ${n}`"
           :aria-current="n === page ? 'page' : undefined"
           @click="$emit('change', n as number)"
-        >{{ n }}</button>
+        >
+          {{ n }}
+        </button>
       </template>
     </div>
 
@@ -26,7 +30,9 @@
       :disabled="page === totalPages"
       aria-label="Próxima página"
       @click="$emit('change', page + 1)"
-    >Próxima →</button>
+    >
+      Próxima →
+    </button>
   </nav>
 </template>
 
@@ -95,7 +101,10 @@ const displayedPages = computed(() => {
     color: var(--purple);
   }
 
-  &:disabled { opacity: 0.35; cursor: not-allowed; }
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
 
   &--page {
     width: 40px;

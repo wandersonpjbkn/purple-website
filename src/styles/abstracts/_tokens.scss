@@ -1,60 +1,54 @@
-// ============================================================
-//  abstracts/_tokens.scss
-//  Tokens de design como CSS custom properties
-//  (ficam no :root para uso via var() no HTML e em componentes Vue)
-// ============================================================
-
 :root {
   // ── Paleta Purple ──────────────────────────────────────
   --purple-900: #1a0533;
   --purple-800: #2d0b55;
   --purple-700: #4a1280;
   --purple-600: #6b1faa;
-  --purple:     #8b2fcc;
+  --purple: #8b2fcc;
   --purple-400: #a855d4;
   --purple-100: #f0e4fb;
-  --purple-50:  #faf5ff;
+  --purple-50: #faf5ff;
 
   // ── Acento verde-limão ─────────────────────────────────
-  --lime:       #c5e22e;
-  --lime-dark:  #9bb81f;
+  --lime: #c5e22e;
+  --lime-dark: #9bb81f;
   --lime-light: #e8f79a;
 
   // ── Tipografia / texto ─────────────────────────────────
-  --ink:           #0f0618;
-  --text:          #1a0533;
-  --muted:         #6b5c7e;
-  --subtle:        #9c8aad;
+  --ink: #0f0618;
+  --text: #1a0533;
+  --muted: #6b5c7e;
+  --subtle: #9c8aad;
 
   // ── Superfícies ────────────────────────────────────────
-  --surface:       #ffffff;
-  --bg:            #faf7fd;
-  --bg-alt:        #f4eefb;
+  --surface: #ffffff;
+  --bg: #faf7fd;
+  --bg-alt: #f4eefb;
 
   // ── Bordas ─────────────────────────────────────────────
-  --border:        #e4d9f0;
+  --border: #e4d9f0;
   --border-subtle: #f0e8f8;
 
   // ── Layout ─────────────────────────────────────────────
-  --container:     1200px;
+  --container: 1200px;
 
   // ── Border radius ──────────────────────────────────────
-  --radius-sm:     8px;
-  --radius:        16px;
-  --radius-lg:     24px;
-  --radius-xl:     32px;
-  --radius-pill:   999px;
+  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
 
   // ── Tipografia ─────────────────────────────────────────
-  --font:          'Plus Jakarta Sans', sans-serif;
+  --font: 'Plus Jakarta Sans', sans-serif;
 
   // ── Sombras ────────────────────────────────────────────
-  --shadow-sm:  0 1px 3px rgba(26,5,51,0.06), 0 1px 2px rgba(26,5,51,0.04);
-  --shadow:     0 4px 16px rgba(26,5,51,0.08), 0 1px 4px rgba(26,5,51,0.05);
-  --shadow-lg:  0 12px 40px rgba(26,5,51,0.12), 0 4px 12px rgba(26,5,51,0.06);
-  --shadow-glow:   0 0 0 1px rgba(139,47,204,0.12), 0 8px 32px rgba(139,47,204,0.14);
+  --shadow-sm: 0 1px 3px rgba(26, 5, 51, 0.06), 0 1px 2px rgba(26, 5, 51, 0.04);
+  --shadow: 0 4px 16px rgba(26, 5, 51, 0.08), 0 1px 4px rgba(26, 5, 51, 0.05);
+  --shadow-lg: 0 12px 40px rgba(26, 5, 51, 0.12), 0 4px 12px rgba(26, 5, 51, 0.06);
+  --shadow-glow: 0 0 0 1px rgba(139, 47, 204, 0.12), 0 8px 32px rgba(139, 47, 204, 0.14);
 
   // ── Transições ─────────────────────────────────────────
-  --ease:          cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
 }

@@ -2,16 +2,11 @@
   <header class="site-header" :class="{ scrolled: isScrolled }">
     <BaseContainer>
       <div class="site-header__inner">
-
         <!-- Logo / Brand -->
         <RouterLink to="/" class="brand" aria-label="Purple Comunicação — Home">
-          <!--
-            Quando o logo SVG/PNG estiver disponível, substitua o bloco abaixo:
-            <img src="@/assets/logo-ppl.svg" alt="ppl comunicação" class="brand__logo" />
-
-            Por enquanto, usamos a versão tipográfica:
-          -->
-          <span class="brand__ppl">ppl</span><span class="brand__dot">.</span><span class="brand__sub">comunicação</span>
+          <!-- <img src="@/assets/logo-ppl.svg" alt="ppl comunicação" class="brand__logo" /> -->
+          <span class="brand__ppl">ppl</span><span class="brand__dot">.</span
+          ><span class="brand__sub">comunicação</span>
         </RouterLink>
 
         <!-- Nav desktop -->
@@ -48,6 +43,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 
@@ -63,7 +59,6 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 </script>
 
 <style scoped>
-/* Brand tipográfico — substituir pela tag <img> quando o logo for entregue */
 .brand {
   display: flex;
   align-items: baseline;
@@ -156,9 +151,10 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 }
 
 @media (max-width: 900px) {
-  .nav-toggle { display: flex; }
+  .nav-toggle {
+    display: flex;
+  }
 
-  /* Esconde o botão CTA do header em mobile (aparece no nav-mobile) */
   .site-header__inner > .button {
     display: none;
   }

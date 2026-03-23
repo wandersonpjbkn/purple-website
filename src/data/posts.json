@@ -1,5 +1,4 @@
-[
-  {
+[{
     "id": 1,
     "title": "Lideranças globais que estão se apoiando em Employer Branding",
     "slug": "liderancas-globais-employer-branding",
@@ -10,8 +9,7 @@
     "date": "2026-03-01",
     "readTime": "8 min",
     "featured": true,
-    "content": [
-      {
+    "content": [{
         "id": "introducao",
         "title": "Introdução",
         "body": [
@@ -47,16 +45,14 @@
     "author": "Purple Team",
     "date": "2026-02-18",
     "readTime": "8 min",
-    "content": [
-      {
-        "id": "mercado",
-        "title": "Cenário atual",
-        "body": [
-          "Os investimentos em cultura, marca empregadora e comunicação interna deixaram de ser apenas complementares e passaram a fazer parte da estratégia do negócio.",
-          "Empresas que amadurecem essas frentes tendem a reduzir ruídos, fortalecer alinhamento e melhorar a percepção de valor das equipes."
-        ]
-      }
-    ]
+    "content": [{
+      "id": "mercado",
+      "title": "Cenário atual",
+      "body": [
+        "Os investimentos em cultura, marca empregadora e comunicação interna deixaram de ser apenas complementares e passaram a fazer parte da estratégia do negócio.",
+        "Empresas que amadurecem essas frentes tendem a reduzir ruídos, fortalecer alinhamento e melhorar a percepção de valor das equipes."
+      ]
+    }]
   },
   {
     "id": 3,
@@ -68,15 +64,13 @@
     "author": "Purple Team",
     "date": "2026-01-10",
     "readTime": "8 min",
-    "content": [
-      {
-        "id": "planejamento",
-        "title": "Planejamento",
-        "body": [
-          "Ter datas mapeadas ajuda a criar campanhas mais intencionais e alinhadas ao contexto da empresa e das pessoas colaboradoras.",
-          "Com um calendário editorial simples, já é possível ganhar previsibilidade e consistência nas iniciativas."
-        ]
-      }
-    ]
+    "content": [{
+      "id": "planejamento",
+      "title": "Planejamento",
+      "body": [
+        "Ter datas mapeadas ajuda a criar campanhas mais intencionais e alinhadas ao contexto da empresa e das pessoas colaboradoras.",
+        "Com um calendário editorial simples, já é possível ganhar previsibilidade e consistência nas iniciativas."
+      ]
+    }]
   }
 ]

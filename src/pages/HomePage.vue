@@ -2,7 +2,6 @@
   <section class="hero">
     <BaseContainer>
       <div class="hero__grid">
-
         <!-- Coluna texto -->
         <div>
           <div class="hero__kicker">
@@ -12,7 +11,7 @@
 
           <h1 class="hero__title">
             <span v-html="site.home.hero.titlePrefix" />
-            <br>
+            <br />
             <span ref="typewriterEl" class="hero__typewriter" />
           </h1>
 
@@ -30,17 +29,17 @@
           <!-- 3 stats compactos abaixo das CTAs -->
           <div class="hero__stat">
             <div>
-              <div class="hero__stat-number">57<span style="color:var(--lime)">%</span></div>
+              <div class="hero__stat-number">57<span style="color: var(--lime)">%</span></div>
               <div class="hero__stat-label">sem engajamento no trabalho</div>
             </div>
             <div class="hero__stat-divider"></div>
             <div>
-              <div class="hero__stat-number">4<span style="color:var(--lime)">x</span></div>
+              <div class="hero__stat-number">4<span style="color: var(--lime)">x</span></div>
               <div class="hero__stat-label">mais produtivas com boa cultura</div>
             </div>
             <div class="hero__stat-divider"></div>
             <div>
-              <div class="hero__stat-number">17<span style="color:var(--lime)">%</span></div>
+              <div class="hero__stat-number">17<span style="color: var(--lime)">%</span></div>
               <div class="hero__stat-label">mais receita com engajamento</div>
             </div>
           </div>
@@ -50,7 +49,7 @@
         <div class="hero__media">
           <div class="hero__card">
             <div class="hero__card-label">Nível de engajamento</div>
-            <div class="hero__card-value">+43<span style="color:var(--lime);font-size:1.8rem">%</span></div>
+            <div class="hero__card-value">+43<span style="color: var(--lime); font-size: 1.8rem">%</span></div>
             <div class="hero__card-sub">após 6 meses de endomarketing estruturado</div>
             <div class="hero__card-bar">
               <div class="hero__card-bar-fill" style="width: 78%"></div>
@@ -70,7 +69,6 @@
             Comunicação Interna
           </div>
         </div>
-
       </div>
     </BaseContainer>
   </section>
@@ -86,7 +84,7 @@
           <ul class="feature-list">
             <li v-for="benefit in site.home.highlight.benefits" :key="benefit">{{ benefit }}</li>
           </ul>
-          <div style="margin-top: 2rem;">
+          <div style="margin-top: 2rem">
             <BaseButton tag="RouterLink" to="/sobre" variant="secondary">Conheça a Purple</BaseButton>
           </div>
         </div>
@@ -94,12 +92,10 @@
     </BaseContainer>
   </section>
 
-  <!-- ══════════════════════════════════════════════════
-       SERVIÇOS
-       Heurística: grid 3+1 mantido. Título mais direto.
-       Removido subtítulo redundante com a descrição dos cards.
-  ═══════════════════════════════════════════════════ -->
-  <section class="section-block" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <section
+    class="section-block"
+    style="background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border)"
+  >
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow">Soluções</p>
@@ -107,7 +103,7 @@
       </div>
       <div class="services-grid">
         <article
-          v-for="service in site.home.services.filter(s => !s.featured)"
+          v-for="service in site.home.services.filter((s) => !s.featured)"
           :key="service.id"
           class="service-card"
         >
@@ -117,19 +113,21 @@
           <RouterLink class="text-link" :to="`/servicos#${service.id}`">{{ service.cta }}</RouterLink>
         </article>
         <article
-          v-for="service in site.home.services.filter(s => s.featured)"
+          v-for="service in site.home.services.filter((s) => s.featured)"
           :key="service.id"
           class="service-card service-card--featured"
         >
           <div>
             <h3>{{ service.title }}</h3>
             <p>{{ service.description }}</p>
-            <RouterLink class="text-link" :to="`/servicos#${service.id}`" style="color:var(--lime)">{{ service.cta }}</RouterLink>
+            <RouterLink class="text-link" :to="`/servicos#${service.id}`" style="color: var(--lime)">{{
+              service.cta
+            }}</RouterLink>
           </div>
           <div class="service-card__icon">{{ service.icon }}</div>
         </article>
       </div>
-      <div style="text-align:center;margin-top:2.5rem;">
+      <div style="text-align: center; margin-top: 2.5rem">
         <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
       </div>
     </BaseContainer>
@@ -151,7 +149,9 @@
           class="panorama-card"
           :class="{ 'panorama-card--highlight': stat.highlight }"
         >
-          <span class="panorama-card__number">{{ stat.number }}<span>{{ stat.suffix }}</span></span>
+          <span class="panorama-card__number"
+            >{{ stat.number }}<span>{{ stat.suffix }}</span></span
+          >
           <p class="panorama-card__label">{{ stat.label }}</p>
           <p v-if="stat.comparison" class="panorama-card__body">{{ stat.comparison }}</p>
           <span class="panorama-card__source">{{ stat.source }}</span>
@@ -161,11 +161,7 @@
       <hr class="panorama-divider" />
 
       <div class="panorama-context">
-        <div
-          v-for="item in site.home.panorama.context"
-          :key="item.strong"
-          class="panorama-context__item"
-        >
+        <div v-for="item in site.home.panorama.context" :key="item.strong" class="panorama-context__item">
           <span class="panorama-context__dot"></span>
           <p class="panorama-context__text">
             <strong>{{ item.strong }}</strong> — {{ item.text }}
@@ -181,8 +177,10 @@
         <div>
           <p class="section-eyebrow">{{ site.home.process.eyebrow }}</p>
           <h2>{{ site.home.process.title }}</h2>
-          <p class="lead">Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.</p>
-          <div style="margin-top:2rem;">
+          <p class="lead">
+            Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.
+          </p>
+          <div style="margin-top: 2rem">
             <BaseButton tag="RouterLink" to="/contato">Quero começar</BaseButton>
           </div>
         </div>
@@ -199,12 +197,14 @@
     </BaseContainer>
   </section>
 
-  <section class="section-block" style="background:var(--surface);border-top:1px solid var(--border);">
+  <section class="section-block" style="background: var(--surface); border-top: 1px solid var(--border)">
     <BaseContainer>
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:2.5rem;">
+      <div
+        style="display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 2.5rem"
+      >
         <div>
           <p class="section-eyebrow">Blog</p>
-          <h2 style="margin-bottom:0;">Conteúdos recentes</h2>
+          <h2 style="margin-bottom: 0">Conteúdos recentes</h2>
         </div>
         <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
       </div>
@@ -214,10 +214,10 @@
 
   <section class="section-block">
     <BaseContainer>
-      <div class="section-header section-header--center" style="margin-bottom:2.5rem;">
+      <div class="section-header section-header--center" style="margin-bottom: 2.5rem">
         <p class="section-eyebrow">Quem somos</p>
-        <h2>Um espaço para pessoas,<br>feito por pessoas</h2>
-        <p class="lead lead--narrow" style="text-align:center;margin-top:0.75rem;">
+        <h2>Um espaço para pessoas,<br />feito por pessoas</h2>
+        <p class="lead lead--narrow" style="text-align: center; margin-top: 0.75rem">
           Nascemos inconformados com lideranças que adoecem times e espaços que não integram as pessoas.
         </p>
       </div>
@@ -226,7 +226,7 @@
           <div class="team-card__avatar">{{ member.name.charAt(0) }}</div>
           <h3>{{ member.name }}</h3>
           <p class="team-card__role">{{ member.role }}</p>
-          <p style="font-size:0.9rem;">{{ member.bio }}</p>
+          <p style="font-size: 0.9rem">{{ member.bio }}</p>
           <blockquote v-if="member.quote">"{{ member.quote }}"</blockquote>
         </article>
       </div>
@@ -240,13 +240,13 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
+import site from '@/data/site.json'
+import posts from '@/data/posts.json'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import BlogList from '@/components/blog/BlogList.vue'
-
-import site from '@/data/site.json'
-import posts from '@/data/posts.json'
 
 const featuredPosts = posts.slice(0, 3)
 
@@ -254,23 +254,16 @@ const featuredPosts = posts.slice(0, 3)
 const typewriterEl = ref<HTMLElement | null>(null)
 const phrases = site.home.hero.titleRotating
 
-let phraseIndex  = 0
-let charIndex    = 0
-let isDeleting   = false
+let phraseIndex = 0
+let charIndex = 0
+let isDeleting = false
 let timeoutId: ReturnType<typeof setTimeout> | null = null
 
-/**
- * Velocidades (ms):
- *   typeSpeed   → tempo entre cada letra sendo digitada
- *   deleteSpeed → tempo entre cada letra sendo apagada
- *   pauseAfter  → pausa depois que termina de digitar
- *   pauseEmpty  → pausa quando o campo está vazio
- */
 const SPEEDS = {
-  type:        65,
-  delete:      35,
+  type: 65,
+  delete: 35,
   pauseAfter: 3500,
-  pauseEmpty:  350,
+  pauseEmpty: 350,
 }
 
 function tick() {
@@ -278,15 +271,14 @@ function tick() {
   if (!el) return
 
   const current = phrases[phraseIndex]
+  if (current === undefined) return
 
   if (isDeleting) {
-    // Apaga uma letra
-    charIndex--
+    charIndex -= 1
     el.textContent = current.slice(0, charIndex)
     el.classList.remove('is-complete', 'is-paused')
 
     if (charIndex === 0) {
-      // Acabou de apagar — pausa antes de digitar a próxima
       isDeleting = false
       phraseIndex = (phraseIndex + 1) % phrases.length
       el.classList.remove('is-paused')
@@ -295,14 +287,11 @@ function tick() {
     }
 
     timeoutId = setTimeout(tick, SPEEDS.delete)
-
   } else {
-    // Digita uma letra
-    charIndex++
+    charIndex += 1
     el.textContent = current.slice(0, charIndex)
 
     if (charIndex === current.length) {
-      // Terminou de digitar — acende sublinhado e pausa
       el.classList.add('is-complete', 'is-paused')
       isDeleting = true
       timeoutId = setTimeout(tick, SPEEDS.pauseAfter)
@@ -314,7 +303,6 @@ function tick() {
 }
 
 onMounted(() => {
-  // Pequeno delay para não começar imediatamente
   timeoutId = setTimeout(tick, 600)
 })
 

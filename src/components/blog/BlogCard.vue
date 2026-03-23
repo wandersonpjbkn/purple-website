@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+
 import type { Post } from '@/types/post'
 
 defineProps<{

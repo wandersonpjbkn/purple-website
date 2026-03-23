@@ -1,10 +1,8 @@
 <template>
   <div v-if="post">
-
     <!-- ── Hero ──────────────────────────────────────── -->
     <section class="post-hero">
       <BaseContainer>
-
         <nav class="post-breadcrumb" aria-label="Navegação">
           <RouterLink to="/blog">Blog</RouterLink>
           <span aria-hidden="true">›</span>
@@ -17,10 +15,9 @@
 
         <div class="post-hero__inner">
           <div class="post-hero__meta">
-            <RouterLink
-              :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
-              class="post-category-badge"
-            >{{ post.category }}</RouterLink>
+            <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`" class="post-category-badge">{{
+              post.category
+            }}</RouterLink>
             <span class="post-hero__sep" aria-hidden="true">·</span>
             <time :datetime="post.date">{{ formatDate(post.date) }}</time>
             <span class="post-hero__sep" aria-hidden="true">·</span>
@@ -30,11 +27,7 @@
           <h1>{{ post.title }}</h1>
           <p class="post-hero__excerpt">{{ post.excerpt }}</p>
 
-          <RouterLink
-            v-if="author"
-            :to="`/blog/autor/${post.author}`"
-            class="post-hero__author"
-          >
+          <RouterLink v-if="author" :to="`/blog/autor/${post.author}`" class="post-hero__author">
             <div class="post-hero__avatar" aria-hidden="true">{{ author.name.charAt(0) }}</div>
             <div>
               <strong>{{ author.name }}</strong>
@@ -49,36 +42,27 @@
     <section class="section-block section-block--sm">
       <BaseContainer>
         <div class="post-layout">
-
           <!-- Sumário lateral -->
           <aside class="post-toc" aria-label="Sumário do artigo">
             <div v-if="headings.length" class="sidebar-box">
               <h3>Neste artigo</h3>
               <ul>
                 <li v-for="h in headings" :key="h.id">
-                  <a
-                    :href="`#${h.id}`"
-                    :class="{ 'toc-h3': h.level === 3 }"
-                  >{{ h.text }}</a>
+                  <a :href="`#${h.id}`" :class="{ 'toc-h3': h.level === 3 }">{{ h.text }}</a>
                 </li>
               </ul>
             </div>
 
             <div class="sidebar-box">
               <h3>Categoria</h3>
-              <RouterLink
-                :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
-                class="sidebar-category-link"
-              >{{ post.category }}</RouterLink>
+              <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`" class="sidebar-category-link">{{
+                post.category
+              }}</RouterLink>
             </div>
           </aside>
 
           <!-- Corpo do post -->
-          <article
-            class="prose"
-            v-html="post.html"
-          />
-
+          <article class="prose" v-html="post.html" />
         </div>
       </BaseContainer>
     </section>
@@ -87,7 +71,7 @@
     <section
       v-if="author"
       class="section-block section-block--sm"
-      style="background:var(--bg-alt);border-top:1px solid var(--border);"
+      style="background: var(--bg-alt); border-top: 1px solid var(--border)"
     >
       <BaseContainer>
         <div class="post-author-card">
@@ -99,9 +83,7 @@
             <h3>{{ author.name }}</h3>
             <p class="post-author-card__role">{{ author.role }}</p>
             <p>{{ author.bio }}</p>
-            <RouterLink :to="`/blog/autor/${post.author}`" class="text-link">
-              Ver todos os posts
-            </RouterLink>
+            <RouterLink :to="`/blog/autor/${post.author}`" class="text-link"> Ver todos os posts </RouterLink>
           </div>
         </div>
       </BaseContainer>
@@ -111,7 +93,7 @@
     <section
       v-if="related.length"
       class="section-block"
-      style="background:var(--surface);border-top:1px solid var(--border);"
+      style="background: var(--surface); border-top: 1px solid var(--border)"
     >
       <BaseContainer>
         <div class="post-related-header">
@@ -122,16 +104,10 @@
           <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
         </div>
         <div class="post-related-grid">
-          <PostCard
-            v-for="p in related"
-            :key="p.slug"
-            :post="p"
-            variant="grid"
-          />
+          <PostCard v-for="p in related" :key="p.slug" :post="p" variant="grid" />
         </div>
       </BaseContainer>
     </section>
-
   </div>
 
   <!-- 404 -->
@@ -139,7 +115,7 @@
     <BaseContainer>
       <h1>Post não encontrado</h1>
       <p>O post que você está procurando não existe ou foi removido.</p>
-      <div style="margin-top:1.5rem;">
+      <div style="margin-top: 1.5rem">
         <BaseButton tag="RouterLink" to="/blog">← Voltar para o blog</BaseButton>
       </div>
     </BaseContainer>
@@ -147,49 +123,62 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { computed, onMounted } from 'vue'
+import { useRouter, useRoute, RouterLink } from 'vue-router'
+
 import { getPost, posts } from 'virtual:blog-posts'
+import type { Post } from 'virtual:blog-posts'
+
+import { formatDate, getAuthor, usePageMeta } from '@/composables'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
-import BaseButton    from '@/components/ui/BaseButton.vue'
-import PostCard      from '@/components/blog/PostCard.vue'
-import { formatDate, getAuthor } from '@/composables/useBlog'
-import { usePageMeta } from '@/composables'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import PostCard from '@/components/blog/PostCard.vue'
 
-const route  = useRoute()
-const post   = computed(() => getPost(route.params.slug as string))
-const author = computed(() => post.value ? getAuthor(post.value.author) : undefined)
+const route = useRoute()
+const router = useRouter()
 
-// SEO
-usePageMeta(computed(() => ({
-  title:       post.value?.title   ?? 'Post',
-  description: post.value?.excerpt ?? '',
-  type:        'article' as const,
-})))
+onMounted(() => {
+  if (!route.params.slug) return router.push({ name: 'blog' })
+})
 
-// Posts relacionados (mesma categoria ou mesmo autor, exceto o atual)
+const slug = computed(() => {
+  const s = route.params.slug!
+  return Array.isArray(s) ? (s[0] ?? '') : s
+})
+
+const post = computed(() => getPost(slug.value))
+const author = computed(() => (post.value ? getAuthor(post.value.author) : undefined))
+
+usePageMeta(
+  computed(() => ({
+    title: post.value?.title ?? 'Post',
+    description: post.value?.excerpt ?? '',
+    type: 'article' as const,
+  })),
+)
+
+// Posts relacionados
 const related = computed(() => {
-  if (!post.value) return []
+  const current = post.value
+  if (!current) return []
   return posts
-    .filter(p =>
-      p.slug !== post.value!.slug &&
-      (p.category === post.value!.category || p.author === post.value!.author)
-    )
+    .filter((p: Post) => p.slug !== current.slug && (p.category === current.category || p.author === current.author))
     .slice(0, 3)
 })
 
-// Sumário — extrai h2/h3 do HTML gerado com id real pelo plugin
+// Sumário — extrai h2/h3 com id do HTML gerado pelo plugin
 const headings = computed(() => {
-  if (!post.value) return []
+  const current = post.value
+  if (!current) return []
   const re = /<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/gi
   const result: { level: number; id: string; text: string }[] = []
   let m: RegExpExecArray | null
-  const src = post.value.html
-  while ((m = re.exec(src)) !== null) {
+  while ((m = re.exec(current.html)) !== null) {
     result.push({
-      level: parseInt(m[1]),
-      id:    m[2],
-      text:  m[3].replace(/<[^>]+>/g, ''),
+      level: parseInt(m[1] ?? '2'),
+      id: m[2] ?? '',
+      text: (m[3] ?? '').replace(/<[^>]+>/g, ''),
     })
   }
   return result
@@ -218,13 +207,20 @@ const headings = computed(() => {
   a {
     color: var(--muted);
     transition: color 0.15s;
-    &:hover { color: var(--purple); }
+    &:hover {
+      color: var(--purple);
+    }
   }
 
-  span[aria-current] { color: var(--text); font-weight: 500; }
+  span[aria-current] {
+    color: var(--text);
+    font-weight: 500;
+  }
 }
 
-.post-hero__inner { max-width: 760px; }
+.post-hero__inner {
+  max-width: 760px;
+}
 
 .post-hero__meta {
   display: flex;
@@ -246,10 +242,14 @@ const headings = computed(() => {
   padding: 0.2rem 0.625rem;
   border-radius: var(--radius-pill);
   transition: background 0.15s;
-  &:hover { background: var(--purple-50); }
+  &:hover {
+    background: var(--purple-50);
+  }
 }
 
-.post-hero__sep { color: var(--border); }
+.post-hero__sep {
+  color: var(--border);
+}
 
 .post-hero__inner h1 {
   font-size: clamp(1.8rem, 3.5vw, 3rem);
@@ -277,10 +277,18 @@ const headings = computed(() => {
     gap: 0.15rem;
   }
 
-  strong { font-size: 0.9rem; font-weight: 700; }
-  span   { font-size: 0.78rem; color: var(--subtle); }
+  strong {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  span {
+    font-size: 0.78rem;
+    color: var(--subtle);
+  }
 
-  &:hover strong { color: var(--purple); }
+  &:hover strong {
+    color: var(--purple);
+  }
 }
 
 .post-hero__avatar {
@@ -304,7 +312,9 @@ const headings = computed(() => {
   gap: 3rem;
   align-items: start;
 
-  @include respond-to(lg) { grid-template-columns: 1fr; }
+  @include respond-to(lg) {
+    grid-template-columns: 1fr;
+  }
 }
 
 // ── Sumário ────────────────────────────────────────────────
@@ -315,7 +325,9 @@ const headings = computed(() => {
   flex-direction: column;
   gap: 1.25rem;
 
-  @include respond-to(lg) { display: none; }
+  @include respond-to(lg) {
+    display: none;
+  }
 }
 
 .sidebar-box {
@@ -347,12 +359,16 @@ const headings = computed(() => {
       line-height: 1.4;
       display: block;
       transition: color 0.15s;
-      &:hover { color: var(--purple); }
+      &:hover {
+        color: var(--purple);
+      }
     }
   }
 }
 
-.toc-h3 { padding-left: 0.875rem; }
+.toc-h3 {
+  padding-left: 0.875rem;
+}
 
 .sidebar-category-link {
   font-size: 0.82rem;
@@ -363,7 +379,9 @@ const headings = computed(() => {
   align-items: center;
   gap: 0.375rem;
   transition: color 0.15s;
-  &:hover { color: var(--purple-700); }
+  &:hover {
+    color: var(--purple-700);
+  }
 }
 
 // ── Prose ──────────────────────────────────────────────────
@@ -386,7 +404,11 @@ const headings = computed(() => {
     border-top: 1px solid var(--border-subtle);
     color: var(--text);
     letter-spacing: -0.02em;
-    &:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    &:first-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
   }
 
   :deep(h3) {
@@ -396,11 +418,21 @@ const headings = computed(() => {
     color: var(--text);
   }
 
-  :deep(p) { margin-bottom: 1.25rem; color: var(--muted); }
-  :deep(p:last-child) { margin-bottom: 0; }
+  :deep(p) {
+    margin-bottom: 1.25rem;
+    color: var(--muted);
+  }
+  :deep(p:last-child) {
+    margin-bottom: 0;
+  }
 
-  :deep(strong) { color: var(--text); font-weight: 700; }
-  :deep(em)     { font-style: italic; }
+  :deep(strong) {
+    color: var(--text);
+    font-weight: 700;
+  }
+  :deep(em) {
+    font-style: italic;
+  }
 
   :deep(a) {
     color: var(--purple);
@@ -408,9 +440,21 @@ const headings = computed(() => {
     text-underline-offset: 3px;
   }
 
-  :deep(ul) { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-  :deep(ol) { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-  :deep(li) { color: var(--muted); margin-bottom: 0.5rem; line-height: 1.7; }
+  :deep(ul) {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  :deep(ol) {
+    list-style: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  :deep(li) {
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
 
   :deep(blockquote) {
     margin: 2rem 0;
@@ -418,7 +462,11 @@ const headings = computed(() => {
     background: var(--bg-alt);
     border-left: 4px solid var(--lime);
     border-radius: 0 var(--radius) var(--radius) 0;
-    p { color: var(--muted); font-style: italic; margin: 0; }
+    p {
+      color: var(--muted);
+      font-style: italic;
+      margin: 0;
+    }
   }
 
   :deep(code) {
@@ -461,8 +509,12 @@ const headings = computed(() => {
       border-bottom: 1px solid var(--border-subtle);
       color: var(--muted);
     }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td      { background: var(--bg-alt); }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: var(--bg-alt);
+    }
   }
 
   :deep(hr) {
@@ -484,7 +536,10 @@ const headings = computed(() => {
   gap: 2rem;
   align-items: flex-start;
 
-  @include respond-to(sm) { flex-direction: column; gap: 1.25rem; }
+  @include respond-to(sm) {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
 }
 
 .post-author-card__avatar {
@@ -502,7 +557,10 @@ const headings = computed(() => {
 }
 
 .post-author-card__info {
-  h3 { font-size: 1.2rem; margin-bottom: 0.2rem; }
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
 }
 
 .post-author-card__role {
@@ -522,7 +580,9 @@ const headings = computed(() => {
   gap: 2rem;
   margin-bottom: 2rem;
 
-  h2 { margin-bottom: 0; }
+  h2 {
+    margin-bottom: 0;
+  }
 }
 
 .post-related-grid {
@@ -530,7 +590,11 @@ const headings = computed(() => {
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 
-  @include respond-to(lg) { grid-template-columns: repeat(2, 1fr); }
-  @include respond-to(sm) { grid-template-columns: 1fr; }
+  @include respond-to(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

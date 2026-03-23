@@ -1,168 +1,173 @@
 <template>
-  <div>
-
-    <!-- ── Hero ──────────────────────────────────────── -->
-    <section class="about-hero">
-      <BaseContainer>
-        <div class="about-hero__inner">
-          <div class="about-hero__text">
-            <p class="section-eyebrow">Sobre nós</p>
-            <h1>Um espaço criado por gente que não se conforma</h1>
-            <p class="lead">
-              Com lideranças abusivas, espaços que adoecem as pessoas e a falta de integração entre times.
-              A Purple nasceu para mudar isso.
-            </p>
-          </div>
-          <div class="about-hero__manifesto">
-            <p class="about-manifesto-text">
-              "Acreditamos que com uma boa cultura, gestão e profissionais engajados, as empresas podem ir cada vez mais longe."
-            </p>
-          </div>
-        </div>
-      </BaseContainer>
-    </section>
-
-    <!-- ── O que nos move ─────────────────────────────── -->
-    <section class="section-block">
-      <BaseContainer>
-        <div class="split-section">
-          <div>
-            <p class="section-eyebrow">Nossa crença</p>
-            <h2>{{ site.about.helpTitle }}</h2>
-            <p class="lead">{{ site.about.helpText }}</p>
-            <p style="margin-top: 1rem;">
-              Por isso, antes de olhar para fora, ajudamos empresas a olharem para dentro —
-              para as pessoas que movem o negócio todos os dias.
-            </p>
-            <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-              <BaseButton tag="RouterLink" to="/servicos">Ver nossos serviços</BaseButton>
-              <BaseButton tag="RouterLink" to="/contato" variant="secondary">Falar com a Purple</BaseButton>
-            </div>
-          </div>
-          <div class="visual-block"></div>
-        </div>
-      </BaseContainer>
-    </section>
-
-    <!-- ── Pilares ────────────────────────────────────── -->
-    <section class="section-block" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-      <BaseContainer>
-        <div class="section-header section-header--center">
-          <p class="section-eyebrow">Como atuamos</p>
-          <h2>Nossa abordagem</h2>
-          <p class="lead" style="text-align:center;">
-            Cada empresa tem um contexto. Antes de propor qualquer ação,
-            entendemos o que está acontecendo de verdade.
+  <!-- ── Hero ──────────────────────────────────────── -->
+  <section class="about-hero">
+    <BaseContainer>
+      <div class="about-hero__inner">
+        <div class="about-hero__text">
+          <p class="section-eyebrow">Sobre nós</p>
+          <h1>Um espaço criado por gente que não se conforma</h1>
+          <p class="lead">
+            Com lideranças abusivas, espaços que adoecem as pessoas e a falta de integração entre times. A Purple nasceu
+            para mudar isso.
           </p>
         </div>
-        <div class="about-pillars">
-          <div v-for="pillar in site.about.pillars" :key="pillar.title" class="about-pillar">
-            <div class="about-pillar__icon" aria-hidden="true">
-              {{ pillarIcons[pillar.title] ?? '✦' }}
-            </div>
-            <h3>{{ pillar.title }}</h3>
-            <p>{{ pillar.description }}</p>
-          </div>
-        </div>
-      </BaseContainer>
-    </section>
-
-    <!-- ── Time ───────────────────────────────────────── -->
-    <section class="section-block">
-      <BaseContainer>
-        <div class="section-header section-header--center" style="margin-bottom:3rem;">
-          <p class="section-eyebrow">Quem somos</p>
-          <h2>As pessoas por trás da Purple</h2>
-          <p class="lead" style="text-align:center;">
-            A união de uma publicitária/marketeira e de um UX/psicólogo que já trabalharam juntos,
-            resultou em uma agência focada em Comunicação Interna, Endomarketing e Employer Branding.
+        <div class="about-hero__manifesto">
+          <p class="about-manifesto-text">
+            "Acreditamos que com uma boa cultura, gestão e profissionais engajados, as empresas podem ir cada vez mais
+            longe."
           </p>
         </div>
+      </div>
+    </BaseContainer>
+  </section>
 
-        <div class="about-team">
-          <article v-for="member in site.home.team" :key="member.name" class="about-team-card">
-            <div class="about-team-card__avatar" aria-hidden="true">
-              {{ member.name.charAt(0) }}
-            </div>
-            <div class="about-team-card__info">
-              <h3>{{ member.name }}</h3>
-              <p class="about-team-card__role">{{ member.role }}</p>
-              <p>{{ member.bio }}</p>
-              <blockquote v-if="member.quote">"{{ member.quote }}"</blockquote>
-            </div>
-          </article>
-        </div>
-      </BaseContainer>
-    </section>
-
-    <!-- ── Dados de mercado ───────────────────────────── -->
-    <section class="about-data-section">
-      <BaseContainer>
-        <div class="section-header section-header--center">
-          <p class="section-eyebrow" style="color:var(--lime);">Por que isso importa</p>
-          <h2>O problema que viemos resolver</h2>
-          <p style="color:rgba(255,255,255,0.6);text-align:center;max-width:56ch;margin:0 auto;">
-            Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
+  <!-- ── O que nos move ─────────────────────────────── -->
+  <section class="section-block">
+    <BaseContainer>
+      <div class="split-section">
+        <div>
+          <p class="section-eyebrow">Nossa crença</p>
+          <h2>{{ site.about.helpTitle }}</h2>
+          <p class="lead">{{ site.about.helpText }}</p>
+          <p style="margin-top: 1rem">
+            Por isso, antes de olhar para fora, ajudamos empresas a olharem para dentro — para as pessoas que movem o
+            negócio todos os dias.
           </p>
-        </div>
-        <div class="about-data-grid">
-          <div v-for="stat in dataStats" :key="stat.number" class="about-data-card">
-            <span class="about-data-card__number">
-              {{ stat.number }}<span>{{ stat.suffix }}</span>
-            </span>
-            <p class="about-data-card__label">{{ stat.label }}</p>
-            <span class="about-data-card__source">{{ stat.source }}</span>
+          <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap">
+            <BaseButton tag="RouterLink" to="/servicos">Ver nossos serviços</BaseButton>
+            <BaseButton tag="RouterLink" to="/contato" variant="secondary">Falar com a Purple</BaseButton>
           </div>
         </div>
-      </BaseContainer>
-    </section>
+        <div class="visual-block"></div>
+      </div>
+    </BaseContainer>
+  </section>
 
-    <!-- ── CTA ────────────────────────────────────────── -->
-    <CtaBanner
-      title="Tudo começa com uma boa conversa"
-      description="Estamos aqui para ouvir, entender seu contexto e construir juntos uma estratégia que faz sentido."
-    />
+  <!-- ── Pilares ────────────────────────────────────── -->
+  <section
+    class="section-block"
+    style="background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border)"
+  >
+    <BaseContainer>
+      <div class="section-header section-header--center">
+        <p class="section-eyebrow">Como atuamos</p>
+        <h2>Nossa abordagem</h2>
+        <p class="lead" style="text-align: center">
+          Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade.
+        </p>
+      </div>
+      <div class="about-pillars">
+        <div v-for="pillar in site.about.pillars" :key="pillar.title" class="about-pillar">
+          <div class="about-pillar__icon" aria-hidden="true">
+            {{ pillarIcons[pillar.title] ?? '✦' }}
+          </div>
+          <h3>{{ pillar.title }}</h3>
+          <p>{{ pillar.description }}</p>
+        </div>
+      </div>
+    </BaseContainer>
+  </section>
 
-  </div>
+  <!-- ── Time ───────────────────────────────────────── -->
+  <section class="section-block">
+    <BaseContainer>
+      <div class="section-header section-header--center" style="margin-bottom: 3rem">
+        <p class="section-eyebrow">Quem somos</p>
+        <h2>As pessoas por trás da Purple</h2>
+        <p class="lead" style="text-align: center">
+          A união de uma publicitária/marketeira e de um UX/psicólogo que já trabalharam juntos, resultou em uma agência
+          focada em Comunicação Interna, Endomarketing e Employer Branding.
+        </p>
+      </div>
+
+      <div class="about-team">
+        <article v-for="member in site.home.team" :key="member.name" class="about-team-card">
+          <div class="about-team-card__avatar" aria-hidden="true">
+            {{ member.name.charAt(0) }}
+          </div>
+          <div class="about-team-card__info">
+            <h3>{{ member.name }}</h3>
+            <p class="about-team-card__role">{{ member.role }}</p>
+            <p>{{ member.bio }}</p>
+            <blockquote v-if="member.quote">"{{ member.quote }}"</blockquote>
+          </div>
+        </article>
+      </div>
+    </BaseContainer>
+  </section>
+
+  <!-- ── Dados de mercado ───────────────────────────── -->
+  <section class="about-data-section">
+    <BaseContainer>
+      <div class="section-header section-header--center">
+        <p class="section-eyebrow" style="color: var(--lime)">Por que isso importa</p>
+        <h2>O problema que viemos resolver</h2>
+        <p style="color: rgba(255, 255, 255, 0.6); text-align: center; max-width: 56ch; margin: 0 auto">
+          Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
+        </p>
+      </div>
+      <div class="about-data-grid">
+        <div v-for="stat in dataStats" :key="stat.number" class="about-data-card">
+          <span class="about-data-card__number">
+            {{ stat.number }}<span>{{ stat.suffix }}</span>
+          </span>
+          <p class="about-data-card__label">{{ stat.label }}</p>
+          <span class="about-data-card__source">{{ stat.source }}</span>
+        </div>
+      </div>
+    </BaseContainer>
+  </section>
+
+  <!-- ── CTA ────────────────────────────────────────── -->
+  <CtaBanner
+    title="Tudo começa com uma boa conversa"
+    description="Estamos aqui para ouvir, entender seu contexto e construir juntos uma estratégia que faz sentido."
+  />
 </template>
 
 <script setup lang="ts">
-import BaseContainer from '@/components/ui/BaseContainer.vue'
-import BaseButton    from '@/components/ui/BaseButton.vue'
-import CtaBanner     from '@/components/sections/CtaBanner.vue'
 import { usePageMeta } from '@/composables'
 import site from '@/data/site.json'
 
+import BaseContainer from '@/components/ui/BaseContainer.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import CtaBanner from '@/components/sections/CtaBanner.vue'
+
 usePageMeta({
-  title:       'Sobre Nós',
-  description: 'Conheça a Purple Comunicação — agência especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
+  title: 'Sobre Nós',
+  description:
+    'Conheça a Purple Comunicação — agência especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
 })
 
 const pillarIcons: Record<string, string> = {
   'Foco no colaborador': '🎯',
-  'Comunicação clara':   '📣',
-  'Marca empregadora':   '🏆',
+  'Comunicação clara': '📣',
+  'Marca empregadora': '🏆',
 }
 
 const dataStats = [
   {
-    number: '57', suffix: '%',
-    label:  'dos trabalhadores não estão engajados globalmente',
+    number: '57',
+    suffix: '%',
+    label: 'dos trabalhadores não estão engajados globalmente',
     source: 'Gallup',
   },
   {
-    number: '86', suffix: '%',
-    label:  'consideram bem-estar tão importante quanto o salário',
+    number: '86',
+    suffix: '%',
+    label: 'consideram bem-estar tão importante quanto o salário',
     source: 'Pesquisa Global, 2024',
   },
   {
-    number: '14', suffix: '%',
-    label:  'das empresas oferecem programas estruturados de bem-estar',
+    number: '14',
+    suffix: '%',
+    label: 'das empresas oferecem programas estruturados de bem-estar',
     source: 'Panorama Corporativo 2024',
   },
   {
-    number: '32', suffix: '%',
-    label:  'da PEA sofre de burnout ou problemas de saúde ocupacional',
+    number: '32',
+    suffix: '%',
+    label: 'da PEA sofre de burnout ou problemas de saúde ocupacional',
     source: 'ISMA-Brasil',
   },
 ]
@@ -191,7 +196,9 @@ const dataStats = [
 }
 
 .about-hero__text {
-  h1 { font-size: clamp(2rem, 4vw, 3.4rem); }
+  h1 {
+    font-size: clamp(2rem, 4vw, 3.4rem);
+  }
 }
 
 .about-hero__manifesto {
@@ -233,7 +240,9 @@ const dataStats = [
   gap: 1.5rem;
   margin-top: 0.5rem;
 
-  @include respond-to(md) { grid-template-columns: 1fr; }
+  @include respond-to(md) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .about-pillar {
@@ -241,7 +250,9 @@ const dataStats = [
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 2rem;
-  transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+  transition:
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
 
   &:hover {
     box-shadow: var(--shadow-glow);
@@ -263,7 +274,9 @@ const dataStats = [
   max-width: 820px;
   margin: 0 auto;
 
-  @include respond-to(sm) { grid-template-columns: 1fr; }
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .about-team-card {
@@ -292,9 +305,15 @@ const dataStats = [
 }
 
 .about-team-card__info {
-  h3 { font-size: 1.15rem; margin-bottom: 0.2rem; }
+  h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.2rem;
+  }
 
-  p { font-size: 0.9rem; line-height: 1.7; }
+  p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
 
   blockquote {
     margin: 1rem 0 0;
@@ -328,9 +347,11 @@ const dataStats = [
   &::before {
     content: '';
     position: absolute;
-    bottom: -20%; right: -5%;
-    width: 400px; aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(197,226,46,0.08) 0%, transparent 65%);
+    bottom: -20%;
+    right: -5%;
+    width: 400px;
+    aspect-ratio: 1;
+    background: radial-gradient(ellipse, rgba(197, 226, 46, 0.08) 0%, transparent 65%);
     pointer-events: none;
   }
 }
@@ -339,14 +360,16 @@ const dataStats = [
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   overflow: hidden;
   margin-top: 3rem;
   position: relative;
   z-index: 1;
 
-  @include respond-to(lg) { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .about-data-card {
@@ -366,19 +389,21 @@ const dataStats = [
   line-height: 1;
   letter-spacing: -0.03em;
 
-  span { color: var(--lime); }
+  span {
+    color: var(--lime);
+  }
 }
 
 .about-data-card__label {
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   line-height: 1.4;
   max-width: 18ch;
 }
 
 .about-data-card__source {
   font-size: 0.72rem;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255, 255, 255, 0.3);
   font-style: italic;
 }
 </style>

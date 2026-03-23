@@ -1,5 +1,4 @@
-[
-  {
+[{
     "slug": "suelen-fernanda",
     "name": "Suelen Fernanda",
     "role": "Marketing & Employer Branding",
@@ -8,11 +7,11 @@
     "linkedin": "https://linkedin.com/in/suelen-fernanda"
   },
   {
-    "slug": "wanderson-paixao",
-    "name": "Wanderson Paixão",
+    "slug": "wanderson-pj",
+    "name": "Wanderson PJ",
     "role": "UX Design & Estratégia",
     "bio": "Desenvolvedor web com vivências em Marketing Digital, amante de Design e cursando Psicologia. Especialista em experiências digitais centradas em pessoas.",
     "avatar": "/images/team/wanderson.jpg",
-    "linkedin": "https://linkedin.com/in/wanderson-paixao"
+    "linkedin": "https://www.linkedin.com/in/wandersonpj-bkn"
   }
 ]

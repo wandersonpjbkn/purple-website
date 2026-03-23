@@ -19,8 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import BaseContainer from '@/components/ui/BaseContainer.vue'
 import type { TeamMember } from '@/types/site'
+
+import BaseContainer from '@/components/ui/BaseContainer.vue'
 
 defineProps<{
   members: TeamMember[]

@@ -1,53 +1,46 @@
-// src/composables/useBlog.ts
-// Composable central — filtros, busca, paginação
-
 import { computed, ref, type Ref } from 'vue'
-import {
-  posts as allPosts,
-  getAllCategories,
-  type Post,
-} from 'virtual:blog-posts'
+
 import authors from '@/data/authors.json'
+
+import { posts as allPosts, getAllCategories } from 'virtual:blog-posts'
+import type { Post } from 'virtual:blog-posts'
 import type { Author } from '@/types/blog'
 
 // ── Utilitários ───────────────────────────────────────────
 
 export function formatDate(iso: string): string {
   return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit', month: 'short', year: 'numeric',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
   }).format(new Date(iso + 'T00:00:00'))
 }
 
 export function getAuthor(slug: string): Author | undefined {
-  return (authors as Author[]).find(a => a.slug === slug)
+  return (authors as Author[]).find((a: Author) => a.slug === slug)
 }
 
 // ── Composable principal ──────────────────────────────────
-export function useBlog(options?: {
-  initialCategory?: Ref<string>
-  initialQuery?:    Ref<string>
-  perPage?: number
-}) {
-  const query          = options?.initialQuery    ?? ref('')
+export function useBlog(options?: { initialCategory?: Ref<string>; initialQuery?: Ref<string>; perPage?: number }) {
+  const query = options?.initialQuery ?? ref('')
   const activeCategory = options?.initialCategory ?? ref('')
-  const page           = ref(1)
-  const perPage        = options?.perPage ?? 9
+  const page = ref(1)
+  const perPage = options?.perPage ?? 9
 
   const filtered = computed(() => {
-    let result = allPosts
+    let result: Post[] = allPosts
 
     if (activeCategory.value) {
-      result = result.filter(
-        p => p.category.toLowerCase() === activeCategory.value.toLowerCase()
-      )
+      result = result.filter((p: Post) => p.category.toLowerCase() === activeCategory.value.toLowerCase())
     }
 
     const q = query.value.trim().toLowerCase()
     if (q) {
-      result = result.filter(p =>
-        p.title.toLowerCase().includes(q)   ||
-        p.excerpt.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
+      result = result.filter(
+        (p: Post) =>
+          p.title.toLowerCase().includes(q) ||
+          p.excerpt.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q),
       )
     }
 
@@ -55,9 +48,7 @@ export function useBlog(options?: {
   })
 
   const totalPages = computed(() => Math.ceil(filtered.value.length / perPage))
-  const paginated  = computed(() =>
-    filtered.value.slice((page.value - 1) * perPage, page.value * perPage)
-  )
+  const paginated = computed(() => filtered.value.slice((page.value - 1) * perPage, page.value * perPage))
 
   function setPage(n: number) {
     page.value = Math.min(Math.max(1, n), totalPages.value || 1)
@@ -65,9 +56,9 @@ export function useBlog(options?: {
   }
 
   function clearFilters() {
-    query.value          = ''
+    query.value = ''
     activeCategory.value = ''
-    page.value           = 1
+    page.value = 1
   }
 
   function watchReset() {
@@ -81,7 +72,7 @@ export function useBlog(options?: {
     filtered,
     paginated,
     totalPages,
-    total:      computed(() => filtered.value.length),
+    total: computed(() => filtered.value.length),
     categories: getAllCategories(),
     setPage,
     clearFilters,

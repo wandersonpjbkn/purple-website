@@ -21,8 +21,7 @@
       "eyebrow": "Panorama do mercado",
       "title": "Os números que ninguém pode ignorar",
       "subtitle": "Dados de pesquisas recentes mostram por que cuidar dos colaboradores deixou de ser diferencial para se tornar estratégia de negócio.",
-      "stats": [
-        {
+      "stats": [{
           "number": "86",
           "suffix": "%",
           "label": "consideram bem-estar tão importante quanto o salário",
@@ -68,8 +67,7 @@
           "highlight": false
         }
       ],
-      "context": [
-        {
+      "context": [{
           "strong": "70% → 90%",
           "text": "de engajamento após implementação de estratégias de saúde corporativa (Forbes Brasil, 2022)"
         },
@@ -87,11 +85,26 @@
         }
       ]
     },
-    "stats": [
-      { "number": "86", "suffix": "%", "label": "consideram bem-estar tão importante quanto o salário" },
-      { "number": "57", "suffix": "%", "label": "dos trabalhadores não estão engajados globalmente" },
-      { "number": "17", "suffix": "%", "label": "de aumento de receita com colaboradores engajados" },
-      { "number": "4x", "suffix": "", "label": "mais produtivas com colaboradores bem engajados" }
+    "stats": [{
+        "number": "86",
+        "suffix": "%",
+        "label": "consideram bem-estar tão importante quanto o salário"
+      },
+      {
+        "number": "57",
+        "suffix": "%",
+        "label": "dos trabalhadores não estão engajados globalmente"
+      },
+      {
+        "number": "17",
+        "suffix": "%",
+        "label": "de aumento de receita com colaboradores engajados"
+      },
+      {
+        "number": "4x",
+        "suffix": "",
+        "label": "mais produtivas com colaboradores bem engajados"
+      }
     ],
     "highlight": {
       "eyebrow": "Por que isso importa",
@@ -104,8 +117,7 @@
         "Cultura organizacional consistente e saudável"
       ]
     },
-    "services": [
-      {
+    "services": [{
         "id": "employer-branding",
         "icon": "🏆",
         "title": "Employer Branding",
@@ -149,8 +161,7 @@
     "process": {
       "eyebrow": "Como trabalhamos",
       "title": "Um processo pensado para gerar resultado real",
-      "steps": [
-        {
+      "steps": [{
           "title": "Briefing e imersão",
           "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
         },
@@ -178,8 +189,7 @@
       "primaryCta": "Falar com a Purple",
       "secondaryCta": "Ver portfólio"
     },
-    "team": [
-      {
+    "team": [{
         "name": "Suelen Fernanda",
         "role": "Marketing & Employer Branding",
         "bio": "No mercado de marketing digital desde 2011, a idealizadora da Purple atuou em agências, marketing interno e atendeu clientes de diversos segmentos.",
@@ -196,8 +206,7 @@
   "services": {
     "title": "Nossas soluções",
     "subtitle": "Serviços pensados para melhorar a comunicação interna, engajamento e reputação da sua empresa como empregadora.",
-    "items": [
-      {
+    "items": [{
         "id": "employer-branding",
         "icon": "🏆",
         "title": "Employer Branding",
@@ -309,8 +318,7 @@
     "intro": "A Purple Comunicação nasce da certeza de que o foco no colaborador e no seu bem-estar é essencial para empresas que desejam crescer com consistência.",
     "helpTitle": "Como iremos te ajudar",
     "helpText": "Com todos os desafios do dia a dia, muitas empresas perdem oportunidades ao deixar de olhar para quem move a organização: as pessoas.",
-    "pillars": [
-      {
+    "pillars": [{
         "title": "Foco no colaborador",
         "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
       },

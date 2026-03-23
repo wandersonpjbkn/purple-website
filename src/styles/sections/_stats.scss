@@ -1,8 +1,3 @@
-// ============================================================
-//  sections/_stats.scss
-//  Stats band + Seção Panorama (dados de pesquisa)
-// ============================================================
-
 @use '../abstracts/mixins' as *;
 
 // ── Stats Band (faixa roxa escura) ─────────────────────────
@@ -19,7 +14,9 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
 
-  @include respond-to(lg) { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .stats-band__item {
@@ -37,7 +34,9 @@
   display: block;
   letter-spacing: -0.03em;
 
-  span { color: var(--lime); }
+  span {
+    color: var(--lime);
+  }
 }
 
 .stats-band__label {
@@ -56,18 +55,22 @@
   &::before {
     content: '';
     position: absolute;
-    top: -20%; left: -5%;
-    width: 500px; aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(197,226,46,0.07) 0%, transparent 65%);
+    top: -20%;
+    left: -5%;
+    width: 500px;
+    aspect-ratio: 1;
+    background: radial-gradient(ellipse, rgba(197, 226, 46, 0.07) 0%, transparent 65%);
     pointer-events: none;
   }
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -20%; right: -5%;
-    width: 400px; aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(139,47,204,0.25) 0%, transparent 65%);
+    bottom: -20%;
+    right: -5%;
+    width: 400px;
+    aspect-ratio: 1;
+    background: radial-gradient(ellipse, rgba(139, 47, 204, 0.25) 0%, transparent 65%);
     pointer-events: none;
   }
 }
@@ -78,7 +81,9 @@
   position: relative;
   z-index: 1;
 
-  .section-eyebrow { color: var(--lime); }
+  .section-eyebrow {
+    color: var(--lime);
+  }
 
   h2 {
     color: #fff;
@@ -100,8 +105,12 @@
   position: relative;
   z-index: 1;
 
-  @include respond-to(md) { grid-template-columns: repeat(2, 1fr); }
-  @include respond-to(sm) { grid-template-columns: 1fr; }
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .panorama-card {
@@ -109,7 +118,9 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: var(--radius-lg);
   padding: 2rem 1.75rem;
-  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+  transition:
+    background 0.2s var(--ease),
+    transform 0.2s var(--ease);
 
   &:hover {
     background: rgba(255, 255, 255, 0.08);
@@ -131,7 +142,9 @@
   letter-spacing: -0.03em;
   display: block;
 
-  span { color: var(--lime); }
+  span {
+    color: var(--lime);
+  }
 }
 
 .panorama-card__label {
@@ -172,7 +185,9 @@
   position: relative;
   z-index: 1;
 
-  @include respond-to(md) { grid-template-columns: 1fr; }
+  @include respond-to(md) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .panorama-context__item {
@@ -195,5 +210,8 @@
   color: rgba(255, 255, 255, 0.55);
   line-height: 1.65;
 
-  strong { color: rgba(255, 255, 255, 0.85); font-weight: 600; }
+  strong {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+  }
 }

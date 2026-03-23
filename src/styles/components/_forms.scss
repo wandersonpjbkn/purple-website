@@ -1,7 +1,3 @@
-// ============================================================
-//  components/_forms.scss
-// ============================================================
-
 @use '../abstracts/mixins' as *;
 
 // ── Input / textarea base ──────────────────────────────────
@@ -12,7 +8,9 @@
   padding: 0.875rem 1rem;
   background: var(--bg);
   color: var(--text);
-  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+  transition:
+    border-color 0.15s var(--ease),
+    box-shadow 0.15s var(--ease);
   outline: none;
 
   &:focus {
@@ -20,10 +18,15 @@
     box-shadow: 0 0 0 3px rgba(139, 47, 204, 0.1);
   }
 
-  &::placeholder { color: var(--subtle); }
+  &::placeholder {
+    color: var(--subtle);
+  }
 }
 
-.search-input { @extend %input-base; width: 280px; }
+.search-input {
+  @extend %input-base;
+  width: 280px;
+}
 
 // ── Contact form ───────────────────────────────────────────
 .contact-form {
@@ -40,5 +43,8 @@
     color: var(--text);
   }
 
-  input, textarea { @extend %input-base; }
+  input,
+  textarea {
+    @extend %input-base;
+  }
 }

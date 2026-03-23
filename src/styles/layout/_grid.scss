@@ -1,8 +1,3 @@
-// ============================================================
-//  layout/_grid.scss
-//  Container, grids e utilitários de layout
-// ============================================================
-
 @use '../abstracts/mixins' as *;
 
 // ── Container ──────────────────────────────────────────────
@@ -15,7 +10,9 @@
 .section-block {
   padding: 5rem 0;
 
-  &--sm { padding: 3rem 0; }
+  &--sm {
+    padding: 3rem 0;
+  }
 }
 
 // ── Section header ─────────────────────────────────────────
@@ -37,7 +34,12 @@
   gap: 5rem;
   align-items: center;
 
-  &--reverse { direction: rtl; > * { direction: ltr; } }
+  &--reverse {
+    direction: rtl;
+    > * {
+      direction: ltr;
+    }
+  }
 
   @include respond-to(md) {
     grid-template-columns: 1fr;

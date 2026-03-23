@@ -5,7 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import BlogCard from './BlogCard.vue'
+import BlogCard from '@/components/blog/BlogCard.vue'
+
 import type { Post } from '@/types/post'
 
 defineProps<{

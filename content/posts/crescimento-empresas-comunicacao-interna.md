@@ -1,14 +1,14 @@
 ---
-title: "Por que empresas que investem em comunicação interna crescem mais"
-slug: "crescimento-empresas-comunicacao-interna"
-excerpt: "Estudos de mercado apontam crescimento em empresas que investem com consistência em comunicação interna e employer branding."
-date: "2026-02-18"
-author: "suelen-fernanda"
-category: "Comunicação Interna"
-tags: ["comunicação interna", "crescimento", "cultura", "engajamento"]
+title: 'Por que empresas que investem em comunicação interna crescem mais'
+slug: 'crescimento-empresas-comunicacao-interna'
+excerpt: 'Estudos de mercado apontam crescimento em empresas que investem com consistência em comunicação interna e employer branding.'
+date: '2026-02-18'
+author: 'suelen-fernanda'
+category: 'Comunicação Interna'
+tags: ['comunicação interna', 'crescimento', 'cultura', 'engajamento']
 readTime: 6
 featured: false
-cover: "/images/blog/post-2.jpg"
+cover: '/images/blog/post-2.jpg'
 ---
 
 ## O cenário atual

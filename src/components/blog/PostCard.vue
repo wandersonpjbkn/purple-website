@@ -1,12 +1,5 @@
 <template>
-  <!--
-    Variantes:
-      "grid"     → card vertical padrão (4 colunas, estilo Remote)
-      "featured" → card horizontal grande (post em destaque)
-      "list"     → card horizontal compacto (sidebar)
-  -->
   <article class="post-card" :class="`post-card--${variant}`">
-
     <!-- Cover -->
     <RouterLink :to="`/blog/${post.slug}`" class="post-card__cover" tabindex="-1" aria-hidden="true">
       <img v-if="post.cover" :src="post.cover" :alt="post.title" loading="lazy" />
@@ -17,14 +10,14 @@
 
     <!-- Body -->
     <div class="post-card__body">
-
       <!-- CATEGORIA — X MIN  (estilo Remote) -->
       <div class="post-card__eyebrow">
         <RouterLink
           :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
           class="post-card__category"
           @click.stop
-        >{{ post.category }}</RouterLink>
+          >{{ post.category }}</RouterLink
+        >
         <span class="post-card__eyebrow-sep">—</span>
         <span class="post-card__readtime">{{ post.readTime }} min</span>
       </div>
@@ -48,7 +41,6 @@
         <span class="post-card__author-sep">·</span>
         <time :datetime="post.date">{{ formatDate(post.date) }}</time>
       </div>
-
     </div>
   </article>
 </template>
@@ -56,8 +48,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
+
 import type { Post } from 'virtual:blog-posts'
+
 import { formatDate, getAuthor } from '@/composables/useBlog'
+
+// Variantes:
+//   "grid"     → card vertical padrão (4 colunas, estilo Remote)
+//   "featured" → card horizontal grande (post em destaque)
+//   "list"     → card horizontal compacto (sidebar)
 
 const props = withDefaults(
   defineProps<{
@@ -77,9 +76,13 @@ const author = computed(() => getAuthor(props.post.author))
 .post-card {
   background: transparent;
   border: none;
-  // Hover sutil só no título
-  &:hover .post-card__title a { color: var(--purple); }
-  &:hover .post-card__cover img { transform: scale(1.03); }
+
+  &:hover .post-card__title a {
+    color: var(--purple);
+  }
+  &:hover .post-card__cover img {
+    transform: scale(1.03);
+  }
 }
 
 // ── Cover ──────────────────────────────────────────────────
@@ -137,7 +140,9 @@ const author = computed(() => getAuthor(props.post.author))
   color: var(--purple);
   transition: color 0.15s;
 
-  &:hover { color: var(--purple-700); }
+  &:hover {
+    color: var(--purple-700);
+  }
 }
 
 .post-card__eyebrow-sep {
@@ -206,17 +211,25 @@ const author = computed(() => getAuthor(props.post.author))
   font-weight: 600;
   color: var(--muted);
   transition: color 0.15s;
-  &:hover { color: var(--purple); }
+  &:hover {
+    color: var(--purple);
+  }
 }
 
-.post-card__author-sep { color: var(--border); }
+.post-card__author-sep {
+  color: var(--border);
+}
 
 // ══════════════════════════════════════════════════════════
 //  Variante: grid — vertical, imagem quadrada/tall
 // ══════════════════════════════════════════════════════════
 .post-card--grid {
-  .post-card__cover { aspect-ratio: 4 / 3; }
-  .post-card__title { font-size: 1rem; }
+  .post-card__cover {
+    aspect-ratio: 4 / 3;
+  }
+  .post-card__title {
+    font-size: 1rem;
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -232,7 +245,9 @@ const author = computed(() => getAuthor(props.post.author))
     aspect-ratio: 16 / 10;
   }
 
-  .post-card__body { padding: 0.25rem 0 0; }
+  .post-card__body {
+    padding: 0.25rem 0 0;
+  }
 
   .post-card__title {
     font-size: 1.5rem;
@@ -243,7 +258,9 @@ const author = computed(() => getAuthor(props.post.author))
   @include respond-to(md) {
     grid-template-columns: 1fr;
 
-    .post-card__title { font-size: 1.2rem; }
+    .post-card__title {
+      font-size: 1.2rem;
+    }
   }
 }
 
@@ -262,7 +279,9 @@ const author = computed(() => getAuthor(props.post.author))
     flex-shrink: 0;
   }
 
-  .post-card__body { padding: 0; }
+  .post-card__body {
+    padding: 0;
+  }
 
   .post-card__title {
     font-size: 0.875rem;

@@ -1,13 +1,12 @@
 <template>
   <div class="blog-page">
-
     <!-- ── Hero: título + busca ──────────────────────── -->
     <section class="blog-hero">
       <BaseContainer>
         <div class="blog-hero__inner">
           <div>
             <p class="section-eyebrow">Blog</p>
-            <h1>Conteúdos sobre pessoas,<br>cultura e comunicação</h1>
+            <h1>Conteúdos sobre pessoas,<br />cultura e comunicação</h1>
           </div>
           <div class="blog-search-field">
             <span class="blog-search-field__icon">🔍</span>
@@ -22,8 +21,10 @@
               v-if="query"
               class="blog-search-field__clear"
               aria-label="Limpar"
-              @click="query = ''; watchReset()"
-            >✕</button>
+              @click="((query = ''), watchReset())"
+            >
+              ✕
+            </button>
           </div>
         </div>
       </BaseContainer>
@@ -36,30 +37,31 @@
           <button
             class="filter-pill"
             :class="{ active: !activeCategory }"
-            @click="activeCategory = ''; watchReset()"
-          >Todos</button>
+            @click="((activeCategory = ''), watchReset())"
+          >
+            Todos
+          </button>
           <button
             v-for="{ category } in categories"
             :key="category"
             class="filter-pill"
             :class="{ active: activeCategory === category }"
-            @click="activeCategory = category; watchReset()"
-          >{{ category }}</button>
+            @click="((activeCategory = category), watchReset())"
+          >
+            {{ category }}
+          </button>
         </nav>
       </BaseContainer>
     </div>
 
-    <!-- ════════════════════════════════════════════════
-         MODO BUSCA
-    ═══════════════════════════════════════════════════ -->
     <section v-if="query" class="blog-section">
       <BaseContainer>
         <div class="blog-section__header">
           <h2 class="blog-section__title">
-            {{ total }} {{ total === 1 ? 'resultado' : 'resultados' }} para
-            "<em>{{ query }}</em>"
+            {{ total }} {{ total === 1 ? 'resultado' : 'resultados' }} para "<em>{{ query }}</em
+            >"
           </h2>
-          <button class="filter-clear" @click="query = ''; watchReset()">Limpar</button>
+          <button class="filter-clear" @click="((query = ''), watchReset())">Limpar</button>
         </div>
 
         <div v-if="paginated.length" class="blog-grid blog-grid--4">
@@ -71,36 +73,20 @@
           <button class="button secondary" @click="query = ''">Ver todos</button>
         </div>
 
-        <BlogPagination
-          v-if="totalPages > 1"
-          :page="page"
-          :total-pages="totalPages"
-          @change="setPage"
-        />
+        <BlogPagination v-if="totalPages > 1" :page="page" :total-pages="totalPages" @change="setPage" />
       </BaseContainer>
     </section>
 
-    <!-- ════════════════════════════════════════════════
-         MODO NORMAL
-    ═══════════════════════════════════════════════════ -->
     <template v-else>
-
       <!-- ── Seção filtrada por categoria ─────────────── -->
       <section v-if="activeCategory" class="blog-section">
         <BaseContainer>
           <div class="blog-section__header">
             <h2 class="blog-section__title">{{ activeCategory }}</h2>
-            <button class="filter-clear" @click="activeCategory = ''; watchReset()">
-              ← Todas as categorias
-            </button>
+            <button class="filter-clear" @click="((activeCategory = ''), watchReset())">← Todas as categorias</button>
           </div>
           <div v-if="filteredByCat.length" class="blog-grid blog-grid--4">
-            <PostCard
-              v-for="post in filteredByCat"
-              :key="post.slug"
-              :post="post"
-              variant="grid"
-            />
+            <PostCard v-for="post in filteredByCat" :key="post.slug" :post="post" variant="grid" />
           </div>
           <div v-else class="blog-empty">
             <p>Nenhum post nessa categoria ainda.</p>
@@ -117,14 +103,8 @@
 
           <!-- Layout: destaque lateral + grid -->
           <div v-if="recentPosts.length" class="blog-recent">
-
             <!-- Post em destaque (primeiro) -->
-            <PostCard
-              v-if="recentPosts[0]"
-              :post="recentPosts[0]"
-              variant="featured"
-              class="blog-recent__featured"
-            />
+            <PostCard v-if="recentPosts[0]" :post="recentPosts[0]" variant="featured" class="blog-recent__featured" />
 
             <!-- Grid 4 colunas com os demais -->
             <div v-if="recentPosts.length > 1" class="blog-grid blog-grid--4 blog-recent__grid">
@@ -153,38 +133,31 @@
           <BaseContainer>
             <div class="blog-section__header">
               <h2 class="blog-section__title">{{ category }}</h2>
-              <button
-                class="filter-clear"
-                @click="activeCategory = category; watchReset()"
-              >Ver todos →</button>
+              <button class="filter-clear" @click="((activeCategory = category), watchReset())">Ver todos →</button>
             </div>
 
             <div class="blog-grid blog-grid--4">
-              <PostCard
-                v-for="post in catPosts"
-                :key="post.slug"
-                :post="post"
-                variant="grid"
-              />
+              <PostCard v-for="post in catPosts" :key="post.slug" :post="post" variant="grid" />
             </div>
           </BaseContainer>
         </section>
       </template>
-
     </template>
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
 import { posts as allPosts } from 'virtual:blog-posts'
+import type { Post, CategoryCount } from 'virtual:blog-posts'
+
+import { usePageMeta, useBlog } from '@/composables'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import BlogPagination from '@/components/blog/BlogPagination.vue'
-import { useBlog } from '@/composables/useBlog'
-import { usePageMeta } from '@/composables'
 
 usePageMeta({
   title: 'Blog',
@@ -192,11 +165,9 @@ usePageMeta({
 })
 
 const route = useRoute()
-const {
-  query, activeCategory, page,
-  paginated, total, totalPages,
-  categories, setPage, watchReset,
-} = useBlog({ perPage: 12 })
+const { query, activeCategory, page, paginated, total, totalPages, categories, setPage, watchReset } = useBlog({
+  perPage: 12,
+})
 
 // Aplica filtro de URL
 if (route.query.categoria) {
@@ -204,25 +175,27 @@ if (route.query.categoria) {
 }
 
 // ── Recentes com "carregar mais" ──────────────────────────
-const INITIAL_LIMIT = 8  // exibe 1 featured + 7 no grid
-const visibleLimit  = ref(INITIAL_LIMIT)
-const recentPosts   = computed(() => allPosts.slice(0, visibleLimit.value + 1))
-const hasMore       = computed(() => allPosts.length > visibleLimit.value + 1)
-function loadMore() { visibleLimit.value += 8 }
+const INITIAL_LIMIT = 8
+const visibleLimit = ref(INITIAL_LIMIT)
+const recentPosts = computed(() => allPosts.slice(0, visibleLimit.value + 1))
+const hasMore = computed(() => allPosts.length > visibleLimit.value + 1)
+function loadMore() {
+  visibleLimit.value += 8
+}
 
 // ── Posts filtrados quando categoria está ativa ───────────
 const filteredByCat = computed(() =>
-  allPosts.filter(p => p.category.toLowerCase() === activeCategory.value.toLowerCase())
+  allPosts.filter((p: Post) => p.category.toLowerCase() === activeCategory.value.toLowerCase()),
 )
 
 // ── Grupos por categoria (máx 4 por grupo) ────────────────
 const categoryGroups = computed(() =>
   categories
-    .map(({ category }) => ({
+    .map(({ category }: CategoryCount) => ({
       category,
-      posts: allPosts.filter(p => p.category === category).slice(0, 4),
+      posts: allPosts.filter((p: Post) => p.category === category).slice(0, 4),
     }))
-    .filter(g => g.posts.length > 0)
+    .filter((g: { category: string; posts: Post[] }) => g.posts.length > 0),
 )
 </script>
 
@@ -242,9 +215,15 @@ const categoryGroups = computed(() =>
   align-items: flex-end;
   gap: 2rem;
 
-  h1 { margin-bottom: 0; font-size: clamp(1.8rem, 3vw, 3rem); }
+  h1 {
+    margin-bottom: 0;
+    font-size: clamp(1.8rem, 3vw, 3rem);
+  }
 
-  @include respond-to(md) { flex-direction: column; align-items: flex-start; }
+  @include respond-to(md) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .blog-search-field {
@@ -254,7 +233,8 @@ const categoryGroups = computed(() =>
 
   &__icon {
     position: absolute;
-    left: 1rem; top: 50%;
+    left: 1rem;
+    top: 50%;
     transform: translateY(-50%);
     font-size: 0.875rem;
     pointer-events: none;
@@ -269,26 +249,38 @@ const categoryGroups = computed(() =>
     font-size: 0.875rem;
     color: var(--text);
     outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
 
     &:focus {
       border-color: var(--purple-400);
-      box-shadow: 0 0 0 3px rgba(139,47,204,0.1);
+      box-shadow: 0 0 0 3px rgba(139, 47, 204, 0.1);
     }
-    &::placeholder { color: var(--subtle); }
+    &::placeholder {
+      color: var(--subtle);
+    }
   }
 
   &__clear {
     position: absolute;
-    right: 0.875rem; top: 50%;
+    right: 0.875rem;
+    top: 50%;
     transform: translateY(-50%);
-    background: none; border: none;
-    cursor: pointer; color: var(--subtle);
-    font-size: 0.85rem; line-height: 1;
-    &:hover { color: var(--text); }
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--subtle);
+    font-size: 0.85rem;
+    line-height: 1;
+    &:hover {
+      color: var(--text);
+    }
   }
 
-  @include respond-to(md) { width: 100%; }
+  @include respond-to(md) {
+    width: 100%;
+  }
 }
 
 // ── Barra de categorias ────────────────────────────────────
@@ -318,7 +310,10 @@ const categoryGroups = computed(() =>
   cursor: pointer;
   transition: all 0.15s;
 
-  &:hover { color: var(--text); background: var(--bg-alt); }
+  &:hover {
+    color: var(--text);
+    background: var(--bg-alt);
+  }
 
   &.active {
     background: var(--purple-100);
@@ -331,9 +326,13 @@ const categoryGroups = computed(() =>
 .blog-section {
   padding: 3rem 0;
 
-  & + & { border-top: 1px solid var(--border-subtle); }
+  & + & {
+    border-top: 1px solid var(--border-subtle);
+  }
 
-  &--category { padding: 2.5rem 0; }
+  &--category {
+    padding: 2.5rem 0;
+  }
 }
 
 .blog-section__header {
@@ -351,14 +350,23 @@ const categoryGroups = computed(() =>
   margin: 0;
   letter-spacing: -0.02em;
 
-  em { font-style: normal; color: var(--purple); }
+  em {
+    font-style: normal;
+    color: var(--purple);
+  }
 }
 
 .filter-clear {
-  background: none; border: none;
-  font-size: 0.82rem; font-weight: 600;
-  color: var(--purple); cursor: pointer; padding: 0;
-  &:hover { text-decoration: underline; }
+  background: none;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--purple);
+  cursor: pointer;
+  padding: 0;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 // ── Grids ──────────────────────────────────────────────────
@@ -367,13 +375,20 @@ const categoryGroups = computed(() =>
   grid-template-columns: repeat(4, 1fr);
   gap: 1.75rem 1.5rem;
 
-  @include respond-to(lg) { grid-template-columns: repeat(3, 1fr); }
-  @include respond-to(md) { grid-template-columns: repeat(2, 1fr); }
-  @include respond-to(sm) { grid-template-columns: 1fr; }
+  @include respond-to(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
 }
 
 // ── Recentes: destaque em cima + grid embaixo ──────────────
-.blog-recent {}
+.blog-recent {
+}
 
 .blog-recent__featured {
   margin-bottom: 2.5rem;
@@ -381,7 +396,8 @@ const categoryGroups = computed(() =>
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.blog-recent__grid {}
+.blog-recent__grid {
+}
 
 // ── Carregar mais ──────────────────────────────────────────
 .blog-load-more {
@@ -398,6 +414,8 @@ const categoryGroups = computed(() =>
   align-items: center;
   gap: 1.5rem;
 
-  p { color: var(--muted); }
+  p {
+    color: var(--muted);
+  }
 }
 </style>

@@ -1,14 +1,14 @@
 ---
-title: "86% dos colaboradores valorizam bem-estar tanto quanto salário — e agora?"
-slug: "bem-estar-colaboradores-dados-2026"
-excerpt: "Novos dados mostram que bem-estar no trabalho deixou de ser benefício e passou a ser critério de escolha e permanência."
-date: "2026-03-10"
-author: "wanderson-paixao"
-category: "Bem-estar"
-tags: ["bem-estar", "engajamento", "saúde mental", "dados", "RH"]
+title: '86% dos colaboradores valorizam bem-estar tanto quanto salário — e agora?'
+slug: 'bem-estar-colaboradores-dados-2026'
+excerpt: 'Novos dados mostram que bem-estar no trabalho deixou de ser benefício e passou a ser critério de escolha e permanência.'
+date: '2026-03-10'
+author: 'wanderson-paixao'
+category: 'Bem-estar'
+tags: ['bem-estar', 'engajamento', 'saúde mental', 'dados', 'RH']
 readTime: 7
 featured: true
-cover: "/images/blog/post-4.jpg"
+cover: '/images/blog/post-4.jpg'
 ---
 
 ## O dado que mudou tudo
@@ -21,13 +21,13 @@ Por muito tempo, o salário foi o principal — e muitas vezes único — crité
 
 O Panorama do Bem-Estar Corporativo 2026 traz comparações reveladoras entre empresas com e sem programas estruturados de bem-estar:
 
-| Indicador | Com programa | Sem programa |
-|---|---|---|
-| Bem-estar geral bom ou excelente | 61% | 40% |
-| Saúde física boa ou excelente | 60% | 43% |
-| Conseguem cuidar de si no trabalho | 79% | 55% |
-| RH se preocupa com seu bem-estar | 77% | 38% |
-| Consideram remuneração adequada | **90%** | 57% |
+| Indicador                          | Com programa | Sem programa |
+| ---------------------------------- | ------------ | ------------ |
+| Bem-estar geral bom ou excelente   | 61%          | 40%          |
+| Saúde física boa ou excelente      | 60%          | 43%          |
+| Conseguem cuidar de si no trabalho | 79%          | 55%          |
+| RH se preocupa com seu bem-estar   | 77%          | 38%          |
+| Consideram remuneração adequada    | **90%**      | 57%          |
 
 O último dado é particularmente interessante: colaboradores com acesso a programas de bem-estar estão mais satisfeitos com o próprio salário. Bem-estar não compete com remuneração — ele a potencializa.
 
