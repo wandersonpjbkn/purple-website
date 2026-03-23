@@ -1,6 +1,6 @@
 <template>
   <article class="blog-card">
-    <div class="blog-card__image">Imagem</div>
+    <div class="blog-card__image" :style="{ 'background-image': `url('${post.cover}')` }" />
     <div class="blog-card__content">
       <p class="blog-card__meta">{{ post.category }} · {{ post.readTime }}</p>
       <h3>

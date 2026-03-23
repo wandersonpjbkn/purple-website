@@ -1,0 +1,62 @@
+// ============================================================
+//  layout/_header.scss
+// ============================================================
+
+@use '../abstracts/mixins' as *;
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(250, 247, 253, 0.88);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: box-shadow 0.2s var(--ease);
+
+  &.scrolled {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 76px;
+
+  @include respond-to(md) {
+    height: 64px;
+  }
+}
+
+// ── Nav desktop ────────────────────────────────────────────
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-pill);
+    transition: color 0.15s var(--ease), background 0.15s var(--ease);
+
+    &:hover {
+      color: var(--text);
+      background: var(--bg-alt);
+    }
+
+    &.router-link-active {
+      color: var(--purple);
+      font-weight: 600;
+      background: var(--purple-100);
+    }
+  }
+
+  @include respond-to(md) {
+    display: none;
+  }
+}

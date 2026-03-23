@@ -1,0 +1,70 @@
+// ============================================================
+//  components/_buttons.scss
+// ============================================================
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding: 0 1.5rem;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s var(--ease);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+
+  &--lg {
+    height: 56px;
+    padding: 0 2rem;
+    font-size: 1rem;
+  }
+
+  // ── Variantes ────────────────────────────────────────
+  &.primary {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+
+    &:hover {
+      background: var(--purple-600);
+      border-color: var(--purple-600);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(139, 47, 204, 0.3);
+    }
+  }
+
+  &.secondary {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+
+    &:hover {
+      border-color: var(--purple-400);
+      color: var(--purple);
+      background: var(--purple-50);
+    }
+  }
+
+  &.lime {
+    background: var(--lime);
+    color: var(--text);
+    border-color: var(--lime);
+    font-weight: 700;
+
+    &:hover {
+      background: var(--lime-dark);
+      border-color: var(--lime-dark);
+      transform: translateY(-1px);
+    }
+  }
+
+  &.ghost {
+    background: transparent;
+    color: var(--text);
+  }
+}

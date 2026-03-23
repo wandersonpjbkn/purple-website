@@ -1,0 +1,34 @@
+// ============================================================
+//  main.scss  ·  Purple Comunicação
+//  Arquivo de entrada — importa todos os módulos em ordem
+//
+//  Estrutura:
+//    abstracts/   → tokens, mixins (sem output CSS)
+//    base/        → reset, tipografia
+//    layout/      → container, grid, header, footer
+//    components/  → botões, formulários, cards
+//    sections/    → hero, stats/panorama, cta
+// ============================================================
+
+// ── 1. Abstracts (sem output direto) ──────────────────────
+@use 'abstracts/tokens';   // CSS custom properties (:root)
+@use 'abstracts/mixins';   // mixins e funções SASS
+
+// ── 2. Base ───────────────────────────────────────────────
+@use 'base/reset';
+@use 'base/typography';
+
+// ── 3. Layout ─────────────────────────────────────────────
+@use 'layout/grid';
+@use 'layout/header';
+@use 'layout/footer';
+
+// ── 4. Components ─────────────────────────────────────────
+@use 'components/buttons';
+@use 'components/forms';
+@use 'components/cards';
+
+// ── 5. Sections ───────────────────────────────────────────
+@use 'sections/hero';
+@use 'sections/stats';
+@use 'sections/cta';

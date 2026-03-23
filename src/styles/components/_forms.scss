@@ -1,0 +1,44 @@
+// ============================================================
+//  components/_forms.scss
+// ============================================================
+
+@use '../abstracts/mixins' as *;
+
+// ── Input / textarea base ──────────────────────────────────
+%input-base {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+  outline: none;
+
+  &:focus {
+    border-color: var(--purple-400);
+    box-shadow: 0 0 0 3px rgba(139, 47, 204, 0.1);
+  }
+
+  &::placeholder { color: var(--subtle); }
+}
+
+.search-input { @extend %input-base; width: 280px; }
+
+// ── Contact form ───────────────────────────────────────────
+.contact-form {
+  @include card-surface(2rem);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 1.25rem;
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  input, textarea { @extend %input-base; }
+}

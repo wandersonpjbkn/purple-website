@@ -1,7 +1,8 @@
 <template>
   <footer class="site-footer">
     <BaseContainer>
-      <section class="newsletter-box">
+      <!-- TODO: review implementation -->
+      <!-- <section class="newsletter-box">
         <div>
           <p class="section-eyebrow">Newsletter</p>
           <h3>{{ site.footer.newsletterTitle }}</h3>
@@ -10,7 +11,7 @@
           <input type="email" placeholder="Seu melhor e-mail" aria-label="Seu melhor e-mail" />
           <button type="submit" class="button primary">Quero receber</button>
         </form>
-      </section>
+      </section> -->
 
       <div class="footer-grid">
         <div>
@@ -21,6 +22,7 @@
           <h4>Navegação</h4>
           <ul>
             <li><RouterLink to="/">Home</RouterLink></li>
+            <li><RouterLink to="/servicos">Serviços</RouterLink></li>
             <li><RouterLink to="/sobre">Sobre</RouterLink></li>
             <li><RouterLink to="/blog">Blog</RouterLink></li>
             <li><RouterLink to="/contato">Contato</RouterLink></li>
@@ -41,8 +43,9 @@
       </div>
 
       <div class="footer-bottom">
-        <span>Copyright © 2026 Purple Comunicação</span>
-        <span>Política de privacidade</span>
+        <span>Copyright © {{ currentYear }} Purple Comunicação</span>
+        <!-- TODO: review implementation -->
+        <!-- <span>Política de privacidade</span> -->
       </div>
     </BaseContainer>
   </footer>
@@ -50,6 +53,9 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+
 import site from '@/data/site.json'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+
+const currentYear = new Date().getFullYear()
 </script>

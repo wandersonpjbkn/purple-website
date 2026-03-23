@@ -1,0 +1,118 @@
+// ============================================================
+//  abstracts/_mixins.scss
+//  Mixins reutilizáveis
+// ============================================================
+
+// ── Breakpoints ────────────────────────────────────────────
+$bp-xl:  1280px;
+$bp-lg:  1024px;
+$bp-md:  900px;
+$bp-sm:  640px;
+$bp-xs:  420px;
+
+@mixin respond-to($bp) {
+  @if $bp == xl    { @media (max-width: #{$bp-xl}) { @content; } }
+  @else if $bp == lg { @media (max-width: #{$bp-lg}) { @content; } }
+  @else if $bp == md { @media (max-width: #{$bp-md}) { @content; } }
+  @else if $bp == sm { @media (max-width: #{$bp-sm}) { @content; } }
+  @else if $bp == xs { @media (max-width: #{$bp-xs}) { @content; } }
+}
+
+// ── Superfície card ────────────────────────────────────────
+@mixin card-surface($padding: 1.5rem) {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: $padding;
+  box-shadow: var(--shadow-sm);
+}
+
+// ── Card hover lift ────────────────────────────────────────
+@mixin card-hover {
+  transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease), border-color 0.2s var(--ease);
+
+  &:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+    border-color: rgba(139, 47, 204, 0.2);
+  }
+}
+
+// ── Linha gradiente no topo do card ───────────────────────
+@mixin top-accent-line {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--lime));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s var(--ease);
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+// ── Fundo com gradiente radial sutil ──────────────────────
+@mixin radial-glow($color: var(--purple), $opacity: 0.08, $pos: 'top right') {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 55%;
+    aspect-ratio: 1;
+    background: radial-gradient(ellipse at center, rgba(139,47,204,#{$opacity}) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+// ── Section eyebrow padronizada ────────────────────────────
+@mixin eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--purple);
+  margin-bottom: 0.875rem;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background: var(--lime);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+}
+
+// ── Clamp fluido de tamanho de fonte ──────────────────────
+@mixin fluid-type($min, $max, $min-vw: 360px, $max-vw: 1200px) {
+  font-size: clamp(#{$min}, calc(#{$min} + (#{strip-unit($max - $min)}) * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})), #{$max});
+}
+
+@function strip-unit($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+// ── Texto truncado com ellipsis ────────────────────────────
+@mixin line-clamp($lines: 3) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

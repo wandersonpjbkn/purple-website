@@ -1,51 +1,306 @@
 {
   "brand": {
     "name": "Purple Comunicação",
-    "tagline": "Employer Branding, comunicação interna e estratégia com foco nas pessoas."
+    "tagline": "Employer Branding, Endomarketing e Comunicação Interna com foco em pessoas e resultados."
   },
   "home": {
     "hero": {
-      "eyebrow": "Comunicação com foco em pessoas",
-      "title": "Investir nas pessoas colaboradoras gera resultados financeiros",
-      "subtitle": "A Purple Comunicação nasce da certeza de que employer branding, comunicação interna e ações de engajamento podem fortalecer a cultura e os resultados do negócio.",
-      "primaryCta": "Começar agora",
-      "secondaryCta": "Vamos conversar"
+      "eyebrow": "Agência de comunicação interna",
+      "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
+      "titleRotating": [
+        "reduzem o turnover",
+        "o time engaja mais",
+        "atraem mais talentos",
+        "fortalecem sua cultura"
+      ],
+      "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
+      "primaryCta": "Falar com a Purple",
+      "secondaryCta": "Conheça os serviços"
     },
+    "panorama": {
+      "eyebrow": "Panorama do mercado",
+      "title": "Os números que ninguém pode ignorar",
+      "subtitle": "Dados de pesquisas recentes mostram por que cuidar dos colaboradores deixou de ser diferencial para se tornar estratégia de negócio.",
+      "stats": [
+        {
+          "number": "86",
+          "suffix": "%",
+          "label": "consideram bem-estar tão importante quanto o salário",
+          "source": "Pesquisa Global, 2024",
+          "highlight": false
+        },
+        {
+          "number": "89",
+          "suffix": "%",
+          "label": "afirmam ter melhor desempenho ao priorizar o bem-estar",
+          "source": "Pesquisa Global, 2024",
+          "highlight": false
+        },
+        {
+          "number": "14",
+          "suffix": "%",
+          "label": "das empresas oferecem programas estruturados de bem-estar",
+          "source": "Panorama Corporativo 2024",
+          "highlight": true,
+          "note": "Apesar de 95% dos colaboradores afirmarem que as dimensões de saúde estão interligadas"
+        },
+        {
+          "number": "61",
+          "suffix": "%",
+          "label": "dos colaboradores com programas de bem-estar avaliam sua saúde como boa ou excelente",
+          "source": "Weehub — Panorama do Bem-Estar Corporativo 2026",
+          "highlight": false,
+          "comparison": "vs. 40% entre os que não têm acesso"
+        },
+        {
+          "number": "90",
+          "suffix": "%",
+          "label": "consideram sua remuneração adequada quando há programa de bem-estar",
+          "source": "Weehub — Panorama do Bem-Estar Corporativo 2026",
+          "highlight": true,
+          "comparison": "vs. 57% sem programa"
+        },
+        {
+          "number": "32",
+          "suffix": "%",
+          "label": "da população economicamente ativa sofre de burnout ou problemas de saúde ocupacional",
+          "source": "ISMA-Brasil, 2019",
+          "highlight": false
+        }
+      ],
+      "context": [
+        {
+          "strong": "70% → 90%",
+          "text": "de engajamento após implementação de estratégias de saúde corporativa (Forbes Brasil, 2022)"
+        },
+        {
+          "strong": "9 em 10 brasileiros",
+          "text": "associam burnout a modelos de liderança que ignoram sobrecarga (Mindsight)"
+        },
+        {
+          "strong": "US$ 1 trilhão",
+          "text": "retirados da economia global anualmente por problemas de saúde mental no trabalho (OMS)"
+        },
+        {
+          "strong": "77%",
+          "text": "sentem que o RH se preocupa com seu bem-estar quando há programa estruturado — vs. 38% sem (Weehub 2026)"
+        }
+      ]
+    },
+    "stats": [
+      { "number": "86", "suffix": "%", "label": "consideram bem-estar tão importante quanto o salário" },
+      { "number": "57", "suffix": "%", "label": "dos trabalhadores não estão engajados globalmente" },
+      { "number": "17", "suffix": "%", "label": "de aumento de receita com colaboradores engajados" },
+      { "number": "4x", "suffix": "", "label": "mais produtivas com colaboradores bem engajados" }
+    ],
     "highlight": {
-      "title": "Vamos te ajudar a atingir melhores resultados",
-      "description": "É importante estar antenado com as tendências de mercado e com as necessidades do seu time. Unimos estratégia, conteúdo e escuta para gerar impacto real."
+      "eyebrow": "Por que isso importa",
+      "title": "Na busca pelo crescimento, muitos esquecem de olhar para dentro",
+      "description": "Campanhas, anúncios e promoções têm impacto limitado quando a comunicação interna é fraca, o time está desengajado e a marca empregadora não transmite confiança.",
+      "benefits": [
+        "Menos rotatividade e custos de recontratação",
+        "Times mais alinhados com os objetivos da empresa",
+        "Marca empregadora que atrai os melhores profissionais",
+        "Cultura organizacional consistente e saudável"
+      ]
     },
     "services": [
       {
-        "title": "Diagnóstico",
-        "description": "Mapeamos a percepção interna e identificamos oportunidades de melhoria na experiência dos colaboradores.",
-        "cta": "Começar agora"
+        "id": "employer-branding",
+        "icon": "🏆",
+        "title": "Employer Branding",
+        "description": "Trabalhamos os atributos que tornam sua empresa um lugar desejado para trabalhar — dentro e fora.",
+        "cta": "Saiba mais",
+        "featured": false
       },
       {
-        "title": "Descrição de cargos",
-        "description": "Ajudamos sua empresa a estruturar descrições mais claras, humanas e alinhadas à marca empregadora.",
-        "cta": "Começar agora"
+        "id": "endomarketing",
+        "icon": "🤝",
+        "title": "Endomarketing",
+        "description": "Ações estratégicas para engajar, motivar e conectar colaboradores com o propósito da empresa.",
+        "cta": "Saiba mais",
+        "featured": false
       },
       {
-        "title": "Pesquisas internas",
-        "description": "Entenda melhor as dores, expectativas e o nível de engajamento das equipes para agir com mais precisão.",
-        "cta": "Começar agora"
+        "id": "comunicacao-interna",
+        "icon": "📣",
+        "title": "Comunicação Interna",
+        "description": "Planejamento e gestão de canais, conteúdos e rituais que mantêm todos informados e alinhados.",
+        "cta": "Saiba mais",
+        "featured": true
+      },
+      {
+        "id": "publicidade-online",
+        "icon": "📈",
+        "title": "Publicidade Online",
+        "description": "Campanhas de mídia paga para atração de talentos, fortalecimento de marca e geração de resultados mensuráveis.",
+        "cta": "Saiba mais",
+        "featured": false
+      },
+      {
+        "id": "ux-ui",
+        "icon": "✦",
+        "title": "UX/UI Design para websites",
+        "description": "Design de interfaces e experiência do usuário para websites institucionais, portais do colaborador e páginas de carreiras.",
+        "cta": "Saiba mais",
+        "featured": false
       }
     ],
+    "process": {
+      "eyebrow": "Como trabalhamos",
+      "title": "Um processo pensado para gerar resultado real",
+      "steps": [
+        {
+          "title": "Briefing e imersão",
+          "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
+        },
+        {
+          "title": "Diagnóstico",
+          "description": "Pesquisa interna, análise de clima e mapeamento da percepção de marca para embasar a estratégia."
+        },
+        {
+          "title": "Planejamento estratégico",
+          "description": "Definimos um plano claro: canais, mensagens, cronograma e métricas de sucesso."
+        },
+        {
+          "title": "Implementação",
+          "description": "Execução das ações com criação de peças, conteúdos, treinamentos e ativação das iniciativas."
+        },
+        {
+          "title": "Acompanhamento e ajustes",
+          "description": "Análise contínua dos resultados e refinamento das estratégias para ampliar o impacto."
+        }
+      ]
+    },
     "cta": {
-      "title": "Colaboradores engajados entregam mais e rendem mais",
-      "description": "Quando a comunicação interna funciona e a marca empregadora é cuidada, a empresa cresce de dentro para fora."
+      "title": "Tudo começa com uma boa conversa",
+      "description": "Estamos aqui para ouvir, entender seu contexto e propor o que realmente faz sentido para o seu negócio.",
+      "primaryCta": "Falar com a Purple",
+      "secondaryCta": "Ver portfólio"
     },
     "team": [
       {
         "name": "Suelen Fernanda",
-        "bio": "Profissional de marketing digital com experiência em conteúdo, mídia e ações voltadas às pessoas colaboradoras.",
+        "role": "Marketing & Employer Branding",
+        "bio": "No mercado de marketing digital desde 2011, a idealizadora da Purple atuou em agências, marketing interno e atendeu clientes de diversos segmentos.",
         "quote": "Foi nas ações focadas nas pessoas colaboradoras que encontrei minha verdadeira vocação."
       },
       {
-        "name": "Wanderson PJ",
-        "bio": "Pesquisador de Experiência do Usuário com interesse em marketing, design, psicologia e processos centrados em pessoas.",
-        "quote": "As diversas vivências me ensinaram como é importante se lembrar das pessoas em todos os processos."
+        "name": "Wanderson Paixão",
+        "role": "UX Design & Estratégia",
+        "bio": "Desenvolvedor web com vivências em Marketing Digital, amante de Design e cursando Psicologia. Especialista em experiências centradas em pessoas.",
+        "quote": "As diversas vivências me ensinaram como é importante sempre se lembrar das pessoas em todos os processos."
+      }
+    ]
+  },
+  "services": {
+    "title": "Nossas soluções",
+    "subtitle": "Serviços pensados para melhorar a comunicação interna, engajamento e reputação da sua empresa como empregadora.",
+    "items": [
+      {
+        "id": "employer-branding",
+        "icon": "🏆",
+        "title": "Employer Branding",
+        "tagline": "Como a sua marca é percebida por quem trabalha — e por quem pode trabalhar — nela.",
+        "description": "Conhecido como Employer Branding, trabalhar com a Marca Empregadora significa tratar os atributos e diferenciais que a empresa tem como empregadora e como os colaboradores internos enxergam o negócio e o ambiente de trabalho.",
+        "benefits": [
+          "Atração de novos talentos qualificados",
+          "Retenção e fidelização de colaboradores",
+          "Agilidade no processo de recrutamento e seleção",
+          "Mídia espontânea e reputação de mercado",
+          "Satisfação interna e senso de pertencimento"
+        ],
+        "process": [
+          "Diagnóstico de Marca Empregadora",
+          "Imersão e conhecimento da empresa",
+          "Definição dos diferenciais e atributos",
+          "Criação de EVP (Employee Value Proposition)",
+          "Criação e gestão de canais internos e externos"
+        ]
+      },
+      {
+        "id": "endomarketing",
+        "icon": "🤝",
+        "title": "Endomarketing",
+        "tagline": "Como o engajamento dos seus colaboradores impacta diretamente nos resultados.",
+        "description": "Ações para engajar e motivar colaboradores são uma ótima forma de manter a produtividade e um bom clima organizacional. Trabalhar com Endomarketing, além de importante, é essencial na construção de um bom ambiente de trabalho.",
+        "benefits": [
+          "Melhora do clima organizacional",
+          "Melhor atendimento aos clientes externos",
+          "Menos rotatividade e turnover",
+          "Mais produtividade e foco",
+          "Maior vínculo entre empresa e colaborador"
+        ],
+        "process": [
+          "Diagnóstico da empresa e cultura",
+          "Pesquisa interna com colaboradores",
+          "Análise dos resultados e identificação de gaps",
+          "Planejamento e aplicação das ações",
+          "Acompanhamento e análise de impacto"
+        ]
+      },
+      {
+        "id": "comunicacao-interna",
+        "icon": "📣",
+        "title": "Comunicação Interna",
+        "tagline": "Para que todos possam caminhar na mesma direção, é essencial que estejam informados.",
+        "description": "Planejamos e gerenciamos canais, conteúdos e rituais de comunicação que mantêm times alinhados, lideranças comunicativas e colaboradores conectados ao propósito da empresa.",
+        "benefits": [
+          "Times alinhados com objetivos e estratégia",
+          "Redução de ruídos e mal-entendidos",
+          "Lideranças mais comunicativas e presentes",
+          "Cultura organizacional mais coesa",
+          "Senso de pertencimento e engajamento"
+        ],
+        "process": [
+          "Briefing e entendimento da empresa",
+          "Diagnóstico de comunicação atual",
+          "Planejamento de canais e conteúdos",
+          "Criação de peças e materiais",
+          "Treinamento e alinhamento com equipe interna"
+        ]
+      },
+      {
+        "id": "publicidade-online",
+        "icon": "📈",
+        "title": "Publicidade Online",
+        "tagline": "Campanhas de mídia paga para atrair talentos, fortalecer a marca e gerar resultados.",
+        "description": "Estratégias de mídia paga voltadas para employer branding, atração de talentos e fortalecimento da presença digital da marca empregadora. Do planejamento à análise de dados.",
+        "benefits": [
+          "Atração de candidatos mais qualificados",
+          "Fortalecimento da marca empregadora no digital",
+          "Campanhas com ROI mensurável",
+          "Segmentação precisa de público-alvo",
+          "Relatórios detalhados de performance"
+        ],
+        "process": [
+          "Definição de objetivos e KPIs",
+          "Planejamento de mídia e segmentação",
+          "Criação de criativos e copys",
+          "Ativação e monitoramento de campanhas",
+          "Otimização contínua e relatórios"
+        ]
+      },
+      {
+        "id": "ux-ui",
+        "icon": "✦",
+        "title": "UX/UI para websites",
+        "tagline": "Design de experiências digitais que refletem a identidade e os valores da sua marca.",
+        "description": "Design de interfaces e experiência do usuário para websites institucionais, portais do colaborador e páginas de carreira. Focamos em clareza, acessibilidade e conversão.",
+        "benefits": [
+          "Sites institucionais e portais de carreiras",
+          "Experiência do usuário centrada em pessoas",
+          "Design alinhado à identidade da marca",
+          "Foco em acessibilidade e performance",
+          "Prototipagem e validação antes do desenvolvimento"
+        ],
+        "process": [
+          "Descoberta e pesquisa de usuários",
+          "Arquitetura de informação",
+          "Wireframes e prototipagem",
+          "Design visual e sistema de componentes",
+          "Handoff para desenvolvimento"
+        ]
       }
     ]
   },
@@ -70,15 +325,15 @@
     ]
   },
   "contact": {
-    "title": "Queremos ouvir de você!",
-    "subtitle": "Adoramos que você chegou aqui. Mande uma mensagem e vamos conversar.",
-    "phone": "+55 19 9 9999-9999",
+    "title": "Queremos ouvir de você",
+    "subtitle": "Adoramos que você chegou até aqui. Mande uma mensagem e vamos conversar sobre como ajudar sua empresa.",
+    "phone": "(19) 99101-8383",
     "email": "purplecomunica@gmail.com",
-    "address": "Americana, São Paulo"
+    "address": "Americana, São Paulo — SP"
   },
   "footer": {
     "newsletterTitle": "Fique por dentro das novidades do mercado",
     "aboutText": "Na busca por vendas e crescimento, muitas empresas esquecem de olhar para dentro. A Purple Comunicação surge para ajudar marcas a cuidarem melhor da experiência das pessoas colaboradoras.",
-    "topics": ["Employer Branding", "Comunicação Interna", "Inovação"]
+    "topics": ["Employer Branding", "Comunicação Interna", "Endomarketing", "UX Design"]
   }
 }

@@ -1,75 +1,536 @@
 <template>
   <div v-if="post">
-    <section class="page-hero page-hero--simple">
+
+    <!-- ── Hero ──────────────────────────────────────── -->
+    <section class="post-hero">
       <BaseContainer>
-        <p class="section-eyebrow">{{ post.category }} · {{ post.readTime }}</p>
-        <h1>{{ post.title }}</h1>
-        <p class="lead narrow">{{ post.excerpt }}</p>
-        <div class="post-meta">Por {{ post.author }} · {{ formattedDate }}</div>
+
+        <nav class="post-breadcrumb" aria-label="Navegação">
+          <RouterLink to="/blog">Blog</RouterLink>
+          <span aria-hidden="true">›</span>
+          <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`">
+            {{ post.category }}
+          </RouterLink>
+          <span aria-hidden="true">›</span>
+          <span aria-current="page">{{ post.title }}</span>
+        </nav>
+
+        <div class="post-hero__inner">
+          <div class="post-hero__meta">
+            <RouterLink
+              :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
+              class="post-category-badge"
+            >{{ post.category }}</RouterLink>
+            <span class="post-hero__sep" aria-hidden="true">·</span>
+            <time :datetime="post.date">{{ formatDate(post.date) }}</time>
+            <span class="post-hero__sep" aria-hidden="true">·</span>
+            <span>{{ post.readTime }} min de leitura</span>
+          </div>
+
+          <h1>{{ post.title }}</h1>
+          <p class="post-hero__excerpt">{{ post.excerpt }}</p>
+
+          <RouterLink
+            v-if="author"
+            :to="`/blog/autor/${post.author}`"
+            class="post-hero__author"
+          >
+            <div class="post-hero__avatar" aria-hidden="true">{{ author.name.charAt(0) }}</div>
+            <div>
+              <strong>{{ author.name }}</strong>
+              <span>{{ author.role }}</span>
+            </div>
+          </RouterLink>
+        </div>
       </BaseContainer>
     </section>
 
-    <section class="section-block">
+    <!-- ── Conteúdo ───────────────────────────────────── -->
+    <section class="section-block section-block--sm">
       <BaseContainer>
         <div class="post-layout">
-          <BlogSidebar :sections="post.content" :tags="popularTags" />
 
-          <article class="post-content">
-            <div class="post-cover">Imagem de capa</div>
+          <!-- Sumário lateral -->
+          <aside class="post-toc" aria-label="Sumário do artigo">
+            <div v-if="headings.length" class="sidebar-box">
+              <h3>Neste artigo</h3>
+              <ul>
+                <li v-for="h in headings" :key="h.id">
+                  <a
+                    :href="`#${h.id}`"
+                    :class="{ 'toc-h3': h.level === 3 }"
+                  >{{ h.text }}</a>
+                </li>
+              </ul>
+            </div>
 
-            <section v-for="section in post.content" :id="section.id" :key="section.id" class="post-section">
-              <h2>{{ section.title }}</h2>
-              <p v-for="paragraph in section.body" :key="paragraph">{{ paragraph }}</p>
-            </section>
-          </article>
+            <div class="sidebar-box">
+              <h3>Categoria</h3>
+              <RouterLink
+                :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
+                class="sidebar-category-link"
+              >{{ post.category }}</RouterLink>
+            </div>
+          </aside>
+
+          <!-- Corpo do post -->
+          <article
+            class="prose"
+            v-html="post.html"
+          />
+
         </div>
       </BaseContainer>
     </section>
 
-    <section class="section-block">
+    <!-- ── Card do autor ──────────────────────────────── -->
+    <section
+      v-if="author"
+      class="section-block section-block--sm"
+      style="background:var(--bg-alt);border-top:1px solid var(--border);"
+    >
       <BaseContainer>
-        <div class="section-heading">
-          <p class="section-eyebrow">Recentes</p>
-          <h2>Você também pode gostar</h2>
+        <div class="post-author-card">
+          <div class="post-author-card__avatar" aria-hidden="true">
+            {{ author.name.charAt(0) }}
+          </div>
+          <div class="post-author-card__info">
+            <p class="section-eyebrow">Escrito por</p>
+            <h3>{{ author.name }}</h3>
+            <p class="post-author-card__role">{{ author.role }}</p>
+            <p>{{ author.bio }}</p>
+            <RouterLink :to="`/blog/autor/${post.author}`" class="text-link">
+              Ver todos os posts
+            </RouterLink>
+          </div>
         </div>
-        <BlogList :posts="relatedPosts" />
       </BaseContainer>
     </section>
+
+    <!-- ── Posts relacionados ────────────────────────── -->
+    <section
+      v-if="related.length"
+      class="section-block"
+      style="background:var(--surface);border-top:1px solid var(--border);"
+    >
+      <BaseContainer>
+        <div class="post-related-header">
+          <div>
+            <p class="section-eyebrow">Continue lendo</p>
+            <h2>Você também pode gostar</h2>
+          </div>
+          <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
+        </div>
+        <div class="post-related-grid">
+          <PostCard
+            v-for="p in related"
+            :key="p.slug"
+            :post="p"
+            variant="grid"
+          />
+        </div>
+      </BaseContainer>
+    </section>
+
   </div>
 
+  <!-- 404 -->
   <section v-else class="section-block">
     <BaseContainer>
       <h1>Post não encontrado</h1>
-      <p>Verifique o slug no arquivo <code>posts.json</code>.</p>
+      <p>O post que você está procurando não existe ou foi removido.</p>
+      <div style="margin-top:1.5rem;">
+        <BaseButton tag="RouterLink" to="/blog">← Voltar para o blog</BaseButton>
+      </div>
     </BaseContainer>
   </section>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
+import { getPost, posts } from 'virtual:blog-posts'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
-import BlogSidebar from '@/components/blog/BlogSidebar.vue'
-import BlogList from '@/components/blog/BlogList.vue'
-import posts from '@/data/posts.json'
+import BaseButton    from '@/components/ui/BaseButton.vue'
+import PostCard      from '@/components/blog/PostCard.vue'
+import { formatDate, getAuthor } from '@/composables/useBlog'
+import { usePageMeta } from '@/composables'
 
-const route = useRoute()
-const popularTags = ['Liderança', 'Employer Branding', 'Comunicação Interna']
+const route  = useRoute()
+const post   = computed(() => getPost(route.params.slug as string))
+const author = computed(() => post.value ? getAuthor(post.value.author) : undefined)
 
-const post = computed(() => posts.find((item) => item.slug === route.params.slug))
+// SEO
+usePageMeta(computed(() => ({
+  title:       post.value?.title   ?? 'Post',
+  description: post.value?.excerpt ?? '',
+  type:        'article' as const,
+})))
 
-const relatedPosts = computed(() => {
-  if (!post.value) return posts.slice(0, 3)
-  return posts.filter((item) => item.slug !== post.value?.slug).slice(0, 3)
+// Posts relacionados (mesma categoria ou mesmo autor, exceto o atual)
+const related = computed(() => {
+  if (!post.value) return []
+  return posts
+    .filter(p =>
+      p.slug !== post.value!.slug &&
+      (p.category === post.value!.category || p.author === post.value!.author)
+    )
+    .slice(0, 3)
 })
 
-const formattedDate = computed(() => {
-  if (!post.value) return ''
-
-  return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date(post.value.date))
+// Sumário — extrai h2/h3 do HTML gerado com id real pelo plugin
+const headings = computed(() => {
+  if (!post.value) return []
+  const re = /<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/gi
+  const result: { level: number; id: string; text: string }[] = []
+  let m: RegExpExecArray | null
+  const src = post.value.html
+  while ((m = re.exec(src)) !== null) {
+    result.push({
+      level: parseInt(m[1]),
+      id:    m[2],
+      text:  m[3].replace(/<[^>]+>/g, ''),
+    })
+  }
+  return result
 })
 </script>
+
+<style scoped lang="scss">
+@use '@/styles/abstracts/mixins' as *;
+
+// ── Hero ───────────────────────────────────────────────────
+.post-hero {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 0 2.5rem;
+}
+
+.post-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--subtle);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+  a {
+    color: var(--muted);
+    transition: color 0.15s;
+    &:hover { color: var(--purple); }
+  }
+
+  span[aria-current] { color: var(--text); font-weight: 500; }
+}
+
+.post-hero__inner { max-width: 760px; }
+
+.post-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--subtle);
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.post-category-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--purple);
+  background: var(--purple-100);
+  padding: 0.2rem 0.625rem;
+  border-radius: var(--radius-pill);
+  transition: background 0.15s;
+  &:hover { background: var(--purple-50); }
+}
+
+.post-hero__sep { color: var(--border); }
+
+.post-hero__inner h1 {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  margin-bottom: 1rem;
+}
+
+.post-hero__excerpt {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  max-width: 65ch;
+}
+
+.post-hero__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text);
+  text-decoration: none;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  strong { font-size: 0.9rem; font-weight: 700; }
+  span   { font-size: 0.78rem; color: var(--subtle); }
+
+  &:hover strong { color: var(--purple); }
+}
+
+.post-hero__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--purple-700);
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+// ── Layout: sumário + prose ────────────────────────────────
+.post-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 3rem;
+  align-items: start;
+
+  @include respond-to(lg) { grid-template-columns: 1fr; }
+}
+
+// ── Sumário ────────────────────────────────────────────────
+.post-toc {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  @include respond-to(lg) { display: none; }
+}
+
+.sidebar-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+
+  h3 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--subtle);
+    margin-bottom: 0.875rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      line-height: 1.4;
+      display: block;
+      transition: color 0.15s;
+      &:hover { color: var(--purple); }
+    }
+  }
+}
+
+.toc-h3 { padding-left: 0.875rem; }
+
+.sidebar-category-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--purple);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: color 0.15s;
+  &:hover { color: var(--purple-700); }
+}
+
+// ── Prose ──────────────────────────────────────────────────
+.prose {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  min-width: 0; // evita overflow em grid
+
+  :deep(h2) {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text);
+    letter-spacing: -0.02em;
+    &:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+  }
+
+  :deep(h3) {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    color: var(--text);
+  }
+
+  :deep(p) { margin-bottom: 1.25rem; color: var(--muted); }
+  :deep(p:last-child) { margin-bottom: 0; }
+
+  :deep(strong) { color: var(--text); font-weight: 700; }
+  :deep(em)     { font-style: italic; }
+
+  :deep(a) {
+    color: var(--purple);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  :deep(ul) { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+  :deep(ol) { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+  :deep(li) { color: var(--muted); margin-bottom: 0.5rem; line-height: 1.7; }
+
+  :deep(blockquote) {
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-alt);
+    border-left: 4px solid var(--lime);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    p { color: var(--muted); font-style: italic; margin: 0; }
+  }
+
+  :deep(code) {
+    background: var(--purple-100);
+    color: var(--purple-700);
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.875em;
+  }
+
+  :deep(pre) {
+    background: var(--purple-900);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    code {
+      background: none;
+      color: #e8d5ff;
+      font-size: 0.875rem;
+      padding: 0;
+    }
+  }
+
+  :deep(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    th {
+      background: var(--bg-alt);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--muted);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td      { background: var(--bg-alt); }
+  }
+
+  :deep(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+
+  :deep(img) {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    margin: 1.5rem 0;
+  }
+}
+
+// ── Card autor ─────────────────────────────────────────────
+.post-author-card {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+
+  @include respond-to(sm) { flex-direction: column; gap: 1.25rem; }
+}
+
+.post-author-card__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--purple-700);
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.post-author-card__info {
+  h3 { font-size: 1.2rem; margin-bottom: 0.2rem; }
+}
+
+.post-author-card__role {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--purple);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+
+// ── Relacionados ───────────────────────────────────────────
+.post-related-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-bottom: 2rem;
+
+  h2 { margin-bottom: 0; }
+}
+
+.post-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @include respond-to(lg) { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to(sm) { grid-template-columns: 1fr; }
+}
+</style>

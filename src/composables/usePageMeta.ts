@@ -1,36 +1,163 @@
+// src/composables/usePageMeta.ts
+// SEO completo: title, description, og:*, twitter:*, canonical, JSON-LD
+// Usa @unhead/vue (já instalado no projeto via @unhead/vue ^3.x)
+
 import { useSeoMeta, useHead } from '@unhead/vue'
-import { toValue } from 'vue'
+import { toValue, type MaybeRefOrGetter } from 'vue'
 import { useRoute } from 'vue-router'
 
-interface PageMetaOptions {
-  title: string
-  description?: string
-  type?: 'website' | 'article'
+// ── Configuração global do site ───────────────────────────
+const SITE = {
+  name:        'Purple Comunicação',
+  url:         import.meta.env.VITE_SITE_URL ?? 'https://purplecomunicacao.com.br',
+  locale:      'pt_BR',
+  twitterHandle: '@purplecomunica',
+  // Imagem padrão para og:image — coloque em /public/og-default.jpg (1200×630px)
+  defaultOgImage: '/og-default.jpg',
 }
 
-type MaybeRefOrGetter<T> = T | (() => T) | import('vue').Ref<T>
+// ── Tipos ─────────────────────────────────────────────────
+export interface PageMetaOptions {
+  // Obrigatórios
+  title: string
 
+  // Opcionais
+  description?: string
+  type?:        'website' | 'article' | 'profile'
+
+  // Article específico
+  publishedAt?: string   // ISO date
+  modifiedAt?:  string
+  author?:      string
+  category?:    string
+
+  // Imagem personalizada para og (ex: cover do post)
+  image?:       string
+  imageAlt?:    string
+
+  // Desativa indexação (ex: páginas de preview)
+  noIndex?: boolean
+}
+
+// ── Composable ────────────────────────────────────────────
 export function usePageMeta(options: MaybeRefOrGetter<PageMetaOptions>) {
   const route = useRoute()
-  const siteUrl = import.meta.env.VITE_SITE_URL ?? ''
-  const siteName = 'Purple Comunicação'
-  const canonical = `${siteUrl}${route.path}`
 
-  const fullTitle = `${toValue(options).title} | ${siteName}`
+  const canonical = computed(() => {
+    const path = route.path.endsWith('/')
+      ? route.path.slice(0, -1)
+      : route.path
+    return `${SITE.url}${path}`
+  })
 
+  const resolved = computed<PageMetaOptions>(() => toValue(options))
+
+  const fullTitle = computed(() =>
+    resolved.value.title === SITE.name
+      ? SITE.name
+      : `${resolved.value.title} | ${SITE.name}`
+  )
+
+  const image = computed(() =>
+    resolved.value.image
+      ? resolved.value.image.startsWith('http')
+        ? resolved.value.image
+        : `${SITE.url}${resolved.value.image}`
+      : `${SITE.url}${SITE.defaultOgImage}`
+  )
+
+  // ── Meta tags ───────────────────────────────────────────
   useSeoMeta({
-    title: fullTitle,
-    description: toValue(options).description,
-    ogTitle: fullTitle,
-    ogDescription: toValue(options).description,
-    ogUrl: canonical,
-    ogType: toValue(options).type ?? 'website',
-    ogSiteName: siteName,
-    twitterCard: 'summary',
+    title:            () => fullTitle.value,
+    description:      () => resolved.value.description,
+
+    // Open Graph
+    ogTitle:          () => fullTitle.value,
+    ogDescription:    () => resolved.value.description,
+    ogUrl:            () => canonical.value,
+    ogType:           () => resolved.value.type ?? 'website',
+    ogSiteName:       SITE.name,
+    ogLocale:         SITE.locale,
+    ogImage:          () => image.value,
+    ogImageAlt:       () => resolved.value.imageAlt ?? resolved.value.title,
+    ogImageWidth:     1200,
+    ogImageHeight:    630,
+
+    // Twitter / X
+    twitterCard:      'summary_large_image',
+    twitterSite:      SITE.twitterHandle,
+    twitterTitle:     () => fullTitle.value,
+    twitterDescription: () => resolved.value.description,
+    twitterImage:     () => image.value,
+
+    // Article
+    articlePublishedTime: () => resolved.value.publishedAt,
+    articleModifiedTime:  () => resolved.value.modifiedAt,
+    articleAuthor:        () => resolved.value.author,
+    articleSection:       () => resolved.value.category,
+
+    // Robots
+    robots: () => resolved.value.noIndex ? 'noindex, nofollow' : 'index, follow',
   })
 
   useHead({
     htmlAttrs: { lang: 'pt-BR' },
-    link: [{ rel: 'canonical', href: canonical }],
+    link: [
+      { rel: 'canonical', href: () => canonical.value },
+    ],
+  })
+
+  // ── JSON-LD structured data ─────────────────────────────
+  useHead({
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: () => {
+          const base = {
+            '@context': 'https://schema.org',
+            '@type':    resolved.value.type === 'article' ? 'Article' : 'WebPage',
+            name:       fullTitle.value,
+            url:        canonical.value,
+            description: resolved.value.description,
+            inLanguage:  'pt-BR',
+            isPartOf: {
+              '@type': 'WebSite',
+              name:    SITE.name,
+              url:     SITE.url,
+            },
+          }
+
+          if (resolved.value.type === 'article') {
+            return JSON.stringify({
+              ...base,
+              '@type':         'Article',
+              headline:        resolved.value.title,
+              datePublished:   resolved.value.publishedAt,
+              dateModified:    resolved.value.modifiedAt ?? resolved.value.publishedAt,
+              author: resolved.value.author ? {
+                '@type': 'Person',
+                name:    resolved.value.author,
+              } : undefined,
+              image:           image.value,
+              articleSection:  resolved.value.category,
+              publisher: {
+                '@type': 'Organization',
+                name:    SITE.name,
+                url:     SITE.url,
+                logo: {
+                  '@type': 'ImageObject',
+                  url:     `${SITE.url}/logo.png`,
+                },
+              },
+            })
+          }
+
+          return JSON.stringify(base)
+        },
+      },
+    ],
   })
 }
+
+// ── Importação faltando no composable ────────────────────
+import { computed } from 'vue'

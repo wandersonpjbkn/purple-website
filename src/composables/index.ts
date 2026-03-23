@@ -1,3 +1,3 @@
-import { usePageMeta } from '@/composables/usePageMeta'
-
-export { usePageMeta }
+// src/composables/index.ts
+export { usePageMeta } from '@/composables/usePageMeta'
+export { useBlog, formatDate, getAuthor } from '@/composables/useBlog'

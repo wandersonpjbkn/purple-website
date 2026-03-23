@@ -1,0 +1,18 @@
+[
+  {
+    "slug": "suelen-fernanda",
+    "name": "Suelen Fernanda",
+    "role": "Marketing & Employer Branding",
+    "bio": "No mercado de marketing digital desde 2011, a idealizadora da Purple atuou em agências, marketing interno e atendeu clientes de diversos segmentos. Especialista em ações focadas em pessoas colaboradoras.",
+    "avatar": "/images/team/suelen.jpg",
+    "linkedin": "https://linkedin.com/in/suelen-fernanda"
+  },
+  {
+    "slug": "wanderson-paixao",
+    "name": "Wanderson Paixão",
+    "role": "UX Design & Estratégia",
+    "bio": "Desenvolvedor web com vivências em Marketing Digital, amante de Design e cursando Psicologia. Especialista em experiências digitais centradas em pessoas.",
+    "avatar": "/images/team/wanderson.jpg",
+    "linkedin": "https://linkedin.com/in/wanderson-paixao"
+  }
+]

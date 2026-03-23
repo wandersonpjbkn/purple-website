@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('@/pages/HomePage.vue'),
     },
     {
+      path: '/servicos',
+      name: 'services',
+      component: () => import('@/pages/ServicesPage.vue'),
+    },
+    {
       path: '/sobre',
       name: 'about',
       component: () => import('@/pages/AboutPage.vue'),
@@ -17,6 +22,11 @@ const router = createRouter({
       path: '/blog',
       name: 'blog',
       component: () => import('@/pages/BlogPage.vue'),
+    },
+    {
+      path: '/blog/autor/:slug',
+      name: 'blog-author',
+      component: () => import('@/pages/AuthorPage.vue'),
     },
     {
       path: '/blog/:slug',
@@ -29,8 +39,9 @@ const router = createRouter({
       component: () => import('@/pages/ContactPage.vue'),
     },
   ],
-  scrollBehavior() {
-    return { top: 0 }
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    return { top: 0, behavior: 'smooth' }
   },
 })
 

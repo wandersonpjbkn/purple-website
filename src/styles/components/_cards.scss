@@ -1,0 +1,268 @@
+// ============================================================
+//  components/_cards.scss
+//  Service cards, blog cards, team cards, process items
+// ============================================================
+
+@use '../abstracts/mixins' as *;
+
+// ── Service cards grid ─────────────────────────────────────
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+
+  @include respond-to(lg) { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to(sm) { grid-template-columns: 1fr; }
+}
+
+.service-card {
+  @include card-surface(2rem);
+  @include card-hover;
+  @include top-accent-line;
+  cursor: pointer;
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: var(--purple-100);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    margin-bottom: 1.25rem;
+    transition: background 0.2s var(--ease);
+  }
+
+  &:hover &__icon {
+    background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  // ── Featured (dark, 2 cols) ─────────────────────────
+  &--featured {
+    grid-column: span 2;
+    background: var(--purple-900);
+    border-color: rgba(255, 255, 255, 0.08);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+
+    &::after { display: none; } // remove accent line
+
+    h3 { color: #fff; font-size: 1.35rem; }
+    p  { color: rgba(255, 255, 255, 0.6); }
+
+    .service-card__icon {
+      background: rgba(255, 255, 255, 0.1);
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      font-size: 26px;
+    }
+
+    @include respond-to(lg) { grid-column: span 2; }
+    @include respond-to(sm) { grid-column: span 1; grid-template-columns: 1fr; }
+  }
+}
+
+// ── Blog ───────────────────────────────────────────────────
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @include respond-to(md) { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to(sm) { grid-template-columns: 1fr; }
+}
+
+.blog-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.2s var(--ease), transform 0.2s var(--ease);
+
+  &:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  &__image {
+    height: 180px;
+    background: {
+      color: var(--purple-100);
+      image: linear-gradient(135deg, var(--purple-100), var(--lime-light));
+      position: center;
+      repeat: no-repeat;
+    };
+    display: grid;
+    place-items: center;
+    color: var(--purple-400);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  &__content { padding: 1.25rem; }
+
+  &__meta {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+
+    a { color: var(--text); &:hover { color: var(--purple); } }
+  }
+
+  p {
+    font-size: 0.875rem;
+    @include line-clamp(3);
+  }
+}
+
+// ── Blog: busca ────────────────────────────────────────────
+.blog-search-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: start;
+
+  @include respond-to(sm) { grid-template-columns: 1fr; }
+}
+
+// ── Team cards ─────────────────────────────────────────────
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  @include respond-to(sm) { grid-template-columns: 1fr; }
+}
+
+.team-card {
+  @include card-surface(2rem);
+
+  &:hover { box-shadow: var(--shadow); }
+
+  &__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--purple-700);
+    margin-bottom: 1.25rem;
+    border: 2px solid var(--border);
+  }
+
+  h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+
+  &__role {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.875rem;
+  }
+
+  blockquote {
+    margin: 1rem 0 0;
+    padding: 1rem;
+    background: var(--bg-alt);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--lime);
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+}
+
+// ── Blog sidebar ───────────────────────────────────────────
+.blog-sidebar {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.sidebar-box {
+  @include card-surface(1.25rem);
+
+  h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--subtle);
+    margin-bottom: 0.875rem;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.5rem;
+
+    li a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      transition: color 0.15s;
+      &:hover { color: var(--purple); }
+    }
+  }
+}
+
+// ── Post layout ────────────────────────────────────────────
+.post-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 3rem;
+  align-items: start;
+
+  @include respond-to(md) {
+    grid-template-columns: 1fr;
+
+    .blog-sidebar { position: static; }
+  }
+}
+
+.post-content {
+  @include card-surface(2.5rem);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-xl);
+}
+
+.post-cover {
+  height: 280px;
+  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+  display: grid;
+  place-items: center;
+  color: var(--subtle);
+  font-size: 0.875rem;
+}
+
+.post-section + .post-section { margin-top: 2.5rem; }
