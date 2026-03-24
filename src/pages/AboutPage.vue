@@ -3,7 +3,7 @@
   <section class="about-hero">
     <BaseContainer>
       <div class="about-hero__inner">
-        <div class="about-hero__text">
+        <div>
           <p class="section-eyebrow">Sobre nós</p>
           <h1>Um espaço criado por gente que não se conforma</h1>
           <p class="lead">
@@ -21,7 +21,7 @@
     </BaseContainer>
   </section>
 
-  <!-- ── O que nos move ─────────────────────────────── -->
+  <!-- ── Nossa crença ───────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
       <div class="split-section">
@@ -57,13 +57,13 @@
         </p>
       </div>
       <div class="about-pillars">
-        <div v-for="pillar in site.about.pillars" :key="pillar.title" class="about-pillar">
-          <div class="about-pillar__icon" aria-hidden="true">
-            {{ pillarIcons[pillar.title] ?? '✦' }}
-          </div>
-          <h3>{{ pillar.title }}</h3>
-          <p>{{ pillar.description }}</p>
-        </div>
+        <FeaturePillar
+          v-for="pillar in site.about.pillars"
+          :key="pillar.title"
+          :icon="pillarIcons[pillar.title] ?? '✦'"
+          :title="pillar.title"
+          :description="pillar.description"
+        />
       </div>
     </BaseContainer>
   </section>
@@ -79,19 +79,8 @@
           focada em Comunicação Interna, Endomarketing e Employer Branding.
         </p>
       </div>
-
-      <div class="about-team">
-        <article v-for="member in site.home.team" :key="member.name" class="about-team-card">
-          <div class="about-team-card__avatar" aria-hidden="true">
-            {{ member.name.charAt(0) }}
-          </div>
-          <div class="about-team-card__info">
-            <h3>{{ member.name }}</h3>
-            <p class="about-team-card__role">{{ member.role }}</p>
-            <p>{{ member.bio }}</p>
-            <blockquote v-if="member.quote">"{{ member.quote }}"</blockquote>
-          </div>
-        </article>
+      <div class="team-grid">
+        <TeamCard v-for="member in site.home.team" :key="member.name" :member="member" />
       </div>
     </BaseContainer>
   </section>
@@ -106,13 +95,14 @@
           Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
         </p>
       </div>
-      <div class="about-data-grid">
-        <div v-for="stat in dataStats" :key="stat.number" class="about-data-card">
-          <span class="about-data-card__number">
+      <!-- data-stat-grid + data-stat-card vêm de _stats.scss -->
+      <div class="data-stat-grid" style="margin-top: 3rem; position: relative; z-index: 1">
+        <div v-for="stat in dataStats" :key="stat.number" class="data-stat-card" style="background: var(--purple-900)">
+          <span class="data-stat-card__number">
             {{ stat.number }}<span>{{ stat.suffix }}</span>
           </span>
-          <p class="about-data-card__label">{{ stat.label }}</p>
-          <span class="about-data-card__source">{{ stat.source }}</span>
+          <p class="data-stat-card__label">{{ stat.label }}</p>
+          <span class="data-stat-card__source">{{ stat.source }}</span>
         </div>
       </div>
     </BaseContainer>
@@ -131,6 +121,8 @@ import site from '@/data/site.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import TeamCard from '@/components/ui/TeamCard.vue'
+import FeaturePillar from '@/components/ui/FeaturePillar.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
 usePageMeta({
@@ -176,7 +168,6 @@ const dataStats = [
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Hero ───────────────────────────────────────────────────
 .about-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -193,9 +184,7 @@ const dataStats = [
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-}
 
-.about-hero__text {
   h1 {
     font-size: clamp(2rem, 4vw, 3.4rem);
   }
@@ -233,7 +222,6 @@ const dataStats = [
   z-index: 1;
 }
 
-// ── Pilares ────────────────────────────────────────────────
 .about-pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -245,99 +233,6 @@ const dataStats = [
   }
 }
 
-.about-pillar {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  transition:
-    box-shadow 0.2s var(--ease),
-    transform 0.2s var(--ease);
-
-  &:hover {
-    box-shadow: var(--shadow-glow);
-    transform: translateY(-2px);
-  }
-}
-
-.about-pillar__icon {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-// ── Time ───────────────────────────────────────────────────
-.about-team {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  max-width: 820px;
-  margin: 0 auto;
-
-  @include respond-to(sm) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.about-team-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 2.5rem;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.about-team-card__avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
-  display: grid;
-  place-items: center;
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--purple-700);
-  border: 2px solid var(--border);
-  flex-shrink: 0;
-}
-
-.about-team-card__info {
-  h3 {
-    font-size: 1.15rem;
-    margin-bottom: 0.2rem;
-  }
-
-  p {
-    font-size: 0.9rem;
-    line-height: 1.7;
-  }
-
-  blockquote {
-    margin: 1rem 0 0;
-    padding: 1rem 1.25rem;
-    background: var(--bg-alt);
-    border-left: 3px solid var(--lime);
-    border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: 0.875rem;
-    font-style: italic;
-    color: var(--muted);
-    line-height: 1.65;
-  }
-}
-
-.about-team-card__role {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--purple);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 0.5rem;
-}
-
-// ── Dados dark ─────────────────────────────────────────────
 .about-data-section {
   background: var(--purple-900);
   padding: 5rem 0;
@@ -354,56 +249,5 @@ const dataStats = [
     background: radial-gradient(ellipse, rgba(197, 226, 46, 0.08) 0%, transparent 65%);
     pointer-events: none;
   }
-}
-
-.about-data-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  margin-top: 3rem;
-  position: relative;
-  z-index: 1;
-
-  @include respond-to(lg) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.about-data-card {
-  background: var(--purple-900);
-  padding: 2rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.about-data-card__number {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-  letter-spacing: -0.03em;
-
-  span {
-    color: var(--lime);
-  }
-}
-
-.about-data-card__label {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.4;
-  max-width: 18ch;
-}
-
-.about-data-card__source {
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.3);
-  font-style: italic;
 }
 </style>

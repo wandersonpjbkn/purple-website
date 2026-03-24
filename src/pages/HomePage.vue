@@ -222,13 +222,7 @@
         </p>
       </div>
       <div class="team-grid">
-        <article v-for="member in site.home.team" :key="member.name" class="team-card">
-          <div class="team-card__avatar">{{ member.name.charAt(0) }}</div>
-          <h3>{{ member.name }}</h3>
-          <p class="team-card__role">{{ member.role }}</p>
-          <p style="font-size: 0.9rem">{{ member.bio }}</p>
-          <blockquote v-if="member.quote">"{{ member.quote }}"</blockquote>
-        </article>
+        <TeamCard v-for="member in site.home.team" :key="member.name" :member="member" />
       </div>
     </BaseContainer>
   </section>
@@ -243,10 +237,19 @@ import { RouterLink } from 'vue-router'
 import site from '@/data/site.json'
 import posts from '@/data/posts.json'
 
+import { usePageMeta } from '@/composables'
+
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import BlogList from '@/components/blog/BlogList.vue'
+import TeamCard from '@/components/ui/TeamCard.vue'
+
+usePageMeta({
+  title: 'Purple Comunicação | A mudança é de dentro para fora',
+  description:
+    'Somos uma empresa que une estratégia e comunicação para transformar o ambiente interno em vantagem competitiva real.',
+})
 
 const featuredPosts = posts.slice(0, 3)
 
@@ -260,9 +263,9 @@ let isDeleting = false
 let timeoutId: ReturnType<typeof setTimeout> | null = null
 
 const SPEEDS = {
-  type: 65,
+  type: 85,
   delete: 35,
-  pauseAfter: 3500,
+  pauseAfter: 4500,
   pauseEmpty: 350,
 }
 

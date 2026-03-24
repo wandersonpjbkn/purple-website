@@ -12,9 +12,7 @@
         </nav>
 
         <div class="author-hero">
-          <div class="author-hero__avatar" aria-hidden="true">
-            {{ author.name.charAt(0) }}
-          </div>
+          <AuthorAvatar :name="author.name" size="xl" />
           <div>
             <p class="section-eyebrow">Autor</p>
             <h1>{{ author.name }}</h1>
@@ -78,6 +76,7 @@ import { getAuthor, usePageMeta } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 
 const route = useRoute()
@@ -122,20 +121,6 @@ usePageMeta(
     flex-direction: column;
     gap: 1.5rem;
   }
-}
-
-.author-hero__avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
-  display: grid;
-  place-items: center;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--purple-700);
-  border: 3px solid var(--border);
-  flex-shrink: 0;
 }
 
 .author-hero__role {

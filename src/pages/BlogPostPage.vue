@@ -28,7 +28,7 @@
           <p class="post-hero__excerpt">{{ post.excerpt }}</p>
 
           <RouterLink v-if="author" :to="`/blog/autor/${post.author}`" class="post-hero__author">
-            <div class="post-hero__avatar" aria-hidden="true">{{ author.name.charAt(0) }}</div>
+            <AuthorAvatar :name="author.name" size="md" />
             <div>
               <strong>{{ author.name }}</strong>
               <span>{{ author.role }}</span>
@@ -41,7 +41,7 @@
     <!-- ── Conteúdo ───────────────────────────────────── -->
     <section class="section-block section-block--sm">
       <BaseContainer>
-        <div class="post-layout">
+        <div class="post-layout-grid">
           <!-- Sumário lateral -->
           <aside class="post-toc" aria-label="Sumário do artigo">
             <div v-if="headings.length" class="sidebar-box">
@@ -75,9 +75,7 @@
     >
       <BaseContainer>
         <div class="post-author-card">
-          <div class="post-author-card__avatar" aria-hidden="true">
-            {{ author.name.charAt(0) }}
-          </div>
+          <AuthorAvatar :name="author.name" size="lg" />
           <div class="post-author-card__info">
             <p class="section-eyebrow">Escrito por</p>
             <h3>{{ author.name }}</h3>
@@ -133,6 +131,7 @@ import { formatDate, getAuthor, usePageMeta } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 
 const route = useRoute()
@@ -291,22 +290,8 @@ const headings = computed(() => {
   }
 }
 
-.post-hero__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
-  display: grid;
-  place-items: center;
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--purple-700);
-  border: 2px solid var(--border);
-  flex-shrink: 0;
-}
-
 // ── Layout: sumário + prose ────────────────────────────────
-.post-layout {
+.post-layout-grid {
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 3rem;
@@ -330,58 +315,8 @@ const headings = computed(() => {
   }
 }
 
-.sidebar-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem;
-
-  h3 {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--subtle);
-    margin-bottom: 0.875rem;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    a {
-      font-size: 0.82rem;
-      color: var(--muted);
-      text-decoration: none;
-      line-height: 1.4;
-      display: block;
-      transition: color 0.15s;
-      &:hover {
-        color: var(--purple);
-      }
-    }
-  }
-}
-
 .toc-h3 {
   padding-left: 0.875rem;
-}
-
-.sidebar-category-link {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--purple);
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  transition: color 0.15s;
-  &:hover {
-    color: var(--purple-700);
-  }
 }
 
 // ── Prose ──────────────────────────────────────────────────
@@ -540,20 +475,6 @@ const headings = computed(() => {
     flex-direction: column;
     gap: 1.25rem;
   }
-}
-
-.post-author-card__avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
-  display: grid;
-  place-items: center;
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--purple-700);
-  border: 2px solid var(--border);
-  flex-shrink: 0;
 }
 
 .post-author-card__info {

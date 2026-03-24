@@ -12,7 +12,7 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Services Detail ───────────────────────────── -->
+    <!-- ── Detalhamento dos serviços ─────────────────── -->
     <section class="section-block">
       <BaseContainer>
         <div
@@ -53,14 +53,14 @@
 
           <div class="service-detail__visual">
             <div class="visual-block" style="min-height: 420px">
-              <div class="visual-block__icon">{{ service.icon }}</div>
+              <div class="service-detail__visual-icon">{{ service.icon }}</div>
             </div>
           </div>
         </div>
       </BaseContainer>
     </section>
 
-    <!-- ── FAQ rápido / diferenciais ─────────────────── -->
+    <!-- ── Diferenciais ───────────────────────────────── -->
     <section class="section-block" style="background: var(--purple-900); border-radius: 0">
       <BaseContainer>
         <div class="section-header section-header--center">
@@ -71,12 +71,16 @@
           </p>
         </div>
 
+        <!-- Usa FeaturePillar com variante dark -->
         <div class="differentials-grid">
-          <div v-for="diff in differentials" :key="diff.title" class="differential-card">
-            <div class="differential-card__icon">{{ diff.icon }}</div>
-            <h3>{{ diff.title }}</h3>
-            <p>{{ diff.description }}</p>
-          </div>
+          <FeaturePillar
+            v-for="diff in differentials"
+            :key="diff.title"
+            :icon="diff.icon"
+            :title="diff.title"
+            :description="diff.description"
+            :dark="true"
+          />
         </div>
       </BaseContainer>
     </section>
@@ -91,12 +95,17 @@
 
 <script setup lang="ts">
 import { usePageMeta } from '@/composables'
+import site from '@/data/site.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import FeaturePillar from '@/components/ui/FeaturePillar.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
-import site from '@/data/site.json'
+usePageMeta({
+  title: 'Serviços',
+  description: 'Conheça as soluções da Purple Comunicação em Employer Branding, Endomarketing e mais.',
+})
 
 const differentials = [
   {
@@ -130,15 +139,12 @@ const differentials = [
     description: 'Unimos marketing, psicologia organizacional e design para soluções mais completas.',
   },
 ]
-
-usePageMeta({
-  title: 'Serviços',
-  description: 'Conheça as soluções da Purple Comunicação em Employer Branding, Endomarketing e mais.',
-})
 </script>
 
-<style scoped>
-/* ── Service Detail Alternado ──────────────────────────── */
+<style scoped lang="scss">
+@use '@/styles/abstracts/mixins' as *;
+
+// ── Detalhamento alternado ─────────────────────────────────
 .service-detail {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -146,18 +152,30 @@ usePageMeta({
   align-items: center;
   padding: 4rem 0;
   border-bottom: 1px solid var(--border);
-}
 
-.service-detail:last-child {
-  border-bottom: none;
-}
+  &:last-child {
+    border-bottom: none;
+  }
 
-.service-detail--reverse .service-detail__content {
-  order: 2;
-}
+  &--reverse {
+    .service-detail__content {
+      order: 2;
+    }
+    .service-detail__visual {
+      order: 1;
+    }
+  }
 
-.service-detail--reverse .service-detail__visual {
-  order: 1;
+  @include respond-to(md) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 3rem 0;
+
+    &--reverse .service-detail__content,
+    &--reverse .service-detail__visual {
+      order: unset;
+    }
+  }
 }
 
 .service-detail__icon {
@@ -166,11 +184,22 @@ usePageMeta({
   display: inline-block;
 }
 
+.service-detail__visual-icon {
+  font-size: 4rem;
+  opacity: 0.4;
+  position: relative;
+  z-index: 1;
+}
+
 .service-detail__cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-top: 2rem;
+
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .detail-heading {
@@ -180,7 +209,6 @@ usePageMeta({
   letter-spacing: 0.08em;
   color: var(--subtle);
   margin-bottom: 1rem;
-  font-family: var(--font-body);
 }
 
 .process-inline {
@@ -188,19 +216,18 @@ usePageMeta({
   padding: 0;
   display: grid;
   gap: 0.75rem;
-}
 
-.process-inline li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  color: var(--muted);
-  line-height: 1.55;
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
 }
 
 .process-inline__num {
-  font-family: var(--font-display);
   font-size: 0.75rem;
   font-weight: 800;
   color: var(--purple);
@@ -208,73 +235,17 @@ usePageMeta({
   margin-top: 0.05rem;
 }
 
-.visual-block__icon {
-  font-size: 4rem;
-  opacity: 0.4;
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Differentials ──────────────────────────────────────── */
+// ── Grid de diferenciais ───────────────────────────────────
 .differentials-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   margin-top: 3rem;
-}
 
-.differential-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  transition: background 0.2s var(--ease);
-}
-
-.differential-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.differential-card__icon {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-}
-
-.differential-card h3 {
-  color: #fff;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.differential-card p {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 0.875rem;
-  line-height: 1.65;
-}
-
-@media (max-width: 900px) {
-  .service-detail {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 3rem 0;
-  }
-
-  .service-detail--reverse .service-detail__content,
-  .service-detail--reverse .service-detail__visual {
-    order: unset;
-  }
-
-  .service-detail__cols {
-    grid-template-columns: 1fr;
-  }
-
-  .differentials-grid {
+  @include respond-to(md) {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-@media (max-width: 640px) {
-  .differentials-grid {
+  @include respond-to(sm) {
     grid-template-columns: 1fr;
   }
 }
