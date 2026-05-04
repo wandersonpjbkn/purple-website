@@ -29,17 +29,17 @@
           <!-- 3 stats compactos abaixo das CTAs -->
           <div class="hero__stat">
             <div>
-              <div class="hero__stat-number">57<span style="color: var(--lime)">%</span></div>
+              <div class="hero__stat-number">64<span style="color: var(--lime)">%</span></div>
               <div class="hero__stat-label">sem engajamento no trabalho</div>
             </div>
             <div class="hero__stat-divider"></div>
             <div>
-              <div class="hero__stat-number">4<span style="color: var(--lime)">x</span></div>
+              <div class="hero__stat-number">14<span style="color: var(--lime)">x</span></div>
               <div class="hero__stat-label">mais produtivas com boa cultura</div>
             </div>
             <div class="hero__stat-divider"></div>
             <div>
-              <div class="hero__stat-number">17<span style="color: var(--lime)">%</span></div>
+              <div class="hero__stat-number">23<span style="color: var(--lime)">%</span></div>
               <div class="hero__stat-label">mais receita com engajamento</div>
             </div>
           </div>
