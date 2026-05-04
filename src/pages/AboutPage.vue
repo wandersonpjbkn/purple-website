@@ -75,8 +75,8 @@
         <p class="section-eyebrow">Quem somos</p>
         <h2>As pessoas por trás da Purple</h2>
         <p class="lead" style="text-align: center">
-          A união de uma publicitária/marketeira e de um UX/psicólogo que já trabalharam juntos, resultou em uma agência
-          focada em Comunicação Interna, Endomarketing e Employer Branding.
+          A união de uma publicitária/marketeira e de um UX/psicólogo que já trabalharam juntos, resultou em uma
+          consultoria focada em Comunicação Interna, Endomarketing e Employer Branding.
         </p>
       </div>
       <div class="team-grid">
@@ -128,7 +128,7 @@ import CtaBanner from '@/components/sections/CtaBanner.vue'
 usePageMeta({
   title: 'Sobre Nós',
   description:
-    'Conheça a Purple Comunicação — agência especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
+    'Conheça a Purple Comunicação — consultoria especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
 })
 
 const pillarIcons: Record<string, string> = {
