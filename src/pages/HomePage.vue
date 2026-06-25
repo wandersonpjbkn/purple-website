@@ -96,30 +96,13 @@
         <p class="section-eyebrow">{{ SERVICE_OFFER.eyebrow }}</p>
         <h2>{{ SERVICE_OFFER.title }}</h2>
       </div>
+      <!-- Oferta em validação · cards renderizam placeholders (placeholders.ts) -->
       <div class="services-grid">
-        <article
-          v-for="service in site.home.services.filter((s) => !s.featured)"
-          :key="service.id"
-          class="service-card"
-        >
+        <article v-for="(service, i) in SERVICE_OFFER.items" :key="i" class="service-card">
           <div class="service-card__icon">{{ service.icon }}</div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
-          <RouterLink class="text-link" :to="`/servicos#${service.id}`">{{ service.cta }}</RouterLink>
-        </article>
-        <article
-          v-for="service in site.home.services.filter((s) => s.featured)"
-          :key="service.id"
-          class="service-card service-card--featured"
-        >
-          <div>
-            <h3>{{ service.title }}</h3>
-            <p>{{ service.description }}</p>
-            <RouterLink class="text-link" :to="`/servicos#${service.id}`" style="color: var(--lime)">{{
-              service.cta
-            }}</RouterLink>
-          </div>
-          <div class="service-card__icon">{{ service.icon }}</div>
+          <RouterLink class="text-link" to="/servicos">Ver serviços</RouterLink>
         </article>
       </div>
       <div style="text-align: center; margin-top: 2.5rem">

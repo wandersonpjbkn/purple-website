@@ -25,6 +25,29 @@
     </BaseContainer>
   </section>
 
+  <!-- ── Diferenciais (por que a Purple) ────────────── -->
+  <section class="section-block" style="background: var(--purple-900); border-radius: 0">
+    <BaseContainer>
+      <div class="section-header section-header--center">
+        <p class="section-eyebrow section-eyebrow--lime">Por que a Purple</p>
+        <h2 style="color: var(--on-dark)">Uma comunicação saudável começa dentro</h2>
+        <p class="lead" style="color: var(--on-dark-muted); text-align: center">
+          Acreditamos que uma comunicação eficaz é aquela que começa dentro para então ir para fora.
+        </p>
+      </div>
+      <div class="differentials-grid">
+        <FeaturePillar
+          v-for="diff in site.services.differentials"
+          :key="diff.title"
+          :icon="diff.icon"
+          :title="diff.title"
+          :description="diff.description"
+          :dark="true"
+        />
+      </div>
+    </BaseContainer>
+  </section>
+
   <!-- ── Processo ───────────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
@@ -84,6 +107,20 @@ usePageMeta({
   gap: 1.5rem;
 
   @include respond-to(md) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.differentials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include respond-to(sm) {
     grid-template-columns: 1fr;
   }
 }
