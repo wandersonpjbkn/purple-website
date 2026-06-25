@@ -37,18 +37,18 @@ withDefaults(
 
   // ── Variante dark (ServicesPage diferenciais) ───────────
   &--dark {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: var(--on-dark-surface);
+    border-color: var(--on-dark-border);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--on-dark-border);
     }
 
     h3 {
-      color: #fff;
+      color: var(--on-dark);
     }
     p {
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--on-dark-muted);
     }
   }
 }

@@ -255,7 +255,7 @@ const categoryGroups = computed(() =>
 
     &:focus {
       border-color: var(--purple-400);
-      box-shadow: 0 0 0 3px rgba(139, 47, 204, 0.1);
+      box-shadow: 0 0 0 3px rgba(var(--purple-rgb), 0.1);
     }
     &::placeholder {
       color: var(--subtle);

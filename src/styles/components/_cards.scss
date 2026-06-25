@@ -50,7 +50,7 @@
   &--featured {
     grid-column: span 2;
     background: var(--purple-900);
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--on-dark-border);
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 2rem;
@@ -61,15 +61,15 @@
     }
 
     h3 {
-      color: #fff;
+      color: var(--on-dark);
       font-size: 1.35rem;
     }
     p {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--on-dark-muted);
     }
 
     .service-card__icon {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--on-dark-border);
       width: 64px;
       height: 64px;
       border-radius: 20px;

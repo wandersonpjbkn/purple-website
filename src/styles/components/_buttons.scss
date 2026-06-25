@@ -23,14 +23,14 @@
   // ── Variantes ────────────────────────────────────────
   &.primary {
     background: var(--purple);
-    color: #fff;
+    color: var(--on-dark);
     border-color: var(--purple);
 
     &:hover {
       background: var(--purple-600);
       border-color: var(--purple-600);
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(139, 47, 204, 0.3);
+      box-shadow: 0 4px 16px rgba(var(--purple-rgb), 0.3);
     }
   }
 

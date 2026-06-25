@@ -64,9 +64,9 @@
     <section class="section-block" style="background: var(--purple-900); border-radius: 0">
       <BaseContainer>
         <div class="section-header section-header--center">
-          <p class="section-eyebrow" style="color: var(--lime)">Por que a Purple</p>
-          <h2 style="color: #fff">Uma comunicação saudável começa dentro</h2>
-          <p class="lead" style="color: rgba(255, 255, 255, 0.6); text-align: center">
+          <p class="section-eyebrow section-eyebrow--lime">Por que a Purple</p>
+          <h2 style="color: var(--on-dark)">Uma comunicação saudável começa dentro</h2>
+          <p class="lead" style="color: var(--on-dark-muted); text-align: center">
             Acreditamos que uma comunicação eficaz é aquela que começa dentro para então ir para fora.
           </p>
         </div>

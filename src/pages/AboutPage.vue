@@ -44,10 +44,7 @@
   </section>
 
   <!-- ── Pilares ────────────────────────────────────── -->
-  <section
-    class="section-block"
-    style="background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border)"
-  >
+  <section class="section-block section-block--alt">
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow">Como atuamos</p>
@@ -89,9 +86,9 @@
   <section class="about-data-section">
     <BaseContainer>
       <div class="section-header section-header--center">
-        <p class="section-eyebrow" style="color: var(--lime)">Por que isso importa</p>
+        <p class="section-eyebrow section-eyebrow--lime">Por que isso importa</p>
         <h2>O problema que viemos resolver</h2>
-        <p style="color: rgba(255, 255, 255, 0.6); text-align: center; max-width: 56ch; margin: 0 auto">
+        <p style="color: var(--on-dark-muted); text-align: center; max-width: 56ch; margin: 0 auto">
           Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
         </p>
       </div>
@@ -215,7 +212,7 @@ const dataStats = [
 .about-manifesto-text {
   font-size: 1.15rem;
   font-weight: 500;
-  color: #fff;
+  color: var(--on-dark);
   line-height: 1.7;
   font-style: italic;
   position: relative;
@@ -246,7 +243,7 @@ const dataStats = [
     right: -5%;
     width: 400px;
     aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(197, 226, 46, 0.08) 0%, transparent 65%);
+    background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.08) 0%, transparent 65%);
     pointer-events: none;
   }
 }

@@ -13,6 +13,13 @@
   &--sm {
     padding: 3rem 0;
   }
+
+  // Fundo alternado com bordas — padrão repetido entre Home e Sobre.
+  &--alt {
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
 }
 
 // ── Section header ─────────────────────────────────────────
@@ -95,7 +102,7 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at 20% 80%, rgba(197, 226, 46, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(139, 47, 204, 0.12) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 80%, rgba(var(--lime-rgb), 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(var(--purple-rgb), 0.12) 0%, transparent 50%);
   }
 }

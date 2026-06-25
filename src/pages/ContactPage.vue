@@ -137,7 +137,7 @@
     <BaseContainer>
       <div class="contact-alt-cta__inner">
         <div>
-          <p class="section-eyebrow" style="color: var(--lime)">Resposta imediata</p>
+          <p class="section-eyebrow section-eyebrow--lime">Resposta imediata</p>
           <h2>Prefere falar agora?</h2>
           <p>O WhatsApp é o canal mais rápido. Respondemos no mesmo dia.</p>
         </div>
@@ -150,7 +150,7 @@
             target="_blank"
             rel="noopener noreferrer"
             class="button secondary button--lg"
-            style="color: #fff; border-color: rgba(255, 255, 255, 0.25)"
+            style="color: var(--on-dark); border-color: rgba(255, 255, 255, 0.25)"
             >Contratar um serviço</a
           >
         </div>
@@ -384,7 +384,7 @@ function resetForm() {
     right: -5%;
     width: 400px;
     aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(197, 226, 46, 0.1) 0%, transparent 65%);
+    background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.1) 0%, transparent 65%);
     pointer-events: none;
   }
 
@@ -397,11 +397,11 @@ function resetForm() {
     z-index: 1;
 
     h2 {
-      color: #fff;
+      color: var(--on-dark);
       margin-bottom: 0.5rem;
     }
     p {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--on-dark-muted);
     }
 
     @include respond-to(md) {

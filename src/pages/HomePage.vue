@@ -92,10 +92,7 @@
     </BaseContainer>
   </section>
 
-  <section
-    class="section-block"
-    style="background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border)"
-  >
+  <section class="section-block section-block--alt">
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow">Soluções</p>

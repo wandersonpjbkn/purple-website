@@ -3,7 +3,7 @@
     <BaseContainer>
       <div class="cta-banner__box">
         <div>
-          <p class="section-eyebrow" style="color: var(--lime)">Próximo passo</p>
+          <p class="section-eyebrow section-eyebrow--lime">Próximo passo</p>
           <h2>{{ title }}</h2>
           <p>{{ description }}</p>
         </div>
@@ -13,7 +13,7 @@
             :href="phoneNumber"
             target="_blank"
             class="text-link"
-            style="color: rgba(255, 255, 255, 0.65); font-size: 0.875rem"
+            style="color: var(--on-dark-muted); font-size: 0.875rem"
           >
             ou chame no WhatsApp
           </a>

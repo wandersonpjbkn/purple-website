@@ -117,7 +117,7 @@ const displayedPages = computed(() => {
   &.active {
     background: var(--purple);
     border-color: var(--purple);
-    color: #fff;
+    color: var(--on-dark);
   }
 }
 </style>
