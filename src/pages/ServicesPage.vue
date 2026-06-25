@@ -3,9 +3,9 @@
     <!-- ── Page Hero ──────────────────────────────────── -->
     <section class="page-hero">
       <BaseContainer>
-        <p class="section-eyebrow">Soluções</p>
-        <h1>{{ site.services.title }}</h1>
-        <p class="lead lead--narrow">{{ site.services.subtitle }}</p>
+        <p class="section-eyebrow">{{ SERVICE_OFFER.eyebrow }}</p>
+        <h1>{{ SERVICE_OFFER.title }}</h1>
+        <p class="lead lead--narrow">{{ SERVICE_OFFER.subtitle }}</p>
         <div style="margin-top: 2rem">
           <BaseButton tag="RouterLink" to="/contato">Falar com a Purple</BaseButton>
         </div>
@@ -96,6 +96,7 @@
 <script setup lang="ts">
 import { usePageMeta } from '@/composables'
 import site from '@/data/site.json'
+import { SERVICE_OFFER } from '@/content/placeholders'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

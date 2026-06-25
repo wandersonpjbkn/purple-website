@@ -5,10 +5,6 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Consultoria de comunicação interna",
-      "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
-      "titleRotating": ["reduzem o turnover", "o time engaja mais", "atraem mais talentos", "fortalecem sua cultura"],
-      "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
       "primaryCta": "Falar com a Purple",
       "secondaryCta": "Conheça os serviços"
     },
@@ -184,8 +180,6 @@
     ]
   },
   "services": {
-    "title": "Nossas soluções",
-    "subtitle": "Serviços pensados para melhorar a comunicação interna, engajamento e reputação da sua empresa como empregadora.",
     "items": [
       {
         "id": "employer-branding",

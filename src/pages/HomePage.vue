@@ -2,20 +2,20 @@
   <section class="hero">
     <BaseContainer>
       <div class="hero__grid">
-        <!-- Coluna texto -->
+        <!-- Coluna texto · posicionamento em validação (placeholders.ts) -->
         <div>
           <div class="hero__kicker">
             <span class="dot"></span>
-            {{ site.home.hero.eyebrow }}
+            {{ POSITIONING_HOOK.eyebrow }}
           </div>
 
           <h1 class="hero__title">
-            <span v-html="site.home.hero.titlePrefix" />
+            {{ POSITIONING_HOOK.title }}
             <br />
             <span ref="typewriterEl" class="hero__typewriter" />
           </h1>
 
-          <p class="lead">{{ site.home.hero.subtitle }}</p>
+          <p class="lead">{{ POSITIONING_HOOK.subtitle }}</p>
 
           <div class="hero__actions">
             <BaseButton class="button--lg" tag="RouterLink" to="/contato">
@@ -26,38 +26,36 @@
             </BaseButton>
           </div>
 
-          <!-- 3 stats compactos abaixo das CTAs -->
+          <!-- 3 indicadores compactos · claims em validação -->
           <div class="hero__stat">
-            <div>
-              <div class="hero__stat-number">64<span style="color: var(--lime)">%</span></div>
-              <div class="hero__stat-label">sem engajamento no trabalho</div>
-            </div>
-            <div class="hero__stat-divider"></div>
-            <div>
-              <div class="hero__stat-number">14<span style="color: var(--lime)">x</span></div>
-              <div class="hero__stat-label">mais produtivas com boa cultura</div>
-            </div>
-            <div class="hero__stat-divider"></div>
-            <div>
-              <div class="hero__stat-number">23<span style="color: var(--lime)">%</span></div>
-              <div class="hero__stat-label">mais receita com engajamento</div>
-            </div>
+            <template v-for="(point, i) in POSITIONING_HOOK.proofPoints" :key="i">
+              <div v-if="i > 0" class="hero__stat-divider"></div>
+              <div>
+                <div class="hero__stat-number">{{ point.value }}</div>
+                <div class="hero__stat-label">{{ point.label }}</div>
+              </div>
+            </template>
           </div>
         </div>
 
-        <!-- Coluna card visual -->
+        <!-- Coluna card visual · claims em validação -->
         <div class="hero__media">
           <div class="hero__card">
-            <div class="hero__card-label">Nível de engajamento</div>
-            <div class="hero__card-value">+43<span style="color: var(--lime); font-size: 1.8rem">%</span></div>
-            <div class="hero__card-sub">após 6 meses de endomarketing estruturado</div>
+            <div class="hero__card-label">{{ POSITIONING_HOOK.card.label }}</div>
+            <div class="hero__card-value">{{ POSITIONING_HOOK.card.value }}</div>
+            <div class="hero__card-sub">{{ POSITIONING_HOOK.card.sub }}</div>
             <div class="hero__card-bar">
               <div class="hero__card-bar-fill" style="width: 78%"></div>
             </div>
             <div class="hero__card-tags">
-              <span class="hero__card-tag accent">Employer Branding</span>
-              <span class="hero__card-tag">Endomarketing</span>
-              <span class="hero__card-tag">Comunicação Interna</span>
+              <span
+                v-for="(tag, i) in POSITIONING_HOOK.card.tags"
+                :key="i"
+                class="hero__card-tag"
+                :class="{ accent: i === 0 }"
+              >
+                {{ tag }}
+              </span>
             </div>
           </div>
           <div class="hero__float hero__float--1">
@@ -95,8 +93,8 @@
   <section class="section-block section-block--alt">
     <BaseContainer>
       <div class="section-header section-header--center">
-        <p class="section-eyebrow">Soluções</p>
-        <h2>O que fazemos pela sua empresa</h2>
+        <p class="section-eyebrow">{{ SERVICE_OFFER.eyebrow }}</p>
+        <h2>{{ SERVICE_OFFER.title }}</h2>
       </div>
       <div class="services-grid">
         <article
@@ -207,6 +205,7 @@ import { RouterLink } from 'vue-router'
 
 import site from '@/data/site.json'
 import posts from '@/data/posts.json'
+import { POSITIONING_HOOK, SERVICE_OFFER } from '@/content/placeholders'
 
 import { usePageMeta } from '@/composables'
 
@@ -226,7 +225,7 @@ const featuredPosts = posts.slice(0, 3)
 
 // ── Typewriter ────────────────────────────────────────────
 const typewriterEl = ref<HTMLElement | null>(null)
-const phrases = site.home.hero.titleRotating
+const phrases = POSITIONING_HOOK.rotating
 
 let phraseIndex = 0
 let charIndex = 0
