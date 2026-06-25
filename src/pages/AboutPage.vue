@@ -43,28 +43,6 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Pilares ────────────────────────────────────── -->
-  <section class="section-block section-block--alt">
-    <BaseContainer>
-      <div class="section-header section-header--center">
-        <p class="section-eyebrow">Como atuamos</p>
-        <h2>Nossa abordagem</h2>
-        <p class="lead" style="text-align: center">
-          Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade.
-        </p>
-      </div>
-      <div class="about-pillars">
-        <FeaturePillar
-          v-for="pillar in site.about.pillars"
-          :key="pillar.title"
-          :icon="pillar.icon"
-          :title="pillar.title"
-          :description="pillar.description"
-        />
-      </div>
-    </BaseContainer>
-  </section>
-
   <!-- ── Time ───────────────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
@@ -124,7 +102,6 @@ import site from '@/data/site.json'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
-import FeaturePillar from '@/components/ui/FeaturePillar.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
 usePageMeta({
@@ -189,17 +166,6 @@ usePageMeta({
   font-style: italic;
   position: relative;
   z-index: 1;
-}
-
-.about-pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 0.5rem;
-
-  @include respond-to(md) {
-    grid-template-columns: 1fr;
-  }
 }
 
 .about-data-section {

@@ -22,8 +22,9 @@
           <h4>Navegação</h4>
           <ul>
             <li><RouterLink to="/">Home</RouterLink></li>
-            <li><RouterLink to="/servicos">Serviços</RouterLink></li>
             <li><RouterLink to="/sobre">Sobre</RouterLink></li>
+            <li><RouterLink to="/abordagem">Abordagem</RouterLink></li>
+            <li><RouterLink to="/servicos">Serviços</RouterLink></li>
             <li><RouterLink to="/blog">Blog</RouterLink></li>
             <li><RouterLink to="/contato">Contato</RouterLink></li>
           </ul>

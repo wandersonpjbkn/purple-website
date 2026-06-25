@@ -12,8 +12,9 @@
         <!-- Nav desktop -->
         <nav class="nav" aria-label="Navegação principal">
           <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/servicos">Serviços</RouterLink>
           <RouterLink to="/sobre">Sobre nós</RouterLink>
+          <RouterLink to="/abordagem">Abordagem</RouterLink>
+          <RouterLink to="/servicos">Serviços</RouterLink>
           <RouterLink to="/blog">Blog</RouterLink>
           <RouterLink to="/contato">Contato</RouterLink>
         </nav>
@@ -30,8 +31,9 @@
       <!-- Mobile nav -->
       <nav v-if="mobileOpen" class="nav-mobile" aria-label="Navegação mobile">
         <RouterLink to="/" @click="mobileOpen = false">Home</RouterLink>
-        <RouterLink to="/servicos" @click="mobileOpen = false">Serviços</RouterLink>
         <RouterLink to="/sobre" @click="mobileOpen = false">Sobre nós</RouterLink>
+        <RouterLink to="/abordagem" @click="mobileOpen = false">Abordagem</RouterLink>
+        <RouterLink to="/servicos" @click="mobileOpen = false">Serviços</RouterLink>
         <RouterLink to="/blog" @click="mobileOpen = false">Blog</RouterLink>
         <RouterLink to="/contato" @click="mobileOpen = false">Contato</RouterLink>
         <RouterLink to="/contato" class="button primary" @click="mobileOpen = false">Vamos conversar</RouterLink>

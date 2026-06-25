@@ -168,32 +168,6 @@
     </BaseContainer>
   </section>
 
-  <section class="section-block">
-    <BaseContainer>
-      <div class="split-section">
-        <div>
-          <p class="section-eyebrow">{{ site.home.process.eyebrow }}</p>
-          <h2>{{ site.home.process.title }}</h2>
-          <p class="lead">
-            Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.
-          </p>
-          <div style="margin-top: 2rem">
-            <BaseButton tag="RouterLink" to="/contato">Quero começar</BaseButton>
-          </div>
-        </div>
-        <div class="process-list">
-          <div v-for="(step, index) in site.home.process.steps" :key="step.title" class="process-item">
-            <div class="process-item__number">{{ String(index + 1).padStart(2, '0') }}</div>
-            <div class="process-item__content">
-              <h3>{{ step.title }}</h3>
-              <p>{{ step.description }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </BaseContainer>
-  </section>
-
   <section class="section-block" style="background: var(--surface); border-top: 1px solid var(--border)">
     <BaseContainer>
       <div
