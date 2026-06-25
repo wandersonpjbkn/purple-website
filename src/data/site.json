@@ -90,32 +90,6 @@
         "Contratações mais rápidas e baratas "
       ]
     },
-    "process": {
-      "eyebrow": "Como trabalhamos",
-      "title": "Um processo pensado para gerar resultado real",
-      "steps": [
-        {
-          "title": "Briefing e imersão",
-          "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
-        },
-        {
-          "title": "Diagnóstico",
-          "description": "Pesquisa interna, análise de clima e mapeamento da percepção de marca para embasar a estratégia."
-        },
-        {
-          "title": "Planejamento estratégico",
-          "description": "Definimos um plano claro: canais, mensagens, cronograma e métricas de sucesso."
-        },
-        {
-          "title": "Implementação",
-          "description": "Execução das ações com criação de peças, conteúdos, treinamentos e ativação das iniciativas."
-        },
-        {
-          "title": "Acompanhamento e ajustes",
-          "description": "Análise contínua dos resultados e refinamento das estratégias para ampliar o impacto."
-        }
-      ]
-    },
     "cta": {
       "title": "Tudo começa com uma boa conversa",
       "description": "Estamos aqui para ouvir, entender seu contexto e propor o que realmente faz sentido para o seu negócio.",
@@ -137,7 +111,24 @@
       }
     ]
   },
-  "services": {
+  "approach": {
+    "pillars": [
+      {
+        "icon": "🎯",
+        "title": "Foco no colaborador",
+        "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
+      },
+      {
+        "icon": "📣",
+        "title": "Comunicação clara",
+        "description": "Transformamos estratégia em narrativas, campanhas e rotinas de comunicação mais consistentes."
+      },
+      {
+        "icon": "🏆",
+        "title": "Marca empregadora",
+        "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
+      }
+    ],
     "differentials": [
       {
         "icon": "🎯",
@@ -169,30 +160,39 @@
         "title": "Visão multidisciplinar",
         "description": "Unimos marketing, psicologia organizacional e design para soluções mais completas."
       }
-    ]
+    ],
+    "process": {
+      "eyebrow": "Como trabalhamos",
+      "title": "Um processo pensado para gerar resultado real",
+      "steps": [
+        {
+          "title": "Briefing e imersão",
+          "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
+        },
+        {
+          "title": "Diagnóstico",
+          "description": "Pesquisa interna, análise de clima e mapeamento da percepção de marca para embasar a estratégia."
+        },
+        {
+          "title": "Planejamento estratégico",
+          "description": "Definimos um plano claro: canais, mensagens, cronograma e métricas de sucesso."
+        },
+        {
+          "title": "Implementação",
+          "description": "Execução das ações com criação de peças, conteúdos, treinamentos e ativação das iniciativas."
+        },
+        {
+          "title": "Acompanhamento e ajustes",
+          "description": "Análise contínua dos resultados e refinamento das estratégias para ampliar o impacto."
+        }
+      ]
+    }
   },
   "about": {
     "title": "Sobre nós",
     "intro": "A Purple Comunicação nasce da certeza de que o foco no colaborador e no seu bem-estar é essencial para empresas que desejam crescer com consistência.",
     "helpTitle": "Como iremos te ajudar",
     "helpText": "Com todos os desafios do dia a dia, muitas empresas perdem oportunidades ao deixar de olhar para quem move a organização: as pessoas.",
-    "pillars": [
-      {
-        "icon": "🎯",
-        "title": "Foco no colaborador",
-        "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
-      },
-      {
-        "icon": "📣",
-        "title": "Comunicação clara",
-        "description": "Transformamos estratégia em narrativas, campanhas e rotinas de comunicação mais consistentes."
-      },
-      {
-        "icon": "🏆",
-        "title": "Marca empregadora",
-        "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
-      }
-    ],
     "dataStats": [
       {
         "number": "57",
