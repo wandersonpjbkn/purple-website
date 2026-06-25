@@ -10,18 +10,26 @@
 
           <!-- CTAs diretos -->
           <div class="contact-hero__ctas">
-            <a
+            <BaseButton
+              tag="a"
               :href="whatsappUrl"
               target="_blank"
               rel="noopener noreferrer"
-              class="button primary button--lg contact-hero__whatsapp"
+              class="button--lg contact-hero__whatsapp"
             >
               <span class="contact-hero__whatsapp-icon" aria-hidden="true">💬</span>
               Falar no WhatsApp
-            </a>
-            <a :href="whatsappHireUrl" target="_blank" rel="noopener noreferrer" class="button lime button--lg">
+            </BaseButton>
+            <BaseButton
+              tag="a"
+              :href="whatsappHireUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="lime"
+              class="button--lg"
+            >
               Contratar agora
-            </a>
+            </BaseButton>
           </div>
 
           <!-- Info de contato -->
@@ -142,17 +150,27 @@
           <p>O WhatsApp é o canal mais rápido. Respondemos no mesmo dia.</p>
         </div>
         <div class="contact-alt-cta__actions">
-          <a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="button lime button--lg"
-            >💬 Abrir WhatsApp</a
+          <BaseButton
+            tag="a"
+            :href="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="lime"
+            class="button--lg"
           >
-          <a
+            💬 Abrir WhatsApp
+          </BaseButton>
+          <BaseButton
+            tag="a"
             :href="whatsappHireUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="button secondary button--lg"
+            variant="secondary"
+            class="button--lg"
             style="color: var(--on-dark); border-color: rgba(255, 255, 255, 0.25)"
-            >Contratar um serviço</a
           >
+            Contratar um serviço
+          </BaseButton>
         </div>
       </div>
     </BaseContainer>
@@ -165,6 +183,7 @@ import { reactive, computed } from 'vue'
 import site from '@/data/site.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
 import { useEmailJS } from '@/composables/useEmailJS'
 import { usePageMeta } from '@/composables'
 

@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :to="to" class="button" :class="variant" v-bind="$attrs">
+  <component :is="tag" :to="tag === 'RouterLink' ? to : undefined" class="button" :class="variant" v-bind="$attrs">
     <slot />
   </component>
 </template>
@@ -9,7 +9,7 @@ withDefaults(
   defineProps<{
     to?: string
     tag?: string
-    variant?: 'primary' | 'secondary' | 'ghost'
+    variant?: 'primary' | 'secondary' | 'ghost' | 'lime'
   }>(),
   {
     to: '',

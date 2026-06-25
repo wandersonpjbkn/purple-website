@@ -7,12 +7,7 @@
     "hero": {
       "eyebrow": "Consultoria de comunicação interna",
       "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
-      "titleRotating": [
-        "reduzem o turnover",
-        "o time engaja mais",
-        "atraem mais talentos",
-        "fortalecem sua cultura"
-      ],
+      "titleRotating": ["reduzem o turnover", "o time engaja mais", "atraem mais talentos", "fortalecem sua cultura"],
       "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
       "primaryCta": "Falar com a Purple",
       "secondaryCta": "Conheça os serviços"
@@ -21,7 +16,8 @@
       "eyebrow": "Panorama do mercado",
       "title": "Os números que ninguém pode ignorar",
       "subtitle": "Dados de pesquisas recentes mostram por que cuidar dos colaboradores deixou de ser diferencial para se tornar estratégia de negócio.",
-      "stats": [{
+      "stats": [
+        {
           "number": "86",
           "suffix": "%",
           "label": "consideram bem-estar tão importante quanto o salário",
@@ -67,7 +63,8 @@
           "highlight": false
         }
       ],
-      "context": [{
+      "context": [
+        {
           "strong": "70% → 90%",
           "text": "de engajamento após implementação de estratégias de saúde corporativa (Forbes Brasil, 2022)"
         },
@@ -85,27 +82,6 @@
         }
       ]
     },
-    "stats": [{
-        "number": "86",
-        "suffix": "%",
-        "label": "consideram bem-estar tão importante quanto o salário"
-      },
-      {
-        "number": "57",
-        "suffix": "%",
-        "label": "dos trabalhadores não estão engajados globalmente"
-      },
-      {
-        "number": "17",
-        "suffix": "%",
-        "label": "de aumento de receita com colaboradores engajados"
-      },
-      {
-        "number": "4x",
-        "suffix": "",
-        "label": "mais produtivas com colaboradores bem engajados"
-      }
-    ],
     "highlight": {
       "eyebrow": "Por que isso importa",
       "title": "Na busca pelo crescimento, muitas empresas esquecem de olhar para dentro",
@@ -118,7 +94,8 @@
         "Contratações mais rápidas e baratas "
       ]
     },
-    "services": [{
+    "services": [
+      {
         "id": "employer-branding",
         "icon": "🏆",
         "title": "Employer Branding",
@@ -162,7 +139,8 @@
     "process": {
       "eyebrow": "Como trabalhamos",
       "title": "Um processo pensado para gerar resultado real",
-      "steps": [{
+      "steps": [
+        {
           "title": "Briefing e imersão",
           "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
         },
@@ -190,7 +168,8 @@
       "primaryCta": "Falar com a Purple",
       "secondaryCta": "Ver portfólio"
     },
-    "team": [{
+    "team": [
+      {
         "name": "Suelen Fernanda",
         "role": "Marketing & Employer Branding",
         "bio": "No mercado de marketing digital desde 2011, a idealizadora da Purple atuou em agências, marketing interno e atendeu clientes de diversos segmentos.",
@@ -207,7 +186,8 @@
   "services": {
     "title": "Nossas soluções",
     "subtitle": "Serviços pensados para melhorar a comunicação interna, engajamento e reputação da sua empresa como empregadora.",
-    "items": [{
+    "items": [
+      {
         "id": "employer-branding",
         "icon": "🏆",
         "title": "Employer Branding",
@@ -312,6 +292,38 @@
           "Handoff para desenvolvimento"
         ]
       }
+    ],
+    "differentials": [
+      {
+        "icon": "🎯",
+        "title": "Foco em pessoas",
+        "description": "Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica."
+      },
+      {
+        "icon": "🔍",
+        "title": "Diagnóstico antes da ação",
+        "description": "Não propomos soluções genéricas. Primeiro entendemos profundamente o seu contexto."
+      },
+      {
+        "icon": "📐",
+        "title": "Estratégia e execução",
+        "description": "Acompanhamos do planejamento à implementação, garantindo consistência em cada etapa."
+      },
+      {
+        "icon": "📊",
+        "title": "Resultados mensuráveis",
+        "description": "Definimos métricas claras e acompanhamos os indicadores para provar o impacto das ações."
+      },
+      {
+        "icon": "🤝",
+        "title": "Parceria de longo prazo",
+        "description": "Construímos relações duradouras, adaptando as estratégias conforme a empresa cresce."
+      },
+      {
+        "icon": "💡",
+        "title": "Visão multidisciplinar",
+        "description": "Unimos marketing, psicologia organizacional e design para soluções mais completas."
+      }
     ]
   },
   "about": {
@@ -319,17 +331,47 @@
     "intro": "A Purple Comunicação nasce da certeza de que o foco no colaborador e no seu bem-estar é essencial para empresas que desejam crescer com consistência.",
     "helpTitle": "Como iremos te ajudar",
     "helpText": "Com todos os desafios do dia a dia, muitas empresas perdem oportunidades ao deixar de olhar para quem move a organização: as pessoas.",
-    "pillars": [{
+    "pillars": [
+      {
+        "icon": "🎯",
         "title": "Foco no colaborador",
         "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
       },
       {
+        "icon": "📣",
         "title": "Comunicação clara",
         "description": "Transformamos estratégia em narrativas, campanhas e rotinas de comunicação mais consistentes."
       },
       {
+        "icon": "🏆",
         "title": "Marca empregadora",
         "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
+      }
+    ],
+    "dataStats": [
+      {
+        "number": "57",
+        "suffix": "%",
+        "label": "dos trabalhadores não estão engajados globalmente",
+        "source": "Gallup"
+      },
+      {
+        "number": "86",
+        "suffix": "%",
+        "label": "consideram bem-estar tão importante quanto o salário",
+        "source": "Pesquisa Global, 2024"
+      },
+      {
+        "number": "14",
+        "suffix": "%",
+        "label": "das empresas oferecem programas estruturados de bem-estar",
+        "source": "Panorama Corporativo 2024"
+      },
+      {
+        "number": "32",
+        "suffix": "%",
+        "label": "da PEA sofre de burnout ou problemas de saúde ocupacional",
+        "source": "ISMA-Brasil"
       }
     ]
   },

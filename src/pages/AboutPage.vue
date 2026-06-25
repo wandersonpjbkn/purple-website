@@ -57,7 +57,7 @@
         <FeaturePillar
           v-for="pillar in site.about.pillars"
           :key="pillar.title"
-          :icon="pillarIcons[pillar.title] ?? '✦'"
+          :icon="pillar.icon"
           :title="pillar.title"
           :description="pillar.description"
         />
@@ -94,7 +94,12 @@
       </div>
       <!-- data-stat-grid + data-stat-card vêm de _stats.scss -->
       <div class="data-stat-grid" style="margin-top: 3rem; position: relative; z-index: 1">
-        <div v-for="stat in dataStats" :key="stat.number" class="data-stat-card" style="background: var(--purple-900)">
+        <div
+          v-for="stat in site.about.dataStats"
+          :key="stat.number"
+          class="data-stat-card"
+          style="background: var(--purple-900)"
+        >
           <span class="data-stat-card__number">
             {{ stat.number }}<span>{{ stat.suffix }}</span>
           </span>
@@ -127,39 +132,6 @@ usePageMeta({
   description:
     'Conheça a Purple Comunicação — consultoria especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
 })
-
-const pillarIcons: Record<string, string> = {
-  'Foco no colaborador': '🎯',
-  'Comunicação clara': '📣',
-  'Marca empregadora': '🏆',
-}
-
-const dataStats = [
-  {
-    number: '57',
-    suffix: '%',
-    label: 'dos trabalhadores não estão engajados globalmente',
-    source: 'Gallup',
-  },
-  {
-    number: '86',
-    suffix: '%',
-    label: 'consideram bem-estar tão importante quanto o salário',
-    source: 'Pesquisa Global, 2024',
-  },
-  {
-    number: '14',
-    suffix: '%',
-    label: 'das empresas oferecem programas estruturados de bem-estar',
-    source: 'Panorama Corporativo 2024',
-  },
-  {
-    number: '32',
-    suffix: '%',
-    label: 'da PEA sofre de burnout ou problemas de saúde ocupacional',
-    source: 'ISMA-Brasil',
-  },
-]
 </script>
 
 <style scoped lang="scss">

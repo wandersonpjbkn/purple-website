@@ -8,7 +8,7 @@
           <p>{{ description }}</p>
         </div>
         <div class="cta-banner__actions">
-          <BaseButton class="button lime button--lg" tag="RouterLink" to="/contato">Vamos conversar</BaseButton>
+          <BaseButton variant="lime" class="button--lg" tag="RouterLink" to="/contato">Vamos conversar</BaseButton>
           <a
             :href="phoneNumber"
             target="_blank"

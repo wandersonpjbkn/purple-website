@@ -74,7 +74,7 @@
         <!-- Usa FeaturePillar com variante dark -->
         <div class="differentials-grid">
           <FeaturePillar
-            v-for="diff in differentials"
+            v-for="diff in site.services.differentials"
             :key="diff.title"
             :icon="diff.icon"
             :title="diff.title"
@@ -106,39 +106,6 @@ usePageMeta({
   title: 'Serviços',
   description: 'Conheça as soluções da Purple Comunicação em Employer Branding, Endomarketing e mais.',
 })
-
-const differentials = [
-  {
-    icon: '🎯',
-    title: 'Foco em pessoas',
-    description: 'Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica.',
-  },
-  {
-    icon: '🔍',
-    title: 'Diagnóstico antes da ação',
-    description: 'Não propomos soluções genéricas. Primeiro entendemos profundamente o seu contexto.',
-  },
-  {
-    icon: '📐',
-    title: 'Estratégia e execução',
-    description: 'Acompanhamos do planejamento à implementação, garantindo consistência em cada etapa.',
-  },
-  {
-    icon: '📊',
-    title: 'Resultados mensuráveis',
-    description: 'Definimos métricas claras e acompanhamos os indicadores para provar o impacto das ações.',
-  },
-  {
-    icon: '🤝',
-    title: 'Parceria de longo prazo',
-    description: 'Construímos relações duradouras, adaptando as estratégias conforme a empresa cresce.',
-  },
-  {
-    icon: '💡',
-    title: 'Visão multidisciplinar',
-    description: 'Unimos marketing, psicologia organizacional e design para soluções mais completas.',
-  },
-]
 </script>
 
 <style scoped lang="scss">
