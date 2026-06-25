@@ -17,7 +17,7 @@
               rel="noopener noreferrer"
               class="button--lg contact-hero__whatsapp"
             >
-              <span class="contact-hero__whatsapp-icon" aria-hidden="true">💬</span>
+              <span class="contact-hero__whatsapp-icon"><BaseIcon name="whatsapp" /></span>
               Falar no WhatsApp
             </BaseButton>
             <BaseButton
@@ -35,15 +35,15 @@
           <!-- Info de contato -->
           <div class="contact-info">
             <a :href="`mailto:${site.contact.email}`" class="contact-info__item">
-              <span class="contact-info__icon" aria-hidden="true">✉️</span>
+              <span class="contact-info__icon"><BaseIcon name="mail" /></span>
               <span>{{ site.contact.email }}</span>
             </a>
             <a :href="whatsappUrl" target="_blank" rel="noopener" class="contact-info__item">
-              <span class="contact-info__icon" aria-hidden="true">📱</span>
+              <span class="contact-info__icon"><BaseIcon name="phone" /></span>
               <span>{{ site.contact.phone }}</span>
             </a>
             <div class="contact-info__item">
-              <span class="contact-info__icon" aria-hidden="true">📍</span>
+              <span class="contact-info__icon"><BaseIcon name="pin" /></span>
               <span>{{ site.contact.address }}</span>
             </div>
           </div>
@@ -53,7 +53,7 @@
         <div class="contact-form-wrap">
           <!-- Estado: sucesso -->
           <div v-if="status === 'success'" class="form-success">
-            <div class="contact-success__icon" aria-hidden="true">✅</div>
+            <div class="contact-success__icon"><BaseIcon name="check" /></div>
             <h3>Mensagem enviada!</h3>
             <p>Recebemos seu contato e responderemos em breve pelo e-mail informado.</p>
             <button class="button secondary" @click="resetForm">Enviar outra mensagem</button>
@@ -158,7 +158,7 @@
             variant="lime"
             class="button--lg"
           >
-            💬 Abrir WhatsApp
+            <BaseIcon name="whatsapp" /> Abrir WhatsApp
           </BaseButton>
           <BaseButton
             tag="a"
@@ -184,6 +184,7 @@ import site from '@/data/site.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseIcon from '@/components/ui/BaseIcon.vue'
 import { useEmailJS } from '@/composables/useEmailJS'
 import { usePageMeta } from '@/composables'
 

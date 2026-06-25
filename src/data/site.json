@@ -114,49 +114,49 @@
   "approach": {
     "pillars": [
       {
-        "icon": "🎯",
+        "icon": "target",
         "title": "Foco no colaborador",
         "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
       },
       {
-        "icon": "📣",
+        "icon": "megaphone",
         "title": "Comunicação clara",
         "description": "Transformamos estratégia em narrativas, campanhas e rotinas de comunicação mais consistentes."
       },
       {
-        "icon": "🏆",
+        "icon": "trophy",
         "title": "Marca empregadora",
         "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
       }
     ],
     "differentials": [
       {
-        "icon": "🎯",
+        "icon": "target",
         "title": "Foco em pessoas",
         "description": "Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica."
       },
       {
-        "icon": "🔍",
+        "icon": "search",
         "title": "Diagnóstico antes da ação",
         "description": "Não propomos soluções genéricas. Primeiro entendemos profundamente o seu contexto."
       },
       {
-        "icon": "📐",
+        "icon": "ruler",
         "title": "Estratégia e execução",
         "description": "Acompanhamos do planejamento à implementação, garantindo consistência em cada etapa."
       },
       {
-        "icon": "📊",
+        "icon": "chart",
         "title": "Resultados mensuráveis",
         "description": "Definimos métricas claras e acompanhamos os indicadores para provar o impacto das ações."
       },
       {
-        "icon": "🤝",
+        "icon": "handshake",
         "title": "Parceria de longo prazo",
         "description": "Construímos relações duradouras, adaptando as estratégias conforme a empresa cresce."
       },
       {
-        "icon": "💡",
+        "icon": "bulb",
         "title": "Visão multidisciplinar",
         "description": "Unimos marketing, psicologia organizacional e design para soluções mais completas."
       }

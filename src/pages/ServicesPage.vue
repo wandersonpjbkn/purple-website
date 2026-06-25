@@ -17,7 +17,7 @@
       <BaseContainer>
         <div class="services-grid">
           <article v-for="(service, i) in SERVICE_OFFER.items" :key="i" class="service-card">
-            <div class="service-card__icon">{{ service.icon }}</div>
+            <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
             <h3>{{ service.title }}</h3>
             <p>{{ service.description }}</p>
           </article>
@@ -39,6 +39,7 @@ import { SERVICE_OFFER } from '@/content/placeholders'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseIcon from '@/components/ui/BaseIcon.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
 usePageMeta({

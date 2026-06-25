@@ -59,11 +59,11 @@
             </div>
           </div>
           <div class="hero__float hero__float--1">
-            <div class="icon">🏆</div>
+            <div class="icon"><BaseIcon name="trophy" /></div>
             Marca Empregadora
           </div>
           <div class="hero__float hero__float--2">
-            <div class="icon">📣</div>
+            <div class="icon"><BaseIcon name="megaphone" /></div>
             Comunicação Interna
           </div>
         </div>
@@ -99,7 +99,7 @@
       <!-- Oferta em validação · cards renderizam placeholders (placeholders.ts) -->
       <div class="services-grid">
         <article v-for="(service, i) in SERVICE_OFFER.items" :key="i" class="service-card">
-          <div class="service-card__icon">{{ service.icon }}</div>
+          <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
           <h3>{{ service.title }}</h3>
           <p>{{ service.description }}</p>
           <RouterLink class="text-link" to="/servicos">Ver serviços</RouterLink>
@@ -194,6 +194,7 @@ import { usePageMeta } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseIcon from '@/components/ui/BaseIcon.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import BlogList from '@/components/blog/BlogList.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'

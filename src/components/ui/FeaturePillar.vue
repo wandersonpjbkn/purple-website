@@ -1,12 +1,14 @@
 <template>
   <div class="feature-pillar" :class="{ 'feature-pillar--dark': dark }">
-    <span class="feature-pillar__icon" aria-hidden="true">{{ icon }}</span>
+    <span class="feature-pillar__icon"><BaseIcon :name="icon" /></span>
     <h3>{{ title }}</h3>
     <p>{{ description }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseIcon from '@/components/ui/BaseIcon.vue'
+
 withDefaults(
   defineProps<{
     icon: string

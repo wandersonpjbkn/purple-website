@@ -41,9 +41,9 @@ export const SERVICE_OFFER = {
   title: '{{SERVICE_OFFER}}',
   subtitle: '{{SERVICE_OFFER}}',
   items: [
-    { icon: '✦', title: '{{SERVICE_OFFER}}', description: '{{SERVICE_OFFER}}' },
-    { icon: '✦', title: '{{SERVICE_OFFER}}', description: '{{SERVICE_OFFER}}' },
-    { icon: '✦', title: '{{SERVICE_OFFER}}', description: '{{SERVICE_OFFER}}' },
+    { icon: '', title: '{{SERVICE_OFFER}}', description: '{{SERVICE_OFFER}}' },
+    { icon: '', title: '{{SERVICE_OFFER}}', description: '{{SERVICE_OFFER}}' },
+    { icon: '', title: '{{SERVICE_OFFER}}', description: '{{SERVICE_OFFER}}' },
   ],
 }
 
@@ -57,7 +57,7 @@ export const SERVICE_OFFER = {
 export const SERVICE_OFFER_DRAFT = [
   {
     id: 'employer-branding',
-    icon: '🏆',
+    icon: 'trophy',
     title: 'Employer Branding',
     tagline: 'Como a sua marca é percebida por quem trabalha — e por quem pode trabalhar — nela.',
     description:
@@ -79,7 +79,7 @@ export const SERVICE_OFFER_DRAFT = [
   },
   {
     id: 'endomarketing',
-    icon: '🤝',
+    icon: 'handshake',
     title: 'Endomarketing',
     tagline: 'Como o engajamento dos seus colaboradores impacta diretamente nos resultados.',
     description:
@@ -101,7 +101,7 @@ export const SERVICE_OFFER_DRAFT = [
   },
   {
     id: 'comunicacao-interna',
-    icon: '📣',
+    icon: 'megaphone',
     title: 'Comunicação Interna',
     tagline: 'Para que todos possam caminhar na mesma direção, é essencial que estejam informados.',
     description:
@@ -123,7 +123,7 @@ export const SERVICE_OFFER_DRAFT = [
   },
   {
     id: 'publicidade-online',
-    icon: '📈',
+    icon: 'chart',
     title: 'Publicidade Online',
     tagline: 'Campanhas de mídia paga para atrair talentos, fortalecer a marca e gerar resultados.',
     description:
@@ -145,7 +145,7 @@ export const SERVICE_OFFER_DRAFT = [
   },
   {
     id: 'ux-ui',
-    icon: '✦',
+    icon: 'design',
     title: 'UX/UI para websites',
     tagline: 'Design de experiências digitais que refletem a identidade e os valores da sua marca.',
     description:

@@ -9,7 +9,7 @@
             <h1>Conteúdos sobre pessoas,<br />cultura e comunicação</h1>
           </div>
           <div class="blog-search-field">
-            <span class="blog-search-field__icon">🔍</span>
+            <span class="blog-search-field__icon"><BaseIcon name="search" /></span>
             <input
               v-model="query"
               type="search"
@@ -156,6 +156,7 @@ import type { Post, CategoryCount } from 'virtual:blog-posts'
 import { usePageMeta, useBlog } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+import BaseIcon from '@/components/ui/BaseIcon.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import BlogPagination from '@/components/blog/BlogPagination.vue'
 
