@@ -21,11 +21,11 @@
 
   // ── Texto/superfícies sobre fundo escuro ───────────────
   --on-dark: #ffffff;
-  --on-dark-strong: var(--on-dark-strong);
-  --on-dark-muted: var(--on-dark-muted);
-  --on-dark-subtle: var(--on-dark-subtle);
-  --on-dark-surface: var(--on-dark-surface);
-  --on-dark-border: var(--on-dark-border);
+  --on-dark-strong: rgba(255, 255, 255, 0.85);
+  --on-dark-muted: rgba(255, 255, 255, 0.6);
+  --on-dark-subtle: rgba(255, 255, 255, 0.35);
+  --on-dark-surface: rgba(255, 255, 255, 0.05);
+  --on-dark-border: rgba(255, 255, 255, 0.08);
 
   // ── Marca WhatsApp ─────────────────────────────────────
   --whatsapp: #25d366;
