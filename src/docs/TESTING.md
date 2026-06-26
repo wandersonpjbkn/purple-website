@@ -7,14 +7,38 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 ## Verdade hoje ✅/⏳
 
-- **Não há test runner nem testes** no repositório ⏳. Sem `vitest`/`playwright`
-  em `package.json`, sem `*.spec.ts`, sem `__tests__/`.
-- O `tsconfig.app.json` já **exclui `src/**/__tests__/*`** — a convenção de pasta
-  está reservada, só falta o runner.
-- **Portões de qualidade que existem ✅** e devem rodar antes de subir:
+- **Runner: Vitest 3** (`vitest.config.ts` próprio, standalone) + **@vue/test-utils**
+  + **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
+- **31 testes** em 6 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
+  excluídos do build app pelo `tsconfig.app.json`).
+- **Portões de qualidade ✅** (rodar antes de subir):
+  - **Testes:** `yarn test`.
   - **Type-check:** `yarn ts` (`vue-tsc --build`), também dentro de `yarn build`.
-  - **Lint:** `yarn lint` (ESLint flat config + plugin Vue + Prettier).
-  - **Format:** `yarn format` (Prettier).
+  - **Lint:** `yarn lint` · **Format:** `yarn format`.
+- Nota: ao fim de `yarn test` aparece *"something prevents Vite server from
+  exiting"* — aviso **benigno** do Vitest (saída 0, testes passam).
+
+### Coberto hoje ✅
+
+| Arquivo | O que valida |
+|---|---|
+| `plugins/__tests__/vite-plugin-blog.spec.ts` | `slugify`, `parseFrontmatter`, `markdownToHtml`, `countWords` |
+| `composables/__tests__/useBlog.spec.ts` | filtro por termo/categoria, paginação, clamp de página, `clearFilters` |
+| `composables/__tests__/useEmailJS.spec.ts` | fallback "simula sucesso" sem env; erro sem SDK; envio com SDK |
+| `content/__tests__/placeholders.spec.ts` | **guarda de placeholder** (hero/oferta não publicam copy final) |
+| `stores/__tests__/consent.spec.ts` | transições do consentimento LGPD + getters |
+| `components/__tests__/CookieConsent.spec.ts` | banner aparece/oculta; aceitar/recusar |
+
+> Para tornar os helpers do blog testáveis, `vite-plugin-blog.ts` passou a
+> **exportar** `parseFrontmatter/slugify/markdownToHtml/countWords` (sem mudança
+> de comportamento).
+
+### Ainda pendente ⏳
+
+- **Validação do form de Contato** via mount do `ContactPage` (hoje a lógica
+  `validate()` é interna ao componente).
+- **Smoke de render** das 6 páginas (rota → componente monta sem erro).
+- **Playwright e2e** (1 smoke navegando as 6 páginas + envio simulado).
 
 ## Right-size (importante) 
 
@@ -27,23 +51,20 @@ que fixem esse copy.
 ## O que vale testar (prioridade) ⏳
 
 1. **Lógica pura — alto valor, fácil:**
-   - `vite-plugin-blog`: `parseFrontmatter`, `markdownToHtml`, ordenação por data,
-     `getPost/getPostsByAuthor/getPostsByCategory/getFeaturedPosts/getAllCategories`.
-   - `useBlog`: filtro por categoria/busca, paginação, `clearFilters`.
-   - `useEmailJS`: validação e o fallback "simula sucesso sem env".
-   - validação do form de Contato (`validate()` em `ContactPage`).
-2. **Smoke de render:** cada uma das 6 páginas monta sem erro (rota → componente).
-3. **Guardas de placeholder:** garantir que hero e Serviços **renderizam
-   `{{POSITIONING_HOOK}}`/`{{SERVICE_OFFER}}`** enquanto a flag de validação não
-   virar — protege contra publicar copy não validado por engano.
+   - ✅ `vite-plugin-blog`: `parseFrontmatter`, `markdownToHtml`, `slugify`, `countWords`.
+   - ✅ `useBlog`: filtro por categoria/busca, paginação, `clearFilters`.
+   - ✅ `useEmailJS`: fallback "simula sucesso sem env" + erro/envio com SDK.
+   - ⏳ validação do form de Contato (`validate()` em `ContactPage`).
+2. ⏳ **Smoke de render:** cada uma das 6 páginas monta sem erro (rota → componente).
+3. ✅ **Guardas de placeholder:** hero e Serviços só renderizam
+   `{{POSITIONING_HOOK}}`/`{{SERVICE_OFFER}}` enquanto não validados.
+4. ✅ **Consentimento LGPD:** store + banner `CookieConsent`.
 
 **Não** testar: snapshot de copy em validação, detalhes visuais/pixel, o
 placeholder do `BaseIcon` (muda quando vier o set SVG real).
 
-## Ferramentas sugeridas (se/quando adicionar) ⏳
+## Ferramentas ⏳ (ainda não adicionadas)
 
-- **Vitest** + **@vue/test-utils** para unidade/componente (integra com Vite e o
-  alias `@`). Ideal para a lógica pura acima.
 - **Playwright** para 1 smoke e2e (Chromium já disponível no ambiente). Manter
   mínimo: navegar pelas 6 páginas, enviar o form em modo simulado.
 

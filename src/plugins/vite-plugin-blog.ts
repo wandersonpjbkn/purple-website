@@ -34,7 +34,7 @@ export interface BlogPost {
 
 // ── Parser de frontmatter YAML simples ────────────────────
 
-function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
+export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/m)
   if (!match) return { fm: {}, body: raw }
 
@@ -72,7 +72,7 @@ function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
 
 // ── Markdown → HTML ───────────────────────────────────────
 
-function slugify(text: string): string {
+export function slugify(text: string): string {
   return text
     .toLowerCase()
     .normalize('NFD')
@@ -82,7 +82,7 @@ function slugify(text: string): string {
     .replace(/\s+/g, '-')
 }
 
-function markdownToHtml(md: string): string {
+export function markdownToHtml(md: string): string {
   let html = md
 
   // Tabelas GFM
@@ -166,7 +166,7 @@ function markdownToHtml(md: string): string {
   return html
 }
 
-function countWords(text: string): number {
+export function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length
 }
 
@@ -266,11 +266,13 @@ export function getAllCategories() {
       const postsDir = path.resolve(process.cwd(), 'content/posts')
       if (!fs.existsSync(postsDir)) return
 
-      fs.watch(postsDir, { recursive: true }, () => {
+      const watcher = fs.watch(postsDir, { recursive: true }, () => {
         const mod = server.moduleGraph.getModuleById(RESOLVED)
         if (mod) server.moduleGraph.invalidateModule(mod)
         server.ws.send({ type: 'full-reload' })
       })
+      // Não impedir o processo de encerrar só por causa do watcher (ex.: vitest).
+      watcher.unref()
     },
   }
 }
