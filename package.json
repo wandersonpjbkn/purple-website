@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p ts \"build:only {@}\" --",
+    "build:static": "run-s build prerender",
     "preview": "vite preview",
     "build:only": "vite build",
+    "prerender": "node scripts/prerender.mjs",
     "ts": "vue-tsc --build",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -36,6 +38,7 @@
     "jiti": "^2.6.1",
     "jsdom": "^29.1.1",
     "npm-run-all2": "^8.0.4",
+    "playwright-core": "^1.61.1",
     "prettier": "^3.8.1",
     "sass": "^1.97.3",
     "sass-embedded": "^1.98.0",

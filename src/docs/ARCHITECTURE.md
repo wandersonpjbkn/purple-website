@@ -96,7 +96,8 @@ removido; a Home renderiza `PostCard` como as demais telas.
 ## Build & deploy
 
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
-- **Deploy (Render) ⏳:** alvo declarado, mas **não há infra no repo** (sem `render.yaml`/`Dockerfile`/`_redirects`). Por ser SPA com history mode, o host precisa de **rewrite `/* → /index.html`** — ainda não configurado aqui.
+- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`) e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog). Os scripts do bundle ficam — o SPA assume no cliente; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
+- **Deploy (Render) ⏳:** alvo declarado, mas **não há infra no repo** (sem `render.yaml`/`Dockerfile`/`_redirects`). Por ser SPA com history mode, o host precisa de **rewrite `/* → /index.html`** — ainda não configurado. Para servir o prerender, o build do deploy deve rodar `build:static` (com Chromium disponível).
 
 ## Consentimento LGPD + GTM ✅
 

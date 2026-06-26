@@ -204,7 +204,8 @@ import PostCard from '@/components/blog/PostCard.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
 
 usePageMeta({
-  title: 'Purple Comunicação | A mudança é de dentro para fora',
+  // usePageMeta já anexa "| Purple Comunicação"; não repetir a marca aqui.
+  title: 'A mudança é de dentro para fora',
   description:
     'Somos uma empresa que une estratégia e comunicação para transformar o ambiente interno em vantagem competitiva real.',
 })
