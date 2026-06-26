@@ -31,6 +31,15 @@ psicossocial (NR-1)**. Qual destes é o comprador-cunha é hipótese sob valida�
 - **Não** compete de frente com endomarketing de brinde, mural, data comemorativa.
 - A lente psicológica é genuína (Wanderson é psicólogo) e é **diferencial, não área a evitar** — desde que sem o artefato regulado.
 
+## Compromisso com a verdade — toda informação tem fonte ✅
+
+Princípio editorial inegociável: **todo dado, estatística ou afirmação de mercado
+publicada vem de fonte real e verificável** (pesquisa acadêmica, relatório,
+revista/jornal). A Purple é autora do conteúdo, mas o conteúdo é **fomentado e
+embasado em evidência** — não opinião solta. Coerente com a formação em Psicologia
+de Wanderson PJ: rigor com a evidência é parte da identidade, não enfeite.
+Reflexo técnico em [`CONTENT_MODEL`](CONTENT_MODEL.md) (campo `source` nos dados).
+
 ## Por que existe
 
 A dupla viveu, numa empresa anterior, assédio moral, liderança que não mediou e

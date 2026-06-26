@@ -59,6 +59,14 @@ Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(
 > A "filosofia/processo" foi consolidada na **Abordagem** (não em Serviços), por
 > decisão de produto registrada em [`PROJECT_STATE`](PROJECT_STATE.md).
 
+## Toda afirmação cita fonte ✅
+
+Compromisso editorial da Purple (ver [`PRODUCT_VISION`](PRODUCT_VISION.md)): todo
+dado/estatística exibido carrega a **fonte**. Verificável no código — cada item de
+`home.panorama.stats` e `about.dataStats` tem `source`; os de `home.panorama.context`
+citam a fonte no próprio texto. **Ao adicionar conteúdo factual, manter o `source`**
+(pesquisa, relatório, revista/jornal). Conteúdo sem fonte não entra.
+
 ## Fonte de blog unificada ✅
 
 Todo o blog (inclusive a Home) lê de `virtual:blog-posts`. O stack legado
