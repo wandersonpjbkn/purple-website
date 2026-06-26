@@ -3,7 +3,7 @@ title: '86% dos colaboradores valorizam bem-estar tanto quanto salário — e ag
 slug: 'bem-estar-colaboradores-dados-2026'
 excerpt: 'Novos dados mostram que bem-estar no trabalho deixou de ser benefício e passou a ser critério de escolha e permanência.'
 date: '2026-03-10'
-author: 'wanderson-paixao'
+author: 'wanderson-pj'
 category: 'Bem-estar'
 tags: ['bem-estar', 'engajamento', 'saúde mental', 'dados', 'RH']
 readTime: 7

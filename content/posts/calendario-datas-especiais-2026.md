@@ -3,7 +3,7 @@ title: 'Calendário de datas especiais para RH e Comunicação Interna 2026'
 slug: 'calendario-datas-especiais-2026'
 excerpt: 'Um calendário editorial ajuda a organizar ações de marca empregadora, comunicação interna e campanhas ao longo do ano.'
 date: '2026-01-10'
-author: 'wanderson-paixao'
+author: 'wanderson-pj'
 category: 'Planejamento'
 tags: ['calendário', 'endomarketing', 'planejamento', 'RH']
 readTime: 5
