@@ -9,11 +9,11 @@ Status: ✅ dado real publicável · ⛔ bloqueado (placeholder até validar) ·
 
 ## Duas fontes de conteúdo ✅/⛔
 
-| Fonte | Papel | Status |
-|---|---|---|
-| `src/data/site.json` | Dados **reais já validados** (stats, time, contato, abordagem) | ✅ |
-| `src/content/placeholders.ts` | Conteúdo **em validação** (posicionamento + oferta) | ⛔ |
-| `content/posts/*.md` + `src/data/authors.json` | Blog (via `virtual:blog-posts`) | ✅ |
+| Fonte                                          | Papel                                                          | Status |
+| ---------------------------------------------- | -------------------------------------------------------------- | ------ |
+| `src/data/site.json`                           | Dados **reais já validados** (stats, time, contato, abordagem) | ✅     |
+| `src/content/placeholders.ts`                  | Conteúdo **em validação** (posicionamento + oferta)            | ⛔     |
+| `content/posts/*.md` + `src/data/authors.json` | Blog (via `virtual:blog-posts`)                                | ✅     |
 
 **Regra inegociável:** posicionamento (hero) e oferta de Serviços ficam em
 **placeholders** até a discovery preencher os slots. O porquê está em
@@ -45,14 +45,14 @@ por `BaseIcon` — não emojis (ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md)).
 
 ## As 6 páginas e a Arquitetura de Informação ✅
 
-| Página | Rota | Seções → fonte |
-|---|---|---|
-| **Home** | `/` | hero ⛔`POSITIONING_HOOK` · highlight `home.highlight` · serviços ⛔`SERVICE_OFFER.items` · panorama `home.panorama` · blog (destaques) · time `home.team` · CTA |
-| **Sobre** | `/sobre` | hero (copy no template) · crença `about.helpTitle/helpText` · time `home.team` · dados `about.dataStats` · CTA |
-| **Abordagem** | `/abordagem` | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA |
-| **Serviços** | `/servicos` | hero ⛔`SERVICE_OFFER` · cards ⛔`SERVICE_OFFER.items` · CTA |
-| **Blog** | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `authors.json` |
-| **Contato** | `/contato` | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`) |
+| Página        | Rota                                           | Seções → fonte                                                                                                                                                   |
+| ------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Home**      | `/`                                            | hero ⛔`POSITIONING_HOOK` · highlight `home.highlight` · serviços ⛔`SERVICE_OFFER.items` · panorama `home.panorama` · blog (destaques) · time `home.team` · CTA |
+| **Sobre**     | `/sobre`                                       | hero (copy no template) · crença `about.helpTitle/helpText` · time `home.team` · dados `about.dataStats` · CTA                                                   |
+| **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                           |
+| **Serviços**  | `/servicos`                                    | hero ⛔`SERVICE_OFFER` · cards ⛔`SERVICE_OFFER.items` · CTA                                                                                                     |
+| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `authors.json`                                                                                                                            |
+| **Contato**   | `/contato`                                     | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                 |
 
 Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
 

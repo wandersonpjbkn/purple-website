@@ -31,7 +31,7 @@ observado; "o que o mercado compra" é inferência até bater num comprador real
 
 - **Entrevistas de descoberta** (roteiro Mom Test) — n pequeno, profundidade.
 - **Formulário Tally** em grupos de RH — n maior, vocabulário e enquadramento.
-- **Sinal-chave:** a *palavra espontânea* do comprador × o *enquadramento que ele escolhe* numa lista. Se convergirem na cunha, confirma. Se divergirem, a palavra espontânea ganha.
+- **Sinal-chave:** a _palavra espontânea_ do comprador × o _enquadramento que ele escolhe_ numa lista. Se convergirem na cunha, confirma. Se divergirem, a palavra espontânea ganha.
 
 ## Os dois slots reservados (no site) ⛔
 
@@ -44,7 +44,7 @@ Até a validação, o site **não crava** a aposta. Dois placeholders, isolados 
 O catálogo antigo (Employer Branding, Endomarketing, branding) está **preservado
 como rascunho-hipótese fora do render** — não como compromisso publicado.
 
-## Visão de longo prazo *(separada da cunha)*
+## Visão de longo prazo _(separada da cunha)_
 
 A "consultoria de alinhamento entre pessoas, cultura e comunicação" é o
 **horizonte de crescimento**, não o ponto de entrada. Entra-se pela cunha

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "run-p ts \"build-only {@}\" --",
     "preview": "vite preview",
-    "build-only": "vite build",
+    "build:only": "vite build",
     "ts": "vue-tsc --build",
     "test": "vitest run",
     "test:watch": "vitest",

@@ -60,8 +60,9 @@ sem BEM: `.lead`, `.section-eyebrow` (+ `--lime`), `.text-link`, `.section-block
 ## Componentes ✅
 
 **ui/**
+
 - `BaseButton` — `<component :is="tag">` polimórfico; `variant: primary |
-  secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink"`.
+secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink"`.
   **Caminho único de botão** — não escrever `class="button primary"` à mão.
 - `BaseContainer` — wrapper `.container` (largura/centralização).
 - `BaseIcon` — **placeholder SVG** 🟡 com `name` semântico (`target`, `megaphone`,

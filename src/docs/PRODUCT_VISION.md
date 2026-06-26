@@ -13,7 +13,7 @@ As duas miram o mesmo destino por portas diferentes. O recorrente "falamos da
 mesma coisa sem nos entender" é gap de vocabulário, não de direção — resolve-se
 nomeando o destino comum em voz alta.
 
-## Quem é o cliente 🟡 *(hipótese a validar)*
+## Quem é o cliente 🟡 _(hipótese a validar)_
 
 Empresas — e, dentro delas, RH/DHO, lideranças, diretoria — lidando com clima,
 engajamento, liderança, comunicação interna e, gatilho atual, **risco

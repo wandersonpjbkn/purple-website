@@ -1,3 +1,4 @@
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 /**
@@ -10,25 +11,36 @@ import { defineStore } from 'pinia'
  */
 export type ConsentChoice = 'unset' | 'accepted' | 'rejected'
 
-export const useConsentStore = defineStore('consent', {
-  state: () => ({
-    analytics: 'unset' as ConsentChoice,
-  }),
-  getters: {
-    decided: (s): boolean => s.analytics !== 'unset',
-    analyticsGranted: (s): boolean => s.analytics === 'accepted',
+export const useConsentStore = defineStore(
+  'consent',
+  () => {
+    // state
+    const analytics = ref<ConsentChoice>('unset')
+
+    // getters
+    const decided = computed(() => analytics.value !== 'unset')
+    const analyticsGranted = computed(() => analytics.value === 'accepted')
+
+    // actions
+    const acceptAnalytics = () => (analytics.value = 'accepted')
+    const rejectAnalytics = () => (analytics.value = 'rejected')
+    const reopen = () => (analytics.value = 'unset')
+
+    return {
+      // state
+      analytics,
+
+      // getters
+      decided,
+      analyticsGranted,
+
+      // actions
+      acceptAnalytics,
+      rejectAnalytics,
+      reopen,
+    }
   },
-  actions: {
-    acceptAnalytics() {
-      this.analytics = 'accepted'
-    },
-    rejectAnalytics() {
-      this.analytics = 'rejected'
-    },
-    /** Reabre o banner (ex.: link "Preferências de cookies" no rodapé). */
-    reopen() {
-      this.analytics = 'unset'
-    },
+  {
+    persist: true,
   },
-  persist: true,
-})
+)

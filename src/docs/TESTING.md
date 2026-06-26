@@ -8,26 +8,26 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 ## Verdade hoje ✅/⏳
 
 - **Runner: Vitest 3** (`vitest.config.ts` próprio, standalone) + **@vue/test-utils**
-  + **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
+  - **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
 - **31 testes** em 6 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`).
 - **Portões de qualidade ✅** (rodar antes de subir):
   - **Testes:** `yarn test`.
   - **Type-check:** `yarn ts` (`vue-tsc --build`), também dentro de `yarn build`.
   - **Lint:** `yarn lint` · **Format:** `yarn format`.
-- Nota: ao fim de `yarn test` aparece *"something prevents Vite server from
-  exiting"* — aviso **benigno** do Vitest (saída 0, testes passam).
+- Nota: ao fim de `yarn test` aparece _"something prevents Vite server from
+  exiting"_ — aviso **benigno** do Vitest (saída 0, testes passam).
 
 ### Coberto hoje ✅
 
-| Arquivo | O que valida |
-|---|---|
-| `plugins/__tests__/vite-plugin-blog.spec.ts` | `slugify`, `parseFrontmatter`, `markdownToHtml`, `countWords` |
-| `composables/__tests__/useBlog.spec.ts` | filtro por termo/categoria, paginação, clamp de página, `clearFilters` |
-| `composables/__tests__/useEmailJS.spec.ts` | fallback "simula sucesso" sem env; erro sem SDK; envio com SDK |
-| `content/__tests__/placeholders.spec.ts` | **guarda de placeholder** (hero/oferta não publicam copy final) |
-| `stores/__tests__/consent.spec.ts` | transições do consentimento LGPD + getters |
-| `components/__tests__/CookieConsent.spec.ts` | banner aparece/oculta; aceitar/recusar |
+| Arquivo                                      | O que valida                                                           |
+| -------------------------------------------- | ---------------------------------------------------------------------- |
+| `plugins/__tests__/vite-plugin-blog.spec.ts` | `slugify`, `parseFrontmatter`, `markdownToHtml`, `countWords`          |
+| `composables/__tests__/useBlog.spec.ts`      | filtro por termo/categoria, paginação, clamp de página, `clearFilters` |
+| `composables/__tests__/useEmailJS.spec.ts`   | fallback "simula sucesso" sem env; erro sem SDK; envio com SDK         |
+| `content/__tests__/placeholders.spec.ts`     | **guarda de placeholder** (hero/oferta não publicam copy final)        |
+| `stores/__tests__/consent.spec.ts`           | transições do consentimento LGPD + getters                             |
+| `components/__tests__/CookieConsent.spec.ts` | banner aparece/oculta; aceitar/recusar                                 |
 
 > Para tornar os helpers do blog testáveis, `vite-plugin-blog.ts` passou a
 > **exportar** `parseFrontmatter/slugify/markdownToHtml/countWords` (sem mudança
@@ -40,7 +40,7 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 - **Smoke de render** das 6 páginas (rota → componente monta sem erro).
 - **Playwright e2e** (1 smoke navegando as 6 páginas + envio simulado).
 
-## Right-size (importante) 
+## Right-size (importante)
 
 É um site institucional de **poucas páginas**, não um produto. **Não buscar
 cobertura alta.** Testar comportamento que quebraria silenciosamente; deixar o

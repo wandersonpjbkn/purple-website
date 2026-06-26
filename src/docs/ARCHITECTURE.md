@@ -55,16 +55,16 @@ public/              robots.txt, images/
 
 8 rotas em `src/router/index.ts` (todas `() => import()`):
 
-| path | name | página |
-|---|---|---|
-| `/` | home | HomePage |
-| `/sobre` | about | AboutPage |
-| `/abordagem` | approach | AbordagemPage |
-| `/servicos` | services | ServicesPage |
-| `/blog` | blog | BlogPage |
-| `/blog/autor/:slug` | blog-author | AuthorPage |
-| `/blog/:slug` | blog-post | BlogPostPage |
-| `/contato` | contact | ContactPage |
+| path                | name        | página        |
+| ------------------- | ----------- | ------------- |
+| `/`                 | home        | HomePage      |
+| `/sobre`            | about       | AboutPage     |
+| `/abordagem`        | approach    | AbordagemPage |
+| `/servicos`         | services    | ServicesPage  |
+| `/blog`             | blog        | BlogPage      |
+| `/blog/autor/:slug` | blog-author | AuthorPage    |
+| `/blog/:slug`       | blog-post   | BlogPostPage  |
+| `/contato`          | contact     | ContactPage   |
 
 `scrollBehavior` rola ao topo (smooth) a cada navegação. São **6 páginas no menu** (Home · Sobre · Abordagem · Serviços · Blog · Contato); `blog-author` e `blog-post` são telas de detalhe.
 
