@@ -29,6 +29,23 @@ ghost | lime`); não escrever `class="button primary"` à mão.
   (`--space-*`, `--text-*`, etc.), não valores crus. Ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
 - **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup).
 
+## Estilos (SCSS) — posse e escopo ✅
+
+Em Vue, o `scoped` **vence** o global (especificidade `[data-v-*]` + ordem de
+carga). Então a regra é organizacional, não brigar com a cascata:
+
+- **Componente é dono do seu estilo:** o visual de um componente mora **com ele**
+  (`<style scoped>`); use `:deep()` para alcançar internos de subcomponentes
+  (ex.: `BaseAvatar` estiliza o `<img>`/`.avatar__initial` de `AvImage`/`AvInitials`).
+- **`src/styles/*` é só para o que é genuinamente global:** reset, tokens,
+  layout, utilitários e primitivos compartilhados — **não** o estilo de um único
+  componente (isso o deixaria numa camada frouxa, sobrescrita por qualquer scoped).
+- **Página não re-estiliza interno de outro componente.** Estiliza as próprias
+  classes/layout.
+- **`:deep()` é cirúrgico:** reservado para conteúdo sem classe (markdown/`v-html`),
+  ancorado ao seu container e a alvos estreitos (ex.: `:deep(p > img)`), nunca um
+  elemento largo que alcance componentes aninhados.
+
 ## Comentários ✅
 
 Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,

@@ -10,7 +10,7 @@
             {{ post.category }}
           </RouterLink>
           <span aria-hidden="true">›</span>
-          <span aria-current="page">{{ post.title }}</span>u
+          <span aria-current="page">{{ post.title }}</span>
         </nav>
 
         <div class="post-hero__inner">
@@ -459,7 +459,10 @@ const headings = computed(() => {
     margin: 2.5rem 0;
   }
 
-  :deep(img) {
+  // Só imagens de conteúdo do markdown (filhas diretas de p/figure);
+  // nunca alcança o <img> de um avatar (que é filho de span.avatar).
+  :deep(p > img),
+  :deep(figure img) {
     width: 100%;
     border-radius: var(--radius-lg);
     margin: 1.5rem 0;

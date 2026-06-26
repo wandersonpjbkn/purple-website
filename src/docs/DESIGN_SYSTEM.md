@@ -45,6 +45,11 @@ Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1
 `abstracts → base → layout → components → sections`. `vite.config.ts` injeta
 `@use "sass:map"` e `@use "sass:math"` em todo `.scss`.
 
+**Posse de estilo:** `src/styles/*` é só para o que é global (reset, tokens,
+layout, primitivos compartilhados). Estilo de um único componente mora **no
+componente** (scoped + `:deep()`), para não virar uma camada frouxa sobrescrita
+por scoped de página. Regra completa em [`CONVENTIONS`](CONVENTIONS.md).
+
 `abstracts/_mixins.scss` traz: `respond-to($bp)` (breakpoints `xl 1280 · lg 1024
 · md 900 · sm 640 · xs 420`, **mobile-last/`max-width`**), `card-surface`,
 `card-hover`, `top-accent-line`, `radial-glow`, `eyebrow`, `fluid-type`,
@@ -69,7 +74,10 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   `whatsapp`…). Hoje desenha o **mesmo** marcador para todo nome, à espera do
   **sistema de ícones SVG real ⏳**; a conversão futura é `name → SVG`. Glifos
   tipográficos (`→ ← ✕`) seguem como **texto**, não como ícone.
-- `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`, `BaseAvatar`.
+- `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`.
+- `BaseAvatar` (`ui/avatar/`) — imagem com **fallback de inicial** ao falhar o
+  load (compõe `AvImage` + `AvInitials`); tamanhos `sm/md/lg/xl`. **Estilo
+  co-localizado** (scoped + `:deep()`), não global.
 
 **sections/** `CtaBanner` · **layout/** `AppHeader`, `AppFooter` ·
 **blog/** `BlogList`, `BlogCard`, `PostCard`, `BlogPagination`, `BlogSidebar`.
