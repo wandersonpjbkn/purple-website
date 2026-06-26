@@ -9,26 +9,27 @@ Status: ✅ dado real publicável · ⛔ bloqueado (placeholder até validar) ·
 
 ## Duas fontes de conteúdo ✅/⛔
 
-| Fonte                                          | Papel                                                          | Status |
-| ---------------------------------------------- | -------------------------------------------------------------- | ------ |
-| `src/data/site.json`                           | Dados **reais já validados** (stats, time, contato, abordagem) | ✅     |
-| `src/content/placeholders.ts`                  | Conteúdo **em validação** (posicionamento + oferta)            | ⛔     |
-| `content/posts/*.md` + `src/data/authors.json` | Blog (via `virtual:blog-posts`)                                | ✅     |
+| Fonte                         | Papel                                                         | Status |
+| ----------------------------- | ------------------------------------------------------------- | ------ |
+| `src/data/*.json`             | Dados **reais já validados** (fragmentados por domínio)       | ✅     |
+| `src/content/placeholders.ts` | Conteúdo **em validação** (posicionamento + oferta)           | ⛔     |
+| `content/posts/*.md`          | Blog (via `virtual:blog-posts`); autores resolvidos em `team` | ✅     |
 
 **Regra inegociável:** posicionamento (hero) e oferta de Serviços ficam em
 **placeholders** até a discovery preencher os slots. O porquê está em
 [`POSITIONING`](POSITIONING.md); o estado em [`PROJECT_STATE`](PROJECT_STATE.md).
 
-## `site.json` — estrutura real ✅
+## `src/data/*.json` — fragmentado por domínio ✅
 
-Chaves de topo: `brand`, `home`, `approach`, `about`, `contact`, `footer`.
+Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
 
-- **`brand`** — `name`, `tagline`.
-- **`home`** — `hero` (apenas `primaryCta`/`secondaryCta`; o texto saiu para o placeholder), `panorama` (`stats[]`, `context[]`), `highlight` (`benefits[]`), `cta`, `team[]`.
-- **`approach`** — `pillars[]`, `differentials[]`, `process` (`steps[]`). Reúne o que antes estava espalhado em `home`/`about`/`services`; é a fonte única da página Abordagem.
-- **`about`** — `title`, `intro`, `helpTitle`, `helpText`, `dataStats[]`.
-- **`contact`** — `title`, `subtitle`, `phone`, `email`, `address`.
-- **`footer`** — `newsletterTitle`, `aboutText`, `topics[]`.
+- **`team.json`** — array de pessoas: `slug`, `name`, `role`, `bio`, `quote`, `avatar`, `linkedin`, `isAuthor`. **Fonte única do time E dos autores do blog** (antes duplicado em `site.team` + `authors.json`); `isAuthor` marca quem assina posts.
+- **`panorama.json`** — seção de dados de mercado da Home: `eyebrow`, `title`, `subtitle`, `stats[]`, `context[]`.
+- **`approach.json`** — `pillars[]`, `differentials[]`, `process` (`steps[]`); fonte única da página Abordagem.
+- **`about.json`** — `title`, `intro`, `helpTitle`, `helpText`, `dataStats[]`.
+- **`contact.json`** — `title`, `subtitle`, `phone`, `email`, `address` (usado por Contato e rodapé).
+- **`footer.json`** — `newsletterTitle`, `aboutText`, `topics[]`.
+- **`home.json`** — copy específica da Home: `hero` (`primaryCta`/`secondaryCta`), `highlight`, `cta`.
 
 Ícones em dados são **nomes semânticos** (`target`, `megaphone`…), renderizados
 por `BaseIcon` — não emojis (ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md)).
@@ -45,14 +46,14 @@ por `BaseIcon` — não emojis (ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md)).
 
 ## As 6 páginas e a Arquitetura de Informação ✅
 
-| Página        | Rota                                           | Seções → fonte                                                                                                                                                   |
-| ------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Home**      | `/`                                            | hero ⛔`POSITIONING_HOOK` · highlight `home.highlight` · serviços ⛔`SERVICE_OFFER.items` · panorama `home.panorama` · blog (destaques) · time `home.team` · CTA |
-| **Sobre**     | `/sobre`                                       | hero (copy no template) · crença `about.helpTitle/helpText` · time `home.team` · dados `about.dataStats` · CTA                                                   |
-| **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                           |
-| **Serviços**  | `/servicos`                                    | hero ⛔`SERVICE_OFFER` · cards ⛔`SERVICE_OFFER.items` · CTA                                                                                                     |
-| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `authors.json`                                                                                                                            |
-| **Contato**   | `/contato`                                     | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                 |
+| Página        | Rota                                           | Seções → fonte                                                                                                                                                    |
+| ------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Home**      | `/`                                            | hero ⛔`POSITIONING_HOOK` · highlight `home.highlight` · serviços ⛔`SERVICE_OFFER.items` · panorama `panorama` · blog (destaques) · time `team` · CTA `home.cta` |
+| **Sobre**     | `/sobre`                                       | hero (copy no template) · crença `about.helpTitle/helpText` · time `team` · dados `about.dataStats` · CTA                                                         |
+| **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                            |
+| **Serviços**  | `/servicos`                                    | hero ⛔`SERVICE_OFFER` · cards ⛔`SERVICE_OFFER.items` · CTA                                                                                                      |
+| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `team` (autores)                                                                                                                           |
+| **Contato**   | `/contato`                                     | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                  |
 
 Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
 
@@ -63,7 +64,7 @@ Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(
 
 Compromisso editorial da Purple (ver [`PRODUCT_VISION`](PRODUCT_VISION.md)): todo
 dado/estatística exibido carrega a **fonte**. Verificável no código — cada item de
-`home.panorama.stats` e `about.dataStats` tem `source`; os de `home.panorama.context`
+`panorama.stats` e `about.dataStats` tem `source`; os de `panorama.context`
 citam a fonte no próprio texto. **Ao adicionar conteúdo factual, manter o `source`**
 (pesquisa, relatório, revista/jornal). Conteúdo sem fonte não entra.
 

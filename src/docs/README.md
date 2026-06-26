@@ -16,7 +16,8 @@ separando o que está **decidido** do que ainda é **hipótese**.
 
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) — stack, pastas, camadas, blog via Vite plugin, build e deploy
 - [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) — tokens reais, componentes Base/Ui, BEM e os placeholders
-- [`CONTENT_MODEL.md`](CONTENT_MODEL.md) — `site.json`, as 6 páginas/IA, e a regra de placeholders
+- [`CONTENT_MODEL.md`](CONTENT_MODEL.md) — `src/data/*.json`, as 6 páginas/IA, e a regra de placeholders
+- [`CONVENTIONS.md`](CONVENTIONS.md) — convenções de código (idioma, arrow functions, botão único, tokens)
 - [`TESTING.md`](TESTING.md) — estado dos testes hoje + diretrizes BDD (right-sized)
 
 ## Convenção de status

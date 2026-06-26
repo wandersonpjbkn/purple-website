@@ -32,11 +32,11 @@ src/
     blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
   content/           placeholders.ts  (conteúdo em validação — ver CONTENT_MODEL)
-  data/              site.json, authors.json
+  data/              team, panorama, contact, approach, about, footer, home (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
-  types/             blog.ts, post.ts, site.ts
+  types/             team.ts, post.ts
   docs/              esta documentação
 content/posts/       *.md  (fonte real do blog)
 public/              robots.txt, images/
