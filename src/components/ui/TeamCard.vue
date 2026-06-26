@@ -1,5 +1,5 @@
 <template>
-  <article class="team-card-member">
+  <article v-if="member && member.isVisibleTeamMember" class="team-card-member">
     <AuthorAvatar :name="member.name" size="lg" />
 
     <div class="team-card-member__info">
@@ -15,10 +15,11 @@
 import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
 
 defineProps<{
-  member: {
+  member?: {
     name: string
     role: string
     bio: string
+    isVisibleTeamMember: boolean
     quote?: string
   }
 }>()

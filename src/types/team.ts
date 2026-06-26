@@ -8,4 +8,6 @@ export interface TeamMember {
   linkedin: string
   /** Whether this member also authors blog posts (used to resolve bylines). */
   isAuthor: boolean
+  /** Whether this member it's not to be shown. */
+  isVisibleTeamMember: boolean
 }

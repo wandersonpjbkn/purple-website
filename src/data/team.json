@@ -7,7 +7,8 @@
     "quote": "Foi nas ações focadas nas pessoas colaboradoras que encontrei minha verdadeira vocação.",
     "avatar": "/images/team/suelen.jpg",
     "linkedin": "https://linkedin.com/in/suelen-fernanda",
-    "isAuthor": true
+    "isAuthor": true,
+    "isVisibleTeamMember": true
   },
   {
     "slug": "wanderson-pj",
@@ -17,6 +18,7 @@
     "quote": "As diversas vivências me ensinaram como é importante sempre se lembrar das pessoas em todos os processos.",
     "avatar": "/images/team/wanderson.jpg",
     "linkedin": "https://www.linkedin.com/in/wandersonpj-bkn",
-    "isAuthor": true
+    "isAuthor": true,
+    "isVisibleTeamMember": true
   }
 ]
