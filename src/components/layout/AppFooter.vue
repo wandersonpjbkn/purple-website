@@ -45,8 +45,7 @@
 
       <div class="footer-bottom">
         <span>Copyright © {{ currentYear }} Purple Comunicação</span>
-        <!-- TODO: review implementation -->
-        <!-- <span>Política de privacidade</span> -->
+        <button type="button" class="footer-cookies" @click="consent.reopen()">Preferências de cookies</button>
       </div>
     </BaseContainer>
   </footer>
@@ -58,6 +57,8 @@ import { RouterLink } from 'vue-router'
 import site from '@/data/site.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+import { useConsentStore } from '@/stores/consent'
 
+const consent = useConsentStore()
 const currentYear = new Date().getFullYear()
 </script>

@@ -5,6 +5,7 @@
       <RouterView />
     </main>
     <AppFooter />
+    <CookieConsent />
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import { useHead } from '@unhead/vue'
 
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
+import CookieConsent from '@/components/layout/CookieConsent.vue'
 
 useHead({
   htmlAttrs: { lang: 'pt-BR' },

@@ -26,13 +26,14 @@ src/
   router/index.ts    8 rotas, lazy-loaded
   pages/             Home, About, Abordagem, Services, Blog, BlogPost, Author, Contact
   components/
-    layout/          AppHeader, AppFooter
+    layout/          AppHeader, AppFooter, CookieConsent
     sections/        CtaBanner
     ui/              BaseButton, BaseContainer, BaseIcon, FeaturePillar, TeamCard, AuthorAvatar
     blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
   content/           placeholders.ts  (conteúdo em validação — ver CONTENT_MODEL)
   data/              site.json, authors.json
+  stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
   types/             blog.ts, post.ts, site.ts
@@ -47,7 +48,8 @@ public/              robots.txt, images/
 2. `App.vue` monta o shell e define head global: `lang="pt-BR"` e **`robots: noindex, nofollow`**.
 3. Páginas são componentes de rota (lazy `import()`), cada uma chama `usePageMeta(...)`.
 
-**Pinia 🟡** — registrado, porém **não há nenhuma store** em `src/`. Fica para uso futuro (decisão em [`PROJECT_STATE`](PROJECT_STATE.md)).
+**Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Tem **uma store**:
+`src/stores/consent.ts` (consentimento LGPD, persistido em localStorage).
 
 ## Roteamento ✅
 
@@ -96,8 +98,21 @@ removido; a Home renderiza `PostCard` como as demais telas.
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
 - **Deploy (Render) ⏳:** alvo declarado, mas **não há infra no repo** (sem `render.yaml`/`Dockerfile`/`_redirects`). Por ser SPA com history mode, o host precisa de **rewrite `/* → /index.html`** — ainda não configurado aqui.
 
+## Consentimento LGPD + GTM ✅
+
+Solução **autoral e local**, sem biblioteca de consentimento de terceiros:
+
+- **Store** `src/stores/consent.ts` (Pinia + persistedstate → localStorage): uma
+  categoria opcional `analytics` (`unset | accepted | rejected`); "necessário" é
+  implícito.
+- **Banner** `components/layout/CookieConsent.vue` — aparece enquanto a escolha é
+  `unset`; **Aceitar/Recusar** via `BaseButton`. Rodapé tem "Preferências de
+  cookies" (`consent.reopen()`).
+- **GTM** (`@gtm-support/vue-gtm`, `createGtm`) é registrado em `main.ts` **só se
+  houver `VITE_GTM_ID`**, com `enabled` partindo do consentimento já persistido.
+  O `<script>` do GTM **só carrega após opt-in** — o banner chama
+  `useGtm()?.enable(true/false)`.
+
 ## Instalado mas inativo (cuidado ao documentar) 🟡
 
 - **vite-plugin-pwa** — dependência presente, **ausente** de `vite.config.ts` (não há PWA ativo).
-- **@gtm-support/vue-gtm** — importado e **comentado** em `main.ts`; entra junto do consentimento LGPD (Grupo 7, ver [`PROJECT_STATE`](PROJECT_STATE.md)).
-- **Pinia / persistedstate** — registrados, sem store.
