@@ -6,13 +6,18 @@ separando o que está **decidido** do que ainda é **hipótese**.
 
 ## Mapa de documentos
 
+**Estratégia** (vêm da reflexão):
+
 - [`PRODUCT_VISION.md`](PRODUCT_VISION.md) — quem é a Purple, quem é o cliente, território de atuação
 - [`POSITIONING.md`](POSITIONING.md) — a hipótese de posicionamento (a cunha), os slots reservados e como se validam
 - [`PROJECT_STATE.md`](PROJECT_STATE.md) — decisões tomadas, perguntas em aberto, o que está em andamento
 
-Docs técnicos (ARCHITECTURE, DESIGN_SYSTEM as-built, CONTENT_MODEL) são gerados
-pelo **Claude Code a partir do repositório real** — porque a verdade técnica
-mora no código, não nesta documentação de estratégia.
+**Técnicos** (gerados lendo o repositório real — a verdade técnica mora no código):
+
+- [`ARCHITECTURE.md`](ARCHITECTURE.md) — stack, pastas, camadas, blog via Vite plugin, build e deploy
+- [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) — tokens reais, componentes Base/Ui, BEM e os placeholders
+- [`CONTENT_MODEL.md`](CONTENT_MODEL.md) — `site.json`, as 6 páginas/IA, e a regra de placeholders
+- [`TESTING.md`](TESTING.md) — estado dos testes hoje + diretrizes BDD (right-sized)
 
 ## Convenção de status
 
