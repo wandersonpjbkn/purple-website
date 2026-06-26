@@ -27,8 +27,8 @@
       <div class="split-section">
         <div>
           <p class="section-eyebrow">Nossa crença</p>
-          <h2>{{ site.about.helpTitle }}</h2>
-          <p class="lead">{{ site.about.helpText }}</p>
+          <h2>{{ about.helpTitle }}</h2>
+          <p class="lead">{{ about.helpText }}</p>
           <p style="margin-top: 1rem">
             Por isso, antes de olhar para fora, ajudamos empresas a olharem para dentro — para as pessoas que movem o
             negócio todos os dias.
@@ -55,7 +55,7 @@
         </p>
       </div>
       <div class="team-grid">
-        <TeamCard v-for="member in site.home.team" :key="member.name" :member="member" />
+        <TeamCard v-for="member in team" :key="member.name" :member="member" />
       </div>
     </BaseContainer>
   </section>
@@ -73,7 +73,7 @@
       <!-- data-stat-grid + data-stat-card vêm de _stats.scss -->
       <div class="data-stat-grid" style="margin-top: 3rem; position: relative; z-index: 1">
         <div
-          v-for="stat in site.about.dataStats"
+          v-for="stat in about.dataStats"
           :key="stat.number"
           class="data-stat-card"
           style="background: var(--purple-900)"
@@ -97,7 +97,8 @@
 
 <script setup lang="ts">
 import { usePageMeta } from '@/composables'
-import site from '@/data/site.json'
+import about from '@/data/about.json'
+import team from '@/data/team.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

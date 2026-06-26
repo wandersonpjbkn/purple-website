@@ -15,7 +15,7 @@
     <BaseContainer>
       <div class="approach-pillars">
         <FeaturePillar
-          v-for="pillar in site.approach.pillars"
+          v-for="pillar in approach.pillars"
           :key="pillar.title"
           :icon="pillar.icon"
           :title="pillar.title"
@@ -37,7 +37,7 @@
       </div>
       <div class="differentials-grid">
         <FeaturePillar
-          v-for="diff in site.approach.differentials"
+          v-for="diff in approach.differentials"
           :key="diff.title"
           :icon="diff.icon"
           :title="diff.title"
@@ -53,8 +53,8 @@
     <BaseContainer>
       <div class="split-section">
         <div>
-          <p class="section-eyebrow">{{ site.approach.process.eyebrow }}</p>
-          <h2>{{ site.approach.process.title }}</h2>
+          <p class="section-eyebrow">{{ approach.process.eyebrow }}</p>
+          <h2>{{ approach.process.title }}</h2>
           <p class="lead">
             Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.
           </p>
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="process-list">
-          <div v-for="(step, index) in site.approach.process.steps" :key="step.title" class="process-item">
+          <div v-for="(step, index) in approach.process.steps" :key="step.title" class="process-item">
             <div class="process-item__number">{{ String(index + 1).padStart(2, '0') }}</div>
             <div class="process-item__content">
               <h3>{{ step.title }}</h3>
@@ -84,7 +84,7 @@
 
 <script setup lang="ts">
 import { usePageMeta } from '@/composables'
-import site from '@/data/site.json'
+import approach from '@/data/approach.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

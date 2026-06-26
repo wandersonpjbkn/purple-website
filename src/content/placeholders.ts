@@ -7,7 +7,7 @@
  * arquivo precisa ser tocado.
  *
  * Os dados REAIS já validados (estatísticas, time, contato, pilares e
- * processo da Abordagem) seguem em src/data/site.json.
+ * processo da Abordagem) ficam fragmentados em src/data/*.json.
  */
 
 export const POSITIONING_HOOK = {

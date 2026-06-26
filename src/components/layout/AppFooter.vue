@@ -5,7 +5,7 @@
       <!-- <section class="newsletter-box">
         <div>
           <p class="section-eyebrow">Newsletter</p>
-          <h3>{{ site.footer.newsletterTitle }}</h3>
+          <h3>{{ footer.newsletterTitle }}</h3>
         </div>
         <form class="newsletter-form" @submit.prevent>
           <input type="email" placeholder="Seu melhor e-mail" aria-label="Seu melhor e-mail" />
@@ -16,7 +16,7 @@
       <div class="footer-grid">
         <div>
           <h4>Purple Comunicação</h4>
-          <p>{{ site.footer.aboutText }}</p>
+          <p>{{ footer.aboutText }}</p>
         </div>
         <div>
           <h4>Navegação</h4>
@@ -32,14 +32,14 @@
         <div>
           <h4>Tópicos</h4>
           <ul>
-            <li v-for="topic in site.footer.topics" :key="topic">{{ topic }}</li>
+            <li v-for="topic in footer.topics" :key="topic">{{ topic }}</li>
           </ul>
         </div>
         <div>
           <h4>Contato</h4>
-          <p>{{ site.contact.address }}</p>
-          <p>{{ site.contact.phone }}</p>
-          <p>{{ site.contact.email }}</p>
+          <p>{{ contact.address }}</p>
+          <p>{{ contact.phone }}</p>
+          <p>{{ contact.email }}</p>
         </div>
       </div>
 
@@ -54,7 +54,8 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 
-import site from '@/data/site.json'
+import contact from '@/data/contact.json'
+import footer from '@/data/footer.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import { useConsentStore } from '@/stores/consent'

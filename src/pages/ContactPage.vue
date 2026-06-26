@@ -5,8 +5,8 @@
       <div class="contact-hero__inner">
         <div>
           <p class="section-eyebrow">Contato</p>
-          <h1>{{ site.contact.title }}</h1>
-          <p class="lead lead--narrow">{{ site.contact.subtitle }}</p>
+          <h1>{{ contact.title }}</h1>
+          <p class="lead lead--narrow">{{ contact.subtitle }}</p>
 
           <!-- CTAs diretos -->
           <div class="contact-hero__ctas">
@@ -34,17 +34,17 @@
 
           <!-- Info de contato -->
           <div class="contact-info">
-            <a :href="`mailto:${site.contact.email}`" class="contact-info__item">
+            <a :href="`mailto:${contact.email}`" class="contact-info__item">
               <span class="contact-info__icon"><BaseIcon name="mail" /></span>
-              <span>{{ site.contact.email }}</span>
+              <span>{{ contact.email }}</span>
             </a>
             <a :href="whatsappUrl" target="_blank" rel="noopener" class="contact-info__item">
               <span class="contact-info__icon"><BaseIcon name="phone" /></span>
-              <span>{{ site.contact.phone }}</span>
+              <span>{{ contact.phone }}</span>
             </a>
             <div class="contact-info__item">
               <span class="contact-info__icon"><BaseIcon name="pin" /></span>
-              <span>{{ site.contact.address }}</span>
+              <span>{{ contact.address }}</span>
             </div>
           </div>
         </div>
@@ -176,7 +176,7 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 
-import site from '@/data/site.json'
+import contact from '@/data/contact.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

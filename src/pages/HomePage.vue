@@ -19,10 +19,10 @@
 
           <div class="hero__actions">
             <BaseButton class="button--lg" tag="RouterLink" to="/contato">
-              {{ site.home.hero.primaryCta }}
+              {{ home.hero.primaryCta }}
             </BaseButton>
             <BaseButton class="button--lg" tag="RouterLink" to="/servicos" variant="secondary">
-              {{ site.home.hero.secondaryCta }}
+              {{ home.hero.secondaryCta }}
             </BaseButton>
           </div>
 
@@ -76,11 +76,11 @@
       <div class="split-section">
         <div class="visual-block"></div>
         <div>
-          <p class="section-eyebrow">{{ site.home.highlight.eyebrow }}</p>
-          <h2>{{ site.home.highlight.title }}</h2>
-          <p class="lead">{{ site.home.highlight.description }}</p>
+          <p class="section-eyebrow">{{ home.highlight.eyebrow }}</p>
+          <h2>{{ home.highlight.title }}</h2>
+          <p class="lead">{{ home.highlight.description }}</p>
           <ul class="feature-list">
-            <li v-for="benefit in site.home.highlight.benefits" :key="benefit">{{ benefit }}</li>
+            <li v-for="benefit in home.highlight.benefits" :key="benefit">{{ benefit }}</li>
           </ul>
           <div style="margin-top: 2rem">
             <BaseButton tag="RouterLink" to="/sobre" variant="secondary">Conheça a Purple</BaseButton>
@@ -114,15 +114,15 @@
   <section class="panorama-section">
     <BaseContainer>
       <div class="panorama-header">
-        <p class="section-eyebrow">{{ site.home.panorama.eyebrow }}</p>
-        <h2>{{ site.home.panorama.title }}</h2>
-        <p>{{ site.home.panorama.subtitle }}</p>
+        <p class="section-eyebrow">{{ panorama.eyebrow }}</p>
+        <h2>{{ panorama.title }}</h2>
+        <p>{{ panorama.subtitle }}</p>
       </div>
 
       <!-- Apenas alguns dados mais impactantes -->
       <div class="panorama-grid">
         <div
-          v-for="stat in site.home.panorama.stats.slice(0, 3)"
+          v-for="stat in panorama.stats.slice(0, 3)"
           :key="stat.label"
           class="panorama-card"
           :class="{ 'panorama-card--highlight': stat.highlight }"
@@ -139,7 +139,7 @@
       <hr class="panorama-divider" />
 
       <div class="panorama-context">
-        <div v-for="item in site.home.panorama.context" :key="item.strong" class="panorama-context__item">
+        <div v-for="item in panorama.context" :key="item.strong" class="panorama-context__item">
           <span class="panorama-context__dot"></span>
           <p class="panorama-context__text">
             <strong>{{ item.strong }}</strong> — {{ item.text }}
@@ -176,19 +176,21 @@
         </p>
       </div>
       <div class="team-grid">
-        <TeamCard v-for="member in site.home.team" :key="member.name" :member="member" />
+        <TeamCard v-for="member in team" :key="member.name" :member="member" />
       </div>
     </BaseContainer>
   </section>
 
-  <CtaBanner :title="site.home.cta.title" :description="site.home.cta.description" />
+  <CtaBanner :title="home.cta.title" :description="home.cta.description" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import site from '@/data/site.json'
+import home from '@/data/home.json'
+import panorama from '@/data/panorama.json'
+import team from '@/data/team.json'
 import { posts } from 'virtual:blog-posts'
 import { POSITIONING_HOOK, SERVICE_OFFER } from '@/content/placeholders'
 

@@ -1,0 +1,32 @@
+{
+  "title": "Sobre nós",
+  "intro": "A Purple Comunicação nasce da certeza de que o foco no colaborador e no seu bem-estar é essencial para empresas que desejam crescer com consistência.",
+  "helpTitle": "Como iremos te ajudar",
+  "helpText": "Com todos os desafios do dia a dia, muitas empresas perdem oportunidades ao deixar de olhar para quem move a organização: as pessoas.",
+  "dataStats": [
+    {
+      "number": "57",
+      "suffix": "%",
+      "label": "dos trabalhadores não estão engajados globalmente",
+      "source": "Gallup"
+    },
+    {
+      "number": "86",
+      "suffix": "%",
+      "label": "consideram bem-estar tão importante quanto o salário",
+      "source": "Pesquisa Global, 2024"
+    },
+    {
+      "number": "14",
+      "suffix": "%",
+      "label": "das empresas oferecem programas estruturados de bem-estar",
+      "source": "Panorama Corporativo 2024"
+    },
+    {
+      "number": "32",
+      "suffix": "%",
+      "label": "da PEA sofre de burnout ou problemas de saúde ocupacional",
+      "source": "ISMA-Brasil"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 import { computed, ref, type Ref } from 'vue'
 
-import authors from '@/data/authors.json'
+import team from '@/data/team.json'
 
 import { posts as allPosts, getAllCategories } from 'virtual:blog-posts'
 import type { Post } from 'virtual:blog-posts'
-import type { Author } from '@/types/blog'
+import type { TeamMember } from '@/types/team'
 
 // ── Utilitários ───────────────────────────────────────────
 
@@ -16,8 +16,8 @@ export const formatDate = (iso: string): string => {
   }).format(new Date(iso + 'T00:00:00'))
 }
 
-export const getAuthor = (slug: string): Author | undefined => {
-  return (authors as Author[]).find((a: Author) => a.slug === slug)
+export const getAuthor = (slug: string): TeamMember | undefined => {
+  return (team as TeamMember[]).find((member) => member.slug === slug)
 }
 
 // ── Composable principal ──────────────────────────────────

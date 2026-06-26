@@ -1,0 +1,77 @@
+{
+  "pillars": [
+    {
+      "icon": "target",
+      "title": "Foco no colaborador",
+      "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
+    },
+    {
+      "icon": "megaphone",
+      "title": "Comunicação clara",
+      "description": "Transformamos estratégia em narrativas, campanhas e rotinas de comunicação mais consistentes."
+    },
+    {
+      "icon": "trophy",
+      "title": "Marca empregadora",
+      "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
+    }
+  ],
+  "differentials": [
+    {
+      "icon": "target",
+      "title": "Foco em pessoas",
+      "description": "Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica."
+    },
+    {
+      "icon": "search",
+      "title": "Diagnóstico antes da ação",
+      "description": "Não propomos soluções genéricas. Primeiro entendemos profundamente o seu contexto."
+    },
+    {
+      "icon": "ruler",
+      "title": "Estratégia e execução",
+      "description": "Acompanhamos do planejamento à implementação, garantindo consistência em cada etapa."
+    },
+    {
+      "icon": "chart",
+      "title": "Resultados mensuráveis",
+      "description": "Definimos métricas claras e acompanhamos os indicadores para provar o impacto das ações."
+    },
+    {
+      "icon": "handshake",
+      "title": "Parceria de longo prazo",
+      "description": "Construímos relações duradouras, adaptando as estratégias conforme a empresa cresce."
+    },
+    {
+      "icon": "bulb",
+      "title": "Visão multidisciplinar",
+      "description": "Unimos marketing, psicologia organizacional e design para soluções mais completas."
+    }
+  ],
+  "process": {
+    "eyebrow": "Como trabalhamos",
+    "title": "Um processo pensado para gerar resultado real",
+    "steps": [
+      {
+        "title": "Briefing e imersão",
+        "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
+      },
+      {
+        "title": "Diagnóstico",
+        "description": "Pesquisa interna, análise de clima e mapeamento da percepção de marca para embasar a estratégia."
+      },
+      {
+        "title": "Planejamento estratégico",
+        "description": "Definimos um plano claro: canais, mensagens, cronograma e métricas de sucesso."
+      },
+      {
+        "title": "Implementação",
+        "description": "Execução das ações com criação de peças, conteúdos, treinamentos e ativação das iniciativas."
+      },
+      {
+        "title": "Acompanhamento e ajustes",
+        "description": "Análise contínua dos resultados e refinamento das estratégias para ampliar o impacto."
+      }
+    ]
+  }
+}
