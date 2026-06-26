@@ -54,11 +54,13 @@ por `BaseIcon` — não emojis (ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md)).
 | **Blog** | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `authors.json` |
 | **Contato** | `/contato` | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`) |
 
+Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
+
 > A "filosofia/processo" foi consolidada na **Abordagem** (não em Serviços), por
 > decisão de produto registrada em [`PROJECT_STATE`](PROJECT_STATE.md).
 
-## Pendência conhecida 🟡
+## Fonte de blog unificada ✅
 
-A Home lê os destaques de blog de `src/data/posts.json` (3 itens, formato legado)
-em vez do `virtual:blog-posts` (4 `.md`). Conteúdo de blog tem, hoje, **duas
-fontes que podem divergir** — candidato a unificação (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
+Todo o blog (inclusive a Home) lê de `virtual:blog-posts`. O stack legado
+(`src/data/posts.json` → `BlogList` → `BlogCard`) foi removido — não há mais duas
+fontes divergentes.

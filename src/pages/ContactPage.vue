@@ -56,7 +56,7 @@
             <div class="contact-success__icon"><BaseIcon name="check" /></div>
             <h3>Mensagem enviada!</h3>
             <p>Recebemos seu contato e responderemos em breve pelo e-mail informado.</p>
-            <button class="button secondary" @click="resetForm">Enviar outra mensagem</button>
+            <BaseButton variant="secondary" @click="resetForm">Enviar outra mensagem</BaseButton>
           </div>
 
           <!-- Formulário normal -->
@@ -126,14 +126,10 @@
               {{ errorMsg }}
             </div>
 
-            <button
-              type="submit"
-              class="button primary button--lg contact-form__submit"
-              :disabled="status === 'sending'"
-            >
+            <BaseButton type="submit" class="button--lg contact-form__submit" :disabled="status === 'sending'">
               <span v-if="status === 'sending'" class="form-spinner" aria-hidden="true"></span>
               {{ status === 'sending' ? 'Enviando...' : 'Enviar mensagem' }}
-            </button>
+            </BaseButton>
           </form>
         </div>
       </div>

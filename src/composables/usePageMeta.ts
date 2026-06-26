@@ -21,7 +21,6 @@ export interface PageMetaOptions {
   category?: string
   image?: string
   imageAlt?: string
-  noIndex?: boolean
 }
 
 export function usePageMeta(options: MaybeRefOrGetter<PageMetaOptions>) {
@@ -70,7 +69,8 @@ export function usePageMeta(options: MaybeRefOrGetter<PageMetaOptions>) {
     articleAuthor: () => (resolved.value.author ? [resolved.value.author] : undefined),
     articleSection: () => resolved.value.category,
 
-    robots: () => (resolved.value.noIndex ? 'noindex, nofollow' : 'index, follow'),
+    // `robots` é fonte única em App.vue (noindex,nofollow enquanto o site é
+    // pré-lançamento). Não emitir aqui para não conflitar — ver ARCHITECTURE.md.
   })
 
   useHead({

@@ -29,10 +29,10 @@ src/
     layout/          AppHeader, AppFooter
     sections/        CtaBanner
     ui/              BaseButton, BaseContainer, BaseIcon, FeaturePillar, TeamCard, AuthorAvatar
-    blog/            BlogList, BlogCard, PostCard, BlogPagination, BlogSidebar
+    blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
   content/           placeholders.ts  (conteúdo em validação — ver CONTENT_MODEL)
-  data/              site.json, posts.json, authors.json
+  data/              site.json, authors.json
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
   types/             blog.ts, post.ts, site.ts
@@ -75,19 +75,21 @@ public/              robots.txt, images/
 - Exporta `posts`, `getPost`, `getPostsByAuthor`, `getPostsByCategory`, `getFeaturedPosts`, `getAllCategories`.
 - Tipos do módulo declarados em `src/vite-env.d.ts`.
 - **HMR**: `fs.watch` em `content/posts` dispara `full-reload`.
-- Consumido por `useBlog`, `BlogPage`, `BlogPostPage`, `AuthorPage`, `PostCard`.
+- Consumido por `useBlog`, `BlogPage`, `BlogPostPage`, `AuthorPage`, `PostCard` **e a Home** (destaques via `posts.slice(0, 3)`).
 
-**Duplicidade de fonte 🟡** — `content/posts/` tem **4** `.md` (fonte do plugin), mas a Home importa os destaques de `src/data/posts.json` (**3** entradas, formato diferente: `id`/`content`). As duas fontes podem divergir. Convém unificar a Home no `virtual:blog-posts` — ver pendência em [`PROJECT_STATE`](PROJECT_STATE.md).
+**Fonte única ✅** — todo o blog (inclusive os destaques da Home) lê de
+`virtual:blog-posts`. O stack legado (`posts.json` → `BlogList` → `BlogCard`) foi
+removido; a Home renderiza `PostCard` como as demais telas.
 
 ## Formulário de contato ✅
 
 `useEmailJS` usa o `window.emailjs` carregado por **CDN** em `index.html` (não é dependência npm). Lê `VITE_EMAILJS_SERVICE_ID`/`TEMPLATE_ID`. Sem env, **simula sucesso** (1s) para não travar dev. A `publicKey` está como `'SUA_PUBLIC_KEY'` placeholder no `index.html` ⏳.
 
-## SEO / meta ✅ (com conflito 🟡)
+## SEO / meta ✅
 
 `usePageMeta` (em `composables/usePageMeta.ts`) emite `useSeoMeta` (OG/Twitter) + **JSON-LD** (WebPage/Article) + canonical, lendo `VITE_SITE_URL`.
 
-- **Conflito de `robots`:** `App.vue` define global **`noindex, nofollow`**, enquanto `usePageMeta` emite `index, follow` por página (nenhuma passa `noIndex`). O resultado depende da ordem de merge do unhead — **não documentar como indexável**. Alinhado à decisão de não publicar ainda, `public/robots.txt` faz `Disallow: /`.
+- **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`noindex, nofollow`** (site pré-lançamento). `usePageMeta` **não** emite mais `robots` (removido para eliminar o conflito anterior). Reforçado por `public/robots.txt` (`Disallow: /`). Quando o site for ao ar, basta trocar a linha no `App.vue`.
 
 ## Build & deploy
 
@@ -99,4 +101,3 @@ public/              robots.txt, images/
 - **vite-plugin-pwa** — dependência presente, **ausente** de `vite.config.ts` (não há PWA ativo).
 - **@gtm-support/vue-gtm** — importado e **comentado** em `main.ts`; entra junto do consentimento LGPD (Grupo 7, ver [`PROJECT_STATE`](PROJECT_STATE.md)).
 - **Pinia / persistedstate** — registrados, sem store.
-- `src/types/site.ts` — **não é importado** por ninguém (tipo morto; `site.json` não é tipado por ele).

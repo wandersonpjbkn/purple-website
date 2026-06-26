@@ -36,7 +36,7 @@
         <RouterLink to="/servicos" @click="mobileOpen = false">Serviços</RouterLink>
         <RouterLink to="/blog" @click="mobileOpen = false">Blog</RouterLink>
         <RouterLink to="/contato" @click="mobileOpen = false">Contato</RouterLink>
-        <RouterLink to="/contato" class="button primary" @click="mobileOpen = false">Vamos conversar</RouterLink>
+        <BaseButton tag="RouterLink" to="/contato" @click="mobileOpen = false">Vamos conversar</BaseButton>
       </nav>
     </BaseContainer>
   </header>

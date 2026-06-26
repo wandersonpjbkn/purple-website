@@ -49,7 +49,7 @@
 
         <div v-else class="author-empty">
           <p>Nenhum post publicado ainda.</p>
-          <RouterLink to="/blog" class="button secondary">← Voltar ao blog</RouterLink>
+          <BaseButton tag="RouterLink" to="/blog" variant="secondary">← Voltar ao blog</BaseButton>
         </div>
       </BaseContainer>
     </section>

@@ -160,7 +160,9 @@
         </div>
         <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
       </div>
-      <BlogList :posts="featuredPosts" />
+      <div class="blog-grid">
+        <PostCard v-for="post in featuredPosts" :key="post.slug" :post="post" variant="grid" />
+      </div>
     </BaseContainer>
   </section>
 
@@ -187,7 +189,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import site from '@/data/site.json'
-import posts from '@/data/posts.json'
+import { posts } from 'virtual:blog-posts'
 import { POSITIONING_HOOK, SERVICE_OFFER } from '@/content/placeholders'
 
 import { usePageMeta } from '@/composables'
@@ -196,7 +198,7 @@ import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
-import BlogList from '@/components/blog/BlogList.vue'
+import PostCard from '@/components/blog/PostCard.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
 
 usePageMeta({

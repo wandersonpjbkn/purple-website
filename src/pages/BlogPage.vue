@@ -70,7 +70,7 @@
 
         <div v-else class="blog-empty">
           <p>Nenhum post encontrado.</p>
-          <button class="button secondary" @click="query = ''">Ver todos</button>
+          <BaseButton variant="secondary" @click="query = ''">Ver todos</BaseButton>
         </div>
 
         <BlogPagination v-if="totalPages > 1" :page="page" :total-pages="totalPages" @change="setPage" />
@@ -117,7 +117,7 @@
             </div>
 
             <div v-if="hasMore" class="blog-load-more">
-              <button class="button secondary" @click="loadMore">Carregar mais</button>
+              <BaseButton variant="secondary" @click="loadMore">Carregar mais</BaseButton>
             </div>
           </div>
         </BaseContainer>
@@ -156,6 +156,7 @@ import type { Post, CategoryCount } from 'virtual:blog-posts'
 import { usePageMeta, useBlog } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import BlogPagination from '@/components/blog/BlogPagination.vue'
