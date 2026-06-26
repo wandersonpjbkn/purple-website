@@ -52,7 +52,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
 
-function handleScroll() {
+const handleScroll = () => {
   isScrolled.value = window.scrollY > 24
 }
 

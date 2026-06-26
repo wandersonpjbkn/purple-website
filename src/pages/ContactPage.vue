@@ -218,7 +218,7 @@ const errors = reactive({
   message: '',
 })
 
-function validate(): boolean {
+const validate = (): boolean => {
   let valid = true
 
   errors.name = form.name.trim() ? '' : 'Informe seu nome.'
@@ -230,7 +230,7 @@ function validate(): boolean {
   return valid
 }
 
-async function handleSubmit() {
+const handleSubmit = async () => {
   if (!validate()) return
 
   const ok = await send({ ...form })
@@ -239,7 +239,7 @@ async function handleSubmit() {
   }
 }
 
-function resetForm() {
+const resetForm = () => {
   reset()
   Object.assign(form, { name: '', email: '', subject: '', message: '' })
   Object.assign(errors, { name: '', email: '', subject: '', message: '' })

@@ -21,11 +21,11 @@ declare global {
   }
 }
 
-export function useEmailJS() {
+export const useEmailJS = () => {
   const status = ref<FormStatus>('idle')
   const errorMsg = ref('')
 
-  async function send(form: ContactForm): Promise<boolean> {
+  const send = async (form: ContactForm): Promise<boolean> => {
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID as string
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string
 
@@ -64,7 +64,7 @@ export function useEmailJS() {
     }
   }
 
-  function reset() {
+  const reset = () => {
     status.value = 'idle'
     errorMsg.value = ''
   }

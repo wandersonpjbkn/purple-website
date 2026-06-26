@@ -29,13 +29,13 @@ import { useConsentStore } from '@/stores/consent'
 
 const consent = useConsentStore()
 
-function accept() {
+const accept = () => {
   consent.acceptAnalytics()
   // Carrega/ativa o GTM apenas após o opt-in (loadScript: true cuida do <script>).
   useGtm()?.enable(true)
 }
 
-function reject() {
+const reject = () => {
   consent.rejectAnalytics()
   useGtm()?.enable(false)
 }

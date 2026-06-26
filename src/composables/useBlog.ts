@@ -8,7 +8,7 @@ import type { Author } from '@/types/blog'
 
 // ── Utilitários ───────────────────────────────────────────
 
-export function formatDate(iso: string): string {
+export const formatDate = (iso: string): string => {
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
     month: 'short',
@@ -16,12 +16,12 @@ export function formatDate(iso: string): string {
   }).format(new Date(iso + 'T00:00:00'))
 }
 
-export function getAuthor(slug: string): Author | undefined {
+export const getAuthor = (slug: string): Author | undefined => {
   return (authors as Author[]).find((a: Author) => a.slug === slug)
 }
 
 // ── Composable principal ──────────────────────────────────
-export function useBlog(options?: { initialCategory?: Ref<string>; initialQuery?: Ref<string>; perPage?: number }) {
+export const useBlog = (options?: { initialCategory?: Ref<string>; initialQuery?: Ref<string>; perPage?: number }) => {
   const query = options?.initialQuery ?? ref('')
   const activeCategory = options?.initialCategory ?? ref('')
   const page = ref(1)
@@ -50,18 +50,18 @@ export function useBlog(options?: { initialCategory?: Ref<string>; initialQuery?
   const totalPages = computed(() => Math.ceil(filtered.value.length / perPage))
   const paginated = computed(() => filtered.value.slice((page.value - 1) * perPage, page.value * perPage))
 
-  function setPage(n: number) {
+  const setPage = (n: number) => {
     page.value = Math.min(Math.max(1, n), totalPages.value || 1)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  function clearFilters() {
+  const clearFilters = () => {
     query.value = ''
     activeCategory.value = ''
     page.value = 1
   }
 
-  function watchReset() {
+  const watchReset = () => {
     page.value = 1
   }
 

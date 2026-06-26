@@ -34,7 +34,7 @@ export interface BlogPost {
 
 // ── Parser de frontmatter YAML simples ────────────────────
 
-export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
+export const parseFrontmatter = (raw: string): { fm: RawFrontmatter; body: string } => {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/m)
   if (!match) return { fm: {}, body: raw }
 
@@ -72,7 +72,7 @@ export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: strin
 
 // ── Markdown → HTML ───────────────────────────────────────
 
-export function slugify(text: string): string {
+export const slugify = (text: string): string => {
   return text
     .toLowerCase()
     .normalize('NFD')
@@ -82,7 +82,7 @@ export function slugify(text: string): string {
     .replace(/\s+/g, '-')
 }
 
-export function markdownToHtml(md: string): string {
+export const markdownToHtml = (md: string): string => {
   let html = md
 
   // Tabelas GFM
@@ -166,7 +166,7 @@ export function markdownToHtml(md: string): string {
   return html
 }
 
-export function countWords(text: string): number {
+export const countWords = (text: string): number => {
   return text.trim().split(/\s+/).filter(Boolean).length
 }
 
@@ -175,7 +175,7 @@ export function countWords(text: string): number {
 const VIRTUAL_ID = 'virtual:blog-posts'
 const RESOLVED = '\0' + VIRTUAL_ID
 
-export function blogPlugin(): Plugin {
+export const blogPlugin = (): Plugin => {
   return {
     name: 'vite-plugin-blog',
 

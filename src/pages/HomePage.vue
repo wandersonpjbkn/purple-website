@@ -225,7 +225,7 @@ const SPEEDS = {
   pauseEmpty: 350,
 }
 
-function tick() {
+const tick = () => {
   const el = typewriterEl.value
   if (!el) return
 

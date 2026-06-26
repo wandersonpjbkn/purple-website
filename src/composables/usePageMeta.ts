@@ -23,7 +23,7 @@ export interface PageMetaOptions {
   imageAlt?: string
 }
 
-export function usePageMeta(options: MaybeRefOrGetter<PageMetaOptions>) {
+export const usePageMeta = (options: MaybeRefOrGetter<PageMetaOptions>) => {
   const route = useRoute()
 
   const canonical = computed(() => {

@@ -181,7 +181,7 @@ const INITIAL_LIMIT = 8
 const visibleLimit = ref(INITIAL_LIMIT)
 const recentPosts = computed(() => allPosts.slice(0, visibleLimit.value + 1))
 const hasMore = computed(() => allPosts.length > visibleLimit.value + 1)
-function loadMore() {
+const loadMore = () => {
   visibleLimit.value += 8
 }
 
