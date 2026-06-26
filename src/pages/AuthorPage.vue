@@ -12,7 +12,7 @@
         </nav>
 
         <div class="author-hero">
-          <AuthorAvatar :name="author.name" size="xl" />
+          <BaseAvatar :name="author.name" size="xl" />
           <div>
             <p class="section-eyebrow">Autor</p>
             <h1>{{ author.name }}</h1>
@@ -76,7 +76,7 @@ import { getAuthor, usePageMeta } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
+import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 
 const route = useRoute()

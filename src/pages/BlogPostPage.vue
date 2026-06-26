@@ -10,7 +10,7 @@
             {{ post.category }}
           </RouterLink>
           <span aria-hidden="true">›</span>
-          <span aria-current="page">{{ post.title }}</span>
+          <span aria-current="page">{{ post.title }}</span>u
         </nav>
 
         <div class="post-hero__inner">
@@ -28,7 +28,7 @@
           <p class="post-hero__excerpt">{{ post.excerpt }}</p>
 
           <RouterLink v-if="author" :to="`/blog/autor/${post.author}`" class="post-hero__author">
-            <AuthorAvatar :name="author.name" size="md" />
+            <BaseAvatar :name="author.name" size="md" />
             <div>
               <strong>{{ author.name }}</strong>
               <span>{{ author.role }}</span>
@@ -75,7 +75,7 @@
     >
       <BaseContainer>
         <div class="post-author-card">
-          <AuthorAvatar :name="author.name" size="lg" />
+          <BaseAvatar :name="author.name" size="lg" />
           <div class="post-author-card__info">
             <p class="section-eyebrow">Escrito por</p>
             <h3>{{ author.name }}</h3>
@@ -131,7 +131,7 @@ import { formatDate, getAuthor, usePageMeta } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
+import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 
 const route = useRoute()
@@ -274,6 +274,7 @@ const headings = computed(() => {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
+    line-height: 100%;
   }
 
   strong {

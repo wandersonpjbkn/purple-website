@@ -34,7 +34,7 @@
 
       <!-- Autor + data: só em grid e featured -->
       <div v-if="variant !== 'list' && author" class="post-card__author">
-        <AuthorAvatar v-if="author" :name="author.name" size="sm" />
+        <BaseAvatar v-if="author" :name="author.name" size="sm" />
         <RouterLink :to="`/blog/autor/${post.author}`" class="post-card__author-name" @click.stop>
           {{ author.name }}
         </RouterLink>
@@ -53,7 +53,7 @@ import type { Post } from 'virtual:blog-posts'
 
 import { formatDate, getAuthor } from '@/composables/useBlog'
 
-import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
+import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 
 // Variantes:
 //   "grid"     → card vertical padrão (4 colunas, estilo Remote)

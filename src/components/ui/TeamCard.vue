@@ -1,6 +1,10 @@
 <template>
   <article v-if="member && member.isVisibleTeamMember" class="team-card-member">
-    <AuthorAvatar :name="member.name" size="lg" />
+    <BaseAvatar
+      :name="member.name"
+      :src="member.avatar"
+      size="lg"
+    />
 
     <div class="team-card-member__info">
       <h3>{{ member.name }}</h3>
@@ -12,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import AuthorAvatar from '@/components/ui/AuthorAvatar.vue'
+import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 
 defineProps<{
   member?: {
@@ -20,6 +24,7 @@ defineProps<{
     role: string
     bio: string
     isVisibleTeamMember: boolean
+    avatar?: string
     quote?: string
   }
 }>()

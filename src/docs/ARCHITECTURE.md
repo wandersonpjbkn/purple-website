@@ -28,7 +28,8 @@ src/
   components/
     layout/          AppHeader, AppFooter, CookieConsent
     sections/        CtaBanner
-    ui/              BaseButton, BaseContainer, BaseIcon, FeaturePillar, TeamCard, AuthorAvatar
+    ui/              BaseButton, BaseContainer, BaseIcon, FeaturePillar, TeamCard
+    ui/avatar        BaseAvatar, AvImage, AvInitials
     blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
   content/           placeholders.ts  (conteúdo em validação — ver CONTENT_MODEL)

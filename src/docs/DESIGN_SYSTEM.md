@@ -69,7 +69,7 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   `whatsapp`…). Hoje desenha o **mesmo** marcador para todo nome, à espera do
   **sistema de ícones SVG real ⏳**; a conversão futura é `name → SVG`. Glifos
   tipográficos (`→ ← ✕`) seguem como **texto**, não como ícone.
-- `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`, `AuthorAvatar`.
+- `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`, `BaseAvatar`.
 
 **sections/** `CtaBanner` · **layout/** `AppHeader`, `AppFooter` ·
 **blog/** `BlogList`, `BlogCard`, `PostCard`, `BlogPagination`, `BlogSidebar`.

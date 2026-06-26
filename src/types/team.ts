@@ -4,7 +4,7 @@ export interface TeamMember {
   role: string
   bio: string
   quote?: string
-  avatar: string
+  avatar?: string
   linkedin: string
   /** Whether this member also authors blog posts (used to resolve bylines). */
   isAuthor: boolean
