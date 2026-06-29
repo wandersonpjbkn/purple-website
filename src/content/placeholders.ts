@@ -10,25 +10,21 @@
  * processo da Abordagem) ficam fragmentados em src/data/*.json.
  */
 
+// 🟡 HIPÓTESE NÃO VALIDADA — rascunho a partir de formulário (n=5). Não publicar.
+// Validar na discovery (ver src/docs/POSITIONING.md). Headline A vs B é hipótese aberta.
 export const POSITIONING_HOOK = {
-  eyebrow: '{{POSITIONING_HOOK}}',
-  title: '{{POSITIONING_HOOK}}',
-  // Frases rotativas do hero (efeito typewriter).
-  rotating: ['{{POSITIONING_HOOK}}'],
-  subtitle: '{{POSITIONING_HOOK}}',
-  // Provas/indicadores exibidos no hero (claims ainda em validação).
-  proofPoints: [
-    { value: '{{POSITIONING_HOOK}}', label: '{{POSITIONING_HOOK}}' },
-    { value: '{{POSITIONING_HOOK}}', label: '{{POSITIONING_HOOK}}' },
-    { value: '{{POSITIONING_HOOK}}', label: '{{POSITIONING_HOOK}}' },
-  ],
-  // Card visual do hero.
-  card: {
-    label: '{{POSITIONING_HOOK}}',
-    value: '{{POSITIONING_HOOK}}',
-    sub: '{{POSITIONING_HOOK}}',
-    tags: ['{{POSITIONING_HOOK}}', '{{POSITIONING_HOOK}}', '{{POSITIONING_HOOK}}'],
+  eyebrow: 'Comunicação interna · liderança · clima',
+  // Duas variantes de manchete; `activeHeadline` escolhe qual renderiza
+  // (sem framework de A/B — só o seletor abaixo).
+  headlineVariants: {
+    A: 'Quando a comunicação trava e a liderança não se posiciona, gente boa vai embora.',
+    B: 'As melhores pessoas não saem de repente. Saem por comunicação e liderança.',
   },
+  activeHeadline: 'A' as 'A' | 'B', // padrão A; trocar para "B" pré-visualiza a outra
+  subhead:
+    'A Purple ajuda RH e lideranças a enxergar onde a comunicação e a liderança travam — e a agir antes que vire desligamento. Diagnóstico primeiro; ação depois.',
+  // Linha secundária do hero (urgência / porquê-agora) — nunca manchete.
+  nr1Line: 'Com a NR-1 exigindo cuidado com riscos psicossociais, esse trabalho deixou de ser opcional.',
 }
 
 /**

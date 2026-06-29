@@ -2,20 +2,28 @@ import { describe, it, expect } from 'vitest'
 
 import { POSITIONING_HOOK, SERVICE_OFFER, SERVICE_OFFER_DRAFT } from '@/content/placeholders'
 
-// Guarda de produto: enquanto posicionamento/oferta não forem validados, o
-// site NÃO pode renderizar copy final — só os placeholders trocáveis.
+// Guarda de produto: o conteúdo em validação fica isolado em placeholders.ts.
+// O hero virou um RASCUNHO 🟡 (hipótese A/B, não validada — não publica o site,
+// que segue noindex). A oferta de Serviços continua 100% placeholder.
 // Ver src/docs/CONTENT_MODEL.md e POSITIONING.md.
 
-describe('POSITIONING_HOOK (hero em validação)', () => {
-  it('título, eyebrow e subtítulo são placeholders', () => {
-    expect(POSITIONING_HOOK.title).toBe('{{POSITIONING_HOOK}}')
-    expect(POSITIONING_HOOK.eyebrow).toBe('{{POSITIONING_HOOK}}')
-    expect(POSITIONING_HOOK.subtitle).toBe('{{POSITIONING_HOOK}}')
+describe('POSITIONING_HOOK (rascunho do hero — hipótese não validada)', () => {
+  it('mantém as duas variantes de manchete e um seletor válido', () => {
+    expect(POSITIONING_HOOK.headlineVariants.A.length).toBeGreaterThan(0)
+    expect(POSITIONING_HOOK.headlineVariants.B.length).toBeGreaterThan(0)
+    expect(['A', 'B']).toContain(POSITIONING_HOOK.activeHeadline)
   })
 
-  it('frases do typewriter e proofPoints são placeholders', () => {
-    expect(POSITIONING_HOOK.rotating.every((s) => s === '{{POSITIONING_HOOK}}')).toBe(true)
-    expect(POSITIONING_HOOK.proofPoints.every((p) => p.value === '{{POSITIONING_HOOK}}')).toBe(true)
+  it('a variante ativa resolve para uma manchete não vazia', () => {
+    const headline = POSITIONING_HOOK.headlineVariants[POSITIONING_HOOK.activeHeadline]
+    expect(typeof headline).toBe('string')
+    expect(headline.length).toBeGreaterThan(0)
+  })
+
+  it('tem eyebrow, subhead e a linha secundária de NR-1', () => {
+    expect(POSITIONING_HOOK.eyebrow.length).toBeGreaterThan(0)
+    expect(POSITIONING_HOOK.subhead.length).toBeGreaterThan(0)
+    expect(POSITIONING_HOOK.nr1Line.length).toBeGreaterThan(0)
   })
 })
 

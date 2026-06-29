@@ -1,72 +1,30 @@
 <template>
   <section class="hero">
     <BaseContainer>
-      <div class="hero__grid">
-        <!-- Coluna texto · posicionamento em validação (placeholders.ts) -->
-        <div>
-          <div class="hero__kicker">
-            <span class="dot"></span>
-            {{ POSITIONING_HOOK.eyebrow }}
-          </div>
-
-          <h1 class="hero__title">
-            {{ POSITIONING_HOOK.title }}
-            <br />
-            <span ref="typewriterEl" class="hero__typewriter" />
-          </h1>
-
-          <p class="lead">{{ POSITIONING_HOOK.subtitle }}</p>
-
-          <div class="hero__actions">
-            <BaseButton class="button--lg" tag="RouterLink" to="/contato">
-              {{ home.hero.primaryCta }}
-            </BaseButton>
-            <BaseButton class="button--lg" tag="RouterLink" to="/servicos" variant="secondary">
-              {{ home.hero.secondaryCta }}
-            </BaseButton>
-          </div>
-
-          <!-- 3 indicadores compactos · claims em validação -->
-          <div class="hero__stat">
-            <template v-for="(point, i) in POSITIONING_HOOK.proofPoints" :key="i">
-              <div v-if="i > 0" class="hero__stat-divider"></div>
-              <div>
-                <div class="hero__stat-number">{{ point.value }}</div>
-                <div class="hero__stat-label">{{ point.label }}</div>
-              </div>
-            </template>
-          </div>
+      <!-- Posicionamento em validação (rascunho 🟡) — ver placeholders.ts -->
+      <div class="hero__content">
+        <div class="hero__kicker">
+          <span class="dot"></span>
+          {{ POSITIONING_HOOK.eyebrow }}
         </div>
 
-        <!-- Coluna card visual · claims em validação -->
-        <div class="hero__media">
-          <div class="hero__card">
-            <div class="hero__card-label">{{ POSITIONING_HOOK.card.label }}</div>
-            <div class="hero__card-value">{{ POSITIONING_HOOK.card.value }}</div>
-            <div class="hero__card-sub">{{ POSITIONING_HOOK.card.sub }}</div>
-            <div class="hero__card-bar">
-              <div class="hero__card-bar-fill" style="width: 78%"></div>
-            </div>
-            <div class="hero__card-tags">
-              <span
-                v-for="(tag, i) in POSITIONING_HOOK.card.tags"
-                :key="i"
-                class="hero__card-tag"
-                :class="{ accent: i === 0 }"
-              >
-                {{ tag }}
-              </span>
-            </div>
-          </div>
-          <div class="hero__float hero__float--1">
-            <div class="icon"><BaseIcon name="trophy" /></div>
-            Marca Empregadora
-          </div>
-          <div class="hero__float hero__float--2">
-            <div class="icon"><BaseIcon name="megaphone" /></div>
-            Comunicação Interna
-          </div>
+        <h1 class="hero__title">{{ headline }}</h1>
+
+        <p class="lead">{{ POSITIONING_HOOK.subhead }}</p>
+
+        <div class="hero__actions">
+          <BaseButton class="button--lg" tag="RouterLink" to="/contato">
+            {{ home.hero.primaryCta }}
+          </BaseButton>
+          <BaseButton class="button--lg" tag="RouterLink" to="/servicos" variant="secondary">
+            {{ home.hero.secondaryCta }}
+          </BaseButton>
         </div>
+
+        <!-- Linha secundária · urgência / porquê-agora (NR-1) — nunca manchete -->
+        <p class="hero__nr1">{{ POSITIONING_HOOK.nr1Line }}</p>
+
+        <!-- stats do hero pendentes de fonte real — não inventar. -->
       </div>
     </BaseContainer>
   </section>
@@ -185,7 +143,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import home from '@/data/home.json'
@@ -212,63 +169,6 @@ usePageMeta({
 
 const featuredPosts = posts.slice(0, 3)
 
-// ── Typewriter ────────────────────────────────────────────
-const typewriterEl = ref<HTMLElement | null>(null)
-const phrases = POSITIONING_HOOK.rotating
-
-let phraseIndex = 0
-let charIndex = 0
-let isDeleting = false
-let timeoutId: ReturnType<typeof setTimeout> | null = null
-
-const SPEEDS = {
-  type: 85,
-  delete: 35,
-  pauseAfter: 4500,
-  pauseEmpty: 350,
-}
-
-const tick = () => {
-  const el = typewriterEl.value
-  if (!el) return
-
-  const current = phrases[phraseIndex]
-  if (current === undefined) return
-
-  if (isDeleting) {
-    charIndex -= 1
-    el.textContent = current.slice(0, charIndex)
-    el.classList.remove('is-complete', 'is-paused')
-
-    if (charIndex === 0) {
-      isDeleting = false
-      phraseIndex = (phraseIndex + 1) % phrases.length
-      el.classList.remove('is-paused')
-      timeoutId = setTimeout(tick, SPEEDS.pauseEmpty)
-      return
-    }
-
-    timeoutId = setTimeout(tick, SPEEDS.delete)
-  } else {
-    charIndex += 1
-    el.textContent = current.slice(0, charIndex)
-
-    if (charIndex === current.length) {
-      el.classList.add('is-complete', 'is-paused')
-      isDeleting = true
-      timeoutId = setTimeout(tick, SPEEDS.pauseAfter)
-      return
-    }
-
-    timeoutId = setTimeout(tick, SPEEDS.type)
-  }
-}
-
-onMounted(() => {
-  timeoutId = setTimeout(tick, 600)
-})
-
-onUnmounted(() => {
-  if (timeoutId) clearTimeout(timeoutId)
-})
+// Manchete do hero: variante ativa do rascunho (A/B em validação — placeholders.ts).
+const headline = POSITIONING_HOOK.headlineVariants[POSITIONING_HOOK.activeHeadline]
 </script>
