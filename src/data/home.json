@@ -1,12 +1,47 @@
 {
   "hero": {
+    "eyebrow": "Comunicação interna e employer branding",
+    "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
+    "rotating": ["reduzem o turnover", "o time engaja mais", "atraem mais talentos", "fortalecem sua cultura"],
+    "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
     "primaryCta": "Falar com a Purple",
-    "secondaryCta": "Conheça os serviços"
+    "secondaryCta": "Conheça os serviços",
+    "stats": [
+      {
+        "value": "64",
+        "sign": "%",
+        "label": "sem engajamento no trabalho",
+        "source": ""
+      },
+      {
+        "value": "14",
+        "sign": "x",
+        "label": "mais produtivas com boa cultura",
+        "source": ""
+      },
+      {
+        "value": "23",
+        "sign": "%",
+        "label": "mais receita com engajamento",
+        "source": ""
+      }
+    ],
+    "card": {
+      "label": "Nível de engajamento",
+      "value": "+43",
+      "sign": "%",
+      "sub": "após 6 meses de endomarketing estruturado",
+      "barWidth": 78,
+      "tags": ["Employer Branding", "Endomarketing", "Comunicação Interna"],
+      "source": ""
+    }
   },
   "highlight": {
     "eyebrow": "Por que isso importa",
     "title": "Na busca pelo crescimento, muitas empresas esquecem de olhar para dentro",
     "description": "Marketing, investimento em mídia, promoções e campanhas são excelentes para engajar os clientes externos. Mas quando a comunicação e as ações internas não recebem a mesma atenção, os times ficam desengajados e a marca empregadora não transmite confiança.",
+    "image": "/images/sections/home-highlight.jpg",
+    "imageAlt": "Equipe colaborando em um ambiente de trabalho saudável",
     "benefits": [
       "Menos rotatividade e absenteísmo",
       "Times mais alinhados com os objetivos da empresa",
@@ -17,8 +52,6 @@
   },
   "cta": {
     "title": "Tudo começa com uma boa conversa",
-    "description": "Estamos aqui para ouvir, entender seu contexto e propor o que realmente faz sentido para o seu negócio.",
-    "primaryCta": "Falar com a Purple",
-    "secondaryCta": "Ver portfólio"
+    "description": "Estamos aqui para ouvir, entender seu contexto e propor o que realmente faz sentido para o seu negócio."
   }
 }

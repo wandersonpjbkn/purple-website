@@ -176,6 +176,11 @@
   line-height: 1;
 }
 
+// Sinal/sufixo do número (%, x) em limão — detalhe de marca.
+.hero__stat-sign {
+  color: var(--lime);
+}
+
 .hero__stat-label {
   font-size: 0.85rem;
   color: var(--muted);
@@ -234,6 +239,12 @@
   color: var(--text);
   line-height: 1;
   margin-bottom: 0.5rem;
+}
+
+// Sinal do valor do card (ex.: % do +43%) em limão, menor que o número.
+.hero__card-sign {
+  color: var(--lime);
+  font-size: 1.8rem;
 }
 
 .hero__card-sub {

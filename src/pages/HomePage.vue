@@ -2,20 +2,21 @@
   <section class="hero">
     <BaseContainer>
       <div class="hero__grid">
-        <!-- Coluna texto · posicionamento em validação (placeholders.ts) -->
+        <!-- Coluna texto -->
         <div>
           <div class="hero__kicker">
             <span class="dot"></span>
-            {{ POSITIONING_HOOK.eyebrow }}
+            {{ home.hero.eyebrow }}
           </div>
 
+          <!-- titlePrefix carrega <em> de destaque — conteúdo controlado (home.json), não input de usuário -->
           <h1 class="hero__title">
-            {{ POSITIONING_HOOK.title }}
+            <span v-html="home.hero.titlePrefix" />
             <br />
             <span ref="typewriterEl" class="hero__typewriter" />
           </h1>
 
-          <p class="lead">{{ POSITIONING_HOOK.subtitle }}</p>
+          <p class="lead">{{ home.hero.subtitle }}</p>
 
           <div class="hero__actions">
             <BaseButton class="button--lg" tag="RouterLink" to="/contato">
@@ -26,31 +27,35 @@
             </BaseButton>
           </div>
 
-          <!-- 3 indicadores compactos · claims em validação -->
+          <!-- 3 indicadores compactos · valor + sinal em lime -->
           <div class="hero__stat">
-            <template v-for="(point, i) in POSITIONING_HOOK.proofPoints" :key="i">
+            <template v-for="(stat, i) in home.hero.stats" :key="stat.label">
               <div v-if="i > 0" class="hero__stat-divider"></div>
               <div>
-                <div class="hero__stat-number">{{ point.value }}</div>
-                <div class="hero__stat-label">{{ point.label }}</div>
+                <div class="hero__stat-number">
+                  {{ stat.value }}<span class="hero__stat-sign">{{ stat.sign }}</span>
+                </div>
+                <div class="hero__stat-label">{{ stat.label }}</div>
               </div>
             </template>
           </div>
         </div>
 
-        <!-- Coluna card visual · claims em validação -->
+        <!-- Coluna card visual -->
         <div class="hero__media">
           <div class="hero__card">
-            <div class="hero__card-label">{{ POSITIONING_HOOK.card.label }}</div>
-            <div class="hero__card-value">{{ POSITIONING_HOOK.card.value }}</div>
-            <div class="hero__card-sub">{{ POSITIONING_HOOK.card.sub }}</div>
+            <div class="hero__card-label">{{ home.hero.card.label }}</div>
+            <div class="hero__card-value">
+              {{ home.hero.card.value }}<span class="hero__card-sign">{{ home.hero.card.sign }}</span>
+            </div>
+            <div class="hero__card-sub">{{ home.hero.card.sub }}</div>
             <div class="hero__card-bar">
-              <div class="hero__card-bar-fill" style="width: 78%"></div>
+              <div class="hero__card-bar-fill" :style="{ width: `${home.hero.card.barWidth}%` }"></div>
             </div>
             <div class="hero__card-tags">
               <span
-                v-for="(tag, i) in POSITIONING_HOOK.card.tags"
-                :key="i"
+                v-for="(tag, i) in home.hero.card.tags"
+                :key="tag"
                 class="hero__card-tag"
                 :class="{ accent: i === 0 }"
               >
@@ -74,7 +79,7 @@
   <section class="section-block">
     <BaseContainer>
       <div class="split-section">
-        <div class="visual-block"></div>
+        <MediaBlock :src="home.highlight.image" :alt="home.highlight.imageAlt" />
         <div>
           <p class="section-eyebrow">{{ home.highlight.eyebrow }}</p>
           <h2>{{ home.highlight.title }}</h2>
@@ -93,16 +98,25 @@
   <section class="section-block section-block--alt">
     <BaseContainer>
       <div class="section-header section-header--center">
-        <p class="section-eyebrow">{{ SERVICE_OFFER.eyebrow }}</p>
-        <h2>{{ SERVICE_OFFER.title }}</h2>
+        <p class="section-eyebrow">{{ services.homeTeaser.eyebrow }}</p>
+        <h2>{{ services.homeTeaser.title }}</h2>
       </div>
-      <!-- Oferta em validação · cards renderizam placeholders (placeholders.ts) -->
       <div class="services-grid">
-        <article v-for="(service, i) in SERVICE_OFFER.items" :key="i" class="service-card">
+        <article v-for="service in teaserServices" :key="service.id" class="service-card">
           <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
           <h3>{{ service.title }}</h3>
-          <p>{{ service.description }}</p>
-          <RouterLink class="text-link" to="/servicos">Ver serviços</RouterLink>
+          <p>{{ service.summary }}</p>
+          <RouterLink class="text-link" :to="`/servicos#${service.id}`">Saiba mais</RouterLink>
+        </article>
+        <article v-if="featuredService" class="service-card service-card--featured">
+          <div>
+            <h3>{{ featuredService.title }}</h3>
+            <p>{{ featuredService.summary }}</p>
+            <RouterLink class="text-link text-link--lime" :to="`/servicos#${featuredService.id}`">
+              Saiba mais
+            </RouterLink>
+          </div>
+          <div class="service-card__icon"><BaseIcon :name="featuredService.icon" /></div>
         </article>
       </div>
       <div style="text-align: center; margin-top: 2.5rem">
@@ -190,15 +204,16 @@ import { RouterLink } from 'vue-router'
 
 import home from '@/data/home.json'
 import panorama from '@/data/panorama.json'
+import services from '@/data/services.json'
 import team from '@/data/team.json'
 import { posts } from 'virtual:blog-posts'
-import { POSITIONING_HOOK, SERVICE_OFFER } from '@/content/placeholders'
 
 import { usePageMeta } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
+import MediaBlock from '@/components/ui/MediaBlock.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
@@ -212,9 +227,14 @@ usePageMeta({
 
 const featuredPosts = posts.slice(0, 3)
 
+// Teaser: 4 cards comuns + 1 destaque (mesma malha 3×2 do develop);
+// o catálogo completo vive em /servicos.
+const teaserServices = services.catalog.filter((service) => !service.featured).slice(0, 4)
+const featuredService = services.catalog.find((service) => service.featured)
+
 // ── Typewriter ────────────────────────────────────────────
 const typewriterEl = ref<HTMLElement | null>(null)
-const phrases = POSITIONING_HOOK.rotating
+const phrases = home.hero.rotating
 
 let phraseIndex = 0
 let charIndex = 0

@@ -1,0 +1,233 @@
+{
+  "intro": {
+    "eyebrow": "Serviços",
+    "title": "Comunicação profissional, sem precisar montar um time interno",
+    "subtitle": "A Purple assume a comunicação da sua empresa com quem já trabalha nela — e com quem ainda vai trabalhar. Entrega prática, contínua e sob medida: produzimos, publicamos e executamos, não apenas recomendamos."
+  },
+  "homeTeaser": {
+    "eyebrow": "Soluções",
+    "title": "O que fazemos pela sua empresa"
+  },
+  "catalog": [
+    {
+      "id": "linkedin-corporativo",
+      "icon": "linkedin",
+      "title": "Gestão de LinkedIn Corporativo",
+      "tagline": "A vitrine da sua empresa para candidatos, clientes e mercado.",
+      "summary": "Linha editorial, redação estratégica e design profissional para a presença B2B da sua marca.",
+      "description": "Cuidamos da presença da sua empresa no LinkedIn de ponta a ponta: linha editorial, redação estratégica, design das peças e agendamento. Conteúdo B2B que fortalece a autoridade da marca e dá visibilidade à cultura — sem sobrecarregar o seu time.",
+      "benefits": [
+        "Linha editorial alinhada ao posicionamento da empresa",
+        "Posts com texto e design profissionais, toda semana",
+        "Marca empregadora visível para candidatos e mercado",
+        "Autoridade e credibilidade junto a clientes B2B",
+        "Time interno livre da produção de conteúdo"
+      ],
+      "process": [
+        "Imersão na cultura e no posicionamento da empresa",
+        "Definição da linha editorial e do calendário",
+        "Redação estratégica e design das peças",
+        "Publicação e agendamento",
+        "Relatório de desempenho e ajustes contínuos"
+      ],
+      "featured": false
+    },
+    {
+      "id": "comunicacao-interna",
+      "icon": "megaphone",
+      "title": "Comunicação Interna",
+      "tagline": "Para que todos possam caminhar na mesma direção, é essencial que estejam informados.",
+      "summary": "Comunicados, canais e rituais que mantêm todos informados e alinhados.",
+      "description": "Planejamos e produzimos os comunicados da sua empresa — e-mails, banners, avisos e rituais de comunicação — com texto claro e design que as pessoas realmente leem. Times alinhados, lideranças comunicativas e colaboradores conectados ao propósito.",
+      "benefits": [
+        "Times alinhados com objetivos e estratégia",
+        "Redução de ruídos e mal-entendidos",
+        "Comunicados com design que as pessoas leem",
+        "Lideranças mais comunicativas e presentes",
+        "Senso de pertencimento e engajamento"
+      ],
+      "process": [
+        "Briefing e entendimento da empresa",
+        "Diagnóstico da comunicação atual",
+        "Planejamento de canais e conteúdos",
+        "Criação de peças e comunicados recorrentes",
+        "Acompanhamento e alinhamento com o time interno"
+      ],
+      "featured": true
+    },
+    {
+      "id": "endomarketing",
+      "icon": "handshake",
+      "title": "Endomarketing",
+      "tagline": "Como o engajamento dos seus colaboradores impacta diretamente nos resultados.",
+      "summary": "Campanhas completas para engajar, motivar e conectar colaboradores com o propósito da empresa.",
+      "description": "Campanhas completas para engajar e motivar colaboradores: conceito criativo, identidade visual da campanha, kit de peças e cronograma de ativação. De datas estratégicas a movimentos internos de reconhecimento, cada campanha reforça a cultura da empresa.",
+      "benefits": [
+        "Melhora do clima organizacional",
+        "Menos rotatividade e turnover",
+        "Mais produtividade e foco",
+        "Maior vínculo entre empresa e colaborador",
+        "Campanhas prontas para a liderança aplicar"
+      ],
+      "process": [
+        "Diagnóstico da empresa e da cultura",
+        "Conceito criativo e identidade da campanha",
+        "Produção do kit de peças",
+        "Cronograma e ativação nos canais",
+        "Análise de engajamento e impacto"
+      ],
+      "featured": false
+    },
+    {
+      "id": "employer-branding",
+      "icon": "trophy",
+      "title": "Employer Branding",
+      "tagline": "Como a sua marca é percebida por quem trabalha — e por quem pode trabalhar — nela.",
+      "summary": "Os atributos que tornam sua empresa um lugar desejado para trabalhar — dentro e fora.",
+      "description": "Trabalhar a Marca Empregadora significa tratar os atributos e diferenciais que a empresa tem como empregadora e como os colaboradores enxergam o negócio e o ambiente de trabalho — para atrair talentos de forma consistente e reter quem já está.",
+      "benefits": [
+        "Atração de novos talentos qualificados",
+        "Retenção e fidelização de colaboradores",
+        "Agilidade no processo de recrutamento e seleção",
+        "Mídia espontânea e reputação de mercado",
+        "Satisfação interna e senso de pertencimento"
+      ],
+      "process": [
+        "Diagnóstico de Marca Empregadora",
+        "Imersão e conhecimento da empresa",
+        "Definição dos diferenciais e atributos",
+        "Criação de EVP (Employee Value Proposition)",
+        "Criação e gestão de canais internos e externos"
+      ],
+      "featured": false
+    },
+    {
+      "id": "midia-atracao",
+      "icon": "chart",
+      "title": "Mídia Paga para Atração de Talentos",
+      "tagline": "Anúncios certeiros para a vaga certa chegar à pessoa certa.",
+      "summary": "Campanhas segmentadas para atrair candidatos qualificados e encurtar processos seletivos.",
+      "description": "Campanhas segmentadas no LinkedIn Ads e Meta Ads para atrair candidatos qualificados e fortalecer a marca empregadora no digital. A verba de mídia é sempre investida em nome da empresa, com total transparência sobre a gestão.",
+      "benefits": [
+        "Atração de candidatos mais qualificados",
+        "Vagas difíceis preenchidas mais rápido",
+        "Segmentação precisa de público-alvo",
+        "Fortalecimento da marca empregadora no digital",
+        "Relatórios claros de performance"
+      ],
+      "process": [
+        "Definição de objetivos e do perfil da vaga",
+        "Planejamento de mídia e segmentação",
+        "Criação de criativos e textos",
+        "Ativação e monitoramento das campanhas",
+        "Otimização contínua e relatórios"
+      ],
+      "featured": false
+    },
+    {
+      "id": "diagnostico-cultura",
+      "icon": "search",
+      "title": "Diagnóstico de Cultura e Clima",
+      "tagline": "Entender antes de comunicar — a base de toda decisão bem tomada.",
+      "summary": "Pesquisa com colaboradores, análise e relatório com recomendações práticas.",
+      "description": "Criamos e aplicamos a pesquisa junto aos colaboradores, acompanhamos a taxa de resposta, tabulamos os dados e entregamos um relatório visual com recomendações práticas e plano de ação — a base para comunicar com contexto.",
+      "benefits": [
+        "Leitura real do clima e da cultura da empresa",
+        "Dados para embasar decisões de gestão e RH",
+        "Identificação de gaps de comunicação e engajamento",
+        "Relatório visual com plano de ação",
+        "Base sólida para campanhas com contexto"
+      ],
+      "process": [
+        "Definição dos objetivos com liderança e RH",
+        "Criação do questionário sob medida",
+        "Aplicação digital e acompanhamento das respostas",
+        "Tabulação e análise dos dados",
+        "Relatório com recomendações e plano de ação"
+      ],
+      "featured": false
+    },
+    {
+      "id": "carreiras-portal",
+      "icon": "design",
+      "title": "Página de Carreiras e Portal do Colaborador",
+      "tagline": "Design de experiências digitais que refletem a identidade e os valores da sua marca.",
+      "summary": "UX/UI para páginas de carreiras, sites institucionais e portais internos.",
+      "description": "UX/UI para páginas de carreiras, sites institucionais e portais internos — pensados para funcionar bem no celular, onde o colaborador realmente acessa. Entregamos o design completo e prototipado, pronto para o time de desenvolvimento implementar.",
+      "benefits": [
+        "Página de carreiras que traduz a experiência real de trabalho",
+        "Portais internos intuitivos e fáceis de usar no celular",
+        "Experiência do usuário centrada em pessoas",
+        "Design alinhado à identidade da marca",
+        "Protótipo validado antes do desenvolvimento"
+      ],
+      "process": [
+        "Descoberta e pesquisa com usuários",
+        "Arquitetura de informação",
+        "Wireframes e prototipagem",
+        "Design visual e sistema de componentes",
+        "Handoff para o time de desenvolvimento"
+      ],
+      "featured": false
+    }
+  ],
+  "packages": {
+    "eyebrow": "Como contratar",
+    "title": "Planos mensais para a fase da sua empresa",
+    "subtitle": "Assinatura mensal com permanência mínima de 3 meses. Cada proposta é fechada sob consulta, de acordo com o contexto e o momento da empresa.",
+    "priceLabel": "Sob consulta",
+    "ctaLabel": "Pedir proposta",
+    "items": [
+      {
+        "id": "essencial",
+        "name": "Essencial",
+        "audience": "40 a 80 colaboradores",
+        "summary": "Para profissionalizar a comunicação com o time e a presença da marca empregadora.",
+        "includes": ["Gestão de LinkedIn corporativo (8 a 12 posts por mês)", "Até 4 comunicados internos por mês"],
+        "featured": false
+      },
+      {
+        "id": "cultura-ativa",
+        "name": "Cultura Ativa",
+        "audience": "80 a 150 colaboradores",
+        "summary": "Para engajar o time de forma contínua e acompanhar o resultado das ações.",
+        "includes": ["Tudo do plano Essencial", "Campanha de endomarketing trimestral", "Relatório de engajamento"],
+        "featured": true
+      },
+      {
+        "id": "employer-branding-completo",
+        "name": "Employer Branding Completo",
+        "audience": "150 a 300+ colaboradores",
+        "summary": "Para atrair talentos ativamente e manter a liderança alinhada à estratégia.",
+        "includes": [
+          "Tudo do plano Cultura Ativa",
+          "Gestão de mídia paga para atração de talentos",
+          "Reunião estratégica mensal com a liderança"
+        ],
+        "featured": false
+      }
+    ]
+  },
+  "projects": {
+    "eyebrow": "Projetos pontuais",
+    "title": "Precisa de algo específico?",
+    "subtitle": "Além dos planos recorrentes, entregamos projetos fechados — com começo, meio e fim.",
+    "items": [
+      {
+        "icon": "search",
+        "title": "Diagnóstico de Cultura",
+        "description": "Pesquisa interna, análise e relatório com recomendações práticas para orientar as próximas decisões."
+      },
+      {
+        "icon": "handshake",
+        "title": "Campanha de Endomarketing avulsa",
+        "description": "Uma campanha completa, do conceito criativo à ativação, para um momento específico da empresa."
+      },
+      {
+        "icon": "design",
+        "title": "Página de Carreiras ou Portal do Colaborador",
+        "description": "Projeto de UX/UI de ponta a ponta, da pesquisa ao design final pronto para desenvolvimento."
+      }
+    ]
+  }
+}

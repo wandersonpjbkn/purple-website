@@ -1,18 +1,6 @@
 <template>
   <footer class="site-footer">
     <BaseContainer>
-      <!-- TODO: review implementation -->
-      <!-- <section class="newsletter-box">
-        <div>
-          <p class="section-eyebrow">Newsletter</p>
-          <h3>{{ footer.newsletterTitle }}</h3>
-        </div>
-        <form class="newsletter-form" @submit.prevent>
-          <input type="email" placeholder="Seu melhor e-mail" aria-label="Seu melhor e-mail" />
-          <button type="submit" class="button primary">Quero receber</button>
-        </form>
-      </section> -->
-
       <div class="footer-grid">
         <div>
           <h4>Purple Comunicação</h4>
