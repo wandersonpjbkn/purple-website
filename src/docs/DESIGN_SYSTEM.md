@@ -1,6 +1,6 @@
 # Design System (as-built) — site Purple
 
-> Verdade observada no código em **2026-06-26**. É um site de poucas páginas:
+> Verdade observada no código em **2026-07-06**. É um site de poucas páginas:
 > isto é um **conjunto de tokens + componentes Base**, não um design system de
 > produto. Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`CONTENT_MODEL`](CONTENT_MODEL.md) · [`POSITIONING`](POSITIONING.md).
@@ -70,10 +70,15 @@ sem BEM: `.lead`, `.section-eyebrow` (+ `--lime`), `.text-link`, `.section-block
 secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink"`.
   **Caminho único de botão** — não escrever `class="button primary"` à mão.
 - `BaseContainer` — wrapper `.container` (largura/centralização).
-- `BaseIcon` — **placeholder SVG** 🟡 com `name` semântico (`target`, `megaphone`,
-  `whatsapp`…). Hoje desenha o **mesmo** marcador para todo nome, à espera do
-  **sistema de ícones SVG real ⏳**; a conversão futura é `name → SVG`. Glifos
-  tipográficos (`→ ← ✕`) seguem como **texto**, não como ícone.
+- `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
+  mapa tipado **`src/components/ui/icons.ts`** (17 ícones, viewBox 24×24).
+  Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
+  de marca preenchidos** (`fill: true` — `whatsapp`, `linkedin`). Nome
+  desconhecido cai num placeholder neutro (degradação graciosa — coberto por
+  teste). Glifos tipográficos (`→ ← ✕`) seguem como **texto**, não como ícone.
+- `MediaBlock` — slot de imagem com fallback: `<img>` opcional sobre o gradiente
+  decorativo do `.visual-block`; em erro/ausência do arquivo, só o gradiente
+  aparece (nunca broken image). Assets pendentes em [`IMAGES`](IMAGES.md).
 - `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`.
 - `BaseAvatar` (`ui/avatar/`) — imagem com **fallback de inicial** ao falhar o
   load (compõe `AvImage` + `AvInitials`); tamanhos `sm/md/lg/xl`. **Estilo
@@ -82,13 +87,16 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 **sections/** `CtaBanner` · **layout/** `AppHeader`, `AppFooter` ·
 **blog/** `BlogList`, `BlogCard`, `PostCard`, `BlogPagination`, `BlogSidebar`.
 
-## Placeholders de conteúdo ⛔ (regra de produto)
+## Números com valor + sinal em lime ✅ (convenção de exibição)
 
-Hero e oferta de Serviços **não cravam** copy até a validação. Vivem isolados em
-**`src/content/placeholders.ts`**: `{{POSITIONING_HOOK}}` (todo o hero) e
-`{{SERVICE_OFFER}}` (enquadramento + cards de serviço). Trocar o copy = editar
-só esse arquivo. Detalhe e regra em [`CONTENT_MODEL`](CONTENT_MODEL.md);
-o porquê em [`POSITIONING`](POSITIONING.md).
+Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
+(`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e os
+`span` internos de `panorama-card__number`/`data-stat-card__number`. A barra do
+card do hero usa gradiente `purple → lime`. É o detalhamento fino de cor herdado
+do develop: preservar ao criar novos blocos numéricos.
+
+> Os antigos placeholders de conteúdo (⛔) foram preenchidos pela discovery —
+> ver [`CONTENT_MODEL`](CONTENT_MODEL.md) e [`POSITIONING`](POSITIONING.md).
 
 ## Tema escuro ✅
 

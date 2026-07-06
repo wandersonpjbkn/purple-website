@@ -1,53 +1,49 @@
 # Positioning — Purple Comunicação
 
-> **Status: 🟡 hipótese forte, NÃO validada.** Este doc registra a aposta e como
-> ela se confirma ou cai. Não tratar como fato. Quando a discovery preencher os
-> slots, virar 🟡 → ✅ aqui e no `PROJECT_STATE.md`.
+> **Status: ✅ validado pela discovery (modelo de negócio, jul/2026).** Este doc
+> registra o posicionamento confirmado e o histórico da hipótese anterior.
 
-## A cunha (hipótese) 🟡
+## O posicionamento validado ✅
 
-A camada **humana e de comunicação** ligada a ambientes de trabalho saudáveis e
-risco psicossocial — usando a **NR-1 como gatilho de compra** (por que comprar
-agora), não como produto (conformidade técnica é de terceiros). Combina:
+**Execução de comunicação interna + employer branding para empresas de médio
+porte (40+ colaboradores) que não têm área estruturada para isso.**
 
-- o diferencial de **psicologia** (Wanderson), que agência de comunicação não tem;
-- a **execução de comunicação** (Suelen);
-- uma **obrigação legal recém-ativada** (fiscalização punitiva da NR-1 desde mai/2026).
+- **Proposta de valor:** profissionalizar a comunicação com colaboradores e
+  candidatos sem a empresa precisar contratar um time interno.
+- **"Entrega prática antes de consultoria":** a Purple assume a execução (posts,
+  comunicados, campanhas) — o cliente vê valor antes de comprar diagnóstico
+  estratégico. Camadas: (1) LinkedIn + comunicados → (2) endomarketing + mídia
+  paga → (3) diagnóstico de cultura + projetos de UX.
+- **Especialização dupla rara:** comunicação interna + employer branding +
+  atração, normalmente vendidos separados por agências de RH ou de marketing.
+- **Diferencial de fundo:** psicologia (Wanderson) + execução de comunicação
+  (Suelen) — "diagnóstico antes da ação" continua sendo o jeito Purple.
 
-## Por que é candidata forte
+### Onde vive no site
 
-- Usa o ativo único (psicologia) que ninguém no nicho de CI tem.
-- É atual e urgente (gatilho legal).
-- Mais defensável contra IA do que craft visual/código.
-- Nasce do problema real vivido pela dupla.
+Os dois slots antes reservados foram preenchidos e `src/content/placeholders.ts`
+foi aposentado:
 
-## Por que ainda é só hipótese
+- **Hero** → `src/data/home.json` (`hero`): título com typewriter, stats com
+  valor+sinal e card visual (números restaurados do develop; fontes pendentes de
+  confirmação — ver `PROJECT_STATE.md`).
+- **Oferta** → `src/data/services.json`: catálogo de 7 serviços (formato rico) +
+  3 planos recorrentes **sem preço publicado** ("Sob consulta") + projetos
+  pontuais.
 
-Saiu de dois documentos de autodescrição + uma história de fundação. Isso diz
-com firmeza **quem a Purple é** — não **o que o mercado paga**. "Quem somos" é
-observado; "o que o mercado compra" é inferência até bater num comprador real.
+## Histórico: a hipótese NR-1 (superada como cunha de entrada)
 
-## Como se valida 🔬
+A aposta anterior — a camada humana/comunicacional do risco psicossocial, com a
+**NR-1 como gatilho de compra** — **não foi o que a discovery confirmou** como
+porta de entrada. O modelo de negócio validou a entrada pelo prático
+(LinkedIn/comunicados), não pela urgência legal. O território "ambientes de
+trabalho saudáveis" permanece como pano de fundo da marca (panorama de dados,
+blog) e o gatilho NR-1 pode voltar como argumento comercial pontual — mas não é
+o produto nem o headline.
 
-- **Entrevistas de descoberta** (roteiro Mom Test) — n pequeno, profundidade.
-- **Formulário Tally** em grupos de RH — n maior, vocabulário e enquadramento.
-- **Sinal-chave:** a _palavra espontânea_ do comprador × o _enquadramento que ele escolhe_ numa lista. Se convergirem na cunha, confirma. Se divergirem, a palavra espontânea ganha.
+## Visão de longo prazo _(inalterada)_
 
-## Os dois slots reservados (no site) ⛔
-
-Até a validação, o site **não crava** a aposta. Dois placeholders, isolados em
-`src/content/placeholders.ts`:
-
-- `{{POSITIONING_HOOK}}` — hero/headline, a dor e o alvo. Preenchido pela palavra que "fez o olho brilhar".
-- `{{SERVICE_OFFER}}` — pacote concreto (escopo + preço). Preenchido pelo que o comprador real reagiu bem.
-
-O catálogo antigo (Employer Branding, Endomarketing, branding) está **preservado
-como rascunho-hipótese fora do render** — não como compromisso publicado.
-
-## Visão de longo prazo _(separada da cunha)_
-
-A "consultoria de alinhamento entre pessoas, cultura e comunicação" é o
-**horizonte de crescimento**, não o ponto de entrada. Entra-se pela cunha
-concreta e urgente; cresce-se para a visão. Lançar pela visão abstrata seria
-erro — sem autoridade nem histórico, ninguém compra "alinhamento cultural" de
-uma dupla nova.
+A "consultoria de alinhamento entre pessoas, cultura e comunicação" segue como
+**horizonte de crescimento**, não ponto de entrada. Entra-se pela execução
+concreta; cresce-se para a estratégia — exatamente a jornada em camadas do
+modelo de negócio.

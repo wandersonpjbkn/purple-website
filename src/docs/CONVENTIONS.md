@@ -55,7 +55,6 @@ comentar só quando ajuda.
 ## Dados ✅
 
 `src/data/*.json` é a fonte de dados estáticos, **fragmentada por domínio**
-(`team`, `panorama`, `contact`, `approach`, `about`, `footer`, `home`) — sem um
-arquivo "site" genérico. Toda afirmação factual carrega `source`
-(ver [`CONTENT_MODEL`](CONTENT_MODEL.md)). Conteúdo em validação fica em
-`src/content/placeholders.ts`.
+(`team`, `panorama`, `contact`, `approach`, `about`, `footer`, `home`,
+`services`) — sem um arquivo "site" genérico. Toda afirmação factual carrega
+`source` (ver [`CONTENT_MODEL`](CONTENT_MODEL.md)).

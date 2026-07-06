@@ -1,6 +1,6 @@
 # Architecture (as-built) — site Purple
 
-> Verdade técnica observada no repositório em **2026-06-26**. Gerado lendo o
+> Verdade técnica observada no repositório em **2026-07-06**. Gerado lendo o
 > código, não as intenções. Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
 > [`POSITIONING`](POSITIONING.md) · [`PROJECT_STATE`](PROJECT_STATE.md).
 > Conteúdo: [`CONTENT_MODEL`](CONTENT_MODEL.md) · UI: [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) ·
@@ -28,12 +28,11 @@ src/
   components/
     layout/          AppHeader, AppFooter, CookieConsent
     sections/        CtaBanner
-    ui/              BaseButton, BaseContainer, BaseIcon, FeaturePillar, TeamCard
+    ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), MediaBlock, FeaturePillar, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
     blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
-  content/           placeholders.ts  (conteúdo em validação — ver CONTENT_MODEL)
-  data/              team, panorama, contact, approach, about, footer, home (.json)
+  data/              team, panorama, contact, approach, about, footer, home, services (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss

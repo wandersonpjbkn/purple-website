@@ -13,17 +13,21 @@ As duas miram o mesmo destino por portas diferentes. O recorrente "falamos da
 mesma coisa sem nos entender" é gap de vocabulário, não de direção — resolve-se
 nomeando o destino comum em voz alta.
 
-## Quem é o cliente 🟡 _(hipótese a validar)_
+## Quem é o cliente ✅ _(validado pela discovery, jul/2026)_
 
-Empresas — e, dentro delas, RH/DHO, lideranças, diretoria — lidando com clima,
-engajamento, liderança, comunicação interna e, gatilho atual, **risco
-psicossocial (NR-1)**. Qual destes é o comprador-cunha é hipótese sob validação
-(ver `POSITIONING.md`).
+**Empresas de médio porte (40+ colaboradores) sem área estruturada de
+comunicação/employer branding** — e, dentro delas, RH/DHO, lideranças e
+diretoria lidando com turnover, atração difícil e comunicação interna
+fragmentada. Detalhe do posicionamento em `POSITIONING.md`.
 
-## Território ✅ vs Oferta 🟡
+## Território ✅ e Oferta ✅
 
 - **Território (decidido):** pessoas, cultura, comunicação, pesquisa qualitativa; filosofia de diagnóstico-antes-de-campanha.
-- **Oferta concreta (hipótese):** primeiro produto = **Diagnóstico de Clima e Comunicação**. Escopo e preço ainda não validados.
+- **Oferta (validada):** entrada pela **execução prática** — planos mensais
+  (LinkedIn corporativo + comunicados → endomarketing → mídia de atração) — com o
+  **Diagnóstico de Cultura e Clima** e projetos de UX como camada estratégica.
+  Preços não são publicados no site ("Sob consulta"); fonte única da oferta em
+  `src/data/services.json`.
 
 ## O que a Purple NÃO é ✅
 
