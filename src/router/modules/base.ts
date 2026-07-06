@@ -17,7 +17,7 @@ export const baseRoutes = [
   {
     path: '/abordagem',
     name: 'approach',
-    component: () => import('@/pages/AbordagemPage.vue'),
+    component: () => import('@/pages/ApproachPage.vue'),
   },
   {
     path: '/contato',

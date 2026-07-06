@@ -93,11 +93,7 @@
     />
 
     <!-- ── Card do autor ──────────────────────────────── -->
-    <section
-      v-if="author"
-      class="section-block section-block--sm"
-      style="background: var(--bg-alt); border-top: 1px solid var(--border)"
-    >
+    <section v-if="author" class="section-block section-block--sm post-author-section">
       <BaseContainer>
         <div class="post-author-card">
           <BaseAvatar :name="author.name" size="lg" />
@@ -113,11 +109,7 @@
     </section>
 
     <!-- ── Posts relacionados ────────────────────────── -->
-    <section
-      v-if="related.length"
-      class="section-block"
-      style="background: var(--surface); border-top: 1px solid var(--border)"
-    >
+    <section v-if="related.length" class="section-block section-block--surface">
       <BaseContainer>
         <div class="post-related-header">
           <div>
@@ -138,7 +130,7 @@
     <BaseContainer>
       <h1>Post não encontrado</h1>
       <p>O post que você está procurando não existe ou foi removido.</p>
-      <div style="margin-top: 1.5rem">
+      <div class="button-row">
         <BaseButton tag="RouterLink" to="/blog">← Voltar para o blog</BaseButton>
       </div>
     </BaseContainer>
@@ -564,6 +556,11 @@ const headings = computed(() => {
 }
 
 // ── Card autor ─────────────────────────────────────────────
+.post-author-section {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+}
+
 .post-author-card {
   display: flex;
   gap: 2rem;

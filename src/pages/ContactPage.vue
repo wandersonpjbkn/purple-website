@@ -162,8 +162,7 @@
             target="_blank"
             rel="noopener noreferrer"
             variant="secondary"
-            class="button--lg"
-            style="color: var(--on-dark); border-color: rgba(255, 255, 255, 0.25)"
+            class="button--lg on-dark"
           >
             Contratar um serviço
           </BaseButton>

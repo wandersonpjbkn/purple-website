@@ -6,7 +6,7 @@
         <p class="section-eyebrow">{{ services.intro.eyebrow }}</p>
         <h1>{{ services.intro.title }}</h1>
         <p class="lead lead--narrow">{{ services.intro.subtitle }}</p>
-        <div style="margin-top: 2rem">
+        <div class="button-row">
           <BaseButton tag="RouterLink" to="/contato">Falar com a Purple</BaseButton>
         </div>
       </BaseContainer>
@@ -29,9 +29,7 @@
         <div class="section-header">
           <p class="section-eyebrow">{{ services.homeTeaser.eyebrow }}</p>
           <h2>{{ services.homeTeaser.title }}</h2>
-          <p class="lead" style="margin-top: 0.5rem">
-            Clique em um serviço para ver o que sua empresa ganha e como fazemos.
-          </p>
+          <p class="lead">Clique em um serviço para ver o que sua empresa ganha e como fazemos.</p>
         </div>
 
         <div class="svc-catalog">
@@ -133,9 +131,9 @@
         <div class="section-header section-header--center">
           <p class="section-eyebrow">{{ services.projects.eyebrow }}</p>
           <h2>{{ services.projects.title }}</h2>
-          <p class="lead lead--narrow" style="text-align: center">{{ services.projects.subtitle }}</p>
+          <p class="lead lead--narrow lead--center">{{ services.projects.subtitle }}</p>
         </div>
-        <div class="services-grid" style="margin-top: 2.5rem">
+        <div class="services-grid">
           <article v-for="project in services.projects.items" :key="project.title" class="service-card">
             <div class="service-card__icon"><BaseIcon :name="project.icon" /></div>
             <h3>{{ project.title }}</h3>
@@ -222,7 +220,7 @@ watch(
   position: sticky;
   top: 76px;
   z-index: 20;
-  background: rgba(250, 247, 253, 0.9);
+  background: rgba(var(--bg-rgb), 0.9);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 
@@ -463,17 +461,12 @@ watch(
   }
 }
 
-.service-card__links {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
-
+// Link "Ver detalhes" nos projetos pontuais (âncora para o catálogo).
 .svc-detail-link {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--muted);
+
   &:hover {
     color: var(--purple);
   }

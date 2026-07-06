@@ -24,6 +24,8 @@
   // Evita repetir os literais 139,47,204 / 197,226,46 em glows e overlays.
   --purple-rgb: 139, 47, 204;
   --lime-rgb: 197, 226, 46;
+  // Canal do --bg, para o blur translúcido do header/sub-nav sticky.
+  --bg-rgb: 247, 244, 252;
 
   // ── Texto/superfícies sobre fundo escuro ───────────────
   // muted/subtle subidos para passar AA nas legendas sobre seções escuras.

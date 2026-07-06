@@ -87,7 +87,7 @@
           <ul class="feature-list">
             <li v-for="benefit in home.highlight.benefits" :key="benefit">{{ benefit }}</li>
           </ul>
-          <div style="margin-top: 2rem">
+          <div class="button-row">
             <BaseButton tag="RouterLink" to="/sobre" variant="secondary">Conheça a Purple</BaseButton>
           </div>
         </div>
@@ -119,7 +119,7 @@
           <div class="service-card__icon"><BaseIcon :name="featuredService.icon" /></div>
         </article>
       </div>
-      <div style="text-align: center; margin-top: 2.5rem">
+      <div class="button-row button-row--center">
         <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
       </div>
     </BaseContainer>
@@ -134,19 +134,17 @@
       </div>
 
       <!-- Apenas alguns dados mais impactantes -->
-      <div class="panorama-grid">
+      <div class="stat-grid stat-grid--cols-3">
         <div
           v-for="stat in panorama.stats.slice(0, 3)"
           :key="stat.label"
-          class="panorama-card"
-          :class="{ 'panorama-card--highlight': stat.highlight }"
+          class="stat-card"
+          :class="{ 'stat-card--highlight': stat.highlight }"
         >
-          <span class="panorama-card__number"
-            >{{ stat.number }}<span>{{ stat.suffix }}</span></span
-          >
-          <p class="panorama-card__label">{{ stat.label }}</p>
-          <p v-if="stat.comparison" class="panorama-card__body">{{ stat.comparison }}</p>
-          <span class="panorama-card__source">{{ stat.source }}</span>
+          <span class="stat-card__number">{{ stat.number }}<span>{{ stat.suffix }}</span></span>
+          <p class="stat-card__label">{{ stat.label }}</p>
+          <p v-if="stat.comparison" class="stat-card__body">{{ stat.comparison }}</p>
+          <span class="stat-card__source">{{ stat.source }}</span>
         </div>
       </div>
 
@@ -163,14 +161,12 @@
     </BaseContainer>
   </section>
 
-  <section class="section-block" style="background: var(--surface); border-top: 1px solid var(--border)">
+  <section class="section-block section-block--surface">
     <BaseContainer>
-      <div
-        style="display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 2.5rem"
-      >
+      <div class="section-head-row">
         <div>
           <p class="section-eyebrow">Blog</p>
-          <h2 style="margin-bottom: 0">Conteúdos recentes</h2>
+          <h2>Conteúdos recentes</h2>
         </div>
         <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
       </div>
@@ -182,10 +178,10 @@
 
   <section class="section-block">
     <BaseContainer>
-      <div class="section-header section-header--center" style="margin-bottom: 2.5rem">
+      <div class="section-header section-header--center section-header--tight">
         <p class="section-eyebrow">Quem somos</p>
         <h2>Um espaço para pessoas,<br />feito por pessoas</h2>
-        <p class="lead lead--narrow" style="text-align: center; margin-top: 0.75rem">
+        <p class="lead lead--narrow lead--center">
           Nascemos inconformados com lideranças que adoecem times e espaços que não integram as pessoas.
         </p>
       </div>

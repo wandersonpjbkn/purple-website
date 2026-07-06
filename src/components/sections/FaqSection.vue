@@ -4,7 +4,7 @@
       <div class="section-header section-header--center">
         <p class="section-eyebrow">{{ faq.eyebrow }}</p>
         <h2>{{ title || faq.title }}</h2>
-        <p v-if="faq.subtitle" class="lead lead--narrow" style="text-align: center; margin: 0.75rem auto 0">
+        <p v-if="faq.subtitle" class="lead lead--narrow lead--center faq-section__subtitle">
           {{ faq.subtitle }}
         </p>
       </div>
@@ -70,6 +70,10 @@ const toggle = (i: number) => {
   &--alt {
     background: var(--bg-alt);
   }
+}
+
+.faq-section__subtitle {
+  margin-top: var(--space-3);
 }
 
 .faq-list {

@@ -6,13 +6,14 @@
 
 ## Idioma ✅
 
-**Código em inglês; conteúdo em português.**
+**Código em inglês; conteúdo e comentários em português.**
 
-- **Inglês:** nomes de variáveis/funções/arquivos, chaves de JSON, comentários,
-  mensagens de commit, nomes de branch, identificadores em geral.
+- **Inglês:** nomes de variáveis/funções/arquivos, chaves de JSON, mensagens de
+  commit, nomes de branch, identificadores em geral.
 - **Português:** o que é **informação/conteúdo** exibido ou redigido para humanos
-  — copy do site, valores de conteúdo no `src/data/*.json`, posts do blog, e
-  **esta documentação** (escrita para a dupla).
+  — copy do site, valores de conteúdo no `src/data/*.json`, posts do blog, **os
+  comentários de código** (explicam o "porquê" para a dupla, como esta doc) e
+  **esta documentação**.
 
 ## JavaScript / TypeScript ✅
 

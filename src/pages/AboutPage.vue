@@ -29,11 +29,11 @@
           <p class="section-eyebrow">Nossa crença</p>
           <h2>{{ about.helpTitle }}</h2>
           <p class="lead">{{ about.helpText }}</p>
-          <p style="margin-top: 1rem">
+          <p class="about-belief__note">
             Por isso, antes de olhar para fora, ajudamos empresas a olharem para dentro — para as pessoas que movem o
             negócio todos os dias.
           </p>
-          <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap">
+          <div class="button-row">
             <BaseButton tag="RouterLink" to="/servicos">Ver nossos serviços</BaseButton>
             <BaseButton tag="RouterLink" to="/contato" variant="secondary">Falar com a Purple</BaseButton>
           </div>
@@ -46,10 +46,10 @@
   <!-- ── Time ───────────────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
-      <div class="section-header section-header--center" style="margin-bottom: 3rem">
+      <div class="section-header section-header--center">
         <p class="section-eyebrow">Quem somos</p>
         <h2>As pessoas por trás da Purple</h2>
-        <p class="lead" style="text-align: center">
+        <p class="lead lead--center">
           A união de uma publicitária/marketeira e de um UX/psicólogo que já trabalharam juntos, resultou em uma
           consultoria focada em Comunicação Interna, Endomarketing e Employer Branding.
         </p>
@@ -65,24 +65,17 @@
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow section-eyebrow--lime">Por que isso importa</p>
-        <h2 style="color: var(--on-dark)">O problema que viemos resolver</h2>
-        <p style="color: var(--on-dark-muted); text-align: center; max-width: 56ch; margin: 0 auto">
+        <h2>O problema que viemos resolver</h2>
+        <p class="about-data-section__intro">
           Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
         </p>
       </div>
-      <!-- data-stat-grid + data-stat-card vêm de _stats.scss -->
-      <div class="data-stat-grid" style="margin-top: 3rem; position: relative; z-index: 1">
-        <div
-          v-for="stat in about.dataStats"
-          :key="stat.number"
-          class="data-stat-card"
-          style="background: var(--section-dark-2)"
-        >
-          <span class="data-stat-card__number">
-            {{ stat.number }}<span>{{ stat.suffix }}</span>
-          </span>
-          <p class="data-stat-card__label">{{ stat.label }}</p>
-          <span class="data-stat-card__source">{{ stat.source }}</span>
+      <!-- stat-grid + stat-card canônicos vêm de _stats.scss -->
+      <div class="stat-grid">
+        <div v-for="stat in about.dataStats" :key="stat.number" class="stat-card">
+          <span class="stat-card__number">{{ stat.number }}<span>{{ stat.suffix }}</span></span>
+          <p class="stat-card__label">{{ stat.label }}</p>
+          <span class="stat-card__source">{{ stat.source }}</span>
         </div>
       </div>
     </BaseContainer>
@@ -170,11 +163,20 @@ usePageMeta({
   z-index: 1;
 }
 
+.about-belief__note {
+  margin-top: var(--space-4);
+}
+
 .about-data-section {
   background: var(--section-dark);
   padding: 5rem 0;
   position: relative;
   overflow: hidden;
+
+  // Contexto on-dark: o título vive sobre fundo escuro.
+  h2 {
+    color: var(--on-dark);
+  }
 
   &::before {
     content: '';
@@ -186,5 +188,12 @@ usePageMeta({
     background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.08) 0%, transparent 65%);
     pointer-events: none;
   }
+}
+
+.about-data-section__intro {
+  color: var(--on-dark-muted);
+  text-align: center;
+  max-width: 56ch;
+  margin-inline: auto;
 }
 </style>

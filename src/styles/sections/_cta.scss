@@ -71,6 +71,11 @@
   flex-shrink: 0;
 }
 
+.cta-banner__whatsapp {
+  color: var(--on-dark-muted);
+  font-size: var(--text-sm);
+}
+
 // ── Contact grid ───────────────────────────────────────────
 .contact-grid {
   display: grid;

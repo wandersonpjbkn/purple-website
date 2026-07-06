@@ -23,8 +23,7 @@
               :href="author.linkedin"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-link"
-              style="margin-top: 1rem; display: inline-flex"
+              class="text-link author-hero__link"
               >LinkedIn →</a
             >
           </div>
@@ -59,7 +58,7 @@
   <section v-else class="section-block">
     <BaseContainer>
       <h1>Autor não encontrado</h1>
-      <div style="margin-top: 1.5rem">
+      <div class="button-row">
         <BaseButton tag="RouterLink" to="/blog">← Voltar para o blog</BaseButton>
       </div>
     </BaseContainer>
@@ -130,6 +129,10 @@ usePageMeta(
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 0.75rem;
+}
+
+.author-hero__link {
+  margin-top: var(--space-4);
 }
 
 .author-posts-header {

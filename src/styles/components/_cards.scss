@@ -47,6 +47,14 @@
     margin-bottom: 1.25rem;
   }
 
+  // Rodapé de links do card (ex.: "Pedir proposta" + "Ver detalhes").
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
   &--featured {
     grid-column: span 2;
     background: var(--section-dark);

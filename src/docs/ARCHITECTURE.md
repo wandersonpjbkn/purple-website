@@ -22,17 +22,17 @@ Status: ✅ no código · 🟡 presente mas não ativo/coerente · ⏳ ausente (
 ```
 src/
   main.ts            bootstrap (createApp + pinia + unhead + router)
-  App.vue            shell: AppHeader / <RouterView/> / AppFooter + head global
-  router/index.ts    8 rotas, lazy-loaded
-  pages/             Home, About, Abordagem, Services, Blog, BlogPost, Author, Contact
+  App.vue            shell: skip-link / AppHeader / <RouterView/> / AppFooter + head global
+  router/index.ts    11 rotas, lazy-loaded (inclui catch-all 404)
+  pages/             Home, About, Abordagem, Services, Blog, BlogPost, Author, Contact, Faq, Privacy, NotFound
   components/
     layout/          AppHeader, AppFooter, CookieConsent
-    sections/        CtaBanner
-    ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), MediaBlock, FeaturePillar, TeamCard
+    sections/        CtaBanner, FaqSection
+    ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
     blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
-  data/              team, panorama, contact, approach, about, footer, home, services (.json)
+  data/              team, panorama, contact, approach, about, footer, home, services, faq, privacy (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
@@ -53,7 +53,7 @@ public/              robots.txt, images/
 
 ## Roteamento ✅
 
-8 rotas em `src/router/index.ts` (todas `() => import()`):
+11 rotas em `src/router/index.ts` (todas `() => import()`):
 
 | path                | name        | página        |
 | ------------------- | ----------- | ------------- |
@@ -65,8 +65,11 @@ public/              robots.txt, images/
 | `/blog/autor/:slug` | blog-author | AuthorPage    |
 | `/blog/:slug`       | blog-post   | BlogPostPage  |
 | `/contato`          | contact     | ContactPage   |
+| `/faq`              | faq         | FaqPage       |
+| `/privacidade`      | privacy     | PrivacyPage   |
+| `/:pathMatch(.*)*`  | not-found   | NotFoundPage  |
 
-`scrollBehavior` rola ao topo (smooth) a cada navegação. São **6 páginas no menu** (Home · Sobre · Abordagem · Serviços · Blog · Contato); `blog-author` e `blog-post` são telas de detalhe.
+`scrollBehavior` rola ao topo (smooth) a cada navegação (e a âncoras `#id` com offset). São **6 páginas no menu** (Home · Sobre · Abordagem · Serviços · Blog · Contato); `blog-author`/`blog-post` são detalhe; `faq`/`privacy` vivem no rodapé; a catch-all `not-found` renderiza a `NotFoundPage`.
 
 ## Blog via Vite plugin ✅
 
@@ -96,7 +99,7 @@ removido; a Home renderiza `PostCard` como as demais telas.
 ## Build & deploy
 
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
-- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`) e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog). Os scripts do bundle ficam — o SPA assume no cliente; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
+- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`) e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade). Os scripts do bundle ficam — o SPA assume no cliente; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
 - **Deploy (Render) ⏳:** alvo declarado, mas **não há infra no repo** (sem `render.yaml`/`Dockerfile`/`_redirects`). Por ser SPA com history mode, o host precisa de **rewrite `/* → /index.html`** — ainda não configurado. Para servir o prerender, o build do deploy deve rodar `build:static` (com Chromium disponível).
 
 ## Consentimento LGPD + GTM ✅

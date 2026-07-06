@@ -15,12 +15,21 @@ Tudo em **`src/styles/abstracts/_tokens.scss`** como CSS custom properties em
 **Cor — paleta de marca**
 `--purple-900 #1a0533` · `-800 #2d0b55` · `-700 #4a1280` · `-600 #6b1faa` ·
 `--purple #8b2fcc` · `-400 #a855d4` · `-100 #f0e4fb` · `-50 #faf5ff`.
-Acento: `--lime #c5e22e` · `--lime-dark #9bb81f` · `--lime-light #e8f79a`.
-Canais RGB para `rgba()` com opacidade variável: `--purple-rgb`, `--lime-rgb`.
+**Lime é cor de marca co-titular do roxo (não acento pontual).** Papel no
+sistema: "resultado / positivo / ação secundária".
+`--lime #c5e22e` · `--lime-dark #9bb81f` · `--lime-light #e8f79a` · `--lime-ink #5f7213`
+(verde escurecido para **texto/link sobre fundo claro** — `--lime` puro não passa
+contraste em texto). Canais RGB para `rgba()`: `--purple-rgb`, `--lime-rgb`, `--bg-rgb`.
 
-**Cor — sobre fundo escuro** (`--on-dark #fff`, `--on-dark-strong .85`,
-`--on-dark-muted .6`, `--on-dark-subtle .35`, `--on-dark-surface .05`,
-`--on-dark-border .08`) e marca **WhatsApp** (`--whatsapp #25d366`, `-dark #1ebe59`).
+**Fundo escuro das seções:** `--section-dark #241047` (roxo profundo, porém mais
+quente/claro que `--purple-900`, para suavizar o contraste com as seções claras)
+e `--section-dark-2 #2d1556` (cards de stat). `--purple-900` fica para acentos.
+
+**Cor — sobre fundo escuro** (`--on-dark #fff`, `--on-dark-strong .88`,
+`--on-dark-muted .74`, `--on-dark-subtle .55`, `--on-dark-surface .06`,
+`--on-dark-border .1` — muted/subtle subidos para passar AA nas legendas) e marca
+**WhatsApp** (`--whatsapp #25d366`, `-dark #1ebe59`). `--muted #5c4f6f` /
+`--subtle #6e6088` foram escurecidos para passar AA sobre fundo claro.
 
 **Texto/superfície:** `--ink`, `--text`, `--muted`, `--subtle` · `--surface`,
 `--bg`, `--bg-alt` · `--border`, `--border-subtle`.
@@ -71,11 +80,17 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   **Caminho único de botão** — não escrever `class="button primary"` à mão.
 - `BaseContainer` — wrapper `.container` (largura/centralização).
 - `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (17 ícones, viewBox 24×24).
+  mapa tipado **`src/components/ui/icons.ts`** (18 ícones, viewBox 24×24).
   Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
-  de marca preenchidos** (`fill: true` — `whatsapp`, `linkedin`). Nome
-  desconhecido cai num placeholder neutro (degradação graciosa — coberto por
-  teste). Glifos tipográficos (`→ ← ✕`) seguem como **texto**, não como ícone.
+  de marca preenchidos** (`fill: true` — `whatsapp`, `linkedin`; `instagram` é
+  stroke). Nome desconhecido cai num placeholder neutro (degradação graciosa —
+  coberto por teste). Glifos tipográficos (`→ ← ✕`) seguem como **texto**.
+  ⚠️ `BaseIcon` **herda a cor do pai** (`currentColor`): sobre fundo escuro, o
+  contêiner precisa setar `color` (ex.: `--lime`/`--on-dark`), senão o ícone
+  herda `--text` e some (escuro-sobre-escuro).
+- `BrandLogo` — logo inline (via `vite-svg-loader`) a partir de
+  `src/assets/brand/logo-ppl.svg`, com fallback ao wordmark textual; recolorível
+  por CSS. Usado no header e no footer.
 - `MediaBlock` — slot de imagem com fallback: `<img>` opcional sobre o gradiente
   decorativo do `.visual-block`; em erro/ausência do arquivo, só o gradiente
   aparece (nunca broken image). Assets pendentes em [`IMAGES`](IMAGES.md).
@@ -84,22 +99,31 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   load (compõe `AvImage` + `AvInitials`); tamanhos `sm/md/lg/xl`. **Estilo
   co-localizado** (scoped + `:deep()`), não global.
 
-**sections/** `CtaBanner` · **layout/** `AppHeader`, `AppFooter` ·
-**blog/** `BlogList`, `BlogCard`, `PostCard`, `BlogPagination`, `BlogSidebar`.
+**sections/** `CtaBanner`, `FaqSection` · **layout/** `AppHeader`, `AppFooter` ·
+**blog/** `PostCard`, `BlogPagination`, `BlogSidebar`.
+
+## Stat grid canônico ✅
+
+Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usam
+**um** padrão em `src/styles/sections/_stats.scss`: `.stat-grid`
+(`--stat-cols`, hairline de 1px via `gap` + `--on-dark-border`; modificador
+`--cols-3`) + `.stat-card` (`__number/__label/__body/__source`, modificador
+`--highlight`). Usado na Home (panorama, 3 col) e na Sobre (dados, 4 col). Os
+antigos `.panorama-card*`/`.data-stat-card*`/`.stats-band*` foram removidos.
 
 ## Números com valor + sinal em lime ✅ (convenção de exibição)
 
 Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
-(`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e os
-`span` internos de `panorama-card__number`/`data-stat-card__number`. A barra do
-card do hero usa gradiente `purple → lime`. É o detalhamento fino de cor herdado
-do develop: preservar ao criar novos blocos numéricos.
+(`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e o
+`span` interno de `stat-card__number`. A barra do card do hero usa gradiente
+`purple → lime`. Preservar ao criar novos blocos numéricos.
 
 > Os antigos placeholders de conteúdo (⛔) foram preenchidos pela discovery —
 > ver [`CONTENT_MODEL`](CONTENT_MODEL.md) e [`POSITIONING`](POSITIONING.md).
 
 ## Tema escuro ✅
 
-Não há toggle claro/escuro. "Dark" = seções de fundo `--purple-900` que usam os
-tokens `--on-dark-*` para texto/bordas. (Esses tokens foram restaurados após um
-bug de auto-referência — ver histórico git.)
+Não há toggle claro/escuro. "Dark" = seções de fundo `--section-dark` que usam os
+tokens `--on-dark-*` para texto/bordas. O modificador `.section-block--dark`
+(em `layout/_grid.scss`) aplica o fundo **e** o contexto de texto on-dark aos
+filhos (`h2`/`.lead`), evitando repetir cor inline em cada seção escura.

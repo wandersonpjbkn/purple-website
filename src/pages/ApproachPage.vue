@@ -26,12 +26,12 @@
   </section>
 
   <!-- ── Diferenciais (por que a Purple) ────────────── -->
-  <section class="section-block" style="background: var(--section-dark); border-radius: 0">
+  <section class="section-block section-block--dark">
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow section-eyebrow--lime">Por que a Purple</p>
-        <h2 style="color: var(--on-dark)">Uma comunicação saudável começa dentro</h2>
-        <p class="lead" style="color: var(--on-dark-muted); text-align: center">
+        <h2>Uma comunicação saudável começa dentro</h2>
+        <p class="lead lead--center">
           Acreditamos que uma comunicação eficaz é aquela que começa dentro para então ir para fora.
         </p>
       </div>
@@ -58,7 +58,7 @@
           <p class="lead">
             Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.
           </p>
-          <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap">
+          <div class="button-row">
             <BaseButton tag="RouterLink" to="/contato">Quero começar</BaseButton>
             <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver nossos serviços</BaseButton>
           </div>
@@ -82,11 +82,11 @@
       <div class="section-header section-header--center">
         <p class="section-eyebrow">Da abordagem à prática</p>
         <h2>É assim que a abordagem vira entrega</h2>
-        <p class="lead lead--narrow" style="text-align: center">
+        <p class="lead lead--narrow lead--center">
           O processo acima se materializa em serviços concretos. Veja por onde a Purple pode começar com a sua empresa.
         </p>
       </div>
-      <div class="services-grid" style="margin-top: 2.5rem">
+      <div class="services-grid">
         <article v-for="service in bridgeServices" :key="service.id" class="service-card">
           <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
           <h3>{{ service.title }}</h3>
@@ -94,7 +94,7 @@
           <RouterLink class="text-link" :to="`/servicos#${service.id}`">Saiba mais</RouterLink>
         </article>
       </div>
-      <div style="text-align: center; margin-top: 2.5rem">
+      <div class="button-row button-row--center">
         <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
       </div>
     </BaseContainer>

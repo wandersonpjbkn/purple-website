@@ -17,7 +17,7 @@
           <BaseButton
             v-if="secondaryTo"
             variant="secondary"
-            class="button--lg cta-banner__secondary"
+            class="button--lg on-dark"
             tag="RouterLink"
             :to="secondaryTo"
           >
@@ -61,20 +61,3 @@ withDefaults(
 
 const phoneNumber = computed(() => `https://wa.me/${import.meta.env.VITE_BASE_PHONE}`)
 </script>
-
-<style scoped>
-.cta-banner__secondary {
-  color: var(--on-dark);
-  border-color: rgba(255, 255, 255, 0.28);
-}
-
-.cta-banner__secondary:hover {
-  background: var(--on-dark-surface);
-  border-color: rgba(255, 255, 255, 0.45);
-}
-
-.cta-banner__whatsapp {
-  color: var(--on-dark-muted);
-  font-size: 0.875rem;
-}
-</style>

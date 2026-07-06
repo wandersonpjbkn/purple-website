@@ -1,96 +1,79 @@
 @use '../abstracts/mixins' as *;
 
-// ── Stats Band ─────────────────────────────────────────────
-.stats-band {
-  background: var(--purple-800);
-  padding: 3.5rem 0;
-}
-
-.stats-band__grid {
+// ── Stat grid + stat card (canônico) ───────────────────────
+// Apresentação única de estatísticas (número + sufixo + label [+ body] +
+// fonte) sobre fundo escuro. Estética hairline: células separadas por 1px,
+// centradas e minimalistas. Usada na Home (panorama) e na Sobre (dados).
+.stat-grid {
+  --stat-cols: 4;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--stat-cols), 1fr);
   gap: 1px;
   background: var(--on-dark-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 
   @include respond-to(lg) {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
 
-.stats-band__item {
-  background: var(--purple-800);
-  padding: 2rem;
-  text-align: center;
-}
-
-.stats-band__number {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: var(--on-dark);
-  line-height: 1;
-  margin-bottom: 0.4rem;
-  display: block;
-  letter-spacing: -0.03em;
-
-  span {
-    color: var(--lime);
+  &--cols-3 {
+    --stat-cols: 3;
   }
 }
 
-.stats-band__label {
-  font-size: 0.85rem;
-  color: var(--on-dark-muted);
-  line-height: 1.4;
-}
-
-// ── Data stat card ─────────────────────────────────────────
-.data-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--on-dark-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-
-  @include respond-to(lg) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.data-stat-card {
-  padding: 2rem;
+.stat-card {
+  background: var(--section-dark-2);
+  padding: var(--space-8);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  // bg herdada da seção (purple-900 ou similar)
+  gap: var(--space-2);
+
+  // Célula destacada (ex.: o dado-chave do panorama).
+  &--highlight {
+    background: rgba(var(--lime-rgb), 0.08);
+  }
 
   &__number {
-    font-size: 2.8rem;
+    font-size: var(--text-3xl);
     font-weight: 800;
     color: var(--on-dark);
     line-height: 1;
     letter-spacing: -0.03em;
 
+    // Convenção de marca: valor em texto padrão, sinal/sufixo em lime.
     span {
       color: var(--lime);
     }
   }
 
   &__label {
-    font-size: 0.85rem;
-    color: var(--on-dark-muted);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--on-dark-strong);
     line-height: 1.4;
-    max-width: 18ch;
+    max-width: 22ch;
+  }
+
+  &__body {
+    font-size: var(--text-sm);
+    color: var(--on-dark-muted);
+    line-height: 1.6;
+    max-width: 34ch;
   }
 
   &__source {
-    font-size: 0.72rem;
+    font-size: var(--text-xs);
     color: var(--on-dark-subtle);
     font-style: italic;
+    margin-top: var(--space-1);
   }
 }
 
@@ -144,78 +127,6 @@
     max-width: 56ch;
     margin: 0 auto;
   }
-}
-
-.panorama-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  position: relative;
-  z-index: 1;
-
-  @include respond-to(md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @include respond-to(sm) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.panorama-card {
-  background: var(--on-dark-surface);
-  border: 1px solid var(--on-dark-border);
-  border-radius: var(--radius-lg);
-  padding: 2rem 1.75rem;
-  transition:
-    background 0.2s var(--ease),
-    transform 0.2s var(--ease);
-
-  &:hover {
-    background: var(--on-dark-border);
-    transform: translateY(-2px);
-  }
-
-  &--highlight {
-    border-color: rgba(var(--lime-rgb), 0.3);
-    background: rgba(var(--lime-rgb), 0.06);
-  }
-}
-
-.panorama-card__number {
-  font-size: 3.2rem;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--on-dark);
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.03em;
-  display: block;
-
-  span {
-    color: var(--lime);
-  }
-}
-
-.panorama-card__label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--on-dark-strong);
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
-}
-
-.panorama-card__body {
-  font-size: 0.875rem;
-  color: var(--on-dark-muted);
-  line-height: 1.65;
-  margin-top: 0.625rem;
-}
-
-.panorama-card__source {
-  font-size: 0.75rem;
-  color: var(--on-dark-subtle);
-  font-style: italic;
-  margin-top: 0.75rem;
-  display: block;
 }
 
 .panorama-divider {
