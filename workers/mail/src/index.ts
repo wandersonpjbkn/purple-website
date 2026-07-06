@@ -76,7 +76,7 @@ export default {
       },
       body: JSON.stringify({
         from: 'Purple Comunicação <contato@purplecomunicacao.com.br>',
-        to: ['contato@purplecomunicacao.com.br'],
+        to: ['purplecomunica@gmail.com'],
         subject: `Novo contato | ${body.interest.service}`,
         html: buildEmail({
           name: body.contact.name,
