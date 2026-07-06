@@ -1,12 +1,9 @@
 <template>
   <!--
-    Ícone EM VALIDAÇÃO — estrutura SVG provisória.
+    Ícone do sistema — renderiza o SVG mapeado por `name` em icons.ts.
 
-    A iconografia final (sistema de ícones SVG próprio) ainda será montada.
-    Até lá, renderizamos um placeholder SVG e preservamos o `name` semântico
-    de cada ícone, para que a conversão futura seja name → SVG (sem passar
-    por emoji ou texto). Quando o set existir, troque o conteúdo abaixo por
-    um <use> / mapa de paths por `name`.
+    Nomes desconhecidos (ou vazios) caem num placeholder neutro em vez de
+    quebrar: um typo em `src/data/*.json` degrada visualmente, não explode.
   -->
   <svg
     class="base-icon"
@@ -19,15 +16,33 @@
     :aria-label="label || undefined"
     :aria-hidden="label ? undefined : 'true'"
   >
-    <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5" opacity="0.4" />
-    <circle cx="12" cy="12" r="2.25" fill="currentColor" opacity="0.55" />
+    <template v-if="icon">
+      <path
+        v-for="(d, i) in icon.paths"
+        :key="i"
+        :d="d"
+        :fill="icon.fill ? 'currentColor' : 'none'"
+        :stroke="icon.fill ? 'none' : 'currentColor'"
+        :stroke-width="icon.fill ? undefined : 1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </template>
+    <template v-else>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.5" opacity="0.4" />
+      <circle cx="12" cy="12" r="2.25" fill="currentColor" opacity="0.55" />
+    </template>
   </svg>
 </template>
 
 <script setup lang="ts">
-withDefaults(
+import { computed } from 'vue'
+
+import { ICONS } from './icons'
+
+const props = withDefaults(
   defineProps<{
-    /** Nome semântico do ícone (ex.: 'target', 'megaphone'). Mapeará para o SVG final. */
+    /** Nome semântico do ícone (ex.: 'target', 'megaphone') — chave de icons.ts. */
     name?: string
     /** Rótulo acessível. Vazio = ícone decorativo (aria-hidden). */
     label?: string
@@ -36,6 +51,8 @@ withDefaults(
   }>(),
   { name: '', label: '', size: '1em' },
 )
+
+const icon = computed(() => (props.name ? ICONS[props.name] : undefined))
 </script>
 
 <style scoped>
