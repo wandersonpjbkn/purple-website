@@ -132,18 +132,18 @@ usePageMeta({
 .about-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 4.5rem 0 4rem;
+  padding: 4.5rem 0 var(--space-16);
 }
 
 .about-hero__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5rem;
+  gap: var(--space-20);
   align-items: center;
 
   @include respond-to(md) {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: var(--space-10);
   }
 
   h1 {
@@ -154,15 +154,15 @@ usePageMeta({
 .about-hero__manifesto {
   background: var(--section-dark);
   border-radius: var(--radius-xl);
-  padding: 2.5rem;
+  padding: var(--space-10);
   position: relative;
   overflow: hidden;
 
   &::before {
     content: '"';
     position: absolute;
-    top: -0.5rem;
-    left: 1.5rem;
+    top: calc(var(--space-2) * -1);
+    left: var(--space-6);
     font-size: 8rem;
     font-weight: 800;
     color: var(--lime);
@@ -189,7 +189,7 @@ usePageMeta({
 
 .about-data-section {
   background: var(--section-dark);
-  padding: 5rem 0;
+  padding: var(--space-20) 0;
   position: relative;
   overflow: hidden;
 

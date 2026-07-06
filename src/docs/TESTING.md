@@ -9,7 +9,7 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 - **Runner: Vitest 3** (`vitest.config.ts` próprio, standalone) + **@vue/test-utils**
   - **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
-- **43 testes** em 9 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
+- **49 testes** em 10 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`).
 - **Portões de qualidade ✅** (rodar antes de subir):
   - **Testes:** `yarn test`.
@@ -20,17 +20,18 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 ### Coberto hoje ✅
 
-| Arquivo                                      | O que valida                                                                                                                                                                         |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `plugins/__tests__/vite-plugin-blog.spec.ts` | `slugify`, `parseFrontmatter`, `markdownToHtml`, `countWords`                                                                                                                        |
-| `composables/__tests__/useBlog.spec.ts`      | filtro por termo/categoria, paginação, clamp de página, `clearFilters`                                                                                                               |
-| `composables/__tests__/useEmailJS.spec.ts`   | fallback "simula sucesso" sem env; erro sem SDK; envio com SDK                                                                                                                       |
-| `data/__tests__/services.spec.ts`            | **integridade do conteúdo publicado**: sem `{{...}}`, sem preços (`R$`), catálogo 7 completo, 3 planos "Sob consulta", ícones referenciados existem em `icons.ts`, hero com `source` |
-| `components/ui/__tests__/BaseIcon.spec.ts`   | paths reais por `name`, glifo de marca preenchido, fallback p/ nome desconhecido, aria (`label`)                                                                                     |
-| `pages/__tests__/HomePage.spec.ts`           | smoke de render: hero validado (stats valor+sinal, card, tags), teaser 4+1 featured                                                                                                  |
-| `pages/__tests__/ServicesPage.spec.ts`       | smoke de render: catálogo com âncoras, 3 `package-card` sem preço, projetos                                                                                                          |
-| `stores/__tests__/consent.spec.ts`           | transições do consentimento LGPD + getters                                                                                                                                           |
-| `components/__tests__/CookieConsent.spec.ts` | banner aparece/oculta; aceitar/recusar                                                                                                                                               |
+| Arquivo                                        | O que valida                                                                                                                                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `plugins/__tests__/vite-plugin-blog.spec.ts`   | `slugify`, `parseFrontmatter`, `markdownToHtml`, `countWords`                                                                                                                        |
+| `composables/__tests__/useBlog.spec.ts`        | filtro por termo/categoria, paginação, clamp de página, `clearFilters`                                                                                                               |
+| `composables/__tests__/useMail.spec.ts`        | envio com sucesso; erro quando a API responde `success: false`; timeout (`AbortController`); `reset`                                                                                 |
+| `composables/__tests__/useContactForm.spec.ts` | validação por campo (nome, e-mail, assunto, mensagem ≥ 10 chars), formulário válido sem erros, `clearForm`                                                                           |
+| `data/__tests__/services.spec.ts`              | **integridade do conteúdo publicado**: sem `{{...}}`, sem preços (`R$`), catálogo 7 completo, 3 planos "Sob consulta", ícones referenciados existem em `icons.ts`, hero com `source` |
+| `components/ui/__tests__/BaseIcon.spec.ts`     | paths reais por `name`, glifo de marca preenchido, fallback p/ nome desconhecido, aria (`label`)                                                                                     |
+| `pages/__tests__/HomePage.spec.ts`             | smoke de render: hero validado (stats valor+sinal, card, tags), teaser 4+1 featured                                                                                                  |
+| `pages/__tests__/ServicesPage.spec.ts`         | smoke de render: catálogo com âncoras, 3 `package-card` sem preço, projetos                                                                                                          |
+| `stores/__tests__/consent.spec.ts`             | transições do consentimento LGPD + getters                                                                                                                                           |
+| `components/__tests__/CookieConsent.spec.ts`   | banner aparece/oculta; aceitar/recusar                                                                                                                                               |
 
 > O antigo `content/__tests__/placeholders.spec.ts` (guarda de placeholder) foi
 > **removido junto com os placeholders** — seu inverso vive agora em
@@ -43,8 +44,6 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 ### Ainda pendente ⏳
 
-- **Validação do form de Contato** via mount do `ContactPage` (hoje a lógica
-  `validate()` é interna ao componente).
 - **Smoke de render** das demais páginas (Sobre, Abordagem, Contato, Blog) —
   Home e Serviços ✅.
 - **Playwright e2e** (1 smoke navegando as 6 páginas + envio simulado).
@@ -60,8 +59,8 @@ resto para type-check + lint + revisão visual.
 1. **Lógica pura — alto valor, fácil:**
    - ✅ `vite-plugin-blog`: `parseFrontmatter`, `markdownToHtml`, `slugify`, `countWords`.
    - ✅ `useBlog`: filtro por categoria/busca, paginação, `clearFilters`.
-   - ✅ `useEmailJS`: fallback "simula sucesso sem env" + erro/envio com SDK.
-   - ⏳ validação do form de Contato (`validate()` em `ContactPage`).
+   - ✅ `useMail`: envio, erro da API, timeout, `reset`.
+   - ✅ `useContactForm`: validação por campo, formulário válido, `clearForm`.
 2. **Smoke de render:** ✅ Home e Serviços · ⏳ demais páginas.
 3. ✅ **Integridade do conteúdo publicado** (sem placeholder, sem preço, ícones válidos).
 4. ✅ **Consentimento LGPD:** store + banner `CookieConsent`.

@@ -11,7 +11,7 @@
     >
       <div class="cookie-consent__inner">
         <p class="cookie-consent__text">
-          Usamos cookies de <strong>análise</strong> (Google Tag Manager) para entender como o site é usado e
+          Usamos <strong>cookies de análise</strong> (Google Tag Manager) para entender como o site é usado e
           melhorá-lo. Os cookies essenciais ao funcionamento são sempre ativos. Você decide sobre os de análise.
           <RouterLink
             to="/privacidade"
@@ -76,6 +76,8 @@ const reject = () => {
   right: var(--space-4);
   bottom: var(--space-4);
   z-index: 100;
+  margin: 0 auto;
+  width: fit-content;
 }
 
 .cookie-consent__inner {

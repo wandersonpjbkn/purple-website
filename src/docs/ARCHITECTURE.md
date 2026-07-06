@@ -31,7 +31,7 @@ src/
     ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
     blog/            PostCard, BlogPagination
-  composables/       usePageMeta, useBlog, useCdnAsset, useContact (reexport em index.ts) · useEmailJS (import direto)
+  composables/       usePageMeta, useBlog, useCdnAsset, useContact (reexport em index.ts) · useMail, useTurnstile, useContactForm (import direto)
   data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
@@ -88,7 +88,12 @@ removido; a Home renderiza `PostCard` como as demais telas.
 
 ## Formulário de contato ✅
 
-`useEmailJS` usa o `window.emailjs` carregado por **CDN** em `index.html` (não é dependência npm). Lê `VITE_EMAILJS_SERVICE_ID`/`TEMPLATE_ID`. Sem env, **simula sucesso** (1s) para não travar dev. A `publicKey` está como `'SUA_PUBLIC_KEY'` placeholder no `index.html` ⏳.
+Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mail transacional no front:
+
+- **`TurnstileWidget.vue`** (`components/forms/`) + **`useTurnstile`** renderizam o widget anti-spam da Cloudflare (`window.turnstile`, script carregado por CDN em `index.html`) usando `VITE_TURNSTILE_SITE_KEY`; emite `verified`/`expired`/`error` com o token do desafio.
+- **`useMail`** (`composables/useMail.ts`) faz `POST` do payload (`contact`, `interest`, `metadata`, `turnstileToken`) para `VITE_CONTACT_API_URL`, com timeout de 10s via `AbortController`.
+- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`) para `contato@purplecomunicacao.com.br`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`), não pelo `yarn build` do site.
+- **`useContact`** (`composables/useContact.ts`) continua isolado — só dados estáticos de contato (título/subtítulo/telefone/e-mail/endereço), não tem relação com o envio.
 
 ## SEO / meta ✅
 

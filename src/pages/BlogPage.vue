@@ -291,14 +291,14 @@ const categoryGroups = computed(() =>
 .blog-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 3.5rem 0 2.5rem;
+  padding: 3.5rem 0 var(--space-10);
 }
 
 .blog-hero__inner {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 2rem;
+  gap: var(--space-8);
 
   h1 {
     margin-bottom: 0;
@@ -318,20 +318,20 @@ const categoryGroups = computed(() =>
 
   &__icon {
     position: absolute;
-    left: 1rem;
+    left: var(--space-4);
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     pointer-events: none;
   }
 
   input {
     width: 100%;
-    padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+    padding: var(--space-3) var(--space-10) var(--space-3) 2.75rem;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-pill);
     background: var(--bg);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     color: var(--text);
     outline: none;
     transition:
@@ -372,7 +372,7 @@ const categoryGroups = computed(() =>
 .blog-categories-bar {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 0.75rem 0;
+  padding: var(--space-3) 0;
   position: sticky;
   top: 76px;
   z-index: 10;
@@ -409,14 +409,14 @@ const categoryGroups = computed(() =>
 
 // ── Sections ───────────────────────────────────────────────
 .blog-section {
-  padding: 3rem 0;
+  padding: var(--space-12) 0;
 
   & + & {
     border-top: 1px solid var(--border-subtle);
   }
 
   &--category {
-    padding: 2.5rem 0;
+    padding: var(--space-10) 0;
   }
 }
 
@@ -424,7 +424,7 @@ const categoryGroups = computed(() =>
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-4);
   margin-bottom: 1.75rem;
 }
 
@@ -458,7 +458,7 @@ const categoryGroups = computed(() =>
 .blog-grid--4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem 1.5rem;
+  gap: 1.75rem var(--space-6);
 
   @include respond-to(lg) {
     grid-template-columns: repeat(3, 1fr);
@@ -476,8 +476,8 @@ const categoryGroups = computed(() =>
 }
 
 .blog-recent__featured {
-  margin-bottom: 2.5rem;
-  padding-bottom: 2.5rem;
+  margin-bottom: var(--space-10);
+  padding-bottom: var(--space-10);
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -486,18 +486,18 @@ const categoryGroups = computed(() =>
 
 // ── Load more ──────────────────────────────────────────────
 .blog-load-more {
-  margin-top: 2.5rem;
+  margin-top: var(--space-10);
   text-align: center;
 }
 
 // ── Empty state ────────────────────────────────────────────
 .blog-empty {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-6);
 
   p {
     color: var(--muted);

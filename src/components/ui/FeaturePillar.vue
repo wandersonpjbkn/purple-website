@@ -30,7 +30,7 @@ withDefaults(
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: var(--space-8);
   transition:
     box-shadow 0.2s var(--ease),
     transform 0.2s var(--ease);
@@ -64,17 +64,17 @@ withDefaults(
 
 .feature-pillar__icon {
   font-size: 1.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
   display: block;
   color: var(--purple);
 }
 
 h3 {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--text-base);
+  margin-bottom: var(--space-2);
 }
 p {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   line-height: 1.65;
 }
 </style>

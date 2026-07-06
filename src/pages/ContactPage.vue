@@ -130,7 +130,7 @@
               </label>
 
               <label class="field field--full">
-                <span class="field__label">Assunto <span aria-hidden="true">*</span></span>
+                <span class="field__label">Serviço de interesse <span aria-hidden="true">*</span></span>
                 <select
                   v-model="form.subject"
                   required
@@ -142,7 +142,7 @@
                     value=""
                     disabled
                   >
-                    Selecione um assunto
+                    Selecione um interesse
                   </option>
                   <option value="Employer Branding">Employer Branding</option>
                   <option value="Endomarketing">Endomarketing</option>
@@ -181,6 +181,13 @@
                 >
               </label>
             </div>
+
+            <TurnstileWidget
+              ref="turnstileWidget"
+              class="contact-form__turnstile"
+              @verified="token => (turnstileToken = token)"
+              @expired="turnstileToken = ''"
+            />
 
             <!-- Submit error -->
             <div
@@ -246,12 +253,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
-import { useEmailJS } from '@/composables/useEmailJS'
+import TurnstileWidget from '@/components/forms/TurnstileWidget.vue'
+import { useMail } from '@/composables/useMail'
+import { useContactForm } from '@/composables/useContactForm'
 import { usePageMeta, useContact } from '@/composables'
 
 usePageMeta({
@@ -271,47 +280,37 @@ const whatsappHireUrl = computed(
 )
 
 // ── Form ───────────────────────────────────────────────────
-const { status, errorMsg, send, reset } = useEmailJS()
+const { status, errorMsg, send, reset } = useMail()
+const { form, errors, validate, clearForm } = useContactForm()
 
-const form = reactive({
-  name: '',
-  email: '',
-  subject: '',
-  message: '',
-})
-
-const errors = reactive({
-  name: '',
-  email: '',
-  subject: '',
-  message: '',
-})
-
-const validate = (): boolean => {
-  let valid = true
-
-  errors.name = form.name.trim() ? '' : 'Informe seu nome.'
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : 'Informe um e-mail válido.'
-  errors.subject = form.subject ? '' : 'Selecione um assunto.'
-  errors.message = form.message.trim().length >= 10 ? '' : 'A mensagem precisa ter pelo menos 10 caracteres.'
-
-  valid = !errors.name && !errors.email && !errors.subject && !errors.message
-  return valid
-}
+const turnstileToken = ref('')
+const turnstileWidget = ref<InstanceType<typeof TurnstileWidget> | null>(null)
 
 const handleSubmit = async () => {
   if (!validate()) return
 
-  const ok = await send({ ...form })
+  if (!turnstileToken.value) {
+    status.value = 'error'
+    errorMsg.value = 'Confirme que você não é um robô antes de enviar.'
+    return
+  }
+
+  const ok = await send(
+    { name: form.name, email: form.email, service: form.subject, message: form.message },
+    turnstileToken.value
+  )
   if (ok) {
-    Object.assign(form, { name: '', email: '', subject: '', message: '' })
+    clearForm()
+    turnstileToken.value = ''
+    turnstileWidget.value?.reset()
   }
 }
 
 const resetForm = () => {
   reset()
-  Object.assign(form, { name: '', email: '', subject: '', message: '' })
-  Object.assign(errors, { name: '', email: '', subject: '', message: '' })
+  turnstileToken.value = ''
+  turnstileWidget.value?.reset()
+  clearForm()
 }
 </script>
 
@@ -322,17 +321,17 @@ const resetForm = () => {
 .contact-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 4rem 0 5rem;
+  padding: var(--space-16) 0 var(--space-20);
 
   &__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 5rem;
+    gap: var(--space-20);
     align-items: start;
 
     @include respond-to(lg) {
       grid-template-columns: 1fr;
-      gap: 3rem;
+      gap: var(--space-12);
     }
   }
 
@@ -341,16 +340,16 @@ const resetForm = () => {
     display: flex;
     gap: 0.875rem;
     flex-wrap: wrap;
-    margin: 2rem 0 2.5rem;
+    margin: var(--space-8) 0 var(--space-10);
   }
 
   &__whatsapp {
-    background: #25d366;
-    border-color: #25d366;
+    background: var(--whatsapp);
+    border-color: var(--whatsapp);
 
     &:hover {
-      background: #1ebe59;
-      border-color: #1ebe59;
+      background: var(--whatsapp-dark);
+      border-color: var(--whatsapp-dark);
     }
 
     &-icon {
@@ -368,7 +367,7 @@ const resetForm = () => {
   &__item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     font-size: 0.9rem;
     color: var(--muted);
     text-decoration: none;
@@ -382,18 +381,18 @@ const resetForm = () => {
   &__icon {
     width: 32px;
     height: 32px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     background: var(--bg-alt);
     display: grid;
     place-items: center;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     flex-shrink: 0;
   }
 }
 
 // ── Form ───────────────────────────────────────────────────
 .contact-form {
-  padding: 2.5rem;
+  padding: var(--space-10);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -407,14 +406,14 @@ const resetForm = () => {
   }
 
   &__header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-8);
 
     h3 {
-      font-size: 1.2rem;
-      margin-bottom: 0.25rem;
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-1);
     }
     p {
-      font-size: 0.875rem;
+      font-size: var(--text-sm);
       color: var(--muted);
     }
   }
@@ -422,12 +421,16 @@ const resetForm = () => {
   &__fields {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
 
     @include respond-to(sm) {
       grid-template-columns: 1fr;
     }
+  }
+
+  &__turnstile {
+    margin-bottom: var(--space-4);
   }
 
   // ── Submit ─────────────────────────────────────────────────
@@ -436,7 +439,7 @@ const resetForm = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   // ── Field ──────────────────────────────────────────────────
@@ -446,7 +449,7 @@ const resetForm = () => {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239c8aad' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.875rem center;
-    padding-right: 2.5rem;
+    padding-right: var(--space-10);
   }
 
   textarea {
@@ -458,7 +461,7 @@ const resetForm = () => {
 // ── Dark CTA ───────────────────────────────────────────────
 .contact-alt-cta {
   background: var(--section-dark);
-  padding: 5rem 0;
+  padding: var(--space-20) 0;
   position: relative;
   overflow: hidden;
 
@@ -476,14 +479,14 @@ const resetForm = () => {
   &__inner {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 3rem;
+    gap: var(--space-12);
     align-items: center;
     position: relative;
     z-index: 1;
 
     h2 {
       color: var(--on-dark);
-      margin-bottom: 0.5rem;
+      margin-bottom: var(--space-2);
     }
     p {
       color: var(--on-dark-muted);
@@ -491,14 +494,14 @@ const resetForm = () => {
 
     @include respond-to(md) {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: var(--space-8);
     }
   }
 
   &__actions {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-3);
     flex-shrink: 0;
   }
 }

@@ -8,8 +8,8 @@
 .process-item {
   display: grid;
   grid-template-columns: 64px 1fr;
-  gap: 1.5rem;
-  padding: 2rem 0;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
   border-bottom: 1px solid var(--border);
 
   &:last-child {
@@ -20,7 +20,7 @@
 .process-item__number {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   border: 1.5px solid var(--border);
   display: grid;
   place-items: center;

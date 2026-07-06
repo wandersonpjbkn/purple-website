@@ -311,8 +311,8 @@ watch(
 
 .svc-subnav__pills {
   display: flex;
-  gap: 0.5rem;
-  padding: 0.75rem 0;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
   overflow-x: auto;
 }
 
@@ -509,7 +509,7 @@ watch(
       content: counter(step);
       width: 22px;
       height: 22px;
-      border-radius: 50%;
+      border-radius: var(--radius-pill);
       border: 1.5px solid var(--border);
       display: grid;
       place-items: center;

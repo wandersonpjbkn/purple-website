@@ -125,10 +125,10 @@ usePageMeta(
 .post-breadcrumb {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 0.8rem;
   color: var(--subtle);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
   flex-wrap: wrap;
 
   a {
@@ -142,12 +142,12 @@ usePageMeta(
 
 .author-hero {
   display: flex;
-  gap: 2.5rem;
+  gap: var(--space-10);
   align-items: flex-start;
 
   @include respond-to(sm) {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-6);
   }
 }
 
@@ -157,7 +157,7 @@ usePageMeta(
   color: var(--purple);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .author-hero__link {
@@ -165,7 +165,7 @@ usePageMeta(
 }
 
 .author-posts-header {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
   h2 {
     margin-bottom: 0;
   }
@@ -174,7 +174,7 @@ usePageMeta(
 .author-posts-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem 1.5rem;
+  gap: 1.75rem var(--space-6);
 
   @include respond-to(lg) {
     grid-template-columns: repeat(3, 1fr);
@@ -189,11 +189,11 @@ usePageMeta(
 
 .author-empty {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-6);
 
   p {
     color: var(--muted);

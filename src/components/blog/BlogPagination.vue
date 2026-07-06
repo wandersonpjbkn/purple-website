@@ -77,8 +77,8 @@ const displayedPages = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 3rem;
+  gap: var(--space-2);
+  margin-top: var(--space-12);
   flex-wrap: wrap;
 }
 
@@ -90,17 +90,17 @@ const displayedPages = computed(() => {
 
 .pagination-ellipsis {
   color: var(--subtle);
-  font-size: 0.875rem;
-  padding: 0 0.25rem;
+  font-size: var(--text-sm);
+  padding: 0 var(--space-1);
 }
 
 .pagination-btn {
   height: 40px;
-  padding: 0 1rem;
+  padding: 0 var(--space-4);
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--border);
   background: transparent;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;

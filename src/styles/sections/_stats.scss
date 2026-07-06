@@ -27,7 +27,7 @@
 // ── Panorama ───────────────────────────────────────────────
 .panorama-section {
   background: var(--section-dark);
-  padding: 5rem 0;
+  padding: var(--space-20) 0;
   position: relative;
   overflow: hidden;
 
@@ -67,7 +67,7 @@
   h2 {
     color: var(--on-dark);
     max-width: 20ch;
-    margin: 0 auto 1rem;
+    margin: 0 auto var(--space-4);
   }
   p {
     color: var(--on-dark-muted);
@@ -79,7 +79,7 @@
 .panorama-divider {
   border: none;
   border-top: 1px solid var(--on-dark-border);
-  margin: 3rem 0;
+  margin: var(--space-12) 0;
   position: relative;
   z-index: 1;
 }
@@ -87,7 +87,7 @@
 .panorama-context {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: var(--space-8);
   position: relative;
   z-index: 1;
 
@@ -98,21 +98,21 @@
 
 .panorama-context__item {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   align-items: flex-start;
 }
 
 .panorama-context__dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   background: var(--lime);
   flex-shrink: 0;
   margin-top: 0.35rem;
 }
 
 .panorama-context__text {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--on-dark-muted);
   line-height: 1.65;
 

@@ -21,20 +21,23 @@ Copie `.env.example` para `.env` e preencha os valores:
 cp .env.example .env
 ```
 
-| Variável                   | Uso                                                    |
-| -------------------------- | ------------------------------------------------------ |
-| `VITE_SITE_URL`            | URL canônica do site, usada em SEO/meta tags           |
-| `VITE_EMAILJS_SERVICE_ID`  | Envio do formulário de contato via EmailJS             |
-| `VITE_EMAILJS_TEMPLATE_ID` | Envio do formulário de contato via EmailJS             |
-| `VITE_EMAILJS_PUBLIC_KEY`  | Envio do formulário de contato via EmailJS             |
-| `VITE_GTM_ID`              | Google Tag Manager (só carrega após opt-in de cookies) |
-| `VITE_BASE_PHONE`          | Número de WhatsApp (formato internacional, só dígitos) |
-| `VITE_BASE_TEL`            | Telefone exibido na página de Contato                  |
-| `VITE_BASE_EMAIL`          | E-mail exibido na página de Contato                    |
-| `VITE_BASE_ADDRESS`        | Endereço exibido na página de Contato                  |
-| `VITE_CDN_URL`             | Base da CDN para imagens de blog/time                  |
+| Variável                  | Uso                                                               |
+| ------------------------- | ----------------------------------------------------------------- |
+| `VITE_SITE_URL`           | URL canônica do site, usada em SEO/meta tags                      |
+| `VITE_CONTACT_API_URL`    | URL do Cloudflare Worker que recebe o formulário de contato       |
+| `VITE_TURNSTILE_SITE_KEY` | Site key do widget Cloudflare Turnstile (anti-spam do formulário) |
+| `VITE_GTM_ID`             | Google Tag Manager (só carrega após opt-in de cookies)            |
+| `VITE_BASE_PHONE`         | Número de WhatsApp (formato internacional, só dígitos)            |
+| `VITE_BASE_TEL`           | Telefone exibido na página de Contato                             |
+| `VITE_BASE_EMAIL`         | E-mail exibido na página de Contato                               |
+| `VITE_BASE_ADDRESS`       | Endereço exibido na página de Contato                             |
+| `VITE_CDN_URL`            | Base da CDN para imagens de blog/time                             |
 
 O site sobe sem essas variáveis, mas contato, WhatsApp, imagens via CDN e analytics ficam degradados.
+
+O envio do formulário de contato depende também do Worker em `workers/mail/`
+(Cloudflare Worker + Resend) — ver [`ARCHITECTURE`](src/docs/ARCHITECTURE.md)
+para como configurá-lo e publicá-lo.
 
 ## Rodando o projeto
 

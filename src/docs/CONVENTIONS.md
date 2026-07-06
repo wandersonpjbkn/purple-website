@@ -64,6 +64,44 @@ Variações de uso único ou com estrutura diferente (ex.: o card `--featured` d
 Home, o card de projetos da Serviços) **não** forçam abstração — DRY vale quando a
 repetição é real e quase idêntica, não para unir coisas só parecidas.
 
+## SOLID ✅
+
+Não há classes neste código (Composition API + funções). Os cinco princípios
+ainda se aplicam, só que traduzidos para composables, componentes e tipos de
+prop:
+
+- **S — Responsabilidade única:** lógica pura (validação, formatação, cálculo)
+  vive num **composable testável**, não dentro do `<script setup>` de uma
+  página. Exemplos já seguidos: `useBlog` (filtro/paginação do blog),
+  `useMail` (envio ao Worker), `useContactForm` (validação do formulário de contato).
+  Um componente de página pode **orquestrar** vários composables, mas não deve
+  **conter** a lógica que poderia ser testada isoladamente.
+- **O — Aberto/fechado:** estender deve significar **adicionar**, não editar
+  código existente. Exemplos: novo ícone = nova entrada em
+  `components/ui/icons.ts` (nunca mexer em `BaseIcon.vue`); novo recurso de
+  markdown no blog = novo `replace` em `vite-plugin-blog.ts` (os passes
+  existentes não mudam).
+- **L — Substituição de Liskov:** variantes de um componente polimórfico
+  precisam honrar o mesmo contrato em todo call site. Ex.: `BaseButton` com
+  `tag="RouterLink"` sempre recebe `to`; com `tag="a"`, sempre `href` — nenhum
+  call site deve depender de um comportamento que só uma das variantes tem.
+- **I — Segregação de interface:** a prop de um componente só existe se o
+  próprio componente a usa. Prop declarada e nunca lida/repassada é sinal de
+  código morto (ver [Código morto](#código-morto-)) — foi o caso do `alt` que
+  existia em `BaseAvatar` sem nunca chegar a `AvImage`/`AvInitials`, removido.
+- **D — Inversão de dependência:** um módulo de alto nível não deve depender
+  direto de um detalhe de baixo nível — a dependência passa por uma
+  abstração local. Exemplo já seguido: `useMail` isola o `fetch()` ao Worker
+  de contato (`VITE_CONTACT_API_URL`) atrás de `{ status, errorMsg, send, reset }`;
+  `useTurnstile` isola o `window.turnstile` (script carregado via CDN) atrás de
+  `{ token, status, render, reset, remove }` — nenhuma página toca essas APIs de
+  baixo nível diretamente. **Não se aplica** ao acesso a `src/data/*.json` —
+  essa é a fonte única de conteúdo por decisão arquitetural (ver
+  [`CONTENT_MODEL`](CONTENT_MODEL.md)), não um detalhe de baixo nível a
+  inverter. **Não confundir com [DRY](#sem-duplicação-dry-)** (acima): DRY é
+  sobre não duplicar estrutura repetida; este "D" é sobre a direção da
+  dependência entre módulos — princípios diferentes, letra coincidente.
+
 ## Comentários ✅
 
 Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,

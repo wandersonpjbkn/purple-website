@@ -44,9 +44,10 @@ Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1
 **Forma/elevação:** `--radius-sm/md/lg/xl/pill`, `--shadow-sm/md/lg/glow`,
 `--container 1200px`, `--ease`, `--ease-out`.
 
-> ⚠️ Os tokens `--space-*` e `--text-*` existem ✅, mas a **aplicação ainda é
-> parcial** 🟡: muitos componentes usam `rem` cru. Não é regressão — é o nível
-> de migração atual. Novos estilos devem preferir os tokens.
+> ✅ Os tokens `--space-*` e `--text-*` existem e já cobrem todo valor cru que
+> coincidia exatamente com a escala. Os `rem` que restam no código são
+> one-offs legítimos sem correspondência na escala, não débito de migração.
+> Novos estilos devem preferir os tokens sempre que o valor existir na escala.
 
 ## Arquitetura SCSS ✅
 

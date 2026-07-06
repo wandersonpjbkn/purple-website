@@ -48,7 +48,7 @@ const hasError = ref(false)
   overflow: hidden;
   flex-shrink: 0;
 
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   border: 2px solid var(--border);
 
   background: linear-gradient(135deg, var(--purple-100), var(--lime-light));
@@ -78,7 +78,7 @@ const hasError = ref(false)
     ),
     md: (
       size: 40px,
-      font: 1rem,
+      font: var(--text-base),
     ),
     lg: (
       size: 72px,

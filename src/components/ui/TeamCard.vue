@@ -40,11 +40,11 @@ defineProps<{
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 2.5rem;
+  padding: var(--space-10);
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 .team-card-member__info {
@@ -58,12 +58,12 @@ defineProps<{
   }
 
   blockquote {
-    margin: 1rem 0 0;
-    padding: 1rem 1.25rem;
+    margin: var(--space-4) 0 0;
+    padding: var(--space-4) var(--space-5);
     background: var(--bg-alt);
     border-left: 3px solid var(--lime);
     border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     font-style: italic;
     color: var(--muted);
     line-height: 1.65;
@@ -76,6 +76,6 @@ defineProps<{
   color: var(--purple);
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 </style>

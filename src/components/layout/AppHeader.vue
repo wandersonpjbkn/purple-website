@@ -121,12 +121,12 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 0.75rem 0 1.25rem;
+  padding: var(--space-3) 0 var(--space-5);
   border-top: 1px solid var(--border-subtle);
 }
 
 .nav-mobile a {
-  padding: 0.75rem 0;
+  padding: var(--space-3) 0;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--muted);
@@ -136,7 +136,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 
 .nav-mobile a:last-child {
   border-bottom: none;
-  margin-top: 0.75rem;
+  margin-top: var(--space-3);
   text-align: center;
 }
 

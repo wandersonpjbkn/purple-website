@@ -302,16 +302,16 @@ const headings = computed(() => {
 .post-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 3rem 0 2.5rem;
+  padding: var(--space-12) 0 var(--space-10);
 }
 
 .post-breadcrumb {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 0.8rem;
   color: var(--subtle);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8);
   flex-wrap: wrap;
 
   a {
@@ -335,10 +335,10 @@ const headings = computed(() => {
 .post-hero__meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 0.82rem;
   color: var(--subtle);
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
   flex-wrap: wrap;
 }
 
@@ -363,21 +363,21 @@ const headings = computed(() => {
 
 .post-hero__inner h1 {
   font-size: clamp(1.8rem, 3.5vw, 3rem);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .post-hero__excerpt {
   font-size: 1.05rem;
   color: var(--muted);
   line-height: 1.7;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
   max-width: 65ch;
 }
 
 .post-hero__author {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
   color: var(--text);
   text-decoration: none;
 
@@ -406,7 +406,7 @@ const headings = computed(() => {
 .post-layout-grid {
   display: grid;
   grid-template-columns: 220px 1fr;
-  gap: 3rem;
+  gap: var(--space-12);
   align-items: start;
 
   @include respond-to(lg) {
@@ -420,7 +420,7 @@ const headings = computed(() => {
   top: 96px;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-5);
 
   @include respond-to(lg) {
     display: none;
@@ -433,21 +433,21 @@ const headings = computed(() => {
 
 // ── Prose ──────────────────────────────────────────────────
 .prose {
-  font-size: 1rem;
+  font-size: var(--text-base);
   line-height: 1.8;
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 2.5rem;
+  padding: var(--space-10);
   box-shadow: var(--shadow-sm);
   min-width: 0; // evita overflow em grid
 
   :deep(h2) {
-    font-size: 1.5rem;
+    font-size: var(--text-xl);
     font-weight: 700;
-    margin: 2.5rem 0 1rem;
-    padding-top: 2rem;
+    margin: var(--space-10) 0 var(--space-4);
+    padding-top: var(--space-8);
     border-top: 1px solid var(--border-subtle);
     color: var(--text);
     letter-spacing: -0.02em;
@@ -461,12 +461,12 @@ const headings = computed(() => {
   :deep(h3) {
     font-size: 1.15rem;
     font-weight: 700;
-    margin: 2rem 0 0.75rem;
+    margin: var(--space-8) 0 var(--space-3);
     color: var(--text);
   }
 
   :deep(p) {
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-5);
     color: var(--muted);
   }
   :deep(p:last-child) {
@@ -489,23 +489,23 @@ const headings = computed(() => {
 
   :deep(ul) {
     list-style: disc;
-    padding-left: 1.5rem;
-    margin-bottom: 1.25rem;
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-5);
   }
   :deep(ol) {
     list-style: decimal;
-    padding-left: 1.5rem;
-    margin-bottom: 1.25rem;
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-5);
   }
   :deep(li) {
     color: var(--muted);
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--space-2);
     line-height: 1.7;
   }
 
   :deep(blockquote) {
-    margin: 2rem 0;
-    padding: 1.25rem 1.5rem;
+    margin: var(--space-8) 0;
+    padding: var(--space-5) var(--space-6);
     background: var(--bg-alt);
     border-left: 4px solid var(--lime);
     border-radius: 0 var(--radius) var(--radius) 0;
@@ -527,13 +527,13 @@ const headings = computed(() => {
   :deep(pre) {
     background: var(--purple-900);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: var(--space-6);
     overflow-x: auto;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-6);
     code {
       background: none;
       color: #e8d5ff;
-      font-size: 0.875rem;
+      font-size: var(--text-sm);
       padding: 0;
     }
   }
@@ -541,18 +541,18 @@ const headings = computed(() => {
   :deep(table) {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-6);
     font-size: 0.9rem;
     th {
       background: var(--bg-alt);
-      padding: 0.75rem 1rem;
+      padding: var(--space-3) var(--space-4);
       text-align: left;
       font-weight: 700;
       color: var(--text);
       border-bottom: 2px solid var(--border);
     }
     td {
-      padding: 0.75rem 1rem;
+      padding: var(--space-3) var(--space-4);
       border-bottom: 1px solid var(--border-subtle);
       color: var(--muted);
     }
@@ -567,7 +567,7 @@ const headings = computed(() => {
   :deep(hr) {
     border: none;
     border-top: 1px solid var(--border);
-    margin: 2.5rem 0;
+    margin: var(--space-10) 0;
   }
 
   // Só imagens de conteúdo do markdown (filhas diretas de p/figure);
@@ -576,7 +576,7 @@ const headings = computed(() => {
   :deep(figure img) {
     width: 100%;
     border-radius: var(--radius-lg);
-    margin: 1.5rem 0;
+    margin: var(--space-6) 0;
   }
 }
 
@@ -587,9 +587,9 @@ const headings = computed(() => {
 
 .post-service-cta {
   display: flex;
-  gap: 1.25rem;
+  gap: var(--space-5);
   align-items: flex-start;
-  margin-top: 1.5rem;
+  margin-top: var(--space-6);
   padding: 1.75rem;
   background: var(--bg-alt);
   border: 1px solid var(--border);
@@ -614,7 +614,7 @@ const headings = computed(() => {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--lime-ink);
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-1);
   }
 
   h3 {
@@ -625,7 +625,7 @@ const headings = computed(() => {
   &__text {
     font-size: 0.9rem;
     color: var(--muted);
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--space-3);
   }
 }
 
@@ -637,18 +637,18 @@ const headings = computed(() => {
 
 .post-author-card {
   display: flex;
-  gap: 2rem;
+  gap: var(--space-8);
   align-items: flex-start;
 
   @include respond-to(sm) {
     flex-direction: column;
-    gap: 1.25rem;
+    gap: var(--space-5);
   }
 }
 
 .post-author-card__info {
   h3 {
-    font-size: 1.2rem;
+    font-size: var(--text-lg);
     margin-bottom: 0.2rem;
   }
 }
@@ -659,7 +659,7 @@ const headings = computed(() => {
   color: var(--purple);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 // ── Relacionados ───────────────────────────────────────────
@@ -667,8 +667,8 @@ const headings = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: var(--space-8);
+  margin-bottom: var(--space-8);
 
   h2 {
     margin-bottom: 0;

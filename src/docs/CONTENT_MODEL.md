@@ -54,7 +54,7 @@ garante que todo ícone referenciado existe no mapa.
 | **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                                                                               |
 | **Serviços**  | `/servicos`                                    | hero `services.intro` · catálogo `services.catalog` (âncoras `#id`) · planos `services.packages` · projetos `services.projects` · CTA                                                                                |
 | **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `team` (autores)                                                                                                                                                                              |
-| **Contato**   | `/contato`                                     | `useContact()` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                                                                  |
+| **Contato**   | `/contato`                                     | `useContact()` + WhatsApp (`VITE_BASE_PHONE`) + form (`useMail` + Turnstile → Worker → Resend)                                                                                                                       |
 
 Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
 

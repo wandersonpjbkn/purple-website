@@ -194,7 +194,7 @@ const author = computed(() => getAuthor(props.post.author))
 
 // ── Título ─────────────────────────────────────────────────
 .post-card__title {
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 700;
   line-height: 1.35;
   margin: 0;
@@ -210,7 +210,7 @@ const author = computed(() => getAuthor(props.post.author))
   font-size: 0.9rem;
   line-height: 1.65;
   color: var(--muted);
-  margin: 0.25rem 0 0;
+  margin: var(--space-1) 0 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -248,7 +248,7 @@ const author = computed(() => getAuthor(props.post.author))
     aspect-ratio: 4 / 3;
   }
   .post-card__title {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
 }
 
@@ -258,7 +258,7 @@ const author = computed(() => getAuthor(props.post.author))
 .post-card--featured {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: var(--space-8);
   align-items: start;
 
   .post-card__cover {
@@ -266,11 +266,11 @@ const author = computed(() => getAuthor(props.post.author))
   }
 
   .post-card__body {
-    padding: 0.25rem 0 0;
+    padding: var(--space-1) 0 0;
   }
 
   .post-card__title {
-    font-size: 1.5rem;
+    font-size: var(--text-xl);
     line-height: 1.22;
     font-weight: 800;
   }
@@ -279,7 +279,7 @@ const author = computed(() => getAuthor(props.post.author))
     grid-template-columns: 1fr;
 
     .post-card__title {
-      font-size: 1.2rem;
+      font-size: var(--text-lg);
     }
   }
 }
@@ -304,7 +304,7 @@ const author = computed(() => getAuthor(props.post.author))
   }
 
   .post-card__title {
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;

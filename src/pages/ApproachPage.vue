@@ -150,7 +150,7 @@ usePageMeta({
 .approach-pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: var(--space-6);
 
   @include respond-to(md) {
     grid-template-columns: 1fr;
@@ -160,8 +160,8 @@ usePageMeta({
 .differentials-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.25rem;
-  margin-top: 3rem;
+  gap: var(--space-5);
+  margin-top: var(--space-12);
 
   @include respond-to(md) {
     grid-template-columns: repeat(2, 1fr);

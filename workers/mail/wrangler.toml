@@ -1,0 +1,16 @@
+name = "purple-mail"
+main = "src/index.ts"
+compatibility_date = "2026-07-06"
+
+# Custom domain the front-end points to (VITE_CONTACT_API_URL).
+# Requires purplecomunicacao.com.br to already be on this Cloudflare account.
+routes = [{ pattern = "mail.purplecomunicacao.com.br", custom_domain = true }]
+
+# Non-secret config, safe to commit.
+[vars]
+ALLOWED_ORIGIN = "https://purplecomunicacao.com.br"
+ALLOWED_ORIGIN_WWW = "https://www.purplecomunicacao.com.br"
+
+# Secrets are NOT set here (this file is committed to git). Set them once via:
+#   wrangler secret put TURNSTILE_SECRET
+#   wrangler secret put RESEND_API_KEY

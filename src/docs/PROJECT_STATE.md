@@ -25,7 +25,7 @@
 - **Imagens:** slots prontos com fallback; arquivos a subir pela dupla — ver `IMAGES.md` (foto da Suelen, **logo definitivo** substituindo o placeholder em `src/assets/brand/logo-ppl.svg`, 2 fotos de seção).
 - **Redes sociais:** URLs de LinkedIn/Instagram no `footer.json` são **chutes plausíveis** — confirmar/corrigir com a dupla.
 - **Política de Privacidade:** `privacy.json` é **texto-base LGPD**; precisa de revisão jurídica antes do go-live.
-- **Go-live SEO:** robots segue `noindex, nofollow` (fonte única em `App.vue`) até decisão explícita de lançamento. Checklist do go-live: preencher fontes pendentes, subir imagens, configurar EmailJS (`index.html`), flipar robots + `public/robots.txt`.
+- **Go-live SEO:** robots segue `noindex, nofollow` (fonte única em `App.vue`) até decisão explícita de lançamento. Checklist do go-live: preencher fontes pendentes, subir imagens, publicar o Worker de contato (`wrangler deploy` + secrets `TURNSTILE_SECRET`/`RESEND_API_KEY` — ver `workers/mail/`) e configurar `VITE_TURNSTILE_SITE_KEY`, flipar robots + `public/robots.txt`.
 
 ## Nota de método
 
