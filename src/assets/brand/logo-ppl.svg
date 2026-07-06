@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 32" role="img" aria-label="ppl comunicação">
+  <!--
+    PLACEHOLDER do logotipo — substitua por src/assets/brand/logo-ppl.svg
+    definitivo (mesmas proporções ~170x32, fundo transparente). O <text> usa a
+    fonte da marca (Plus Jakarta Sans, carregada na página).
+  -->
+  <text x="0" y="25" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="26" letter-spacing="-1.2" fill="#8b2fcc">ppl</text>
+  <text x="44" y="25" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="26" fill="#9bb81f">.</text>
+  <text x="55" y="23" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="500" font-size="12" letter-spacing="0.4" fill="#6e6088">comunicação</text>
+</svg>

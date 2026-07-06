@@ -22,7 +22,7 @@ const DIST = join(process.cwd(), 'dist')
 const PORT = 4180
 
 // Rotas estáticas (as dinâmicas do blog ficam client-rendered).
-const ROUTES = ['/', '/sobre', '/abordagem', '/servicos', '/contato', '/blog']
+const ROUTES = ['/', '/sobre', '/abordagem', '/servicos', '/contato', '/blog', '/faq', '/privacidade']
 
 const MIME = {
   '.html': 'text/html',

@@ -285,6 +285,15 @@ const tick = () => {
 }
 
 onMounted(() => {
+  // Movimento reduzido: mostra a 1ª frase estática, sem animar o typewriter.
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  if (reduced) {
+    if (typewriterEl.value) {
+      typewriterEl.value.textContent = phrases[0] ?? ''
+      typewriterEl.value.classList.add('is-complete')
+    }
+    return
+  }
   timeoutId = setTimeout(tick, 600)
 })
 

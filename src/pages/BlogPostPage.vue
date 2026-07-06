@@ -62,10 +62,35 @@
           </aside>
 
           <!-- Corpo do post -->
-          <article class="prose" v-html="post.html" />
+          <div class="post-body">
+            <article class="prose" v-html="post.html" />
+
+            <!-- Convite contextual ao serviço relacionado ao tema -->
+            <aside v-if="relatedService" class="post-service-cta">
+              <span class="post-service-cta__icon"><BaseIcon :name="relatedService.icon" /></span>
+              <div class="post-service-cta__body">
+                <p class="post-service-cta__eyebrow">Como a Purple ajuda</p>
+                <h3>{{ relatedService.title }}</h3>
+                <p class="post-service-cta__text">{{ relatedService.summary }}</p>
+                <RouterLink class="text-link" :to="`/servicos#${relatedService.id}`">
+                  Ver esse serviço
+                </RouterLink>
+              </div>
+            </aside>
+          </div>
         </div>
       </BaseContainer>
     </section>
+
+    <!-- ── CTA de conversão ao fim do artigo ──────────── -->
+    <CtaBanner
+      eyebrow="Do conteúdo à prática"
+      title="Quer aplicar isso na sua empresa?"
+      description="A gente assume a execução da comunicação com o seu time — dos comunicados internos ao employer branding. Fale com um consultor ou conheça os serviços."
+      primary-label="Falar com um consultor"
+      secondary-to="/servicos"
+      secondary-label="Conhecer os serviços"
+    />
 
     <!-- ── Card do autor ──────────────────────────────── -->
     <section
@@ -128,10 +153,13 @@ import { getPost, posts } from 'virtual:blog-posts'
 import type { Post } from 'virtual:blog-posts'
 
 import { formatDate, getAuthor, usePageMeta } from '@/composables'
+import services from '@/data/services.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseIcon from '@/components/ui/BaseIcon.vue'
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
+import CtaBanner from '@/components/sections/CtaBanner.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 
 const route = useRoute()
@@ -156,6 +184,23 @@ usePageMeta(
     type: 'article' as const,
   })),
 )
+
+// Serviço relacionado ao tema do post (mapeado pela categoria) — convite
+// contextual à contratação, sem alterar o conteúdo editorial dos .md.
+const CATEGORY_TO_SERVICE: Record<string, string> = {
+  'Comunicação Interna': 'comunicacao-interna',
+  'Employer Branding': 'employer-branding',
+  Endomarketing: 'endomarketing',
+  'Cultura e Clima': 'diagnostico-cultura',
+  'Bem-estar': 'endomarketing',
+}
+
+const relatedService = computed(() => {
+  const cat = post.value?.category
+  if (!cat) return undefined
+  const id = CATEGORY_TO_SERVICE[cat]
+  return id ? services.catalog.find((s) => s.id === id) : undefined
+})
 
 // Posts relacionados
 const related = computed(() => {
@@ -466,6 +511,55 @@ const headings = computed(() => {
     width: 100%;
     border-radius: var(--radius-lg);
     margin: 1.5rem 0;
+  }
+}
+
+// ── Convite ao serviço relacionado ─────────────────────────
+.post-body {
+  min-width: 0;
+}
+
+.post-service-cta {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  padding: 1.75rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--lime);
+  border-radius: var(--radius-lg);
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    background: var(--purple-100);
+    color: var(--purple);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  &__eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--lime-ink);
+    margin-bottom: 0.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  &__text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
   }
 }
 

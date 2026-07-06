@@ -27,9 +27,9 @@ describe('ServicesPage', () => {
     })
   })
 
-  it('renderiza o catálogo completo com âncoras', () => {
-    const sections = wrapper.findAll('.service-detail')
-    expect(sections).toHaveLength(services.catalog.length)
+  it('renderiza o catálogo completo (cards expansíveis) com âncoras', () => {
+    const cards = wrapper.findAll('.svc-item')
+    expect(cards).toHaveLength(services.catalog.length)
     for (const service of services.catalog) {
       expect(wrapper.find(`#${service.id}`).exists()).toBe(true)
     }

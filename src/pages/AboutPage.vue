@@ -76,7 +76,7 @@
           v-for="stat in about.dataStats"
           :key="stat.number"
           class="data-stat-card"
-          style="background: var(--purple-900)"
+          style="background: var(--section-dark-2)"
         >
           <span class="data-stat-card__number">
             {{ stat.number }}<span>{{ stat.suffix }}</span>
@@ -139,7 +139,7 @@ usePageMeta({
 }
 
 .about-hero__manifesto {
-  background: var(--purple-900);
+  background: var(--section-dark);
   border-radius: var(--radius-xl);
   padding: 2.5rem;
   position: relative;
@@ -171,7 +171,7 @@ usePageMeta({
 }
 
 .about-data-section {
-  background: var(--purple-900);
+  background: var(--section-dark);
   padding: 5rem 0;
   position: relative;
   overflow: hidden;

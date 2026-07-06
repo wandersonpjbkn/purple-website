@@ -388,7 +388,7 @@ const resetForm = () => {
 
 // ── CTA dark ──────────────────────────────────────────────
 .contact-alt-cta {
-  background: var(--purple-900);
+  background: var(--section-dark);
   padding: 5rem 0;
   position: relative;
   overflow: hidden;

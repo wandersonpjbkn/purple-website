@@ -28,6 +28,13 @@ a {
   text-decoration: none;
 }
 
+// Foco visível consistente para navegação por teclado (a11y).
+:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 img,
 video {
   max-width: 100%;
@@ -49,4 +56,21 @@ ul,
 ol {
   list-style: none;
   padding: 0;
+}
+
+// Respeita a preferência de movimento reduzido: desliga animações decorativas
+// (typewriter, floats, pulse) e encurta transições/scroll suave.
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
