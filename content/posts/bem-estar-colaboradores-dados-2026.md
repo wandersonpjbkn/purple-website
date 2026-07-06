@@ -8,7 +8,7 @@ category: 'Bem-estar'
 tags: ['bem-estar', 'engajamento', 'saúde mental', 'dados', 'RH']
 readTime: 7
 featured: true
-cover: '/images/blog/post-4.jpg'
+cover: 'blog/post-4.jpg'
 ---
 
 ## O dado que mudou tudo

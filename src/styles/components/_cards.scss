@@ -47,9 +47,17 @@
     margin-bottom: 1.25rem;
   }
 
+  // Rodapé de links do card (ex.: "Pedir proposta" + "Ver detalhes").
+  &__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
   &--featured {
     grid-column: span 2;
-    background: var(--purple-900);
+    background: var(--section-dark);
     border-color: var(--on-dark-border);
     display: grid;
     grid-template-columns: 1fr auto;
@@ -69,7 +77,10 @@
     }
 
     .service-card__icon {
-      background: var(--on-dark-border);
+      // Ícone em lime sobre o tile translúcido escuro — antes herdava
+      // --text (escuro sobre escuro). Lime = "resultado/destaque".
+      background: rgba(var(--lime-rgb), 0.14);
+      color: var(--lime);
       width: 64px;
       height: 64px;
       border-radius: 20px;

@@ -215,16 +215,19 @@
     "items": [
       {
         "icon": "search",
+        "serviceId": "diagnostico-cultura",
         "title": "Diagnóstico de Cultura",
         "description": "Pesquisa interna, análise e relatório com recomendações práticas para orientar as próximas decisões."
       },
       {
         "icon": "handshake",
+        "serviceId": "endomarketing",
         "title": "Campanha de Endomarketing avulsa",
         "description": "Uma campanha completa, do conceito criativo à ativação, para um momento específico da empresa."
       },
       {
         "icon": "design",
+        "serviceId": "carreiras-portal",
         "title": "Página de Carreiras ou Portal do Colaborador",
         "description": "Projeto de UX/UI de ponta a ponta, da pesquisa ao design final pronto para desenvolvimento."
       }

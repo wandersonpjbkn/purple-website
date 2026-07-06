@@ -1,11 +1,10 @@
-[
-  {
+[{
     "slug": "suelen-fernanda",
     "name": "Suelen Fernanda",
     "role": "Marketing & Employer Branding",
     "bio": "No mercado de marketing digital desde 2011, e idealizadora da Purple. Atuou em agências, marketing interno e atendeu clientes de diversos segmentos. Especialista em ações focadas em pessoas colaboradoras.",
     "quote": "Foi nas ações focadas nas pessoas colaboradoras que encontrei minha verdadeira vocação.",
-    "avatar": "/images/team/suelen.jpg",
+    "avatar": "team/suelen.jpg",
     "linkedin": "https://linkedin.com/in/suelen-fernanda",
     "isAuthor": true,
     "isVisibleTeamMember": true
@@ -16,7 +15,7 @@
     "role": "UX Design & Estratégia",
     "bio": "Desenvolvedor web com vivências em experiência do usuário, e bacharel em Psicologia. Amante de Design, Business e Produto. Especialista em experiências digitais centradas em pessoas.",
     "quote": "As diversas vivências me ensinaram como é importante sempre se lembrar das pessoas em todos os processos.",
-    "avatar": "/images/team/wanderson.jpg",
+    "avatar": "team/wanderson.jpg",
     "linkedin": "https://www.linkedin.com/in/wandersonpj-bkn",
     "isAuthor": true,
     "isVisibleTeamMember": true

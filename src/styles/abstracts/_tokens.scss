@@ -9,38 +9,58 @@
   --purple-100: #f0e4fb;
   --purple-50: #faf5ff;
 
-  // ── Acento verde-limão ─────────────────────────────────
+  // ── Verde-limão (cor de marca co-titular do roxo) ──────
+  // Papel no sistema: "resultado / positivo / ação secundária".
+  // Contraste: --lime é claro demais para texto sobre branco (~1.6:1),
+  // por isso texto sobre fundo claro usa --lime-ink; --lime fica para
+  // preenchimentos, detalhes e ícones sobre fundo escuro.
   --lime: #c5e22e;
   --lime-dark: #9bb81f;
   --lime-light: #e8f79a;
+  // Verde escurecido o suficiente para texto/links sobre fundo claro (AA).
+  --lime-ink: #5f7213;
 
   // ── Canais RGB (para rgba() com opacidade variável) ────
   // Evita repetir os literais 139,47,204 / 197,226,46 em glows e overlays.
   --purple-rgb: 139, 47, 204;
   --lime-rgb: 197, 226, 46;
+  // Canal do --bg, para o blur translúcido do header/sub-nav sticky.
+  --bg-rgb: 247, 244, 252;
 
   // ── Texto/superfícies sobre fundo escuro ───────────────
+  // muted/subtle subidos para passar AA nas legendas sobre seções escuras.
   --on-dark: #ffffff;
-  --on-dark-strong: rgba(255, 255, 255, 0.85);
-  --on-dark-muted: rgba(255, 255, 255, 0.6);
-  --on-dark-subtle: rgba(255, 255, 255, 0.35);
-  --on-dark-surface: rgba(255, 255, 255, 0.05);
-  --on-dark-border: rgba(255, 255, 255, 0.08);
+  --on-dark-strong: rgba(255, 255, 255, 0.88);
+  --on-dark-muted: rgba(255, 255, 255, 0.74);
+  --on-dark-subtle: rgba(255, 255, 255, 0.55);
+  --on-dark-surface: rgba(255, 255, 255, 0.06);
+  --on-dark-border: rgba(255, 255, 255, 0.1);
 
   // ── Marca WhatsApp ─────────────────────────────────────
   --whatsapp: #25d366;
   --whatsapp-dark: #1ebe59;
 
   // ── Tipografia / texto ─────────────────────────────────
+  // muted/subtle escurecidos para passar AA sobre fundo claro
+  // (antes: --muted #6b5c7e ~5:1, --subtle #9c8aad ~3:1 falhava).
   --ink: #0f0618;
   --text: #1a0533;
-  --muted: #6b5c7e;
-  --subtle: #9c8aad;
+  --muted: #5c4f6f;
+  --subtle: #6e6088;
 
   // ── Superfícies ────────────────────────────────────────
+  // Fundo levemente mais quente/suave e superfície de cartão sem branco
+  // puro (#fff), reduzindo o glare e a alternância dura com as seções escuras.
   --surface: #ffffff;
-  --bg: #faf7fd;
-  --bg-alt: #f4eefb;
+  --surface-soft: #fbf9fe;
+  --bg: #f7f4fc;
+  --bg-alt: #f1eafa;
+
+  // Fundo padrão das seções escuras: roxo profundo, porém mais quente/claro
+  // que --purple-900 (#1a0533), para suavizar o contraste com as seções claras.
+  // --purple-900 fica reservado a acentos pontuais.
+  --section-dark: #241047;
+  --section-dark-2: #2d1556;
 
   // ── Bordas ─────────────────────────────────────────────
   --border: #e4d9f0;

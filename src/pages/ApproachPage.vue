@@ -1,14 +1,10 @@
 <template>
   <!-- ── Page Hero ──────────────────────────────────── -->
-  <section class="page-hero">
-    <BaseContainer>
-      <p class="section-eyebrow">Como atuamos</p>
-      <h1>Nossa abordagem</h1>
-      <p class="lead lead--narrow">
-        Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade.
-      </p>
-    </BaseContainer>
-  </section>
+  <PageHero
+    eyebrow="Como atuamos"
+    title="Nossa abordagem"
+    subtitle="Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade."
+  />
 
   <!-- ── Pilares da abordagem ───────────────────────── -->
   <section class="section-block section-block--alt">
@@ -26,12 +22,12 @@
   </section>
 
   <!-- ── Diferenciais (por que a Purple) ────────────── -->
-  <section class="section-block" style="background: var(--purple-900); border-radius: 0">
+  <section class="section-block section-block--dark">
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow section-eyebrow--lime">Por que a Purple</p>
-        <h2 style="color: var(--on-dark)">Uma comunicação saudável começa dentro</h2>
-        <p class="lead" style="color: var(--on-dark-muted); text-align: center">
+        <h2>Uma comunicação saudável começa dentro</h2>
+        <p class="lead lead--center">
           Acreditamos que uma comunicação eficaz é aquela que começa dentro para então ir para fora.
         </p>
       </div>
@@ -58,8 +54,9 @@
           <p class="lead">
             Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.
           </p>
-          <div style="margin-top: 2rem">
+          <div class="button-row">
             <BaseButton tag="RouterLink" to="/contato">Quero começar</BaseButton>
+            <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver nossos serviços</BaseButton>
           </div>
         </div>
         <div class="process-list">
@@ -75,21 +72,48 @@
     </BaseContainer>
   </section>
 
+  <!-- ── Ponte para os serviços (evita beco sem saída) ── -->
+  <section class="section-block section-block--alt">
+    <BaseContainer>
+      <div class="section-header section-header--center">
+        <p class="section-eyebrow">Da abordagem à prática</p>
+        <h2>É assim que a abordagem vira entrega</h2>
+        <p class="lead lead--narrow lead--center">
+          O processo acima se materializa em serviços concretos. Veja por onde a Purple pode começar com a sua empresa.
+        </p>
+      </div>
+      <div class="services-grid">
+        <ServiceTeaserCard v-for="service in bridgeServices" :key="service.id" :service="service" />
+      </div>
+      <div class="button-row button-row--center">
+        <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
+      </div>
+    </BaseContainer>
+  </section>
+
   <!-- ── CTA ────────────────────────────────────────── -->
   <CtaBanner
     title="Vamos entender o seu contexto?"
     description="Cada estratégia começa por ouvir. Conte o seu desafio e construímos o caminho junto com o seu time."
+    secondary-to="/servicos"
+    secondary-label="Conhecer os serviços"
   />
 </template>
 
 <script setup lang="ts">
 import { usePageMeta } from '@/composables'
 import approach from '@/data/approach.json'
+import services from '@/data/services.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import ServiceTeaserCard from '@/components/ui/ServiceTeaserCard.vue'
 import FeaturePillar from '@/components/ui/FeaturePillar.vue'
+import PageHero from '@/components/sections/PageHero.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
+
+// Ponte para Serviços: os 3 serviços "porta de entrada" (camada prática).
+const bridgeServices = services.catalog.slice(0, 3)
 
 usePageMeta({
   title: 'Abordagem',

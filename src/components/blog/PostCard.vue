@@ -2,7 +2,7 @@
   <article class="post-card" :class="`post-card--${variant}`">
     <!-- Cover -->
     <RouterLink :to="`/blog/${post.slug}`" class="post-card__cover" tabindex="-1" aria-hidden="true">
-      <img v-if="post.cover" :src="post.cover" :alt="post.title" loading="lazy" />
+      <img v-if="post.cover" :src="useCdnAsset(post.cover)" :alt="post.title" loading="lazy" />
       <div v-else class="post-card__cover-placeholder">
         <span class="post-card__cover-letter">{{ post.category.charAt(0) }}</span>
       </div>
@@ -52,6 +52,7 @@ import { RouterLink } from 'vue-router'
 import type { Post } from 'virtual:blog-posts'
 
 import { formatDate, getAuthor } from '@/composables/useBlog'
+import { useCdnAsset } from '@/composables'
 
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 

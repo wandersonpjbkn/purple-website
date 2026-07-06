@@ -4,19 +4,7 @@
       <div class="site-header__inner">
         <!-- Logo / Brand -->
         <RouterLink to="/" class="brand" aria-label="Purple Comunicação — Home">
-          <!-- Logo em imagem quando o arquivo existir (ver src/docs/IMAGES.md);
-               enquanto isso, o wordmark textual segue como fallback. -->
-          <img
-            v-if="!logoFailed"
-            :src="LOGO_SRC"
-            alt="ppl comunicação"
-            class="brand__logo"
-            @error="logoFailed = true"
-          />
-          <template v-else>
-            <span class="brand__ppl">ppl</span><span class="brand__dot">.</span
-            ><span class="brand__sub">comunicação</span>
-          </template>
+          <BrandLogo />
         </RouterLink>
 
         <!-- Nav desktop -->
@@ -32,14 +20,20 @@
         <!-- CTA -->
         <BaseButton tag="RouterLink" to="/contato">Vamos conversar</BaseButton>
 
-        <!-- Hamburger mobile (visual only — conectar lógica de menu se necessário) -->
-        <button class="nav-toggle" aria-label="Abrir menu" @click="mobileOpen = !mobileOpen">
+        <!-- Hamburger mobile -->
+        <button
+          class="nav-toggle"
+          :aria-label="mobileOpen ? 'Fechar menu' : 'Abrir menu'"
+          :aria-expanded="mobileOpen"
+          aria-controls="mobile-nav"
+          @click="mobileOpen = !mobileOpen"
+        >
           <span></span><span></span><span></span>
         </button>
       </div>
 
       <!-- Mobile nav -->
-      <nav v-if="mobileOpen" class="nav-mobile" aria-label="Navegação mobile">
+      <nav v-if="mobileOpen" id="mobile-nav" class="nav-mobile" aria-label="Navegação mobile">
         <RouterLink to="/" @click="mobileOpen = false">Home</RouterLink>
         <RouterLink to="/sobre" @click="mobileOpen = false">Sobre nós</RouterLink>
         <RouterLink to="/abordagem" @click="mobileOpen = false">Abordagem</RouterLink>
@@ -58,13 +52,10 @@ import { RouterLink } from 'vue-router'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BrandLogo from '@/components/ui/BrandLogo.vue'
 
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
-// Caminho público do logo (binding dinâmico: o Vite não exige o arquivo no
-// build). Sem o arquivo, o onError devolve o wordmark textual.
-const LOGO_SRC = '/images/brand/logo-ppl.svg'
-const logoFailed = ref(false)
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 24
@@ -77,44 +68,11 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 <style scoped>
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 0;
+  align-items: center;
   text-decoration: none;
   line-height: 1;
-}
-
-.brand__ppl {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  font-size: 1.35rem;
-  color: var(--purple);
-  letter-spacing: -0.04em;
-}
-
-.brand__dot {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  font-size: 1.35rem;
-  color: var(--lime-dark);
-  margin-left: 1px;
-}
-
-.brand__sub {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.72rem;
-  color: var(--subtle);
-  letter-spacing: 0.04em;
-  margin-left: 6px;
-  text-transform: lowercase;
-  align-self: center;
-}
-
-/* Para quando o logo imagem for inserido */
-.brand__logo {
-  height: 32px;
-  width: auto;
-  display: block;
+  /* Altura do logo consumida pelo BrandLogo (var --brand-logo-height). */
+  --brand-logo-height: 32px;
 }
 
 /* Nav toggle (mobile) */

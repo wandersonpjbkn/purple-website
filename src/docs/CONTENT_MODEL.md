@@ -28,7 +28,7 @@ Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
 - **`approach.json`** — `pillars[]`, `differentials[]`, `process` (`steps[]`); fonte única da página Abordagem.
 - **`about.json`** — `title`, `intro`, `helpTitle`, `helpText`, `image`/`imageAlt` (slot de foto — ver `IMAGES.md`), `dataStats[]`.
 - **`contact.json`** — `title`, `subtitle`, `phone`, `email`, `address` (usado por Contato e rodapé).
-- **`footer.json`** — `aboutText`, `topics[]` (a chave `newsletterTitle` saiu junto com o bloco de newsletter).
+- **`footer.json`** — `aboutText`, `topics[]`, `social[]` (`{ label, icon, url }` — LinkedIn/Instagram no rodapé).
 - **`home.json`** — copy da Home:
   - `hero`: `eyebrow`, `titlePrefix` (com `<em>` de destaque), `rotating[]` (typewriter), `subtitle`, CTAs, `stats[]` (`{ value, sign, label, source }` — sinal renderiza em lime) e `card` (`{ label, value, sign, sub, barWidth, tags[], source }`).
   - `highlight` (inclui `image`/`imageAlt` — slot de foto), `cta`.
@@ -36,7 +36,9 @@ Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
   - `intro` (hero da página), `homeTeaser` (seção da Home);
   - `catalog[7]` — formato rico por serviço: `id` (âncora `/servicos#id`), `icon`, `title`, `tagline`, `summary` (cards/teaser), `description`, `benefits[]`, `process[]`, `featured` (exatamente 1 = card destacado da Home);
   - `packages` — 3 planos recorrentes (`audience`, `summary`, `includes[]`, `featured`), `priceLabel: "Sob consulta"` (**sem preços publicados — decisão de produto**), `ctaLabel`;
-  - `projects` — 3 projetos pontuais.
+  - `projects` — 3 projetos pontuais (cada um com `serviceId`, âncora para o card do catálogo).
+- **`faq.json`** — `eyebrow`, `title`, `subtitle`, `items[]` (`{ question, answer }`); consumido por `FaqSection` (página `/faq` e seção na Serviços).
+- **`privacy.json`** — `updatedAt`, `intro`, `sections[]` (`{ title, paragraphs[] }`); política LGPD (**texto-base, pendente de revisão jurídica** — ver `PROJECT_STATE`).
 
 Ícones em dados são **nomes semânticos** (`target`, `megaphone`…), renderizados
 por `BaseIcon` a partir do mapa `src/components/ui/icons.ts` — não emojis (ver
@@ -55,6 +57,11 @@ garante que todo ícone referenciado existe no mapa.
 | **Contato**   | `/contato`                                     | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                                                                     |
 
 Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
+
+Além das 6 do menu, há páginas institucionais no rodapé — **FAQ** (`/faq` ←
+`faq.json`) e **Privacidade** (`/privacidade` ← `privacy.json`) — e uma
+**404** (`NotFoundPage`, catch-all). Cada post do blog ganhou um CTA de conversão
+(`CtaBanner`) + convite ao serviço relacionado (mapa categoria→`services.catalog`).
 
 > A "filosofia/processo" segue consolidada na **Abordagem**; a página de
 > Serviços é oferta (catálogo + planos + projetos), por decisão registrada em

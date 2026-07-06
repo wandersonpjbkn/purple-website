@@ -162,8 +162,7 @@
             target="_blank"
             rel="noopener noreferrer"
             variant="secondary"
-            class="button--lg"
-            style="color: var(--on-dark); border-color: rgba(255, 255, 255, 0.25)"
+            class="button--lg on-dark"
           >
             Contratar um serviço
           </BaseButton>
@@ -388,7 +387,7 @@ const resetForm = () => {
 
 // ── CTA dark ──────────────────────────────────────────────
 .contact-alt-cta {
-  background: var(--purple-900);
+  background: var(--section-dark);
   padding: 5rem 0;
   position: relative;
   overflow: hidden;

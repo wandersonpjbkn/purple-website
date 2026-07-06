@@ -37,13 +37,19 @@ withDefaults(
     transform: translateY(-2px);
   }
 
-  // ── Variante dark (ServicesPage diferenciais) ───────────
+  // ── Variante dark (Abordagem "Por que a Purple") ────────
   &--dark {
     background: var(--on-dark-surface);
     border-color: var(--on-dark-border);
 
     &:hover {
       background: var(--on-dark-border);
+    }
+
+    // Ícone em lime sobre fundo escuro — antes herdava --text (escuro
+    // sobre escuro). Lime é cor de marca co-titular, usada aqui como destaque.
+    .feature-pillar__icon {
+      color: var(--lime);
     }
 
     h3 {
@@ -59,6 +65,8 @@ withDefaults(
   font-size: 1.75rem;
   margin-bottom: 1rem;
   display: block;
+  // Contexto claro (default): ícone em roxo da marca.
+  color: var(--purple);
 }
 
 h3 {

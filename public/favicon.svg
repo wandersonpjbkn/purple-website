@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Purple Comunicação">
+  <rect width="32" height="32" rx="8" fill="#8b2fcc"/>
+  <text x="16" y="22" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="800" font-size="18" fill="#ffffff">p</text>
+  <circle cx="23" cy="20" r="2.4" fill="#c5e22e"/>
+</svg>

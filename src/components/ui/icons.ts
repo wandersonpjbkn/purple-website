@@ -69,6 +69,13 @@ export const ICONS: Record<string, IconDef> = {
       'M10 22h4',
     ],
   },
+  instagram: {
+    paths: [
+      'M17 2H7a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5Z',
+      'M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z',
+      'M17.5 6.5h.01',
+    ],
+  },
   linkedin: {
     fill: true,
     paths: [

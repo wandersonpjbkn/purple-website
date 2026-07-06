@@ -20,6 +20,26 @@
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
   }
+
+  // Superfície branca com borda superior (destaca a seção do fundo da página).
+  &--surface {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  // Seção escura: fundo + contexto de texto on-dark para os filhos, evitando
+  // repetir cor inline em h2/lead/p dentro de cada seção escura.
+  &--dark {
+    background: var(--section-dark);
+
+    h2 {
+      color: var(--on-dark);
+    }
+    .lead,
+    > .container > p {
+      color: var(--on-dark-muted);
+    }
+  }
 }
 
 // ── Section header ─────────────────────────────────────────
@@ -31,6 +51,39 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  // Espaçamento inferior menor, para headers coladas ao conteúdo seguinte.
+  &--tight {
+    margin-bottom: 2.5rem;
+  }
+}
+
+// ── Linha de ações (botões) ────────────────────────────────
+// Padrão repetido: um ou mais botões abaixo de um bloco de texto.
+.button-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-8);
+
+  &--center {
+    justify-content: center;
+  }
+}
+
+// ── Cabeçalho de seção em linha (título à esquerda, link à direita) ──
+// Repetido na Home (blog) e no BlogPost (relacionados).
+.section-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-8);
+  margin-bottom: var(--space-10);
+
+  h2 {
+    margin-bottom: 0;
   }
 }
 

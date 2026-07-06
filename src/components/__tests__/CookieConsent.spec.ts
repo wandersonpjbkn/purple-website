@@ -5,10 +5,14 @@ import { createPinia, setActivePinia } from 'pinia'
 import CookieConsent from '@/components/layout/CookieConsent.vue'
 import { useConsentStore } from '@/stores/consent'
 
+// RouterLink é usado no banner ("Saiba mais" → /privacidade); stub simples
+// evita precisar de um router real no teste unitário.
+const routerStub = { RouterLink: { template: '<a><slot /></a>' } }
+
 function mountBanner() {
   const pinia = createPinia()
   setActivePinia(pinia)
-  return mount(CookieConsent, { global: { plugins: [pinia] } })
+  return mount(CookieConsent, { global: { plugins: [pinia], stubs: routerStub } })
 }
 
 describe('CookieConsent (banner LGPD)', () => {
@@ -49,7 +53,7 @@ describe('CookieConsent (banner LGPD)', () => {
     setActivePinia(pinia)
     useConsentStore().rejectAnalytics()
 
-    const wrapper = mount(CookieConsent, { global: { plugins: [pinia] } })
+    const wrapper = mount(CookieConsent, { global: { plugins: [pinia], stubs: routerStub } })
     expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
   })
 })

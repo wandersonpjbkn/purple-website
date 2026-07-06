@@ -6,7 +6,7 @@
 }
 
 .cta-banner__box {
-  background: var(--purple-900);
+  background: var(--section-dark);
   border-radius: var(--radius-xl);
   padding: 4rem;
   display: grid;
@@ -69,6 +69,11 @@
   position: relative;
   z-index: 1;
   flex-shrink: 0;
+}
+
+.cta-banner__whatsapp {
+  color: var(--on-dark-muted);
+  font-size: var(--text-sm);
 }
 
 // ── Contact grid ───────────────────────────────────────────

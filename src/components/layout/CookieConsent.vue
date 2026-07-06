@@ -11,6 +11,7 @@
         <p class="cookie-consent__text">
           Usamos cookies de <strong>análise</strong> (Google Tag Manager) para entender como o site é usado e
           melhorá-lo. Os cookies essenciais ao funcionamento são sempre ativos. Você decide sobre os de análise.
+          <RouterLink to="/privacidade" class="cookie-consent__link">Saiba mais</RouterLink>.
         </p>
         <div class="cookie-consent__actions">
           <BaseButton variant="secondary" @click="reject">Recusar análise</BaseButton>
@@ -23,6 +24,7 @@
 
 <script setup lang="ts">
 import { useGtm } from '@gtm-support/vue-gtm'
+import { RouterLink } from 'vue-router'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useConsentStore } from '@/stores/consent'
@@ -80,6 +82,13 @@ const reject = () => {
   strong {
     color: var(--text);
   }
+}
+
+.cookie-consent__link {
+  color: var(--purple);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .cookie-consent__actions {

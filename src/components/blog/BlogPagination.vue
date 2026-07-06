@@ -6,7 +6,7 @@
       aria-label="Página anterior"
       @click="$emit('change', page - 1)"
     >
-      ← Anterior
+      Anterior
     </button>
 
     <div class="pagination-pages">
@@ -31,7 +31,7 @@
       aria-label="Próxima página"
       @click="$emit('change', page + 1)"
     >
-      Próxima →
+      Próxima
     </button>
   </nav>
 </template>
