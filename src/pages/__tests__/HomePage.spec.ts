@@ -31,7 +31,7 @@ describe('HomePage', () => {
     expect(wrapper.find('.hero__title').text()).toContain('Empresas que')
     const stats = wrapper.findAll('.hero__stat-number')
     expect(stats).toHaveLength(home.hero.stats.length)
-    expect(wrapper.findAll('.hero__stat-sign').map((s) => s.text())).toEqual(home.hero.stats.map((s) => s.sign))
+    expect(wrapper.findAll('.hero__stat-sign').map(s => s.text())).toEqual(home.hero.stats.map(s => s.sign))
   })
 
   it('renderiza o card visual com valor + sinal e as tags', () => {

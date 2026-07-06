@@ -1,16 +1,26 @@
 <template>
-  <section class="faq-section" :class="{ 'faq-section--alt': alt }">
+  <section
+    class="faq-section"
+    :class="{ 'faq-section--alt': alt }"
+  >
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow">{{ faq.eyebrow }}</p>
         <h2>{{ title || faq.title }}</h2>
-        <p v-if="faq.subtitle" class="lead lead--narrow lead--center faq-section__subtitle">
+        <p
+          v-if="faq.subtitle"
+          class="lead lead--narrow lead--center faq-section__subtitle"
+        >
           {{ faq.subtitle }}
         </p>
       </div>
 
       <ul class="faq-list">
-        <li v-for="(item, i) in faq.items" :key="item.question" class="faq-item">
+        <li
+          v-for="(item, i) in faq.items"
+          :key="item.question"
+          class="faq-item"
+        >
           <h3 class="faq-item__q">
             <button
               :id="`faq-trigger-${i}`"
@@ -21,7 +31,10 @@
               @click="toggle(i)"
             >
               <span>{{ item.question }}</span>
-              <span class="faq-item__chevron" aria-hidden="true"></span>
+              <span
+                class="faq-item__chevron"
+                aria-hidden="true"
+              ></span>
             </button>
           </h3>
           <div
@@ -46,12 +59,10 @@ import BaseContainer from '@/components/ui/BaseContainer.vue'
 
 withDefaults(
   defineProps<{
-    /** Sobrescreve o título vindo do JSON (ex.: em página vs. seção). */
     title?: string
-    /** Fundo alternativo (--bg-alt) quando embutido em outra página. */
     alt?: boolean
   }>(),
-  { title: '', alt: false },
+  { title: '', alt: false }
 )
 
 // Acordeão de item único aberto por vez; -1 = todos fechados.

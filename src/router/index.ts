@@ -5,10 +5,17 @@ import { blogRoutes } from './modules/blog'
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [...baseRoutes, ...blogRoutes],
+  routes: [
+    ...baseRoutes,
+    ...blogRoutes,
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/pages/NotFoundPage.vue'),
+    },
+  ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition
-    // Âncoras (ex.: /servicos#endomarketing) rolam até a seção do serviço.
     if (to.hash) return { el: to.hash, top: 96, behavior: 'smooth' }
     return { top: 0, behavior: 'smooth' }
   },

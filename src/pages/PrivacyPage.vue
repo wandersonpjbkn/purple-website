@@ -13,13 +13,26 @@
         <div class="privacy-doc">
           <p class="privacy-intro">{{ privacy.intro }}</p>
 
-          <section v-for="block in privacy.sections" :key="block.title" class="privacy-block">
+          <section
+            v-for="block in privacy.sections"
+            :key="block.title"
+            class="privacy-block"
+          >
             <h2>{{ block.title }}</h2>
-            <p v-for="(para, i) in block.paragraphs" :key="i">{{ para }}</p>
+            <p
+              v-for="(para, i) in block.paragraphs"
+              :key="i"
+            >
+              {{ para }}
+            </p>
           </section>
 
           <p class="privacy-contact">
-            <RouterLink class="text-link" to="/contato">Falar com a Purple sobre privacidade</RouterLink>
+            <RouterLink
+              class="text-link"
+              to="/contato"
+              >Falar com a Purple sobre privacidade</RouterLink
+            >
           </p>
         </div>
       </BaseContainer>

@@ -34,7 +34,7 @@ export const usePageMeta = (options: MaybeRefOrGetter<PageMetaOptions>) => {
   const resolved = computed<PageMetaOptions>(() => toValue(options))
 
   const fullTitle = computed(() =>
-    resolved.value.title === SITE.name ? SITE.name : `${resolved.value.title} | ${SITE.name}`,
+    resolved.value.title === SITE.name ? SITE.name : `${resolved.value.title} | ${SITE.name}`
   )
 
   const image = computed(() => {

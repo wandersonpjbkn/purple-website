@@ -1,6 +1,6 @@
 <template>
   <div class="blog-page">
-    <!-- ── Hero: título + busca ──────────────────────── -->
+    <!-- ── Hero: title + search ─────────────────────────── -->
     <section class="blog-hero">
       <BaseContainer>
         <div class="blog-hero__inner">
@@ -30,13 +30,17 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Categorias (sticky) ───────────────────────── -->
+    <!-- ── Categories (sticky) ──────────────────────────── -->
     <div class="blog-categories-bar">
       <BaseContainer>
-        <nav class="blog-filter-pills" aria-label="Filtrar por categoria">
+        <nav
+          class="blog-filter-pills"
+          aria-label="Filtrar por categoria"
+        >
           <button
             class="filter-pill"
             :class="{ active: !activeCategory }"
+            :aria-pressed="!activeCategory"
             @click="((activeCategory = ''), watchReset())"
           >
             Todos
@@ -46,6 +50,7 @@
             :key="category"
             class="filter-pill"
             :class="{ active: activeCategory === category }"
+            :aria-pressed="activeCategory === category"
             @click="((activeCategory = category), watchReset())"
           >
             {{ category }}
@@ -54,60 +59,121 @@
       </BaseContainer>
     </div>
 
-    <section v-if="query" class="blog-section">
+    <section
+      v-if="query"
+      class="blog-section"
+    >
       <BaseContainer>
         <div class="blog-section__header">
           <h2 class="blog-section__title">
             {{ total }} {{ total === 1 ? 'resultado' : 'resultados' }} para "<em>{{ query }}</em
             >"
           </h2>
-          <button class="filter-clear" @click="((query = ''), watchReset())">Limpar</button>
+          <button
+            class="filter-clear"
+            @click="((query = ''), watchReset())"
+          >
+            Limpar
+          </button>
         </div>
 
-        <div v-if="paginated.length" class="blog-grid blog-grid--4">
-          <PostCard v-for="post in paginated" :key="post.slug" :post="post" variant="grid" />
+        <div
+          v-if="paginated.length"
+          class="blog-grid blog-grid--4"
+        >
+          <PostCard
+            v-for="post in paginated"
+            :key="post.slug"
+            :post="post"
+            variant="grid"
+          />
         </div>
 
-        <div v-else class="blog-empty">
+        <div
+          v-else
+          class="blog-empty"
+        >
           <p>Nenhum post encontrado.</p>
-          <BaseButton variant="secondary" @click="query = ''">Ver todos</BaseButton>
+          <BaseButton
+            variant="secondary"
+            @click="query = ''"
+            >Ver todos</BaseButton
+          >
         </div>
 
-        <BlogPagination v-if="totalPages > 1" :page="page" :total-pages="totalPages" @change="setPage" />
+        <BlogPagination
+          v-if="totalPages > 1"
+          :page="page"
+          :total-pages="totalPages"
+          @change="setPage"
+        />
       </BaseContainer>
     </section>
 
     <template v-else>
-      <!-- ── Seção filtrada por categoria ─────────────── -->
-      <section v-if="activeCategory" class="blog-section">
+      <!-- ── Section filtered by category ─────────────────── -->
+      <section
+        v-if="activeCategory"
+        class="blog-section"
+      >
         <BaseContainer>
           <div class="blog-section__header">
             <h2 class="blog-section__title">{{ activeCategory }}</h2>
-            <button class="filter-clear" @click="((activeCategory = ''), watchReset())">← Todas as categorias</button>
+            <button
+              class="filter-clear"
+              @click="((activeCategory = ''), watchReset())"
+            >
+              ← Todas as categorias
+            </button>
           </div>
-          <div v-if="filteredByCat.length" class="blog-grid blog-grid--4">
-            <PostCard v-for="post in filteredByCat" :key="post.slug" :post="post" variant="grid" />
+          <div
+            v-if="filteredByCat.length"
+            class="blog-grid blog-grid--4"
+          >
+            <PostCard
+              v-for="post in filteredByCat"
+              :key="post.slug"
+              :post="post"
+              variant="grid"
+            />
           </div>
-          <div v-else class="blog-empty">
+          <div
+            v-else
+            class="blog-empty"
+          >
             <p>Nenhum post nessa categoria ainda.</p>
           </div>
         </BaseContainer>
       </section>
 
-      <!-- ── Seção: Recentes ──────────────────────────── -->
-      <section v-else class="blog-section">
+      <!-- ── Section: Recent ───────────────────────────────── -->
+      <section
+        v-else
+        class="blog-section"
+      >
         <BaseContainer>
           <div class="blog-section__header">
             <h2 class="blog-section__title">Recentes</h2>
           </div>
 
-          <!-- Layout: destaque lateral + grid -->
-          <div v-if="recentPosts.length" class="blog-recent">
-            <!-- Post em destaque (primeiro) -->
-            <PostCard v-if="recentPosts[0]" :post="recentPosts[0]" variant="featured" class="blog-recent__featured" />
+          <!-- Layout: side highlight + grid -->
+          <div
+            v-if="recentPosts.length"
+            class="blog-recent"
+          >
+            <!-- Featured post (first) -->
+            <PostCard
+              v-if="recentPosts[0]"
+              :post="recentPosts[0]"
+              variant="featured"
+              class="blog-recent__featured"
+            />
 
-            <!-- Grid 4 colunas com os demais -->
-            <div v-if="recentPosts.length > 1" class="blog-grid blog-grid--4 blog-recent__grid">
+            <!-- 4-column grid with the rest -->
+            <div
+              v-if="recentPosts.length > 1"
+              class="blog-grid blog-grid--4 blog-recent__grid"
+            >
               <PostCard
                 v-for="post in recentPosts.slice(1, visibleLimit)"
                 :key="post.slug"
@@ -116,14 +182,21 @@
               />
             </div>
 
-            <div v-if="hasMore" class="blog-load-more">
-              <BaseButton variant="secondary" @click="loadMore">Carregar mais</BaseButton>
+            <div
+              v-if="hasMore"
+              class="blog-load-more"
+            >
+              <BaseButton
+                variant="secondary"
+                @click="loadMore"
+                >Carregar mais</BaseButton
+              >
             </div>
           </div>
         </BaseContainer>
       </section>
 
-      <!-- ── Seções por categoria ──────────────────────── -->
+      <!-- ── Sections by category ─────────────────────────── -->
       <template v-if="!activeCategory">
         <section
           v-for="{ category, posts: catPosts } in categoryGroups"
@@ -133,11 +206,21 @@
           <BaseContainer>
             <div class="blog-section__header">
               <h2 class="blog-section__title">{{ category }}</h2>
-              <button class="filter-clear" @click="((activeCategory = category), watchReset())">Ver todos →</button>
+              <button
+                class="filter-clear"
+                @click="((activeCategory = category), watchReset())"
+              >
+                Ver todos →
+              </button>
             </div>
 
             <div class="blog-grid blog-grid--4">
-              <PostCard v-for="post in catPosts" :key="post.slug" :post="post" variant="grid" />
+              <PostCard
+                v-for="post in catPosts"
+                :key="post.slug"
+                :post="post"
+                variant="grid"
+              />
             </div>
           </BaseContainer>
         </section>
@@ -171,12 +254,12 @@ const { query, activeCategory, page, paginated, total, totalPages, categories, s
   perPage: 12,
 })
 
-// Aplica filtro de URL
+// Applies the URL filter
 if (route.query.categoria) {
   activeCategory.value = decodeURIComponent(route.query.categoria as string)
 }
 
-// ── Recentes com "carregar mais" ──────────────────────────
+// ── Recent posts with "load more" ─────────────────────────
 const INITIAL_LIMIT = 8
 const visibleLimit = ref(INITIAL_LIMIT)
 const recentPosts = computed(() => allPosts.slice(0, visibleLimit.value + 1))
@@ -185,19 +268,19 @@ const loadMore = () => {
   visibleLimit.value += 8
 }
 
-// ── Posts filtrados quando categoria está ativa ───────────
+// ── Posts filtered when a category is active ──────────────
 const filteredByCat = computed(() =>
-  allPosts.filter((p: Post) => p.category.toLowerCase() === activeCategory.value.toLowerCase()),
+  allPosts.filter((p: Post) => p.category.toLowerCase() === activeCategory.value.toLowerCase())
 )
 
-// ── Grupos por categoria (máx 4 por grupo) ────────────────
+// ── Groups by category (max 4 per group) ───────────────────
 const categoryGroups = computed(() =>
   categories
     .map(({ category }: CategoryCount) => ({
       category,
       posts: allPosts.filter((p: Post) => p.category === category).slice(0, 4),
     }))
-    .filter((g: { category: string; posts: Post[] }) => g.posts.length > 0),
+    .filter((g: { category: string; posts: Post[] }) => g.posts.length > 0)
 )
 </script>
 
@@ -285,7 +368,7 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Barra de categorias ────────────────────────────────────
+// ── Categories bar ─────────────────────────────────────────
 .blog-categories-bar {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -324,7 +407,7 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Seções ─────────────────────────────────────────────────
+// ── Sections ───────────────────────────────────────────────
 .blog-section {
   padding: 3rem 0;
 
@@ -388,7 +471,7 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Recentes: destaque em cima + grid embaixo ──────────────
+// ── Recent: featured on top + grid below ───────────────────
 .blog-recent {
 }
 
@@ -401,13 +484,13 @@ const categoryGroups = computed(() =>
 .blog-recent__grid {
 }
 
-// ── Carregar mais ──────────────────────────────────────────
+// ── Load more ──────────────────────────────────────────────
 .blog-load-more {
   margin-top: 2.5rem;
   text-align: center;
 }
 
-// ── Estado vazio ───────────────────────────────────────────
+// ── Empty state ────────────────────────────────────────────
 .blog-empty {
   text-align: center;
   padding: 4rem 2rem;

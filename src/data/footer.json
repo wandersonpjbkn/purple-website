@@ -11,5 +11,14 @@
       "icon": "instagram",
       "url": "https://www.instagram.com/purplecomunicacao"
     }
+  ],
+  "legal": [{
+      "name": "Perguntas frequentes",
+      "to": "/faq"
+    },
+    {
+      "name": "Política de Privacidade",
+      "to": "/privacidade"
+    }
   ]
 }

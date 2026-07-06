@@ -17,7 +17,7 @@ export const formatDate = (iso: string): string => {
 }
 
 export const getAuthor = (slug: string): TeamMember | undefined => {
-  return (team as TeamMember[]).find((member) => member.slug === slug)
+  return (team as TeamMember[]).find(member => member.slug === slug)
 }
 
 // ── Composable principal ──────────────────────────────────
@@ -40,7 +40,7 @@ export const useBlog = (options?: { initialCategory?: Ref<string>; initialQuery?
         (p: Post) =>
           p.title.toLowerCase().includes(q) ||
           p.excerpt.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q),
+          p.category.toLowerCase().includes(q)
       )
     }
 

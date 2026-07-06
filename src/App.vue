@@ -1,6 +1,10 @@
 <template>
   <div class="app-shell">
-    <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+    <a
+      class="skip-link"
+      href="#main-content"
+      >Pular para o conteúdo</a
+    >
     <AppHeader />
     <main id="main-content">
       <RouterView />
@@ -25,7 +29,6 @@ useHead({
 </script>
 
 <style scoped>
-/* Skip-link: oculto até receber foco por teclado. */
 .skip-link {
   position: fixed;
   top: 0.5rem;

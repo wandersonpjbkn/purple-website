@@ -1,7 +1,18 @@
 <template>
-  <span class="avatar" :class="`avatar--${size}`">
-    <AvImage v-if="src && !hasError" :name="name" :src="src" @error="hasError = true" />
-    <AvInitials v-else :name="name" />
+  <span
+    class="avatar"
+    :class="`avatar--${size}`"
+  >
+    <AvImage
+      v-if="src && !hasError"
+      :name="name"
+      :src="src"
+      @error="hasError = true"
+    />
+    <AvInitials
+      v-else
+      :name="name"
+    />
   </span>
 </template>
 
@@ -15,23 +26,21 @@ withDefaults(
   defineProps<{
     name: string
     src?: string
-    alt?: string
     size?: 'sm' | 'md' | 'lg' | 'xl'
   }>(),
   {
     src: '',
-    alt: '',
     size: 'md',
-  },
+  }
 )
 
 const hasError = ref(false)
 </script>
 
 <style scoped lang="scss">
-// Estilo do avatar mora aqui (não num global frouxo), então é autoritativo e
-// não é sobrescrito por scoped de página. `:deep()` alcança o <img> (AvImage) e
-// o .avatar__initial (AvInitials), que vivem em outros escopos.
+// The avatar's style lives here (not in a loose global), so it's authoritative
+// and isn't overridden by a page's scoped styles. `:deep()` reaches the <img>
+// (AvImage) and .avatar__initial (AvInitials), which live in other scopes.
 .avatar {
   display: grid;
   place-items: center;

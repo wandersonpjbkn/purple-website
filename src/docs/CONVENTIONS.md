@@ -6,13 +6,13 @@
 
 ## Idioma ✅
 
-**Código em inglês; conteúdo e comentários em português.**
+**Código e comentários em inglês; conteúdo em português.**
 
 - **Inglês:** nomes de variáveis/funções/arquivos, chaves de JSON, mensagens de
-  commit, nomes de branch, identificadores em geral.
+  commit, nomes de branch, identificadores em geral e **os comentários de
+  código** (ver regra de quando comentar em [Comentários](#comentários-)).
 - **Português:** o que é **informação/conteúdo** exibido ou redigido para humanos
-  — copy do site, valores de conteúdo no `src/data/*.json`, posts do blog, **os
-  comentários de código** (explicam o "porquê" para a dupla, como esta doc) e
+  — copy do site, valores de conteúdo no `src/data/*.json`, posts do blog e
   **esta documentação**.
 
 ## JavaScript / TypeScript ✅
@@ -68,11 +68,17 @@ repetição é real e quase idêntica, não para unir coisas só parecidas.
 
 Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,
 contexto não óbvio, armadilha), não o **o quê** (que o código já diz). Em testes,
-comentar só quando ajuda.
+comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)).
+
+## Código morto ✅
+
+Código, dado ou trecho de documentação sem uso é **removido ao ser encontrado**
+— não se mantém "só porque pode ser útil depois". Só permanece se houver um
+comentário explícito justificando por que precisa ficar (ex.: `// keep: ...`).
 
 ## Dados ✅
 
 `src/data/*.json` é a fonte de dados estáticos, **fragmentada por domínio**
-(`team`, `panorama`, `contact`, `approach`, `about`, `footer`, `home`,
-`services`) — sem um arquivo "site" genérico. Toda afirmação factual carrega
-`source` (ver [`CONTENT_MODEL`](CONTENT_MODEL.md)).
+(`team`, `panorama`, `approach`, `about`, `footer`, `home`, `services`, `pages`)
+— sem um arquivo "site" genérico. Toda afirmação factual carrega `source` (ver
+[`CONTENT_MODEL`](CONTENT_MODEL.md)).

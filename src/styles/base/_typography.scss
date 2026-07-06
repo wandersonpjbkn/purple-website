@@ -67,7 +67,6 @@ p {
 .section-eyebrow {
   @include eyebrow;
 
-  // Variante para uso sobre fundo escuro (cor de destaque limão).
   &--lime {
     color: var(--lime);
   }
@@ -82,7 +81,6 @@ p {
   color: var(--purple);
   transition: gap 0.15s var(--ease);
 
-  // Variante para uso sobre fundo escuro (cor de destaque limão).
   &--lime {
     color: var(--lime);
   }

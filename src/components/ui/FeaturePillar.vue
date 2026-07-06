@@ -1,5 +1,8 @@
 <template>
-  <div class="feature-pillar" :class="{ 'feature-pillar--dark': dark }">
+  <div
+    class="feature-pillar"
+    :class="{ 'feature-pillar--dark': dark }"
+  >
     <span class="feature-pillar__icon"><BaseIcon :name="icon" /></span>
     <h3>{{ title }}</h3>
     <p>{{ description }}</p>
@@ -16,7 +19,7 @@ withDefaults(
     description: string
     dark?: boolean
   }>(),
-  { dark: false },
+  { dark: false }
 )
 </script>
 
@@ -46,8 +49,6 @@ withDefaults(
       background: var(--on-dark-border);
     }
 
-    // Ícone em lime sobre fundo escuro — antes herdava --text (escuro
-    // sobre escuro). Lime é cor de marca co-titular, usada aqui como destaque.
     .feature-pillar__icon {
       color: var(--lime);
     }
@@ -65,7 +66,6 @@ withDefaults(
   font-size: 1.75rem;
   margin-bottom: 1rem;
   display: block;
-  // Contexto claro (default): ícone em roxo da marca.
   color: var(--purple);
 }
 

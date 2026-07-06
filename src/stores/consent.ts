@@ -1,14 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-/**
- * Consentimento LGPD — autoral e local.
- *
- * Sem biblioteca de terceiros: o estado mora num store Pinia persistido em
- * localStorage (via pinia-plugin-persistedstate). Hoje há uma única categoria
- * opcional — `analytics` (gateia o GTM). A categoria "necessário" é implícita e
- * sempre ativa (não há cookies necessários hoje além do próprio consentimento).
- */
 export type ConsentChoice = 'unset' | 'accepted' | 'rejected'
 
 export const useConsentStore = defineStore(
@@ -42,5 +34,5 @@ export const useConsentStore = defineStore(
   },
   {
     persist: true,
-  },
+  }
 )

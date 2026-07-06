@@ -29,7 +29,7 @@ describe('CookieConsent (banner LGPD)', () => {
     const wrapper = mountBanner()
     const store = useConsentStore()
 
-    const accept = wrapper.findAll('button').find((b) => b.text().includes('Aceitar'))
+    const accept = wrapper.findAll('button').find(b => b.text().includes('Aceitar'))
     await accept!.trigger('click')
 
     expect(store.analyticsGranted).toBe(true)
@@ -40,7 +40,7 @@ describe('CookieConsent (banner LGPD)', () => {
     const wrapper = mountBanner()
     const store = useConsentStore()
 
-    const reject = wrapper.findAll('button').find((b) => b.text().includes('Recusar'))
+    const reject = wrapper.findAll('button').find(b => b.text().includes('Recusar'))
     await reject!.trigger('click')
 
     expect(store.decided).toBe(true)

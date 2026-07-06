@@ -101,7 +101,7 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 
 **sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
 `AppFooter` · **ui/** (+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`,
-`BlogPagination`, `BlogSidebar`.
+`BlogPagination`.
 
 ## Stat grid canônico ✅
 
@@ -109,9 +109,10 @@ Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usa
 **um** padrão: o layout `.stat-grid` em `src/styles/sections/_stats.scss`
 (`--stat-cols`, hairline de 1px via `gap` + `--on-dark-border`; modificador
 `--cols-3`) e o card é o componente **`StatCard.vue`** (dono do estilo `.stat-card`
-+ `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
-(panorama, `--cols-3`) e na Sobre (dados). Os antigos
-`.panorama-card*`/`.data-stat-card*`/`.stats-band*` foram removidos.
+
+- `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
+  (panorama, `--cols-3`) e na Sobre (dados). Os antigos
+  `.panorama-card*`/`.data-stat-card*`/`.stats-band*` foram removidos.
 
 ## Números com valor + sinal em lime ✅ (convenção de exibição)
 

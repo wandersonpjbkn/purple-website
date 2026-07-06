@@ -3,7 +3,10 @@
     <!-- ── Hero ──────────────────────────────────────── -->
     <section class="post-hero">
       <BaseContainer>
-        <nav class="post-breadcrumb" aria-label="Navegação">
+        <nav
+          class="post-breadcrumb"
+          aria-label="Navegação"
+        >
           <RouterLink to="/blog">Blog</RouterLink>
           <span aria-hidden="true">›</span>
           <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`">
@@ -15,20 +18,37 @@
 
         <div class="post-hero__inner">
           <div class="post-hero__meta">
-            <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`" class="post-category-badge">{{
-              post.category
-            }}</RouterLink>
-            <span class="post-hero__sep" aria-hidden="true">·</span>
+            <RouterLink
+              :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
+              class="post-category-badge"
+              >{{ post.category }}</RouterLink
+            >
+            <span
+              class="post-hero__sep"
+              aria-hidden="true"
+              >·</span
+            >
             <time :datetime="post.date">{{ formatDate(post.date) }}</time>
-            <span class="post-hero__sep" aria-hidden="true">·</span>
+            <span
+              class="post-hero__sep"
+              aria-hidden="true"
+              >·</span
+            >
             <span>{{ post.readTime }} min de leitura</span>
           </div>
 
           <h1>{{ post.title }}</h1>
           <p class="post-hero__excerpt">{{ post.excerpt }}</p>
 
-          <RouterLink v-if="author" :to="`/blog/autor/${post.author}`" class="post-hero__author">
-            <BaseAvatar :name="author.name" size="md" />
+          <RouterLink
+            v-if="author"
+            :to="`/blog/autor/${post.author}`"
+            class="post-hero__author"
+          >
+            <BaseAvatar
+              :name="author.name"
+              size="md"
+            />
             <div>
               <strong>{{ author.name }}</strong>
               <span>{{ author.role }}</span>
@@ -43,36 +63,60 @@
       <BaseContainer>
         <div class="post-layout-grid">
           <!-- Sumário lateral -->
-          <aside class="post-toc" aria-label="Sumário do artigo">
-            <div v-if="headings.length" class="sidebar-box">
+          <aside
+            class="post-toc"
+            aria-label="Sumário do artigo"
+          >
+            <div
+              v-if="headings.length"
+              class="sidebar-box"
+            >
               <h3>Neste artigo</h3>
               <ul>
-                <li v-for="h in headings" :key="h.id">
-                  <a :href="`#${h.id}`" :class="{ 'toc-h3': h.level === 3 }">{{ h.text }}</a>
+                <li
+                  v-for="h in headings"
+                  :key="h.id"
+                >
+                  <a
+                    :href="`#${h.id}`"
+                    :class="{ 'toc-h3': h.level === 3 }"
+                    >{{ h.text }}</a
+                  >
                 </li>
               </ul>
             </div>
 
             <div class="sidebar-box">
               <h3>Categoria</h3>
-              <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`" class="sidebar-category-link">{{
-                post.category
-              }}</RouterLink>
+              <RouterLink
+                :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
+                class="sidebar-category-link"
+                >{{ post.category }}</RouterLink
+              >
             </div>
           </aside>
 
           <!-- Corpo do post -->
           <div class="post-body">
-            <article class="prose" v-html="post.html" />
+            <article
+              class="prose"
+              v-html="post.html"
+            />
 
             <!-- Convite contextual ao serviço relacionado ao tema -->
-            <aside v-if="relatedService" class="post-service-cta">
+            <aside
+              v-if="relatedService"
+              class="post-service-cta"
+            >
               <span class="post-service-cta__icon"><BaseIcon :name="relatedService.icon" /></span>
               <div class="post-service-cta__body">
                 <p class="post-service-cta__eyebrow">Como a Purple ajuda</p>
                 <h3>{{ relatedService.title }}</h3>
                 <p class="post-service-cta__text">{{ relatedService.summary }}</p>
-                <RouterLink class="text-link" :to="`/servicos#${relatedService.id}`">
+                <RouterLink
+                  class="text-link"
+                  :to="`/servicos#${relatedService.id}`"
+                >
                   Ver esse serviço
                 </RouterLink>
               </div>
@@ -93,45 +137,75 @@
     />
 
     <!-- ── Card do autor ──────────────────────────────── -->
-    <section v-if="author" class="section-block section-block--sm post-author-section">
+    <section
+      v-if="author"
+      class="section-block section-block--sm post-author-section"
+    >
       <BaseContainer>
         <div class="post-author-card">
-          <BaseAvatar :name="author.name" size="lg" />
+          <BaseAvatar
+            :name="author.name"
+            size="lg"
+          />
           <div class="post-author-card__info">
             <p class="section-eyebrow">Escrito por</p>
             <h3>{{ author.name }}</h3>
             <p class="post-author-card__role">{{ author.role }}</p>
             <p>{{ author.bio }}</p>
-            <RouterLink :to="`/blog/autor/${post.author}`" class="text-link"> Ver todos os posts </RouterLink>
+            <RouterLink
+              :to="`/blog/autor/${post.author}`"
+              class="text-link"
+            >
+              Ver todos os posts
+            </RouterLink>
           </div>
         </div>
       </BaseContainer>
     </section>
 
     <!-- ── Posts relacionados ────────────────────────── -->
-    <section v-if="related.length" class="section-block section-block--surface">
+    <section
+      v-if="related.length"
+      class="section-block section-block--surface"
+    >
       <BaseContainer>
         <div class="post-related-header">
           <div>
             <p class="section-eyebrow">Continue lendo</p>
             <h2>Você também pode gostar</h2>
           </div>
-          <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
+          <RouterLink
+            class="text-link"
+            to="/blog"
+            >Ver todos</RouterLink
+          >
         </div>
         <div class="post-related-grid">
-          <PostCard v-for="p in related" :key="p.slug" :post="p" variant="grid" />
+          <PostCard
+            v-for="p in related"
+            :key="p.slug"
+            :post="p"
+            variant="grid"
+          />
         </div>
       </BaseContainer>
     </section>
   </div>
 
   <!-- 404 -->
-  <section v-else class="section-block">
+  <section
+    v-else
+    class="section-block"
+  >
     <BaseContainer>
       <h1>Post não encontrado</h1>
       <p>O post que você está procurando não existe ou foi removido.</p>
       <div class="button-row">
-        <BaseButton tag="RouterLink" to="/blog">← Voltar para o blog</BaseButton>
+        <BaseButton
+          tag="RouterLink"
+          to="/blog"
+          >← Voltar para o blog</BaseButton
+        >
       </div>
     </BaseContainer>
   </section>
@@ -174,7 +248,7 @@ usePageMeta(
     title: post.value?.title ?? 'Post',
     description: post.value?.excerpt ?? '',
     type: 'article' as const,
-  })),
+  }))
 )
 
 // Serviço relacionado ao tema do post (mapeado pela categoria) — convite
@@ -191,7 +265,7 @@ const relatedService = computed(() => {
   const cat = post.value?.category
   if (!cat) return undefined
   const id = CATEGORY_TO_SERVICE[cat]
-  return id ? services.catalog.find((s) => s.id === id) : undefined
+  return id ? services.catalog.find(s => s.id === id) : undefined
 })
 
 // Posts relacionados

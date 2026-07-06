@@ -8,9 +8,23 @@
           O link pode estar quebrado ou a página foi movida. Mas a conversa continua — veja por onde seguir.
         </p>
         <div class="notfound__actions">
-          <BaseButton tag="RouterLink" to="/">Voltar para a Home</BaseButton>
-          <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver serviços</BaseButton>
-          <BaseButton tag="RouterLink" to="/blog" variant="ghost">Ir para o blog</BaseButton>
+          <BaseButton
+            tag="RouterLink"
+            to="/"
+            >Voltar para a Home</BaseButton
+          >
+          <BaseButton
+            tag="RouterLink"
+            to="/servicos"
+            variant="secondary"
+            >Ver serviços</BaseButton
+          >
+          <BaseButton
+            tag="RouterLink"
+            to="/blog"
+            variant="ghost"
+            >Ir para o blog</BaseButton
+          >
         </div>
       </div>
     </BaseContainer>

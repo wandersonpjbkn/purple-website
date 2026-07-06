@@ -1,24 +1,38 @@
 <template>
-  <header class="site-header" :class="{ scrolled: isScrolled }">
+  <header
+    class="site-header"
+    :class="{ scrolled: isScrolled }"
+  >
     <BaseContainer>
       <div class="site-header__inner">
         <!-- Logo / Brand -->
-        <RouterLink to="/" class="brand" aria-label="Purple Comunicação — Home">
+        <RouterLink
+          to="/"
+          class="brand"
+          aria-label="Purple Comunicação — Home"
+        >
           <BrandLogo />
         </RouterLink>
 
         <!-- Nav desktop -->
-        <nav class="nav" aria-label="Navegação principal">
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/sobre">Sobre nós</RouterLink>
-          <RouterLink to="/abordagem">Abordagem</RouterLink>
-          <RouterLink to="/servicos">Serviços</RouterLink>
-          <RouterLink to="/blog">Blog</RouterLink>
-          <RouterLink to="/contato">Contato</RouterLink>
+        <nav
+          class="nav"
+          aria-label="Navegação principal"
+        >
+          <RouterLink
+            v-for="(route, index) in pages"
+            :key="index"
+            :to="route.to"
+            >{{ route.name }}</RouterLink
+          >
         </nav>
 
         <!-- CTA -->
-        <BaseButton tag="RouterLink" to="/contato">Vamos conversar</BaseButton>
+        <BaseButton
+          tag="RouterLink"
+          to="/contato"
+          >Vamos conversar</BaseButton
+        >
 
         <!-- Hamburger mobile -->
         <button
@@ -33,14 +47,19 @@
       </div>
 
       <!-- Mobile nav -->
-      <nav v-if="mobileOpen" id="mobile-nav" class="nav-mobile" aria-label="Navegação mobile">
-        <RouterLink to="/" @click="mobileOpen = false">Home</RouterLink>
-        <RouterLink to="/sobre" @click="mobileOpen = false">Sobre nós</RouterLink>
-        <RouterLink to="/abordagem" @click="mobileOpen = false">Abordagem</RouterLink>
-        <RouterLink to="/servicos" @click="mobileOpen = false">Serviços</RouterLink>
-        <RouterLink to="/blog" @click="mobileOpen = false">Blog</RouterLink>
-        <RouterLink to="/contato" @click="mobileOpen = false">Contato</RouterLink>
-        <BaseButton tag="RouterLink" to="/contato" @click="mobileOpen = false">Vamos conversar</BaseButton>
+      <nav
+        v-if="mobileOpen"
+        id="mobile-nav"
+        class="nav-mobile"
+        aria-label="Navegação mobile"
+      >
+        <RouterLink
+          v-for="(route, index) in pages"
+          :key="index"
+          :to="route.to"
+          @click="mobileOpen = false"
+          >{{ route.name }}</RouterLink
+        >
       </nav>
     </BaseContainer>
   </header>
@@ -49,6 +68,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+
+import pages from '@/data/pages.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

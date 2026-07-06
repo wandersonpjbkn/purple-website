@@ -1,34 +1,37 @@
 <template>
-  <!--
-    Card de estatística sobre fundo escuro (número + sufixo + label [+ body] +
-    fonte). Vive dentro de um `.stat-grid` (layout hairline, em _stats.scss),
-    reusado pela Home (panorama) e pela Sobre (dados de mercado).
-  -->
-  <div class="stat-card" :class="{ 'stat-card--highlight': highlight }">
-    <span class="stat-card__number">{{ number }}<span v-if="suffix">{{ suffix }}</span></span>
+  <div
+    class="stat-card"
+    :class="{ 'stat-card--highlight': highlight }"
+  >
+    <span class="stat-card__number"
+      >{{ number }}<span v-if="suffix">{{ suffix }}</span></span
+    >
     <p class="stat-card__label">{{ label }}</p>
-    <p v-if="body" class="stat-card__body">{{ body }}</p>
-    <span v-if="source" class="stat-card__source">{{ source }}</span>
+    <p
+      v-if="body"
+      class="stat-card__body"
+    >
+      {{ body }}
+    </p>
+    <span
+      v-if="source"
+      class="stat-card__source"
+      >{{ source }}</span
+    >
   </div>
 </template>
 
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    /** Valor principal (ex.: "86"). */
     number: string | number
-    /** Sinal/sufixo renderizado em lime (ex.: "%", "x"). */
     suffix?: string
-    /** Descrição curta do dado. */
     label: string
-    /** Texto de contexto opcional (ex.: comparação do panorama). */
     body?: string
-    /** Fonte do dado (compromisso editorial). */
     source?: string
-    /** Destaca a célula (dado-chave). */
     highlight?: boolean
   }>(),
-  { suffix: '', body: '', source: '', highlight: false },
+  { suffix: '', body: '', source: '', highlight: false }
 )
 </script>
 
@@ -42,7 +45,6 @@ withDefaults(
   align-items: center;
   gap: var(--space-2);
 
-  // Célula destacada (ex.: o dado-chave do panorama).
   &--highlight {
     background: rgba(var(--lime-rgb), 0.08);
   }
@@ -54,7 +56,6 @@ withDefaults(
     line-height: 1;
     letter-spacing: -0.03em;
 
-    // Convenção de marca: valor em texto padrão, sinal/sufixo em lime.
     span {
       color: var(--lime);
     }

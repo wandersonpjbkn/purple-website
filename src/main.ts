@@ -22,9 +22,6 @@ app.use(head)
 app.use(router)
 
 // ── GTM condicionado ao consentimento (LGPD) ──────────────
-// Registramos o plugin sempre, mas `enabled` parte do consentimento já
-// persistido: o <script> do GTM só carrega se o usuário já optou por análise.
-// O opt-in em runtime é feito pelo CookieConsent via useGtm().enable(true).
 const gtmId = import.meta.env.VITE_GTM_ID
 if (gtmId) {
   const consent = useConsentStore(pinia)
@@ -35,7 +32,7 @@ if (gtmId) {
       loadScript: true,
       vueRouter: router,
       defer: true,
-    }),
+    })
   )
 }
 

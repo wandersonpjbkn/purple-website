@@ -34,11 +34,23 @@
             negócio todos os dias.
           </p>
           <div class="button-row">
-            <BaseButton tag="RouterLink" to="/servicos">Ver nossos serviços</BaseButton>
-            <BaseButton tag="RouterLink" to="/contato" variant="secondary">Falar com a Purple</BaseButton>
+            <BaseButton
+              tag="RouterLink"
+              to="/servicos"
+              >Ver nossos serviços</BaseButton
+            >
+            <BaseButton
+              tag="RouterLink"
+              to="/contato"
+              variant="secondary"
+              >Falar com a Purple</BaseButton
+            >
           </div>
         </div>
-        <MediaBlock :src="about.image" :alt="about.imageAlt" />
+        <MediaBlock
+          :src="about.image"
+          :alt="about.imageAlt"
+        />
       </div>
     </BaseContainer>
   </section>
@@ -55,7 +67,11 @@
         </p>
       </div>
       <div class="team-grid">
-        <TeamCard v-for="member in team" :key="member.name" :member="member" />
+        <TeamCard
+          v-for="member in team"
+          :key="member.name"
+          :member="member"
+        />
       </div>
     </BaseContainer>
   </section>

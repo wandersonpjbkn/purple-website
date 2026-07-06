@@ -30,9 +30,9 @@ src/
     sections/        CtaBanner, FaqSection, PageHero
     ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
-    blog/            PostCard, BlogPagination, BlogSidebar
-  composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)
-  data/              team, panorama, contact, approach, about, footer, home, services, faq, privacy (.json)
+    blog/            PostCard, BlogPagination
+  composables/       usePageMeta, useBlog, useCdnAsset, useContact (reexport em index.ts) · useEmailJS (import direto)
+  data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss

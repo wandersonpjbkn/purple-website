@@ -64,8 +64,6 @@
     color: var(--text);
   }
 
-  // Variante secundária sobre fundo escuro (usar junto de variant="secondary").
-  // Declarada por último para vencer o `.secondary` por ordem (mesma specificity).
   &.on-dark {
     background: transparent;
     color: var(--on-dark);

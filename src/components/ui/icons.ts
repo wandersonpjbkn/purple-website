@@ -11,9 +11,7 @@
  * renaming an entry here is a content-facing change.
  */
 export interface IconDef {
-  /** SVG path `d` attributes, drawn in order. */
   paths: string[]
-  /** Solid glyph rendered with fill instead of stroke (brand marks). */
   fill?: boolean
 }
 

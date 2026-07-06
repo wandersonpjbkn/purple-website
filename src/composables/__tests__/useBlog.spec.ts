@@ -26,7 +26,7 @@ describe('useBlog', () => {
     expect(cat).toBeTruthy()
     blog.activeCategory.value = cat as string
     expect(blog.filtered.value.length).toBeGreaterThan(0)
-    expect(blog.filtered.value.every((p) => p.category.toLowerCase() === (cat as string).toLowerCase())).toBe(true)
+    expect(blog.filtered.value.every(p => p.category.toLowerCase() === (cat as string).toLowerCase())).toBe(true)
   })
 
   it('pagina conforme perPage', () => {

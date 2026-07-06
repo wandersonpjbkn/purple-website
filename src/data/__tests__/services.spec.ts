@@ -32,7 +32,7 @@ describe('services.json / home.json — integridade do conteúdo', () => {
   })
 
   it('exatamente um serviço em destaque (card featured da Home)', () => {
-    expect(services.catalog.filter((s) => s.featured)).toHaveLength(1)
+    expect(services.catalog.filter(s => s.featured)).toHaveLength(1)
   })
 
   it('3 pacotes com campos obrigatórios e preço sob consulta', () => {
@@ -47,10 +47,10 @@ describe('services.json / home.json — integridade do conteúdo', () => {
 
   it('todo ícone referenciado nos dados existe no mapa de ícones', () => {
     const referenced = [
-      ...services.catalog.map((s) => s.icon),
-      ...services.projects.items.map((p) => p.icon),
-      ...approach.pillars.map((p) => p.icon),
-      ...approach.differentials.map((d) => d.icon),
+      ...services.catalog.map(s => s.icon),
+      ...services.projects.items.map(p => p.icon),
+      ...approach.pillars.map(p => p.icon),
+      ...approach.differentials.map(d => d.icon),
     ]
     for (const name of referenced) {
       expect(ICONS[name], `ícone "${name}" não existe em icons.ts`).toBeDefined()

@@ -1,11 +1,8 @@
 <template>
-  <!--
-    Slot de imagem com fallback: enquanto o arquivo não existir (ou falhar o
-    carregamento), mantém o visual-block decorativo — nunca o "broken image"
-    do navegador. Para ativar a foto, basta subir o arquivo no caminho
-    esperado (ver src/docs/IMAGES.md); nenhuma mudança de código.
-  -->
-  <div class="media-block" :class="{ 'media-block--loaded': loaded }">
+  <div
+    class="media-block"
+    :class="{ 'media-block--loaded': loaded }"
+  >
     <img
       v-if="src && !failed"
       class="media-block__img"
@@ -23,12 +20,10 @@ import { ref } from 'vue'
 
 withDefaults(
   defineProps<{
-    /** Caminho público da imagem (ex.: '/images/sections/about.jpg'). Vazio = só o fallback. */
     src?: string
-    /** Texto alternativo — obrigatório quando a imagem existir. */
     alt?: string
   }>(),
-  { src: '', alt: '' },
+  { src: '', alt: '' }
 )
 
 const loaded = ref(false)
@@ -36,8 +31,6 @@ const failed = ref(false)
 </script>
 
 <style scoped lang="scss">
-// Mesmo tratamento do .visual-block global (_grid.scss), que segue existindo
-// para usos sem imagem; aqui ele é a base do fallback.
 .media-block {
   border-radius: var(--radius-xl);
   background: var(--bg-alt);

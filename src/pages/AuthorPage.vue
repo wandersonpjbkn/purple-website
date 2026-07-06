@@ -3,7 +3,10 @@
     <!-- ── Hero do autor ─────────────────────────────── -->
     <section class="page-hero">
       <BaseContainer>
-        <nav class="post-breadcrumb" aria-label="Navegação">
+        <nav
+          class="post-breadcrumb"
+          aria-label="Navegação"
+        >
           <RouterLink to="/blog">Blog</RouterLink>
           <span aria-hidden="true">›</span>
           <span>Autores</span>
@@ -12,7 +15,10 @@
         </nav>
 
         <div class="author-hero">
-          <BaseAvatar :name="author.name" size="xl" />
+          <BaseAvatar
+            :name="author.name"
+            size="xl"
+          />
           <div>
             <p class="section-eyebrow">Autor</p>
             <h1>{{ author.name }}</h1>
@@ -42,24 +48,47 @@
           </h2>
         </div>
 
-        <div v-if="authorPosts.length" class="author-posts-grid">
-          <PostCard v-for="post in authorPosts" :key="post.slug" :post="post" variant="grid" />
+        <div
+          v-if="authorPosts.length"
+          class="author-posts-grid"
+        >
+          <PostCard
+            v-for="post in authorPosts"
+            :key="post.slug"
+            :post="post"
+            variant="grid"
+          />
         </div>
 
-        <div v-else class="author-empty">
+        <div
+          v-else
+          class="author-empty"
+        >
           <p>Nenhum post publicado ainda.</p>
-          <BaseButton tag="RouterLink" to="/blog" variant="secondary">← Voltar ao blog</BaseButton>
+          <BaseButton
+            tag="RouterLink"
+            to="/blog"
+            variant="secondary"
+            >← Voltar ao blog</BaseButton
+          >
         </div>
       </BaseContainer>
     </section>
   </div>
 
   <!-- Autor não encontrado -->
-  <section v-else class="section-block">
+  <section
+    v-else
+    class="section-block"
+  >
     <BaseContainer>
       <h1>Autor não encontrado</h1>
       <div class="button-row">
-        <BaseButton tag="RouterLink" to="/blog">← Voltar para o blog</BaseButton>
+        <BaseButton
+          tag="RouterLink"
+          to="/blog"
+          >← Voltar para o blog</BaseButton
+        >
       </div>
     </BaseContainer>
   </section>
@@ -86,7 +115,7 @@ usePageMeta(
   computed(() => ({
     title: author.value ? `Posts de ${author.value.name}` : 'Autor',
     description: author.value?.bio ?? '',
-  })),
+  }))
 )
 </script>
 

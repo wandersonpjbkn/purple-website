@@ -27,8 +27,8 @@ Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
 - **`panorama.json`** — seção de dados de mercado da Home: `eyebrow`, `title`, `subtitle`, `stats[]`, `context[]`.
 - **`approach.json`** — `pillars[]`, `differentials[]`, `process` (`steps[]`); fonte única da página Abordagem.
 - **`about.json`** — `title`, `intro`, `helpTitle`, `helpText`, `image`/`imageAlt` (slot de foto — ver `IMAGES.md`), `dataStats[]`.
-- **`contact.json`** — `title`, `subtitle`, `phone`, `email`, `address` (usado por Contato e rodapé).
 - **`footer.json`** — `aboutText`, `topics[]`, `social[]` (`{ label, icon, url }` — LinkedIn/Instagram no rodapé).
+- **`pages.json`** — array `{ name, to }` com os links do menu principal; fonte única da navegação, consumida por `AppHeader.vue` e `AppFooter.vue`.
 - **`home.json`** — copy da Home:
   - `hero`: `eyebrow`, `titlePrefix` (com `<em>` de destaque), `rotating[]` (typewriter), `subtitle`, CTAs, `stats[]` (`{ value, sign, label, source }` — sinal renderiza em lime) e `card` (`{ label, value, sign, sub, barWidth, tags[], source }`).
   - `highlight` (inclui `image`/`imageAlt` — slot de foto), `cta`.
@@ -54,7 +54,7 @@ garante que todo ícone referenciado existe no mapa.
 | **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                                                                               |
 | **Serviços**  | `/servicos`                                    | hero `services.intro` · catálogo `services.catalog` (âncoras `#id`) · planos `services.packages` · projetos `services.projects` · CTA                                                                                |
 | **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `team` (autores)                                                                                                                                                                              |
-| **Contato**   | `/contato`                                     | `contact.*` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                                                                     |
+| **Contato**   | `/contato`                                     | `useContact()` + WhatsApp (`VITE_BASE_PHONE`) + form (`useEmailJS`)                                                                                                                                                  |
 
 Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
 

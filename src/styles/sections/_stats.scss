@@ -1,9 +1,6 @@
 @use '../abstracts/mixins' as *;
 
 // ── Stat grid (layout hairline) ────────────────────────────
-// Grid-container das estatísticas: células separadas por 1px sobre fundo
-// escuro. O card em si é o componente `StatCard.vue` (dono do próprio estilo).
-// Usado na Home (panorama, --cols-3) e na Sobre (dados, 4 col).
 .stat-grid {
   --stat-cols: 4;
   display: grid;

@@ -54,7 +54,7 @@ export const parseFrontmatter = (raw: string): { fm: RawFrontmatter; body: strin
       ;(fm as Record<string, unknown>)[key] = rawVal
         .replace(/^\[|\]$/g, '')
         .split(',')
-        .map((s) => s.trim().replace(/^["']|["']$/g, ''))
+        .map(s => s.trim().replace(/^["']|["']$/g, ''))
         .filter(Boolean)
     } else if (rawVal === 'true') {
       ;(fm as Record<string, unknown>)[key] = true
@@ -155,7 +155,7 @@ export const markdownToHtml = (md: string): string => {
   // Parágrafos
   html = html
     .split(/\n\n+/)
-    .map((block) => {
+    .map(block => {
       block = block.trim()
       if (!block) return ''
       if (/^<(h[1-6]|ul|ol|pre|blockquote|table|hr)/.test(block)) return block

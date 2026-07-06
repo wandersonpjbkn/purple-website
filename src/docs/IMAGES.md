@@ -15,22 +15,39 @@
   basta substituí-lo pelo logo definitivo (mesmas proporções ~170×32).
 - Avatares (`BaseAvatar`) caem em iniciais quando a foto não existe.
 
+## Imagens via CDN (`useCdnAsset`) ✅
+
+Um segundo mecanismo, paralelo ao `MediaBlock`: `src/composables/useCdnAsset.ts`
+recebe um `path` relativo (guardado no dado, ex.: `post.cover`, `member.avatar`)
+e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `path`
+(não valida se `VITE_CDN_URL` está de fato configurada).
+
+- **`TeamCard.vue`** passa o resultado como `:src` do `BaseAvatar` — se a URL
+  falhar ao carregar, o `@error` do `AvImage` já cai para as iniciais (mesmo
+  fallback gracioso descrito acima).
+- **`PostCard.vue`** usa `useCdnAsset(post.cover)` direto no `<img>` da capa do
+  post, **sem** handler de erro: se a URL do CDN quebrar (404, `VITE_CDN_URL`
+  ausente etc.), aparece o ícone nativo de imagem quebrada em vez de um
+  fallback — assimetria real em relação ao `TeamCard`/`BaseAvatar`, registrada
+  aqui como pendência de robustez (não é falha de acessibilidade, já que o
+  `alt` do post continua presente).
+
 ## Assets pendentes ⏳
 
-| Slot                         | Caminho exato                               | Formato | Proporção                        | Tamanho mínimo       | Observações                                                                        |
-| ---------------------------- | ------------------------------------------- | ------- | -------------------------------- | -------------------- | ---------------------------------------------------------------------------------- |
-| Foto da Suelen (time)        | `public/images/team/suelen.jpg`             | JPG     | 1:1 (quadrada)                   | 640×640px            | Mesmo enquadramento/estilo da `wanderson.jpg` já existente                         |
-| Logo definitivo              | `src/assets/brand/logo-ppl.svg`             | SVG     | ~170×32 (horizontal)             | —                    | **Substituir o placeholder** existente; fundo transparente. Inline via `BrandLogo` |
-| Seção destaque da Home       | `public/images/sections/home-highlight.jpg` | JPG     | ~4:3 vertical-friendly           | 1200px no lado maior | Aparece ao lado de "Na busca pelo crescimento…"; foto de time/ambiente de trabalho |
-| Seção "Nossa crença" (Sobre) | `public/images/sections/about.jpg`          | JPG     | ~4:3                             | 1200px no lado maior | Ideal: foto dos fundadores ou do trabalho em contexto                              |
+| Slot                         | Caminho exato                               | Formato | Proporção              | Tamanho mínimo       | Observações                                                                        |
+| ---------------------------- | ------------------------------------------- | ------- | ---------------------- | -------------------- | ---------------------------------------------------------------------------------- |
+| Foto da Suelen (time)        | `public/images/team/suelen.jpg`             | JPG     | 1:1 (quadrada)         | 640×640px            | Mesmo enquadramento/estilo da `wanderson.jpg` já existente                         |
+| Logo definitivo              | `src/assets/brand/logo-ppl.svg`             | SVG     | ~170×32 (horizontal)   | —                    | **Substituir o placeholder** existente; fundo transparente. Inline via `BrandLogo` |
+| Seção destaque da Home       | `public/images/sections/home-highlight.jpg` | JPG     | ~4:3 vertical-friendly | 1200px no lado maior | Aparece ao lado de "Na busca pelo crescimento…"; foto de time/ambiente de trabalho |
+| Seção "Nossa crença" (Sobre) | `public/images/sections/about.jpg`          | JPG     | ~4:3                   | 1200px no lado maior | Ideal: foto dos fundadores ou do trabalho em contexto                              |
 
 ## Assets já entregues ✅
 
-| Slot                    | Caminho                                        |
-| ----------------------- | ---------------------------------------------- |
-| Foto do Wanderson       | `public/images/team/wanderson.jpg`             |
-| Capas do blog (4 posts) | `public/images/blog/post-1.jpg` … `post-4.jpg` |
-| Logo placeholder        | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo) |
+| Slot                    | Caminho                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------- |
+| Foto do Wanderson       | `public/images/team/wanderson.jpg`                                               |
+| Capas do blog (4 posts) | `public/images/blog/post-1.jpg` … `post-4.jpg`                                   |
+| Logo placeholder        | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo)                         |
 | Favicon / touch / OG    | `public/favicon.svg` · `favicon.png` · `apple-touch-icon.png` · `og-default.jpg` |
 
 > Os assets de marca raster (favicon PNG, apple-touch, OG 1200×630) são gerados

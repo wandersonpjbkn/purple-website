@@ -34,11 +34,4 @@ export const baseRoutes = [
     name: 'privacy',
     component: () => import('@/pages/PrivacyPage.vue'),
   },
-  // Catch-all 404 — o menor score de match, então não intercepta rotas válidas
-  // (inclusive as de blog registradas à parte).
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'not-found',
-    component: () => import('@/pages/NotFoundPage.vue'),
-  },
 ]

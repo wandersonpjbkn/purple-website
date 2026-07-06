@@ -1,9 +1,25 @@
 <template>
-  <article class="post-card" :class="`post-card--${variant}`">
+  <article
+    class="post-card"
+    :class="`post-card--${variant}`"
+  >
     <!-- Cover -->
-    <RouterLink :to="`/blog/${post.slug}`" class="post-card__cover" tabindex="-1" aria-hidden="true">
-      <img v-if="post.cover" :src="useCdnAsset(post.cover)" :alt="post.title" loading="lazy" />
-      <div v-else class="post-card__cover-placeholder">
+    <RouterLink
+      :to="`/blog/${post.slug}`"
+      class="post-card__cover"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <img
+        v-if="post.cover"
+        :src="useCdnAsset(post.cover)"
+        :alt="post.title"
+        loading="lazy"
+      />
+      <div
+        v-else
+        class="post-card__cover-placeholder"
+      >
         <span class="post-card__cover-letter">{{ post.category.charAt(0) }}</span>
       </div>
     </RouterLink>
@@ -28,14 +44,28 @@
       </h3>
 
       <!-- Excerpt: só em featured -->
-      <p v-if="variant === 'featured'" class="post-card__excerpt">
+      <p
+        v-if="variant === 'featured'"
+        class="post-card__excerpt"
+      >
         {{ post.excerpt }}
       </p>
 
       <!-- Autor + data: só em grid e featured -->
-      <div v-if="variant !== 'list' && author" class="post-card__author">
-        <BaseAvatar v-if="author" :name="author.name" size="sm" />
-        <RouterLink :to="`/blog/autor/${post.author}`" class="post-card__author-name" @click.stop>
+      <div
+        v-if="variant !== 'list' && author"
+        class="post-card__author"
+      >
+        <BaseAvatar
+          v-if="author"
+          :name="author.name"
+          size="sm"
+        />
+        <RouterLink
+          :to="`/blog/autor/${post.author}`"
+          class="post-card__author-name"
+          @click.stop
+        >
           {{ author.name }}
         </RouterLink>
         <span class="post-card__author-sep">·</span>
@@ -66,7 +96,7 @@ const props = withDefaults(
     post: Post
     variant?: 'grid' | 'featured' | 'list'
   }>(),
-  { variant: 'grid' },
+  { variant: 'grid' }
 )
 
 const author = computed(() => getAuthor(props.post.author))

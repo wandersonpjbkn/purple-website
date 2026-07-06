@@ -1,25 +1,51 @@
 <template>
   <div>
-    <!-- ── Page Hero ──────────────────────────────────── -->
-    <PageHero :eyebrow="services.intro.eyebrow" :title="services.intro.title" :subtitle="services.intro.subtitle">
+    <!-- ── Page Hero ──────────────────────────────────────── -->
+    <PageHero
+      :eyebrow="services.intro.eyebrow"
+      :title="services.intro.title"
+      :subtitle="services.intro.subtitle"
+    >
       <div class="button-row">
-        <BaseButton tag="RouterLink" to="/contato">Falar com a Purple</BaseButton>
+        <BaseButton
+          tag="RouterLink"
+          to="/contato"
+          >Falar com a Purple</BaseButton
+        >
       </div>
     </PageHero>
 
-    <!-- ── Sub-nav fixa: acesso rápido às 3 camadas ───── -->
+    <!-- ── Fixed sub-nav: quick access to the 3 layers ─────── -->
     <div class="svc-subnav">
       <BaseContainer>
-        <nav class="svc-subnav__pills" aria-label="Seções de serviços">
-          <a href="#catalogo" class="svc-subnav__pill">Serviços</a>
-          <a href="#planos" class="svc-subnav__pill">Planos mensais</a>
-          <a href="#projetos" class="svc-subnav__pill">Projetos pontuais</a>
+        <nav
+          class="svc-subnav__pills"
+          aria-label="Seções de serviços"
+        >
+          <a
+            href="#catalogo"
+            class="svc-subnav__pill"
+            >Serviços</a
+          >
+          <a
+            href="#planos"
+            class="svc-subnav__pill"
+            >Planos mensais</a
+          >
+          <a
+            href="#projetos"
+            class="svc-subnav__pill"
+            >Projetos pontuais</a
+          >
         </nav>
       </BaseContainer>
     </div>
 
-    <!-- ── Catálogo em cards expansíveis ──────────────── -->
-    <section id="catalogo" class="section-block">
+    <!-- ── Catalog as expandable cards ─────────────────────── -->
+    <section
+      id="catalogo"
+      class="section-block"
+    >
       <BaseContainer>
         <div class="section-header">
           <p class="section-eyebrow">{{ services.homeTeaser.eyebrow }}</p>
@@ -47,19 +73,32 @@
                 <span class="svc-item__title">{{ service.title }}</span>
                 <span class="svc-item__tagline">{{ service.tagline }}</span>
               </span>
-              <span class="svc-item__chevron" aria-hidden="true"></span>
+              <span
+                class="svc-item__chevron"
+                aria-hidden="true"
+              ></span>
             </button>
 
             <p class="svc-item__summary">{{ service.summary }}</p>
 
-            <div v-show="isOpen(service.id)" :id="`svc-panel-${service.id}`" class="svc-item__detail">
+            <div
+              v-show="isOpen(service.id)"
+              :id="`svc-panel-${service.id}`"
+              class="svc-item__detail"
+            >
               <p class="svc-item__description">{{ service.description }}</p>
               <div class="svc-item__cols">
                 <div>
                   <h3 class="svc-item__subtitle">O que sua empresa ganha</h3>
                   <ul class="svc-item__benefits">
-                    <li v-for="benefit in service.benefits" :key="benefit">
-                      <BaseIcon name="check" class="svc-item__check" />
+                    <li
+                      v-for="benefit in service.benefits"
+                      :key="benefit"
+                    >
+                      <BaseIcon
+                        name="check"
+                        class="svc-item__check"
+                      />
                       {{ benefit }}
                     </li>
                   </ul>
@@ -67,16 +106,32 @@
                 <div>
                   <h3 class="svc-item__subtitle">Como fazemos</h3>
                   <ol class="svc-item__process">
-                    <li v-for="step in service.process" :key="step">{{ step }}</li>
+                    <li
+                      v-for="step in service.process"
+                      :key="step"
+                    >
+                      {{ step }}
+                    </li>
                   </ol>
                 </div>
               </div>
               <div class="svc-item__actions">
-                <BaseButton tag="RouterLink" to="/contato" variant="lime">Pedir proposta</BaseButton>
+                <BaseButton
+                  tag="RouterLink"
+                  to="/contato"
+                  variant="lime"
+                  >Pedir proposta</BaseButton
+                >
               </div>
             </div>
 
-            <button type="button" class="svc-item__more" @click="toggle(service.id)">
+            <button
+              type="button"
+              class="svc-item__more"
+              :aria-expanded="isOpen(service.id)"
+              :aria-controls="`svc-panel-${service.id}`"
+              @click="toggle(service.id)"
+            >
               {{ isOpen(service.id) ? 'Fechar' : 'Saiba mais' }}
             </button>
           </article>
@@ -84,8 +139,11 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Planos recorrentes ─────────────────────────── -->
-    <section id="planos" class="packages-section">
+    <!-- ── Recurring plans ──────────────────────────────────── -->
+    <section
+      id="planos"
+      class="packages-section"
+    >
       <BaseContainer>
         <div class="section-header section-header--center">
           <p class="section-eyebrow section-eyebrow--lime">{{ services.packages.eyebrow }}</p>
@@ -104,14 +162,24 @@
             <h3 class="package-card__name">{{ pkg.name }}</h3>
             <p class="package-card__summary">{{ pkg.summary }}</p>
             <ul class="package-card__includes">
-              <li v-for="item in pkg.includes" :key="item">
-                <BaseIcon name="check" class="package-card__check" />
+              <li
+                v-for="item in pkg.includes"
+                :key="item"
+              >
+                <BaseIcon
+                  name="check"
+                  class="package-card__check"
+                />
                 {{ item }}
               </li>
             </ul>
             <div class="package-card__footer">
               <span class="package-card__price">{{ services.packages.priceLabel }}</span>
-              <BaseButton tag="RouterLink" to="/contato" variant="lime">
+              <BaseButton
+                tag="RouterLink"
+                to="/contato"
+                variant="lime"
+              >
                 {{ services.packages.ctaLabel }}
               </BaseButton>
             </div>
@@ -120,8 +188,11 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Projetos pontuais ──────────────────────────── -->
-    <section id="projetos" class="section-block">
+    <!-- ── One-off projects ─────────────────────────────────── -->
+    <section
+      id="projetos"
+      class="section-block"
+    >
       <BaseContainer>
         <div class="section-header section-header--center">
           <p class="section-eyebrow">{{ services.projects.eyebrow }}</p>
@@ -129,13 +200,26 @@
           <p class="lead lead--narrow lead--center">{{ services.projects.subtitle }}</p>
         </div>
         <div class="services-grid">
-          <article v-for="project in services.projects.items" :key="project.title" class="service-card">
+          <article
+            v-for="project in services.projects.items"
+            :key="project.title"
+            class="service-card"
+          >
             <div class="service-card__icon"><BaseIcon :name="project.icon" /></div>
             <h3>{{ project.title }}</h3>
             <p>{{ project.description }}</p>
             <div class="service-card__links">
-              <RouterLink class="text-link" to="/contato">Pedir proposta</RouterLink>
-              <a v-if="project.serviceId" class="svc-detail-link" :href="`#${project.serviceId}`" @click="open(project.serviceId)">
+              <RouterLink
+                class="text-link"
+                to="/contato"
+                >Pedir proposta</RouterLink
+              >
+              <a
+                v-if="project.serviceId"
+                class="svc-detail-link"
+                :href="`#${project.serviceId}`"
+                @click="open(project.serviceId)"
+              >
                 Ver detalhes
               </a>
             </div>
@@ -144,10 +228,10 @@
       </BaseContainer>
     </section>
 
-    <!-- ── FAQ ────────────────────────────────────────── -->
+    <!-- ── FAQ ──────────────────────────────────────────────── -->
     <FaqSection alt />
 
-    <!-- ── CTA ───────────────────────────────────────── -->
+    <!-- ── CTA ──────────────────────────────────────────────── -->
     <CtaBanner
       title="Pronto para transformar sua comunicação interna?"
       description="Vamos entender o contexto da sua empresa e construir juntos uma estratégia que faz sentido para o seu time."
@@ -179,7 +263,7 @@ usePageMeta({
 
 const route = useRoute()
 
-// Estado de expansão dos cards do catálogo (vários podem ficar abertos).
+// Expansion state of the catalog cards (several can stay open at once).
 const openState = reactive<Record<string, boolean>>({})
 const isOpen = (id: string) => !!openState[id]
 const toggle = (id: string) => {
@@ -189,11 +273,11 @@ const open = (id: string) => {
   openState[id] = true
 }
 
-// Deep-link: /servicos#comunicacao-interna (vindo da Home ou de Projetos) abre
-// o card correspondente e rola até ele.
+// Deep-link: /servicos#comunicacao-interna (coming from Home or Projects) opens
+// the matching card and scrolls to it.
 const openFromHash = (hash: string) => {
   const id = hash.replace('#', '')
-  if (id && services.catalog.some((s) => s.id === id)) {
+  if (id && services.catalog.some(s => s.id === id)) {
     open(id)
     nextTick(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }))
   }
@@ -204,14 +288,14 @@ onMounted(() => {
 })
 watch(
   () => route.hash,
-  (hash) => hash && openFromHash(hash),
+  hash => hash && openFromHash(hash)
 )
 </script>
 
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Sub-nav fixa ───────────────────────────────────────────
+// ── Fixed sub-nav ──────────────────────────────────────────
 .svc-subnav {
   position: sticky;
   top: 76px;
@@ -253,7 +337,7 @@ watch(
   }
 }
 
-// ── Catálogo (cards expansíveis) ───────────────────────────
+// ── Catalog (expandable cards) ─────────────────────────────
 .svc-catalog {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -457,7 +541,7 @@ watch(
   }
 }
 
-// Link "Ver detalhes" nos projetos pontuais (âncora para o catálogo).
+// "Ver detalhes" link on one-off projects (anchors into the catalog).
 .svc-detail-link {
   font-size: var(--text-sm);
   font-weight: 600;
@@ -468,7 +552,7 @@ watch(
   }
 }
 
-// ── Planos recorrentes (fundo escuro) ──────────────────────
+// ── Recurring plans (dark background) ──────────────────────
 .packages-section {
   background: var(--section-dark);
   padding: var(--space-20) 0;

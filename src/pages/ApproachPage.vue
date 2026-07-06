@@ -55,12 +55,25 @@
             Cada empresa tem um contexto único. Antes de propor qualquer ação, entendemos profundamente o seu negócio.
           </p>
           <div class="button-row">
-            <BaseButton tag="RouterLink" to="/contato">Quero começar</BaseButton>
-            <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver nossos serviços</BaseButton>
+            <BaseButton
+              tag="RouterLink"
+              to="/contato"
+              >Quero começar</BaseButton
+            >
+            <BaseButton
+              tag="RouterLink"
+              to="/servicos"
+              variant="secondary"
+              >Ver nossos serviços</BaseButton
+            >
           </div>
         </div>
         <div class="process-list">
-          <div v-for="(step, index) in approach.process.steps" :key="step.title" class="process-item">
+          <div
+            v-for="(step, index) in approach.process.steps"
+            :key="step.title"
+            class="process-item"
+          >
             <div class="process-item__number">{{ String(index + 1).padStart(2, '0') }}</div>
             <div class="process-item__content">
               <h3>{{ step.title }}</h3>
@@ -83,10 +96,19 @@
         </p>
       </div>
       <div class="services-grid">
-        <ServiceTeaserCard v-for="service in bridgeServices" :key="service.id" :service="service" />
+        <ServiceTeaserCard
+          v-for="service in bridgeServices"
+          :key="service.id"
+          :service="service"
+        />
       </div>
       <div class="button-row button-row--center">
-        <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
+        <BaseButton
+          tag="RouterLink"
+          to="/servicos"
+          variant="secondary"
+          >Ver todos os serviços</BaseButton
+        >
       </div>
     </BaseContainer>
   </section>

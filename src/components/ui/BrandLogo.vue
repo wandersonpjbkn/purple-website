@@ -1,19 +1,22 @@
 <template>
-  <!--
-    Logotipo da marca. Renderiza o SVG inline (via vite-svg-loader), o que o
-    mantém nítido e permite estilizar por CSS. O arquivo vive em
-    `src/assets/brand/logo-ppl.svg` — troque-o pelo definitivo mantendo as
-    proporções. Cai no wordmark textual apenas se o SVG não existir.
-  -->
-  <component :is="LogoSvg" v-if="LogoSvg" class="brand-logo" role="img" aria-label="Purple Comunicação" />
-  <span v-else class="brand-wordmark" aria-label="Purple Comunicação">
+  <component
+    :is="LogoSvg"
+    v-if="LogoSvg"
+    class="brand-logo"
+    role="img"
+    aria-label="Purple Comunicação"
+  />
+  <span
+    v-else
+    class="brand-wordmark"
+    aria-label="Purple Comunicação"
+  >
     <span class="brand-wordmark__ppl">ppl</span><span class="brand-wordmark__dot">.</span
     ><span class="brand-wordmark__sub">comunicação</span>
   </span>
 </template>
 
 <script setup lang="ts">
-// Import estático: se o arquivo existir, o Vite o injeta como componente Vue.
 import LogoSvg from '@/assets/brand/logo-ppl.svg?component'
 </script>
 

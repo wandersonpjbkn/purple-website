@@ -47,7 +47,6 @@
     margin-bottom: 1.25rem;
   }
 
-  // Rodapé de links do card (ex.: "Pedir proposta" + "Ver detalhes").
   &__links {
     display: flex;
     align-items: center;
@@ -77,8 +76,6 @@
     }
 
     .service-card__icon {
-      // Ícone em lime sobre o tile translúcido escuro — antes herdava
-      // --text (escuro sobre escuro). Lime = "resultado/destaque".
       background: rgba(var(--lime-rgb), 0.14);
       color: var(--lime);
       width: 64px;
@@ -97,7 +94,7 @@
   }
 }
 
-// ── Blog card (legado — usado em BlogCard.vue + BlogList.vue) ─
+// ── Blog grid ────────────────────────────────────────────────
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -111,67 +108,7 @@
   }
 }
 
-.blog-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition:
-    box-shadow 0.2s var(--ease),
-    transform 0.2s var(--ease);
-
-  &:hover {
-    box-shadow: var(--shadow);
-    transform: translateY(-2px);
-  }
-
-  &__image {
-    height: 180px;
-    background: {
-      color: var(--purple-100);
-      image: linear-gradient(135deg, var(--purple-100), var(--lime-light));
-      position: center;
-      repeat: no-repeat;
-    }
-    display: grid;
-    place-items: center;
-    color: var(--purple-400);
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
-
-  &__content {
-    padding: 1.25rem;
-  }
-
-  &__meta {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--purple);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 0.5rem;
-  }
-
-  h3 {
-    font-size: 1rem;
-    line-height: 1.35;
-    margin-bottom: 0.5rem;
-    a {
-      color: var(--text);
-      &:hover {
-        color: var(--purple);
-      }
-    }
-  }
-
-  p {
-    font-size: 0.875rem;
-    @include line-clamp(3);
-  }
-}
-
-// ── Team cards (usados em TeamCard.vue — Home + About) ─────
+// ── Team cards (used in TeamCard.vue — Home + About) ────────
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -218,7 +155,7 @@
   }
 }
 
-// ── Sidebar link de categoria ──────────────────────────────
+// ── Sidebar category link ───────────────────────────────────
 .sidebar-category-link {
   font-size: 0.82rem;
   font-weight: 600;
@@ -231,14 +168,6 @@
   &:hover {
     color: var(--purple-700);
   }
-}
-
-// ── Blog sidebar (legado — BlogSidebar.vue) ────────────────
-.blog-sidebar {
-  position: sticky;
-  top: 96px;
-  display: grid;
-  gap: 1.25rem;
 }
 
 // ── Post layout grid ───────────────────────────────────────

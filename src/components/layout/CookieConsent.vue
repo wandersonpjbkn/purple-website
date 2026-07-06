@@ -2,19 +2,29 @@
   <Transition name="consent">
     <section
       v-if="!consent.decided"
+      ref="bannerRef"
       class="cookie-consent"
       role="dialog"
       aria-live="polite"
       aria-label="Aviso de cookies"
+      tabindex="-1"
     >
       <div class="cookie-consent__inner">
         <p class="cookie-consent__text">
           Usamos cookies de <strong>análise</strong> (Google Tag Manager) para entender como o site é usado e
           melhorá-lo. Os cookies essenciais ao funcionamento são sempre ativos. Você decide sobre os de análise.
-          <RouterLink to="/privacidade" class="cookie-consent__link">Saiba mais</RouterLink>.
+          <RouterLink
+            to="/privacidade"
+            class="cookie-consent__link"
+            >Saiba mais</RouterLink
+          >.
         </p>
         <div class="cookie-consent__actions">
-          <BaseButton variant="secondary" @click="reject">Recusar análise</BaseButton>
+          <BaseButton
+            variant="secondary"
+            @click="reject"
+            >Recusar análise</BaseButton
+          >
           <BaseButton @click="accept">Aceitar</BaseButton>
         </div>
       </div>
@@ -25,15 +35,29 @@
 <script setup lang="ts">
 import { useGtm } from '@gtm-support/vue-gtm'
 import { RouterLink } from 'vue-router'
+import { ref, onMounted, watch, nextTick } from 'vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useConsentStore } from '@/stores/consent'
 
 const consent = useConsentStore()
 
+const bannerRef = ref<HTMLElement | null>(null)
+const focusBanner = () => nextTick(() => bannerRef.value?.focus())
+
+onMounted(() => {
+  if (!consent.decided) focusBanner()
+})
+
+watch(
+  () => consent.decided,
+  decided => {
+    if (!decided) focusBanner()
+  }
+)
+
 const accept = () => {
   consent.acceptAnalytics()
-  // Carrega/ativa o GTM apenas após o opt-in (loadScript: true cuida do <script>).
   useGtm()?.enable(true)
 }
 
@@ -101,7 +125,7 @@ const reject = () => {
   }
 }
 
-// Animação de entrada/saída
+// Enter/leave transition
 .consent-enter-active,
 .consent-leave-active {
   transition:

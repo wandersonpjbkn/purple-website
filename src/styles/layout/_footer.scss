@@ -22,9 +22,6 @@
     color: var(--text);
   }
 
-  // Listas de texto (Navegação, Tópicos, legal) — NÃO a fileira de ícones
-  // sociais, que tem layout/hover próprios (senão estas regras genéricas a
-  // venceriam por especificidade, empilhando os ícones e quebrando o hover).
   ul:not(.footer-social) {
     display: grid;
     gap: 0.625rem;
@@ -78,10 +75,6 @@
   font-size: 0.825rem;
   color: var(--subtle);
   transition: color 0.15s;
-
-  &:hover {
-    color: var(--purple);
-  }
 }
 
 // ── Marca + redes sociais ──────────────────────────────────
@@ -120,7 +113,26 @@
 }
 
 .footer-legal {
-  margin-top: var(--space-4);
-  display: grid;
+  display: flex;
   gap: var(--space-2);
+
+  @include respond-to(sm) {
+    display: grid;
+  }
+
+  li {
+    &:hover a,
+    &:hover button {
+      color: var(--purple);
+    }
+
+    @media (min-width: $bp-md) {
+      &:not(:last-child) {
+        &::after {
+          content: '|';
+          margin-left: var(--space-2);
+        }
+      }
+    }
+  }
 }

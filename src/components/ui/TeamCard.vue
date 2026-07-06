@@ -1,6 +1,13 @@
 <template>
-  <article v-if="member && member.isVisibleTeamMember" class="team-card-member">
-    <BaseAvatar :name="member.name" :src="useCdnAsset(member.avatar)" size="lg" />
+  <article
+    v-if="member && member.isVisibleTeamMember"
+    class="team-card-member"
+  >
+    <BaseAvatar
+      :name="member.name"
+      :src="useCdnAsset(member.avatar)"
+      size="lg"
+    />
 
     <div class="team-card-member__info">
       <h3>{{ member.name }}</h3>

@@ -13,24 +13,42 @@
           <h1 class="hero__title">
             <span v-html="home.hero.titlePrefix" />
             <br />
-            <span ref="typewriterEl" class="hero__typewriter" />
+            <span
+              ref="typewriterEl"
+              class="hero__typewriter"
+            />
           </h1>
 
           <p class="lead">{{ home.hero.subtitle }}</p>
 
           <div class="hero__actions">
-            <BaseButton class="button--lg" tag="RouterLink" to="/contato">
+            <BaseButton
+              class="button--lg"
+              tag="RouterLink"
+              to="/contato"
+            >
               {{ home.hero.primaryCta }}
             </BaseButton>
-            <BaseButton class="button--lg" tag="RouterLink" to="/servicos" variant="secondary">
+            <BaseButton
+              class="button--lg"
+              tag="RouterLink"
+              to="/servicos"
+              variant="secondary"
+            >
               {{ home.hero.secondaryCta }}
             </BaseButton>
           </div>
 
           <!-- 3 indicadores compactos · valor + sinal em lime -->
           <div class="hero__stat">
-            <template v-for="(stat, i) in home.hero.stats" :key="stat.label">
-              <div v-if="i > 0" class="hero__stat-divider"></div>
+            <template
+              v-for="(stat, i) in home.hero.stats"
+              :key="stat.label"
+            >
+              <div
+                v-if="i > 0"
+                class="hero__stat-divider"
+              ></div>
               <div>
                 <div class="hero__stat-number">
                   {{ stat.value }}<span class="hero__stat-sign">{{ stat.sign }}</span>
@@ -50,7 +68,10 @@
             </div>
             <div class="hero__card-sub">{{ home.hero.card.sub }}</div>
             <div class="hero__card-bar">
-              <div class="hero__card-bar-fill" :style="{ width: `${home.hero.card.barWidth}%` }"></div>
+              <div
+                class="hero__card-bar-fill"
+                :style="{ width: `${home.hero.card.barWidth}%` }"
+              ></div>
             </div>
             <div class="hero__card-tags">
               <span
@@ -79,16 +100,29 @@
   <section class="section-block">
     <BaseContainer>
       <div class="split-section">
-        <MediaBlock :src="home.highlight.image" :alt="home.highlight.imageAlt" />
+        <MediaBlock
+          :src="home.highlight.image"
+          :alt="home.highlight.imageAlt"
+        />
         <div>
           <p class="section-eyebrow">{{ home.highlight.eyebrow }}</p>
           <h2>{{ home.highlight.title }}</h2>
           <p class="lead">{{ home.highlight.description }}</p>
           <ul class="feature-list">
-            <li v-for="benefit in home.highlight.benefits" :key="benefit">{{ benefit }}</li>
+            <li
+              v-for="benefit in home.highlight.benefits"
+              :key="benefit"
+            >
+              {{ benefit }}
+            </li>
           </ul>
           <div class="button-row">
-            <BaseButton tag="RouterLink" to="/sobre" variant="secondary">Conheça a Purple</BaseButton>
+            <BaseButton
+              tag="RouterLink"
+              to="/sobre"
+              variant="secondary"
+              >Conheça a Purple</BaseButton
+            >
           </div>
         </div>
       </div>
@@ -102,12 +136,22 @@
         <h2>{{ services.homeTeaser.title }}</h2>
       </div>
       <div class="services-grid">
-        <ServiceTeaserCard v-for="service in teaserServices" :key="service.id" :service="service" />
-        <article v-if="featuredService" class="service-card service-card--featured">
+        <ServiceTeaserCard
+          v-for="service in teaserServices"
+          :key="service.id"
+          :service="service"
+        />
+        <article
+          v-if="featuredService"
+          class="service-card service-card--featured"
+        >
           <div>
             <h3>{{ featuredService.title }}</h3>
             <p>{{ featuredService.summary }}</p>
-            <RouterLink class="text-link text-link--lime" :to="`/servicos#${featuredService.id}`">
+            <RouterLink
+              class="text-link text-link--lime"
+              :to="`/servicos#${featuredService.id}`"
+            >
               Saiba mais
             </RouterLink>
           </div>
@@ -115,7 +159,12 @@
         </article>
       </div>
       <div class="button-row button-row--center">
-        <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
+        <BaseButton
+          tag="RouterLink"
+          to="/servicos"
+          variant="secondary"
+          >Ver todos os serviços</BaseButton
+        >
       </div>
     </BaseContainer>
   </section>
@@ -145,7 +194,11 @@
       <hr class="panorama-divider" />
 
       <div class="panorama-context">
-        <div v-for="item in panorama.context" :key="item.strong" class="panorama-context__item">
+        <div
+          v-for="item in panorama.context"
+          :key="item.strong"
+          class="panorama-context__item"
+        >
           <span class="panorama-context__dot"></span>
           <p class="panorama-context__text">
             <strong>{{ item.strong }}</strong> — {{ item.text }}
@@ -162,10 +215,19 @@
           <p class="section-eyebrow">Blog</p>
           <h2>Conteúdos recentes</h2>
         </div>
-        <RouterLink class="text-link" to="/blog">Ver todos</RouterLink>
+        <RouterLink
+          class="text-link"
+          to="/blog"
+          >Ver todos</RouterLink
+        >
       </div>
       <div class="blog-grid">
-        <PostCard v-for="post in featuredPosts" :key="post.slug" :post="post" variant="grid" />
+        <PostCard
+          v-for="post in featuredPosts"
+          :key="post.slug"
+          :post="post"
+          variant="grid"
+        />
       </div>
     </BaseContainer>
   </section>
@@ -180,12 +242,19 @@
         </p>
       </div>
       <div class="team-grid">
-        <TeamCard v-for="member in team" :key="member.name" :member="member" />
+        <TeamCard
+          v-for="member in team"
+          :key="member.name"
+          :member="member"
+        />
       </div>
     </BaseContainer>
   </section>
 
-  <CtaBanner :title="home.cta.title" :description="home.cta.description" />
+  <CtaBanner
+    :title="home.cta.title"
+    :description="home.cta.description"
+  />
 </template>
 
 <script setup lang="ts">
@@ -221,8 +290,8 @@ const featuredPosts = posts.slice(0, 3)
 
 // Teaser: 4 cards comuns + 1 destaque (mesma malha 3×2 do develop);
 // o catálogo completo vive em /servicos.
-const teaserServices = services.catalog.filter((service) => !service.featured).slice(0, 4)
-const featuredService = services.catalog.find((service) => service.featured)
+const teaserServices = services.catalog.filter(service => !service.featured).slice(0, 4)
+const featuredService = services.catalog.find(service => service.featured)
 
 // ── Typewriter ────────────────────────────────────────────
 const typewriterEl = ref<HTMLElement | null>(null)

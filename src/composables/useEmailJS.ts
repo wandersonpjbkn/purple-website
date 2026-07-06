@@ -15,7 +15,7 @@ declare global {
       send: (
         serviceId: string,
         templateId: string,
-        params: Record<string, string>,
+        params: Record<string, string>
       ) => Promise<{ status: number; text: string }>
     }
   }
@@ -32,7 +32,7 @@ export const useEmailJS = () => {
     if (!serviceId || !templateId) {
       console.warn('[EmailJS] Variáveis de ambiente não configuradas.')
       status.value = 'sending'
-      await new Promise((r) => setTimeout(r, 1000))
+      await new Promise(r => setTimeout(r, 1000))
       status.value = 'success'
       return true
     }

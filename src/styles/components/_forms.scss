@@ -1,6 +1,6 @@
 @use '../abstracts/mixins' as *;
 
-// ── Base compartilhada via placeholder ────────────────────
+// ── Shared base via placeholder ───────────────────────────
 %input-base {
   width: 100%;
   border: 1.5px solid var(--border);
@@ -11,9 +11,16 @@
   transition:
     border-color 0.15s var(--ease),
     box-shadow 0.15s var(--ease);
-  outline: none;
 
-  &:focus {
+  // Keyboard focus gets a real high-contrast outline (WCAG 2.4.7/1.4.11);
+  // mouse focus keeps the softer ring so pointer users aren't distracted.
+  &:focus-visible {
+    outline: 2px solid var(--purple);
+    outline-offset: 2px;
+    border-color: var(--purple-400);
+  }
+
+  &:focus:not(:focus-visible) {
     border-color: var(--purple-400);
     box-shadow: 0 0 0 3px rgba(var(--purple-rgb), 0.1);
   }
@@ -23,13 +30,13 @@
   }
 }
 
-// ── Input de busca ─────────────────────────────────────────
+// ── Search input ───────────────────────────────────────────
 .search-input {
   @extend %input-base;
   width: 280px;
 }
 
-// ── Campos de formulário (ContactPage e futuros forms) ─────
+// ── Form fields (ContactPage and future forms) ─────────────
 .field {
   display: flex;
   flex-direction: column;
@@ -56,7 +63,7 @@
   font-weight: 500;
 }
 
-// Aplica o estilo base em todos os inputs de formulário ──────
+// Applies the base style to every form input ─────────────────
 input[type='text'],
 input[type='email'],
 input[type='tel'],
@@ -79,7 +86,7 @@ textarea {
   min-height: 120px;
 }
 
-// ── Estado de erro ─────────────────────────────────────────
+// ── Error state ────────────────────────────────────────────
 .field__input--error {
   border-color: #e53e3e !important;
   &:focus {
@@ -87,8 +94,8 @@ textarea {
   }
 }
 
-// ── Spinner de loading ─────────────────────────────────────
-// Reutilizável em qualquer botão com estado "sending"
+// ── Loading spinner ────────────────────────────────────────
+// Reusable on any button with a "sending" state
 .form-spinner {
   width: 16px;
   height: 16px;
@@ -105,7 +112,7 @@ textarea {
   }
 }
 
-// ── Mensagem de erro de envio ──────────────────────────────
+// ── Submit error message ───────────────────────────────────
 .form-send-error {
   background: #fff5f5;
   border: 1px solid #fed7d7;
@@ -115,7 +122,7 @@ textarea {
   color: #c53030;
 }
 
-// ── Estado de sucesso ──────────────────────────────────────
+// ── Success state ──────────────────────────────────────────
 .form-success {
   padding: 3rem 2.5rem;
   text-align: center;
@@ -139,23 +146,3 @@ textarea {
   }
 }
 
-// ── Legado: contact-form (ContactSection.vue) ─────────────
-.contact-form {
-  @include card-surface(2rem);
-  box-shadow: var(--shadow);
-  display: grid;
-  gap: 1.25rem;
-
-  label {
-    display: grid;
-    gap: 0.4rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  input,
-  textarea {
-    @extend %input-base;
-  }
-}

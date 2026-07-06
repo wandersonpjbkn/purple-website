@@ -1,5 +1,8 @@
 <template>
-  <nav class="blog-pagination" aria-label="Paginação">
+  <nav
+    class="blog-pagination"
+    aria-label="Paginação"
+  >
     <button
       class="pagination-btn"
       :disabled="page === 1"
@@ -10,8 +13,15 @@
     </button>
 
     <div class="pagination-pages">
-      <template v-for="n in displayedPages" :key="n">
-        <span v-if="n === '...'" class="pagination-ellipsis">…</span>
+      <template
+        v-for="n in displayedPages"
+        :key="n"
+      >
+        <span
+          v-if="n === '...'"
+          class="pagination-ellipsis"
+          >…</span
+        >
         <button
           v-else
           class="pagination-btn pagination-btn--page"

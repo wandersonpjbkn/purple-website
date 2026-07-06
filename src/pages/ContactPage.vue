@@ -1,14 +1,14 @@
 <template>
-  <!-- ── Hero ──────────────────────────────────────── -->
+  <!-- ── Hero ─────────────────────────────────────────────── -->
   <section class="contact-hero">
     <BaseContainer>
       <div class="contact-hero__inner">
         <div>
           <p class="section-eyebrow">Contato</p>
-          <h1>{{ contact.title }}</h1>
-          <p class="lead lead--narrow">{{ contact.subtitle }}</p>
+          <h1>{{ useContact().title }}</h1>
+          <p class="lead lead--narrow">{{ useContact().subtitle }}</p>
 
-          <!-- CTAs diretos -->
+          <!-- Direct CTAs -->
           <div class="contact-hero__ctas">
             <BaseButton
               tag="a"
@@ -32,35 +32,55 @@
             </BaseButton>
           </div>
 
-          <!-- Info de contato -->
+          <!-- Contact info -->
           <div class="contact-info">
-            <a :href="`mailto:${contact.email}`" class="contact-info__item">
+            <a
+              :href="`mailto:${useContact().email}`"
+              class="contact-info__item"
+            >
               <span class="contact-info__icon"><BaseIcon name="mail" /></span>
-              <span>{{ contact.email }}</span>
+              <span>{{ useContact().email }}</span>
             </a>
-            <a :href="whatsappUrl" target="_blank" rel="noopener" class="contact-info__item">
+            <a
+              :href="whatsappUrl"
+              target="_blank"
+              rel="noopener"
+              class="contact-info__item"
+            >
               <span class="contact-info__icon"><BaseIcon name="phone" /></span>
-              <span>{{ contact.phone }}</span>
+              <span>{{ useContact().tel }}</span>
             </a>
             <div class="contact-info__item">
               <span class="contact-info__icon"><BaseIcon name="pin" /></span>
-              <span>{{ contact.address }}</span>
+              <span>{{ useContact().address }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Formulário -->
+        <!-- Form -->
         <div class="contact-form-wrap">
-          <!-- Estado: sucesso -->
-          <div v-if="status === 'success'" class="form-success">
+          <!-- State: success -->
+          <div
+            v-if="status === 'success'"
+            class="form-success"
+          >
             <div class="contact-success__icon"><BaseIcon name="check" /></div>
             <h3>Mensagem enviada!</h3>
             <p>Recebemos seu contato e responderemos em breve pelo e-mail informado.</p>
-            <BaseButton variant="secondary" @click="resetForm">Enviar outra mensagem</BaseButton>
+            <BaseButton
+              variant="secondary"
+              @click="resetForm"
+              >Enviar outra mensagem</BaseButton
+            >
           </div>
 
-          <!-- Formulário normal -->
-          <form v-else class="contact-form" novalidate @submit.prevent="handleSubmit">
+          <!-- Normal form -->
+          <form
+            v-else
+            class="contact-form"
+            novalidate
+            @submit.prevent="handleSubmit"
+          >
             <div class="contact-form__header">
               <h3>Envie uma mensagem</h3>
               <p>Preencha o formulário e entraremos em contato em até 1 dia útil.</p>
@@ -76,8 +96,16 @@
                   autocomplete="name"
                   required
                   :class="{ 'field__input--error': errors.name }"
+                  :aria-invalid="!!errors.name"
+                  :aria-describedby="errors.name ? 'name-error' : undefined"
                 />
-                <span v-if="errors.name" class="field__error" role="alert">{{ errors.name }}</span>
+                <span
+                  v-if="errors.name"
+                  id="name-error"
+                  class="field__error"
+                  role="alert"
+                  >{{ errors.name }}</span
+                >
               </label>
 
               <label class="field">
@@ -89,14 +117,33 @@
                   autocomplete="email"
                   required
                   :class="{ 'field__input--error': errors.email }"
+                  :aria-invalid="!!errors.email"
+                  :aria-describedby="errors.email ? 'email-error' : undefined"
                 />
-                <span v-if="errors.email" class="field__error" role="alert">{{ errors.email }}</span>
+                <span
+                  v-if="errors.email"
+                  id="email-error"
+                  class="field__error"
+                  role="alert"
+                  >{{ errors.email }}</span
+                >
               </label>
 
               <label class="field field--full">
                 <span class="field__label">Assunto <span aria-hidden="true">*</span></span>
-                <select v-model="form.subject" required :class="{ 'field__input--error': errors.subject }">
-                  <option value="" disabled>Selecione um assunto</option>
+                <select
+                  v-model="form.subject"
+                  required
+                  :class="{ 'field__input--error': errors.subject }"
+                  :aria-invalid="!!errors.subject"
+                  :aria-describedby="errors.subject ? 'subject-error' : undefined"
+                >
+                  <option
+                    value=""
+                    disabled
+                  >
+                    Selecione um assunto
+                  </option>
                   <option value="Employer Branding">Employer Branding</option>
                   <option value="Endomarketing">Endomarketing</option>
                   <option value="Comunicação Interna">Comunicação Interna</option>
@@ -105,7 +152,13 @@
                   <option value="Orçamento geral">Orçamento geral</option>
                   <option value="Outro">Outro</option>
                 </select>
-                <span v-if="errors.subject" class="field__error" role="alert">{{ errors.subject }}</span>
+                <span
+                  v-if="errors.subject"
+                  id="subject-error"
+                  class="field__error"
+                  role="alert"
+                  >{{ errors.subject }}</span
+                >
               </label>
 
               <label class="field field--full">
@@ -116,18 +169,38 @@
                   placeholder="Conte um pouco sobre o seu desafio ou como podemos ajudar..."
                   required
                   :class="{ 'field__input--error': errors.message }"
+                  :aria-invalid="!!errors.message"
+                  :aria-describedby="errors.message ? 'message-error' : undefined"
                 ></textarea>
-                <span v-if="errors.message" class="field__error" role="alert">{{ errors.message }}</span>
+                <span
+                  v-if="errors.message"
+                  id="message-error"
+                  class="field__error"
+                  role="alert"
+                  >{{ errors.message }}</span
+                >
               </label>
             </div>
 
-            <!-- Erro de envio -->
-            <div v-if="status === 'error'" class="form-send-error" role="alert">
+            <!-- Submit error -->
+            <div
+              v-if="status === 'error'"
+              class="form-send-error"
+              role="alert"
+            >
               {{ errorMsg }}
             </div>
 
-            <BaseButton type="submit" class="button--lg contact-form__submit" :disabled="status === 'sending'">
-              <span v-if="status === 'sending'" class="form-spinner" aria-hidden="true"></span>
+            <BaseButton
+              type="submit"
+              class="button--lg contact-form__submit"
+              :disabled="status === 'sending'"
+            >
+              <span
+                v-if="status === 'sending'"
+                class="form-spinner"
+                aria-hidden="true"
+              ></span>
               {{ status === 'sending' ? 'Enviando...' : 'Enviar mensagem' }}
             </BaseButton>
           </form>
@@ -136,7 +209,7 @@
     </BaseContainer>
   </section>
 
-  <!-- ── CTA secundário ─────────────────────────────── -->
+  <!-- ── Secondary CTA ────────────────────────────────────── -->
   <section class="contact-alt-cta">
     <BaseContainer>
       <div class="contact-alt-cta__inner">
@@ -175,32 +248,29 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 
-import contact from '@/data/contact.json'
-
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
 import { useEmailJS } from '@/composables/useEmailJS'
-import { usePageMeta } from '@/composables'
+import { usePageMeta, useContact } from '@/composables'
 
 usePageMeta({
   title: 'Contato',
   description: 'Entre em contato com a Purple Comunicação. Formulário, WhatsApp e e-mail disponíveis.',
 })
 
-// ── WhatsApp URLs ─────────────────────────────────────────
-const PHONE = import.meta.env.VITE_BASE_PHONE
-
+// ── WhatsApp URLs ──────────────────────────────────────────
 const whatsappUrl = computed(
-  () => `https://wa.me/${PHONE}?text=${encodeURIComponent('Olá! Vim pelo site da Purple e gostaria de saber mais.')}`,
+  () =>
+    `https://wa.me/${useContact().phone}?text=${encodeURIComponent('Olá! Vim pelo site da Purple e gostaria de saber mais.')}`
 )
 
 const whatsappHireUrl = computed(
   () =>
-    `https://wa.me/${PHONE}?text=${encodeURIComponent('Olá! Gostaria de contratar um serviço da Purple Comunicação.')}`,
+    `https://wa.me/${useContact().phone}?text=${encodeURIComponent('Olá! Gostaria de contratar um serviço da Purple Comunicação.')}`
 )
 
-// ── Formulário ────────────────────────────────────────────
+// ── Form ───────────────────────────────────────────────────
 const { status, errorMsg, send, reset } = useEmailJS()
 
 const form = reactive({
@@ -266,7 +336,7 @@ const resetForm = () => {
     }
   }
 
-  // ── CTAs diretos ───────────────────────────────────────────
+  // ── Direct CTAs ────────────────────────────────────────────
   &__ctas {
     display: flex;
     gap: 0.875rem;
@@ -289,7 +359,7 @@ const resetForm = () => {
   }
 }
 
-// ── Info de contato ────────────────────────────────────────
+// ── Contact info ───────────────────────────────────────────
 .contact-info {
   display: flex;
   flex-direction: column;
@@ -321,7 +391,7 @@ const resetForm = () => {
   }
 }
 
-// ── Formulário ─────────────────────────────────────────────
+// ── Form ───────────────────────────────────────────────────
 .contact-form {
   padding: 2.5rem;
   display: flex;
@@ -369,7 +439,7 @@ const resetForm = () => {
     gap: 0.5rem;
   }
 
-  // ── Campo ──────────────────────────────────────────────────
+  // ── Field ──────────────────────────────────────────────────
   select {
     cursor: pointer;
     appearance: none;
@@ -385,7 +455,7 @@ const resetForm = () => {
   }
 }
 
-// ── CTA dark ──────────────────────────────────────────────
+// ── Dark CTA ───────────────────────────────────────────────
 .contact-alt-cta {
   background: var(--section-dark);
   padding: 5rem 0;

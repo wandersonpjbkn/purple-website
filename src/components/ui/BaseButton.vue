@@ -1,5 +1,11 @@
 <template>
-  <component :is="tag" :to="tag === 'RouterLink' ? to : undefined" class="button" :class="variant" v-bind="$attrs">
+  <component
+    :is="tag"
+    :to="tag === 'RouterLink' ? to : undefined"
+    class="button"
+    :class="variant"
+    v-bind="$attrs"
+  >
     <slot />
   </component>
 </template>
@@ -15,6 +21,6 @@ withDefaults(
     to: '',
     tag: 'button',
     variant: 'primary',
-  },
+  }
 )
 </script>
