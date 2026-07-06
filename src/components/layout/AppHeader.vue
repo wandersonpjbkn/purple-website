@@ -4,9 +4,19 @@
       <div class="site-header__inner">
         <!-- Logo / Brand -->
         <RouterLink to="/" class="brand" aria-label="Purple Comunicação — Home">
-          <!-- <img src="@/assets/logo-ppl.svg" alt="ppl comunicação" class="brand__logo" /> -->
-          <span class="brand__ppl">ppl</span><span class="brand__dot">.</span
-          ><span class="brand__sub">comunicação</span>
+          <!-- Logo em imagem quando o arquivo existir (ver src/docs/IMAGES.md);
+               enquanto isso, o wordmark textual segue como fallback. -->
+          <img
+            v-if="!logoFailed"
+            :src="LOGO_SRC"
+            alt="ppl comunicação"
+            class="brand__logo"
+            @error="logoFailed = true"
+          />
+          <template v-else>
+            <span class="brand__ppl">ppl</span><span class="brand__dot">.</span
+            ><span class="brand__sub">comunicação</span>
+          </template>
         </RouterLink>
 
         <!-- Nav desktop -->
@@ -51,6 +61,10 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
+// Caminho público do logo (binding dinâmico: o Vite não exige o arquivo no
+// build). Sem o arquivo, o onError devolve o wordmark textual.
+const LOGO_SRC = '/images/brand/logo-ppl.svg'
+const logoFailed = ref(false)
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 24

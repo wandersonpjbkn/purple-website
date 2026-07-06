@@ -38,7 +38,7 @@
             <BaseButton tag="RouterLink" to="/contato" variant="secondary">Falar com a Purple</BaseButton>
           </div>
         </div>
-        <div class="visual-block"></div>
+        <MediaBlock :src="about.image" :alt="about.imageAlt" />
       </div>
     </BaseContainer>
   </section>
@@ -102,6 +102,7 @@ import team from '@/data/team.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import MediaBlock from '@/components/ui/MediaBlock.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
