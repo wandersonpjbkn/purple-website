@@ -8,7 +8,7 @@ category: 'Planejamento'
 tags: ['calendário', 'endomarketing', 'planejamento', 'RH']
 readTime: 5
 featured: false
-cover: '/images/blog/post-3.jpg'
+cover: 'blog/post-3.jpg'
 ---
 
 ## Por que um calendário de RH importa

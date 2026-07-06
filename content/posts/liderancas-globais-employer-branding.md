@@ -1,14 +1,14 @@
 ---
-title: "Lideranças globais que estão se apoiando em Employer Branding"
-slug: "liderancas-globais-employer-branding"
-excerpt: "O colaborador é peça central em qualquer empresa e vem ganhando ainda mais relevância nas estratégias de marca empregadora."
-date: "2026-03-01"
-author: "suelen-fernanda"
-category: "Employer Branding"
-tags: ["employer branding", "liderança", "cultura organizacional"]
+title: 'Lideranças globais que estão se apoiando em Employer Branding'
+slug: 'liderancas-globais-employer-branding'
+excerpt: 'O colaborador é peça central em qualquer empresa e vem ganhando ainda mais relevância nas estratégias de marca empregadora.'
+date: '2026-03-01'
+author: 'suelen-fernanda'
+category: 'Employer Branding'
+tags: ['employer branding', 'liderança', 'cultura organizacional']
 readTime: 8
 featured: true
-cover: "/images/blog/post-1.jpg"
+cover: 'blog/post-1.jpg'
 ---
 
 ## Introdução

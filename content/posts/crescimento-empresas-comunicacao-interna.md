@@ -8,7 +8,7 @@ category: 'Comunicação Interna'
 tags: ['comunicação interna', 'crescimento', 'cultura', 'engajamento']
 readTime: 6
 featured: false
-cover: '/images/blog/post-2.jpg'
+cover: 'blog/post-2.jpg'
 ---
 
 ## O cenário atual
