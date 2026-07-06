@@ -1,10 +1,5 @@
 <template>
-  <img
-    :src="src"
-    :alt="name"
-    loading="lazy"
-    @error="emit('error')"
-  />
+  <img :src="src" :alt="name" loading="lazy" @error="emit('error')" />
 </template>
 
 <script setup lang="ts">

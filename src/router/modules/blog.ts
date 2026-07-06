@@ -1,4 +1,4 @@
-const name = 'blog';
+const name = 'blog'
 
 export const blogRoutes = [
   {
