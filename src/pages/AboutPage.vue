@@ -65,7 +65,7 @@
     <BaseContainer>
       <div class="section-header section-header--center">
         <p class="section-eyebrow section-eyebrow--lime">Por que isso importa</p>
-        <h2>O problema que viemos resolver</h2>
+        <h2 style="color: var(--on-dark)">O problema que viemos resolver</h2>
         <p style="color: var(--on-dark-muted); text-align: center; max-width: 56ch; margin: 0 auto">
           Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
         </p>
