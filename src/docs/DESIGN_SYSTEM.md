@@ -99,17 +99,19 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   load (compõe `AvImage` + `AvInitials`); tamanhos `sm/md/lg/xl`. **Estilo
   co-localizado** (scoped + `:deep()`), não global.
 
-**sections/** `CtaBanner`, `FaqSection` · **layout/** `AppHeader`, `AppFooter` ·
-**blog/** `PostCard`, `BlogPagination`, `BlogSidebar`.
+**sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
+`AppFooter` · **ui/** (+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`,
+`BlogPagination`, `BlogSidebar`.
 
 ## Stat grid canônico ✅
 
 Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usam
-**um** padrão em `src/styles/sections/_stats.scss`: `.stat-grid`
+**um** padrão: o layout `.stat-grid` em `src/styles/sections/_stats.scss`
 (`--stat-cols`, hairline de 1px via `gap` + `--on-dark-border`; modificador
-`--cols-3`) + `.stat-card` (`__number/__label/__body/__source`, modificador
-`--highlight`). Usado na Home (panorama, 3 col) e na Sobre (dados, 4 col). Os
-antigos `.panorama-card*`/`.data-stat-card*`/`.stats-band*` foram removidos.
+`--cols-3`) e o card é o componente **`StatCard.vue`** (dono do estilo `.stat-card`
++ `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
+(panorama, `--cols-3`) e na Sobre (dados). Os antigos
+`.panorama-card*`/`.data-stat-card*`/`.stats-band*` foram removidos.
 
 ## Números com valor + sinal em lime ✅ (convenção de exibição)
 

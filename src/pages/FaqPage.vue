@@ -1,14 +1,10 @@
 <template>
   <div>
-    <section class="page-hero">
-      <BaseContainer>
-        <p class="section-eyebrow">Ajuda</p>
-        <h1>Perguntas frequentes</h1>
-        <p class="lead lead--narrow">
-          Como funciona contratar a Purple, planos, prazos e o que esperar. Se ficar qualquer dúvida, fale com a gente.
-        </p>
-      </BaseContainer>
-    </section>
+    <PageHero
+      eyebrow="Ajuda"
+      title="Perguntas frequentes"
+      subtitle="Como funciona contratar a Purple, planos, prazos e o que esperar. Se ficar qualquer dúvida, fale com a gente."
+    />
 
     <FaqSection />
 
@@ -24,7 +20,7 @@
 <script setup lang="ts">
 import { usePageMeta } from '@/composables'
 
-import BaseContainer from '@/components/ui/BaseContainer.vue'
+import PageHero from '@/components/sections/PageHero.vue'
 import FaqSection from '@/components/sections/FaqSection.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 

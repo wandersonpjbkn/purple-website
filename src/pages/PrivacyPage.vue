@@ -1,15 +1,12 @@
 <template>
   <div>
-    <section class="page-hero">
-      <BaseContainer>
-        <p class="section-eyebrow">Legal</p>
-        <h1>Política de Privacidade</h1>
-        <p class="lead lead--narrow">
-          Como a Purple Comunicação trata os seus dados, em conformidade com a LGPD.
-        </p>
-        <p class="privacy-updated">Última atualização: {{ formatDate(privacy.updatedAt) }}</p>
-      </BaseContainer>
-    </section>
+    <PageHero
+      eyebrow="Legal"
+      title="Política de Privacidade"
+      subtitle="Como a Purple Comunicação trata os seus dados, em conformidade com a LGPD."
+    >
+      <p class="privacy-updated">Última atualização: {{ formatDate(privacy.updatedAt) }}</p>
+    </PageHero>
 
     <section class="section-block section-block--sm">
       <BaseContainer>
@@ -37,6 +34,7 @@ import { formatDate, usePageMeta } from '@/composables'
 import privacy from '@/data/privacy.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+import PageHero from '@/components/sections/PageHero.vue'
 
 usePageMeta({
   title: 'Política de Privacidade',

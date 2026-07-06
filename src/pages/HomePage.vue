@@ -102,12 +102,7 @@
         <h2>{{ services.homeTeaser.title }}</h2>
       </div>
       <div class="services-grid">
-        <article v-for="service in teaserServices" :key="service.id" class="service-card">
-          <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
-          <h3>{{ service.title }}</h3>
-          <p>{{ service.summary }}</p>
-          <RouterLink class="text-link" :to="`/servicos#${service.id}`">Saiba mais</RouterLink>
-        </article>
+        <ServiceTeaserCard v-for="service in teaserServices" :key="service.id" :service="service" />
         <article v-if="featuredService" class="service-card service-card--featured">
           <div>
             <h3>{{ featuredService.title }}</h3>
@@ -135,17 +130,16 @@
 
       <!-- Apenas alguns dados mais impactantes -->
       <div class="stat-grid stat-grid--cols-3">
-        <div
+        <StatCard
           v-for="stat in panorama.stats.slice(0, 3)"
           :key="stat.label"
-          class="stat-card"
-          :class="{ 'stat-card--highlight': stat.highlight }"
-        >
-          <span class="stat-card__number">{{ stat.number }}<span>{{ stat.suffix }}</span></span>
-          <p class="stat-card__label">{{ stat.label }}</p>
-          <p v-if="stat.comparison" class="stat-card__body">{{ stat.comparison }}</p>
-          <span class="stat-card__source">{{ stat.source }}</span>
-        </div>
+          :number="stat.number"
+          :suffix="stat.suffix"
+          :label="stat.label"
+          :body="stat.comparison"
+          :source="stat.source"
+          :highlight="stat.highlight"
+        />
       </div>
 
       <hr class="panorama-divider" />
@@ -210,6 +204,8 @@ import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
 import MediaBlock from '@/components/ui/MediaBlock.vue'
+import StatCard from '@/components/ui/StatCard.vue'
+import ServiceTeaserCard from '@/components/ui/ServiceTeaserCard.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'

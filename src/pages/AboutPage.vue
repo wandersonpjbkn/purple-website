@@ -70,13 +70,16 @@
           Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
         </p>
       </div>
-      <!-- stat-grid + stat-card canônicos vêm de _stats.scss -->
+      <!-- .stat-grid (layout) + StatCard (componente) -->
       <div class="stat-grid">
-        <div v-for="stat in about.dataStats" :key="stat.number" class="stat-card">
-          <span class="stat-card__number">{{ stat.number }}<span>{{ stat.suffix }}</span></span>
-          <p class="stat-card__label">{{ stat.label }}</p>
-          <span class="stat-card__source">{{ stat.source }}</span>
-        </div>
+        <StatCard
+          v-for="stat in about.dataStats"
+          :key="stat.number"
+          :number="stat.number"
+          :suffix="stat.suffix"
+          :label="stat.label"
+          :source="stat.source"
+        />
       </div>
     </BaseContainer>
   </section>
@@ -96,6 +99,7 @@ import team from '@/data/team.json'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import MediaBlock from '@/components/ui/MediaBlock.vue'
+import StatCard from '@/components/ui/StatCard.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 

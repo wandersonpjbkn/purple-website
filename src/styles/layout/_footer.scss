@@ -22,7 +22,10 @@
     color: var(--text);
   }
 
-  ul {
+  // Listas de texto (Navegação, Tópicos, legal) — NÃO a fileira de ícones
+  // sociais, que tem layout/hover próprios (senão estas regras genéricas a
+  // venceriam por especificidade, empilhando os ícones e quebrando o hover).
+  ul:not(.footer-social) {
     display: grid;
     gap: 0.625rem;
 

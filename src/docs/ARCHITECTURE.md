@@ -27,8 +27,8 @@ src/
   pages/             Home, About, Abordagem, Services, Blog, BlogPost, Author, Contact, Faq, Privacy, NotFound
   components/
     layout/          AppHeader, AppFooter, CookieConsent
-    sections/        CtaBanner, FaqSection
-    ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, TeamCard
+    sections/        CtaBanner, FaqSection, PageHero
+    ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
     blog/            PostCard, BlogPagination, BlogSidebar
   composables/       useBlog, useEmailJS, usePageMeta (reexport em index.ts)

@@ -1,14 +1,10 @@
 <template>
   <!-- ── Page Hero ──────────────────────────────────── -->
-  <section class="page-hero">
-    <BaseContainer>
-      <p class="section-eyebrow">Como atuamos</p>
-      <h1>Nossa abordagem</h1>
-      <p class="lead lead--narrow">
-        Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade.
-      </p>
-    </BaseContainer>
-  </section>
+  <PageHero
+    eyebrow="Como atuamos"
+    title="Nossa abordagem"
+    subtitle="Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade."
+  />
 
   <!-- ── Pilares da abordagem ───────────────────────── -->
   <section class="section-block section-block--alt">
@@ -87,12 +83,7 @@
         </p>
       </div>
       <div class="services-grid">
-        <article v-for="service in bridgeServices" :key="service.id" class="service-card">
-          <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
-          <h3>{{ service.title }}</h3>
-          <p>{{ service.summary }}</p>
-          <RouterLink class="text-link" :to="`/servicos#${service.id}`">Saiba mais</RouterLink>
-        </article>
+        <ServiceTeaserCard v-for="service in bridgeServices" :key="service.id" :service="service" />
       </div>
       <div class="button-row button-row--center">
         <BaseButton tag="RouterLink" to="/servicos" variant="secondary">Ver todos os serviços</BaseButton>
@@ -110,16 +101,15 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-
 import { usePageMeta } from '@/composables'
 import approach from '@/data/approach.json'
 import services from '@/data/services.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import BaseIcon from '@/components/ui/BaseIcon.vue'
+import ServiceTeaserCard from '@/components/ui/ServiceTeaserCard.vue'
 import FeaturePillar from '@/components/ui/FeaturePillar.vue'
+import PageHero from '@/components/sections/PageHero.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
 // Ponte para Serviços: os 3 serviços "porta de entrada" (camada prática).

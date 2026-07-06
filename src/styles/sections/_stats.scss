@@ -1,9 +1,9 @@
 @use '../abstracts/mixins' as *;
 
-// ── Stat grid + stat card (canônico) ───────────────────────
-// Apresentação única de estatísticas (número + sufixo + label [+ body] +
-// fonte) sobre fundo escuro. Estética hairline: células separadas por 1px,
-// centradas e minimalistas. Usada na Home (panorama) e na Sobre (dados).
+// ── Stat grid (layout hairline) ────────────────────────────
+// Grid-container das estatísticas: células separadas por 1px sobre fundo
+// escuro. O card em si é o componente `StatCard.vue` (dono do próprio estilo).
+// Usado na Home (panorama, --cols-3) e na Sobre (dados, 4 col).
 .stat-grid {
   --stat-cols: 4;
   display: grid;
@@ -24,56 +24,6 @@
 
   &--cols-3 {
     --stat-cols: 3;
-  }
-}
-
-.stat-card {
-  background: var(--section-dark-2);
-  padding: var(--space-8);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-
-  // Célula destacada (ex.: o dado-chave do panorama).
-  &--highlight {
-    background: rgba(var(--lime-rgb), 0.08);
-  }
-
-  &__number {
-    font-size: var(--text-3xl);
-    font-weight: 800;
-    color: var(--on-dark);
-    line-height: 1;
-    letter-spacing: -0.03em;
-
-    // Convenção de marca: valor em texto padrão, sinal/sufixo em lime.
-    span {
-      color: var(--lime);
-    }
-  }
-
-  &__label {
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--on-dark-strong);
-    line-height: 1.4;
-    max-width: 22ch;
-  }
-
-  &__body {
-    font-size: var(--text-sm);
-    color: var(--on-dark-muted);
-    line-height: 1.6;
-    max-width: 34ch;
-  }
-
-  &__source {
-    font-size: var(--text-xs);
-    color: var(--on-dark-subtle);
-    font-style: italic;
-    margin-top: var(--space-1);
   }
 }
 

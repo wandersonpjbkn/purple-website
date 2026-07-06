@@ -1,16 +1,11 @@
 <template>
   <div>
     <!-- ── Page Hero ──────────────────────────────────── -->
-    <section class="page-hero">
-      <BaseContainer>
-        <p class="section-eyebrow">{{ services.intro.eyebrow }}</p>
-        <h1>{{ services.intro.title }}</h1>
-        <p class="lead lead--narrow">{{ services.intro.subtitle }}</p>
-        <div class="button-row">
-          <BaseButton tag="RouterLink" to="/contato">Falar com a Purple</BaseButton>
-        </div>
-      </BaseContainer>
-    </section>
+    <PageHero :eyebrow="services.intro.eyebrow" :title="services.intro.title" :subtitle="services.intro.subtitle">
+      <div class="button-row">
+        <BaseButton tag="RouterLink" to="/contato">Falar com a Purple</BaseButton>
+      </div>
+    </PageHero>
 
     <!-- ── Sub-nav fixa: acesso rápido às 3 camadas ───── -->
     <div class="svc-subnav">
@@ -172,6 +167,7 @@ import services from '@/data/services.json'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
+import PageHero from '@/components/sections/PageHero.vue'
 import FaqSection from '@/components/sections/FaqSection.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 

@@ -47,6 +47,23 @@ carga). Então a regra é organizacional, não brigar com a cascata:
   ancorado ao seu container e a alvos estreitos (ex.: `:deep(p > img)`), nunca um
   elemento largo que alcance componentes aninhados.
 
+## Sem duplicação (DRY) ✅
+
+Uma estrutura não deve ser copiada e colada. Se uma estrutura CSS/HTML aparece em
+**mais de um lugar** e é **muito idêntica**, segmentá-la seguindo as regras do
+projeto:
+
+- **Só CSS repetido** → utilitário/classe compartilhada (ex.: `.button-row`,
+  `.section-block--dark`, `.stat-grid`) num partial global apropriado.
+- **Markup repetido** → **componente** (ex.: `StatCard`, `ServiceTeaserCard`,
+  `PageHero`), com o estilo co-localizado no componente (posse de estilo). O card
+  antes duplicado (Home + Sobre) virou `StatCard`; o teaser de serviço (Home +
+  Abordagem) virou `ServiceTeaserCard`; o hero de página interna virou `PageHero`.
+
+Variações de uso único ou com estrutura diferente (ex.: o card `--featured` da
+Home, o card de projetos da Serviços) **não** forçam abstração — DRY vale quando a
+repetição é real e quase idêntica, não para unir coisas só parecidas.
+
 ## Comentários ✅
 
 Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,
