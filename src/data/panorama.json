@@ -2,8 +2,7 @@
   "eyebrow": "Panorama do mercado",
   "title": "Os números que ninguém pode ignorar",
   "subtitle": "Dados de pesquisas recentes mostram por que cuidar dos colaboradores deixou de ser diferencial para se tornar estratégia de negócio.",
-  "stats": [
-    {
+  "stats": [{
       "number": "86",
       "suffix": "%",
       "label": "consideram bem-estar tão importante quanto o salário",
@@ -49,8 +48,7 @@
       "highlight": false
     }
   ],
-  "context": [
-    {
+  "context": [{
       "strong": "70% → 90%",
       "text": "de engajamento após implementação de estratégias de saúde corporativa (Forbes Brasil, 2022)"
     },

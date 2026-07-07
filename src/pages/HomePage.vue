@@ -71,7 +71,7 @@
               <div
                 class="hero__card-bar-fill"
                 :style="{ width: `${home.hero.card.barWidth}%` }"
-              ></div>
+              />
             </div>
             <div class="hero__card-tags">
               <span
@@ -101,7 +101,7 @@
     <BaseContainer>
       <div class="split-section">
         <MediaBlock
-          :src="home.highlight.image"
+          :src="useCdnAsset(home.highlight.image)"
           :alt="home.highlight.imageAlt"
         />
         <div>
@@ -267,7 +267,7 @@ import services from '@/data/services.json'
 import team from '@/data/team.json'
 import { posts } from 'virtual:blog-posts'
 
-import { usePageMeta } from '@/composables'
+import { usePageMeta, useCdnAsset } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'

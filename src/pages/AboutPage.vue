@@ -48,7 +48,7 @@
           </div>
         </div>
         <MediaBlock
-          :src="about.image"
+          :src="useCdnAsset(about.image)"
           :alt="about.imageAlt"
         />
       </div>
@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePageMeta } from '@/composables'
+import { usePageMeta, useCdnAsset } from '@/composables'
 import about from '@/data/about.json'
 import team from '@/data/team.json'
 

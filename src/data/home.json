@@ -6,8 +6,7 @@
     "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
     "primaryCta": "Falar com a Purple",
     "secondaryCta": "Conheça os serviços",
-    "stats": [
-      {
+    "stats": [{
         "value": "64",
         "sign": "%",
         "label": "sem engajamento no trabalho",
@@ -40,7 +39,7 @@
     "eyebrow": "Por que isso importa",
     "title": "Na busca pelo crescimento, muitas empresas esquecem de olhar para dentro",
     "description": "Marketing, investimento em mídia, promoções e campanhas são excelentes para engajar os clientes externos. Mas quando a comunicação e as ações internas não recebem a mesma atenção, os times ficam desengajados e a marca empregadora não transmite confiança.",
-    "image": "/images/sections/home-highlight.jpg",
+    "image": "sections/home-highlight.jpg",
     "imageAlt": "Equipe colaborando em um ambiente de trabalho saudável",
     "benefits": [
       "Menos rotatividade e absenteísmo",

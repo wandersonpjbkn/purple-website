@@ -8,8 +8,7 @@
     "eyebrow": "Soluções",
     "title": "O que fazemos pela sua empresa"
   },
-  "catalog": [
-    {
+  "catalog": [{
       "id": "linkedin-corporativo",
       "icon": "linkedin",
       "title": "Gestão de LinkedIn Corporativo",
@@ -177,8 +176,7 @@
     "subtitle": "Assinatura mensal com permanência mínima de 3 meses. Cada proposta é fechada sob consulta, de acordo com o contexto e o momento da empresa.",
     "priceLabel": "Sob consulta",
     "ctaLabel": "Pedir proposta",
-    "items": [
-      {
+    "items": [{
         "id": "essencial",
         "name": "Essencial",
         "audience": "40 a 80 colaboradores",
@@ -212,8 +210,7 @@
     "eyebrow": "Projetos pontuais",
     "title": "Precisa de algo específico?",
     "subtitle": "Além dos planos recorrentes, entregamos projetos fechados — com começo, meio e fim.",
-    "items": [
-      {
+    "items": [{
         "icon": "search",
         "serviceId": "diagnostico-cultura",
         "title": "Diagnóstico de Cultura",

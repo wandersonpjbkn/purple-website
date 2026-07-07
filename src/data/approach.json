@@ -1,6 +1,5 @@
 {
-  "pillars": [
-    {
+  "pillars": [{
       "icon": "target",
       "title": "Foco no colaborador",
       "description": "Fortalecemos a experiência interna com ações orientadas por percepção, contexto e cultura."
@@ -16,8 +15,7 @@
       "description": "Ajudamos a tornar a proposta de valor ao colaborador mais visível, coerente e atrativa."
     }
   ],
-  "differentials": [
-    {
+  "differentials": [{
       "icon": "target",
       "title": "Foco em pessoas",
       "description": "Nossas soluções são desenhadas colocando os colaboradores no centro de cada decisão estratégica."
@@ -51,8 +49,7 @@
   "process": {
     "eyebrow": "Como trabalhamos",
     "title": "Um processo pensado para gerar resultado real",
-    "steps": [
-      {
+    "steps": [{
         "title": "Briefing e imersão",
         "description": "Entendemos a fundo o contexto da empresa, cultura, desafios e objetivos antes de propor qualquer ação."
       },

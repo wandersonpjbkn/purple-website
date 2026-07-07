@@ -34,21 +34,21 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
 
 ## Assets pendentes ⏳
 
-| Slot                         | Caminho exato                               | Formato | Proporção              | Tamanho mínimo       | Observações                                                                        |
-| ---------------------------- | ------------------------------------------- | ------- | ---------------------- | -------------------- | ---------------------------------------------------------------------------------- |
-| Foto da Suelen (time)        | `public/images/team/suelen.jpg`             | JPG     | 1:1 (quadrada)         | 640×640px            | Mesmo enquadramento/estilo da `wanderson.jpg` já existente                         |
-| Logo definitivo              | `src/assets/brand/logo-ppl.svg`             | SVG     | ~170×32 (horizontal)   | —                    | **Substituir o placeholder** existente; fundo transparente. Inline via `BrandLogo` |
-| Seção destaque da Home       | `public/images/sections/home-highlight.jpg` | JPG     | ~4:3 vertical-friendly | 1200px no lado maior | Aparece ao lado de "Na busca pelo crescimento…"; foto de time/ambiente de trabalho |
-| Seção "Nossa crença" (Sobre) | `public/images/sections/about.jpg`          | JPG     | ~4:3                   | 1200px no lado maior | Ideal: foto dos fundadores ou do trabalho em contexto                              |
+| Slot                  | Caminho exato                   | Formato | Proporção            | Tamanho mínimo | Observações                                                                        |
+| --------------------- | ------------------------------- | ------- | -------------------- | -------------- | ---------------------------------------------------------------------------------- |
+| Foto da Suelen (time) | `public/images/team/suelen.jpg` | JPG     | 1:1 (quadrada)       | 640×640px      | Mesmo enquadramento/estilo da `wanderson.jpg` já existente                         |
+| Logo definitivo       | `src/assets/brand/logo-ppl.svg` | SVG     | ~170×32 (horizontal) | —              | **Substituir o placeholder** existente; fundo transparente. Inline via `BrandLogo` |
 
 ## Assets já entregues ✅
 
-| Slot                    | Caminho                                                                          |
-| ----------------------- | -------------------------------------------------------------------------------- |
-| Foto do Wanderson       | `public/images/team/wanderson.jpg`                                               |
-| Capas do blog (4 posts) | `public/images/blog/post-1.jpg` … `post-4.jpg`                                   |
-| Logo placeholder        | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo)                         |
-| Favicon / touch / OG    | `public/favicon.svg` · `favicon.png` · `apple-touch-icon.png` · `og-default.jpg` |
+| Slot                         | Caminho                                                                          |
+| ---------------------------- | -------------------------------------------------------------------------------- |
+| Foto do Wanderson            | `team/wanderson.jpg`                                                             |
+| Seção destaque da Home       | `sections/home-highlight.jpg`                                                    |
+| Seção "Nossa crença" (Sobre) | `sections/about.jpg`                                                             |
+| Capas do blog (4 posts)      | `blog/post-1.jpg` … `post-4.jpg`                                                 |
+| Logo placeholder             | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo)                         |
+| Favicon / touch / OG         | `public/favicon.svg` · `favicon.png` · `apple-touch-icon.png` · `og-default.jpg` |
 
 > Os assets de marca raster (favicon PNG, apple-touch, OG 1200×630) são gerados
 > da marca por `scripts/gen-brand-assets.mjs` (Chromium headless) — rodar de novo

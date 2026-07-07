@@ -35,7 +35,7 @@ const failed = ref(false)
   border-radius: var(--radius-xl);
   background: var(--bg-alt);
   border: 1px solid var(--border);
-  min-height: 380px;
+  min-height: 690px;
   position: relative;
   overflow: hidden;
 
