@@ -26,108 +26,139 @@ export function buildEmail(data: EmailData): string {
   <style>
     body {
       margin: 0;
-      padding: 32px;
+      padding: 40px;
       background: #F5F3FA;
       font-family: Inter, Roboto, Arial, Helvetica, sans-serif;
-      color: #2C2434;
+      color: #2D2438;
     }
     .container {
       max-width: 700px;
       margin: auto;
       background: #FFFFFF;
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
-      border: 1px solid #E8E3EF;
+      border: 1px solid #E8E2F1;
     }
     .header {
       background: #4F2D7F;
-      color: #FFFFFF;
-      padding: 28px 36px;
+      color: #FFF;
+      padding: 32px;
     }
     .header h1 {
       margin: 0;
-      font-size: 24px;
+      font-size: 26px;
+    }
+    .header p {
+      margin-top: 8px;
+      margin-bottom: 0;
+      opacity: .85;
     }
     .content {
       padding: 36px;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: 170px 1fr;
-      gap: 12px 20px;
+    .section {
+      margin-bottom: 28px;
     }
     .label {
-      color: #7E748B;
-      font-weight: bold;
+      color: #8B809A;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
     }
     .value {
-      color: #2C2434;
+      font-size: 16px;
+      line-height: 1.6;
     }
-    .message {
-      margin-top: 30px;
+    .card {
       background: #F8F6FC;
-      padding: 22px;
       border-left: 4px solid #c5e22e;
-      border-radius: 8px;
+      padding: 20px;
+      border-radius: 10px;
       white-space: pre-wrap;
       line-height: 1.7;
     }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 16px 0;
+      margin-bottom: 30px;
+    }
+    .grid .title {
+      color: #7D708B;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .grid .info {
+      color: #2D2438;
+      margin-bottom: 16px;
+    }
     .button {
       display: inline-block;
-      margin-top: 30px;
-      background: #6D28D9;
+      margin-top: 10px;
+      background: #8b2fcc;
       color: #fff;
       text-decoration: none;
-      padding: 14px 24px;
-      border-radius: 8px;
+      padding: 15px 24px;
+      border-radius: 10px;
       font-weight: bold;
     }
     .footer {
       background: #F8F6FC;
       padding: 28px 36px;
       font-size: 13px;
-      color: #6F677B;
+      color: #746C81;
+    }
+    .footer strong {
+      color: #4F2D7F;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- header -->
     <div class="header">
       <h1>Novo contato pelo site</h1>
+      <p>Um potencial cliente acabou de preencher o formulário da Purple Comunicação.</p>
     </div>
 
     <div class="content">
       <div class="grid">
-        <div class="label">Nome</div>
-        <div class="value">${name}</div>
+        <!-- title -->
+        <div class="title">Nome</div>
+        <div class="info">${name}</div>
 
-        <div class="label">Email</div>
-        <div class="value">${email}</div>
+        <!-- email -->
+        <div class="title">E-mail</div>
+        <div class="info"><a href="mailto:${email}">${email}</a></div>
 
-        <div class="label">Serviço</div>
-        <div class="value">${service}</div>
+        <!-- service -->
+        <div class="title">Serviço</div>
+        <div class="info">${service}</div>
 
-        <div class="label">Recebido em</div>
-        <div class="value">${sentAt}</div>
+        <!-- sent at -->
+        <div class="title">Recebido em</div>
+        <div class="info">${sentAt}</div>
 
-        <div class="label">Idioma</div>
-        <div class="value">${language}</div>
-
-        <div class="label">Origem</div>
-        <div class="value">${url}</div>
+        <!-- source -->
+        <div class="title">Origem</div>
+        <div class="info"><a href="${url}">${url}</a></div>
       </div>
 
-      <div class="message">
-        ${message}
+      <!-- message -->
+      <div class="section">
+        <div class="label">Mensagem enviada</div>
+        <div class="card">${message}</div>
       </div>
 
-      <a class="button" href="mailto:${email}?subject=Re:%20${encodeURIComponent(service)}">
-        Responder ao cliente
-      </a>
+      <!-- reply -->
+      <a class="button" href="mailto:${email}?subject=Re:%20${encodeURIComponent(service)}">Responder ao cliente</a>
     </div>
 
     <div class="footer">
-      Mensagem enviada automaticamente pelo formulário do site da Purple Comunicação.
+      <strong>Purple Comunicação</strong><br>
+      Este e-mail foi enviado automaticamente pelo formulário de contato do site.
     </div>
   </div>
 </body>
