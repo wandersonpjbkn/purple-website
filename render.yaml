@@ -1,0 +1,41 @@
+# Infra-as-code do site institucional Purple (Vue 3 + Vite SPA).
+#
+# O serviço no Render já existe e foi criado manualmente pelo painel (não via
+# Blueprint): auto-deploy a cada commit na branch e o rewrite de SPA já estão
+# configurados por lá. Este arquivo documenta essa configuração como
+# referência — como o serviço não é gerenciado por Blueprint, ele não se
+# aplica sozinho ao painel. Ajuste `name`/`branch` abaixo para bater com o
+# serviço real se decidirem adotar/sincronizar via Blueprint.
+services:
+  - name: purple-website
+    type: web
+    runtime: static
+    branch: develop
+    buildCommand: >-
+      (npx playwright-core install-deps chromium || true) &&
+      npx playwright-core install chromium &&
+      yarn build:static
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_SITE_URL
+        sync: false
+      - key: VITE_CONTACT_API_URL
+        sync: false
+      - key: VITE_TURNSTILE_SITE_KEY
+        sync: false
+      - key: VITE_GTM_ID
+        sync: false
+      - key: VITE_BASE_PHONE
+        sync: false
+      - key: VITE_BASE_TEL
+        sync: false
+      - key: VITE_BASE_EMAIL
+        sync: false
+      - key: VITE_BASE_ADDRESS
+        sync: false
+      - key: VITE_CDN_URL
+        sync: false
