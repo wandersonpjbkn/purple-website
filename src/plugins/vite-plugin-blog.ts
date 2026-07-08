@@ -26,8 +26,6 @@ export const blogPlugin = (workerUrl?: string): Plugin => {
 
         const blogPosts = await response.json()
 
-        console.log(`[vite-plugin-blog] Encontrados ${blogPosts.length} posts`)
-
         return `
 export const posts = ${JSON.stringify(blogPosts, null, 0)};
 
