@@ -1,7 +1,8 @@
 # Content Model (as-built) — site Purple
 
-> Verdade observada no código em **2026-07-06**. Onde mora cada conteúdo e qual
-> é a regra de validação. Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
+> Verdade observada no código em **2026-07-08**. Onde mora cada conteúdo e qual
+> é a regra de validação. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
+> Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) · [`POSITIONING`](POSITIONING.md) ·
 > [`PROJECT_STATE`](PROJECT_STATE.md) · [`IMAGES`](IMAGES.md).
 
@@ -9,15 +10,13 @@ Status: ✅ dado real publicável · ⏳ pendência registrada.
 
 ## Fonte única de conteúdo ✅
 
-| Fonte                | Papel                                                         | Status |
-| -------------------- | ------------------------------------------------------------- | ------ |
-| `src/data/*.json`    | Todo o conteúdo do site (fragmentado por domínio)             | ✅     |
-| `content/posts/*.md` | Blog (via `virtual:blog-posts`); autores resolvidos em `team` | ✅     |
+| Fonte                       | Papel                                                                      | Status |
+| --------------------------- | -------------------------------------------------------------------------- | ------ |
+| `src/data/*.json`           | Todo o conteúdo do site (fragmentado por domínio)                          | ✅      |
+| Bucket R2 (`workers/blog/`) | Blog: arquivos `.md`, servidos via `virtual:blog-posts`; autores em `team` | ✅      |
 
-> `src/content/placeholders.ts` foi **aposentado** (jul/2026): a discovery
-> preencheu os dois slots reservados. O conteúdo validado vive em `home.json`
-> (hero) e `services.json` (oferta). O rascunho `SERVICE_OFFER_DRAFT` foi
-> absorvido/atualizado no catálogo de `services.json`; histórico no git.
+O conteúdo do blog não está versionado neste repositório — vive num bucket R2,
+lido pelo Worker `workers/blog` (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
 
 ## `src/data/*.json` — fragmentado por domínio ✅
 
@@ -34,7 +33,7 @@ Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
   - `highlight` (inclui `image`/`imageAlt` — slot de foto), `cta`.
 - **`services.json`** — **fonte única da oferta**:
   - `intro` (hero da página), `homeTeaser` (seção da Home);
-  - `catalog[7]` — formato rico por serviço: `id` (âncora `/servicos#id`), `icon`, `title`, `tagline`, `summary` (cards/teaser), `description`, `benefits[]`, `process[]`, `featured` (exatamente 1 = card destacado da Home);
+  - `catalog[7]` — formato rico por serviço: `id` (âncora `/servicos#id`), `icon`, `title`, `tagline`, `summary` (cards/teaser), `description`, `benefits[]`, `process[]`, `featured` (exatamente 1 = card destacado da Home), `blogCategories[]` opcional (categorias de post do blog associadas a esse serviço — usado pelo convite contextual em `BlogPostPage`);
   - `packages` — 3 planos recorrentes (`audience`, `summary`, `includes[]`, `featured`), `priceLabel: "Sob consulta"` (**sem preços publicados — decisão de produto**), `ctaLabel`;
   - `projects` — 3 projetos pontuais (cada um com `serviceId`, âncora para o card do catálogo).
 - **`faq.json`** — `eyebrow`, `title`, `subtitle`, `items[]` (`{ question, answer }`); consumido por `FaqSection` (página `/faq` e seção na Serviços).
@@ -60,8 +59,9 @@ Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(
 
 Além das 6 do menu, há páginas institucionais no rodapé — **FAQ** (`/faq` ←
 `faq.json`) e **Privacidade** (`/privacidade` ← `privacy.json`) — e uma
-**404** (`NotFoundPage`, catch-all). Cada post do blog ganhou um CTA de conversão
-(`CtaBanner`) + convite ao serviço relacionado (mapa categoria→`services.catalog`).
+**404** (`NotFoundPage`, catch-all). Cada post do blog tem um CTA de conversão
+(`CtaBanner`) + convite ao serviço relacionado — serviço encontrado por
+`services.catalog` cujo `blogCategories[]` contém a categoria do post.
 
 > A "filosofia/processo" segue consolidada na **Abordagem**; a página de
 > Serviços é oferta (catálogo + planos + projetos), por decisão registrada em
@@ -77,9 +77,3 @@ citam a fonte no próprio texto. **Exceção registrada:** os stats do hero
 vazio, aguardando confirmação das referências pela dupla — pendência rastreada em
 [`PROJECT_STATE`](PROJECT_STATE.md). **Ao adicionar conteúdo factual novo, o
 `source` é obrigatório.** Não publicamos preços (decisão: "Sob consulta").
-
-## Fonte de blog unificada ✅
-
-Todo o blog (inclusive a Home) lê de `virtual:blog-posts`. O stack legado
-(`src/data/posts.json` → `BlogList` → `BlogCard`) foi removido — não há mais duas
-fontes divergentes.

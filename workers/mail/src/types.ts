@@ -4,6 +4,7 @@ export interface Env {
 
   ALLOWED_ORIGIN: string
   ALLOWED_ORIGIN_WWW: string
+  ALLOWED_ORIGIN_LAN?: string
 }
 
 export interface EmailData {

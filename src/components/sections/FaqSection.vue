@@ -26,7 +26,7 @@
               :id="`faq-trigger-${i}`"
               type="button"
               class="faq-item__trigger"
-              :aria-expanded="open === i"
+              :aria-expanded="isOpen(i)"
               :aria-controls="`faq-panel-${i}`"
               @click="toggle(i)"
             >
@@ -38,7 +38,7 @@
             </button>
           </h3>
           <div
-            v-show="open === i"
+            v-show="isOpen(i)"
             :id="`faq-panel-${i}`"
             class="faq-item__a"
             role="region"
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import faq from '@/data/faq.json'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 
@@ -65,10 +65,10 @@ withDefaults(
   { title: '', alt: false }
 )
 
-// Acordeão de item único aberto por vez; -1 = todos fechados.
-const open = ref(-1)
+const openState = reactive<Record<number, boolean>>({})
+const isOpen = (i: number) => !!openState[i]
 const toggle = (i: number) => {
-  open.value = open.value === i ? -1 : i
+  openState[i] = !openState[i]
 }
 </script>
 

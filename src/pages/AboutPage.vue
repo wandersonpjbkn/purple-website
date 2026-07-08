@@ -104,6 +104,9 @@
   <CtaBanner
     title="Tudo começa com uma boa conversa"
     description="Estamos aqui para ouvir, entender seu contexto e construir juntos uma estratégia que faz sentido."
+    whatsapp-message="Olá! Conheci a Purple pela página Sobre e quero conversar. [mensagem provisória — copy final pendente]"
+    content-to="/abordagem"
+    content-label="Conhecer nossa abordagem"
   />
 </template>
 

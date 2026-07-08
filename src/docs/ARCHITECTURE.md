@@ -1,7 +1,8 @@
 # Architecture (as-built) — site Purple
 
-> Verdade técnica observada no repositório em **2026-07-06**. Gerado lendo o
-> código, não as intenções. Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
+> Verdade técnica observada no repositório em **2026-07-08**. Gerado lendo o
+> código, não as intenções. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
+> Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
 > [`POSITIONING`](POSITIONING.md) · [`PROJECT_STATE`](PROJECT_STATE.md).
 > Conteúdo: [`CONTENT_MODEL`](CONTENT_MODEL.md) · UI: [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) ·
 > testes: [`TESTING`](TESTING.md).
@@ -36,9 +37,8 @@ src/
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
-  types/             team.ts, post.ts
+  types/             team.ts
   docs/              esta documentação
-content/posts/       *.md  (fonte real do blog)
 public/              robots.txt, images/
 ```
 
@@ -71,20 +71,32 @@ public/              robots.txt, images/
 
 `scrollBehavior` rola ao topo (smooth) a cada navegação (e a âncoras `#id` com offset). São **6 páginas no menu** (Home · Sobre · Abordagem · Serviços · Blog · Contato); `blog-author`/`blog-post` são detalhe; `faq`/`privacy` vivem no rodapé; a catch-all `not-found` renderiza a `NotFoundPage`.
 
-## Blog via Vite plugin ✅
+## Blog via Cloudflare Worker + R2 ✅
 
 `src/plugins/vite-plugin-blog.ts` expõe o módulo virtual **`virtual:blog-posts`**:
 
-- Lê `content/posts/*.md` no `load()`; parser de **frontmatter YAML próprio** (não usa lib) e **markdown→HTML por regex** (`markdownToHtml`): tabelas GFM, code blocks, blockquotes, headings com `id` de âncora, listas, inline.
-- Calcula `readTime` (≈200 wpm) e `wordCount`; ordena por data desc.
-- Exporta `posts`, `getPost`, `getPostsByAuthor`, `getPostsByCategory`, `getFeaturedPosts`, `getAllCategories`.
-- Tipos do módulo declarados em `src/vite-env.d.ts`.
-- **HMR**: `fs.watch` em `content/posts` dispara `full-reload`.
-- Consumido por `useBlog`, `BlogPage`, `BlogPostPage`, `AuthorPage`, `PostCard` **e a Home** (destaques via `posts.slice(0, 3)`).
+- No `load()`, faz `fetch` em `${VITE_POSTS_API_URL}/posts` (sem a env, default
+  `http://localhost:8787/posts`) e recebe os posts **já processados** em JSON.
+- O parsing propriamente dito — **frontmatter YAML próprio** (não usa lib) e
+  **markdown→HTML por regex**: tabelas GFM, code blocks, blockquotes, headings
+  com `id` de âncora, listas, inline — roda no Worker
+  (`workers/blog/src/index.ts`), que lê os arquivos `.md` de um bucket R2
+  (binding `POSTS_BUCKET`). O front-end nunca lê markdown diretamente.
+- `readTime` (≈200 wpm) e `wordCount` são calculados no Worker; a ordenação
+  por data (desc) também acontece lá antes de responder.
+- Exporta `posts`, `getPost`, `getPostsByAuthor`, `getPostsByCategory`,
+  `getFeaturedPosts`, `getAllCategories`. Tipos do módulo declarados em
+  `src/vite-env.d.ts`.
+- **Falha de rede é silenciosa por design:** se o `fetch` falhar (Worker fora
+  do ar, `VITE_POSTS_API_URL` incorreta etc.), `load()` cai para `posts = []`
+  sem interromper build/dev — só um `console.error`. `BlogPage.vue` e o
+  teaser da `HomePage.vue` mostram uma mensagem de "não foi possível carregar"
+  quando `posts` vem vazio, em vez de uma grade em branco sem explicação.
+- Consumido por `useBlog`, `BlogPage`, `BlogPostPage`, `AuthorPage`,
+  `PostCard` **e a Home** (destaques via `posts.slice(0, 3)`).
 
 **Fonte única ✅** — todo o blog (inclusive os destaques da Home) lê de
-`virtual:blog-posts`. O stack legado (`posts.json` → `BlogList` → `BlogCard`) foi
-removido; a Home renderiza `PostCard` como as demais telas.
+`virtual:blog-posts`; não há outra fonte de posts no repositório.
 
 ## Formulário de contato ✅
 
@@ -92,14 +104,14 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 
 - **`TurnstileWidget.vue`** (`components/forms/`) + **`useTurnstile`** renderizam o widget anti-spam da Cloudflare (`window.turnstile`, script carregado por CDN em `index.html`) usando `VITE_TURNSTILE_SITE_KEY`; emite `verified`/`expired`/`error` com o token do desafio.
 - **`useMail`** (`composables/useMail.ts`) faz `POST` do payload (`contact`, `interest`, `metadata`, `turnstileToken`) para `VITE_CONTACT_API_URL`, com timeout de 10s via `AbortController`.
-- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`) para `contato@purplecomunicacao.com.br`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`), não pelo `yarn build` do site.
+- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW`, `workers/shared/http.ts`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`) para `purplecomunica@gmail.com`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`), não pelo `yarn build` do site.
 - **`useContact`** (`composables/useContact.ts`) continua isolado — só dados estáticos de contato (título/subtítulo/telefone/e-mail/endereço), não tem relação com o envio.
 
 ## SEO / meta ✅
 
 `usePageMeta` (em `composables/usePageMeta.ts`) emite `useSeoMeta` (OG/Twitter) + **JSON-LD** (WebPage/Article) + canonical, lendo `VITE_SITE_URL`.
 
-- **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`noindex, nofollow`** (site pré-lançamento). `usePageMeta` **não** emite mais `robots` (removido para eliminar o conflito anterior). Reforçado por `public/robots.txt` (`Disallow: /`). Quando o site for ao ar, basta trocar a linha no `App.vue`.
+- **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`noindex, nofollow`** (site pré-lançamento). `usePageMeta` não emite `robots` — evita duas fontes divergentes. Reforçado por `public/robots.txt` (`Disallow: /`). Quando o site for ao ar, basta trocar a linha no `App.vue`.
 
 ## Build & deploy
 

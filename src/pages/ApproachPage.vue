@@ -9,6 +9,10 @@
   <!-- ── Pilares da abordagem ───────────────────────── -->
   <section class="section-block section-block--alt">
     <BaseContainer>
+      <div class="section-header section-header--center">
+        <p class="section-eyebrow">Como pensamos</p>
+        <h2>Os pilares da nossa abordagem</h2>
+      </div>
       <div class="approach-pillars">
         <FeaturePillar
           v-for="pillar in approach.pillars"
@@ -117,8 +121,9 @@
   <CtaBanner
     title="Vamos entender o seu contexto?"
     description="Cada estratégia começa por ouvir. Conte o seu desafio e construímos o caminho junto com o seu time."
-    secondary-to="/servicos"
-    secondary-label="Conhecer os serviços"
+    whatsapp-message="Olá! Vi como a Purple trabalha (Abordagem) e quero aplicar isso na minha empresa. [mensagem provisória — copy final pendente]"
+    content-to="/servicos"
+    content-label="Conhecer os serviços"
   />
 </template>
 

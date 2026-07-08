@@ -39,10 +39,10 @@
           <h4>Navegação</h4>
           <ul>
             <li
-              v-for="(route, index) in pages"
+              v-for="(page, index) in pages"
               :key="index"
             >
-              <RouterLink :to="route.to">{{ route.name }}</RouterLink>
+              <RouterLink :to="{ name: page.routeName }">{{ page.label }}</RouterLink>
             </li>
           </ul>
         </div>
@@ -61,18 +61,10 @@
           <h4>Contato</h4>
           <p>{{ useContact().address }}</p>
           <p>
-            <a
-              :href="`tel:${useContact().phone}`"
-              target="_blank"
-              >{{ useContact().tel }}</a
-            >
+            <a :href="`tel:${useContact().phone}`">{{ useContact().tel }}</a>
           </p>
           <p>
-            <a
-              :href="`mailto:${useContact().email}`"
-              target="_blank"
-              >{{ useContact().email }}</a
-            >
+            <a :href="`mailto:${useContact().email}`">{{ useContact().email }}</a>
           </p>
         </address>
       </div>
@@ -83,7 +75,7 @@
           <li>
             <button
               type="button"
-              class="footer-cookies"
+              class="footer-legal__link"
               @click="consent.reopen()"
             >
               Preferências de cookies
@@ -93,7 +85,11 @@
             v-for="(item, index) in footer.legal"
             :key="index"
           >
-            <RouterLink :to="item.to">{{ item.name }}</RouterLink>
+            <RouterLink
+              class="footer-legal__link"
+              :to="{ name: item.routeName }"
+              >{{ item.label }}</RouterLink
+            >
           </li>
         </ul>
       </div>

@@ -15,7 +15,6 @@ export function buildEmail(data: EmailData): string {
   const service = escape(data.service)
   const message = escape(data.message)
   const url = escape(data.url)
-  const language = escape(data.language)
   const sentAt = escape(data.sentAt)
 
   return `

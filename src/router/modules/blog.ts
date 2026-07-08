@@ -1,19 +1,17 @@
-const name = 'blog'
-
 export const blogRoutes = [
   {
-    path: `/${name}`,
-    name,
+    path: '/blog',
+    name: 'blog',
     component: () => import('@/pages/BlogPage.vue'),
   },
   {
-    path: `/${name}/autor/:slug`,
-    name: `${name}-author`,
+    path: '/blog/autor/:slug',
+    name: 'blog-author',
     component: () => import('@/pages/AuthorPage.vue'),
   },
   {
-    path: `/${name}/:slug`,
-    name: `${name}-post`,
+    path: '/blog/:slug',
+    name: 'blog-post',
     component: () => import('@/pages/BlogPostPage.vue'),
   },
 ]

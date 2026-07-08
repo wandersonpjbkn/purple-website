@@ -5,8 +5,11 @@
         <!-- Coluna texto -->
         <div>
           <div class="hero__kicker">
-            <span class="dot"></span>
-            {{ home.hero.eyebrow }}
+            <span
+              v-for="(eyebrow, index) in home.hero.eyebrow"
+              :key="index"
+              ><span class="dot" />{{ eyebrow }}</span
+            >
           </div>
 
           <!-- titlePrefix carrega <em> de destaque — conteúdo controlado (home.json), não input de usuário -->
@@ -16,7 +19,9 @@
             <span
               ref="typewriterEl"
               class="hero__typewriter"
+              aria-hidden="true"
             />
+            <span class="sr-only">{{ home.hero.rotating.join(' · ') }}</span>
           </h1>
 
           <p class="lead">{{ home.hero.subtitle }}</p>
@@ -221,13 +226,22 @@
           >Ver todos</RouterLink
         >
       </div>
-      <div class="blog-grid">
+      <div
+        v-if="featuredPosts.length"
+        class="blog-grid"
+      >
         <PostCard
           v-for="post in featuredPosts"
           :key="post.slug"
           :post="post"
           variant="grid"
         />
+      </div>
+      <div
+        v-else
+        class="home-blog-empty"
+      >
+        <p>Não conseguimos carregar os posts do blog no momento.</p>
       </div>
     </BaseContainer>
   </section>
@@ -254,6 +268,7 @@
   <CtaBanner
     :title="home.cta.title"
     :description="home.cta.description"
+    whatsapp-message="Olá! Vim pela página inicial do site da Purple e quero saber mais. [mensagem provisória — copy final pendente]"
   />
 </template>
 
@@ -362,3 +377,14 @@ onUnmounted(() => {
   if (timeoutId) clearTimeout(timeoutId)
 })
 </script>
+
+<style scoped lang="scss">
+.home-blog-empty {
+  text-align: center;
+  padding: var(--space-10) var(--space-8);
+
+  p {
+    color: var(--muted);
+  }
+}
+</style>

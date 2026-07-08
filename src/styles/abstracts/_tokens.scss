@@ -40,6 +40,12 @@
   --whatsapp: #25d366;
   --whatsapp-dark: #1ebe59;
 
+  // ── Error / validation ──────────────────────────────────
+  --danger: #c0392b;
+  --danger-bg: #fff5f5;
+  --danger-border: #fed7d7;
+  --danger-rgb: 192, 57, 43;
+
   // ── Tipografia / texto ─────────────────────────────────
   // muted/subtle escurecidos para passar AA sobre fundo claro
   // (antes: --muted #6b5c7e ~5:1, --subtle #9c8aad ~3:1 falhava).
@@ -68,6 +74,7 @@
 
   // ── Layout ─────────────────────────────────────────────
   --container: 1200px;
+  --tap-target-min: 44px;
 
   // ── Border radius ──────────────────────────────────────
   --radius-sm: 8px;

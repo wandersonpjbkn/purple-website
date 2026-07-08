@@ -11,27 +11,29 @@
           <BaseButton
             variant="lime"
             class="button--lg"
-            tag="RouterLink"
-            :to="primaryTo"
+            tag="a"
+            :href="whatsappUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="trackWhatsappClick(origin)"
           >
             {{ primaryLabel }}
           </BaseButton>
           <BaseButton
-            v-if="secondaryTo"
             variant="secondary"
             class="button--lg on-dark"
             tag="RouterLink"
-            :to="secondaryTo"
+            to="/contato"
           >
             {{ secondaryLabel }}
           </BaseButton>
-          <a
-            :href="phoneNumber"
-            target="_blank"
-            class="text-link cta-banner__whatsapp"
+          <RouterLink
+            v-if="contentTo"
+            :to="contentTo"
+            class="text-link cta-banner__content-link"
           >
-            ou chame no WhatsApp
-          </a>
+            {{ contentLabel }}
+          </RouterLink>
         </div>
       </div>
     </BaseContainer>
@@ -40,27 +42,38 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
+import { useWhatsappUrl } from '@/composables/useWhatsapp'
+import { useCtaTracking } from '@/composables/useCtaTracking'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     title: string
     description: string
+    whatsappMessage: string
     eyebrow?: string
-    primaryTo?: string
     primaryLabel?: string
-    secondaryTo?: string
     secondaryLabel?: string
+    contentTo?: string
+    contentLabel?: string
+    gtmOrigin?: string
   }>(),
   {
     eyebrow: 'Próximo passo',
-    primaryTo: '/contato',
     primaryLabel: 'Vamos conversar',
-    secondaryTo: '',
-    secondaryLabel: 'Ver serviços',
+    secondaryLabel: 'Enviar mensagem',
+    contentTo: '',
+    contentLabel: '',
+    gtmOrigin: '',
   }
 )
 
-const phoneNumber = computed(() => `https://wa.me/${import.meta.env.VITE_BASE_PHONE}`)
+const route = useRoute()
+const origin = computed(() => props.gtmOrigin || String(route.name ?? route.path))
+
+const whatsappUrl = useWhatsappUrl(computed(() => props.whatsappMessage))
+const { trackWhatsappClick } = useCtaTracking()
 </script>

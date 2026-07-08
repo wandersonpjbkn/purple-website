@@ -1,5 +1,69 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest'
 
+vi.mock('virtual:blog-posts', () => {
+  const posts = [
+    {
+      title: 'Post A',
+      slug: 'post-a',
+      excerpt: 'Como estruturar a comunicação interna',
+      date: '2026-01-10',
+      author: 'ana',
+      category: 'Cultura',
+      tags: [],
+      readTime: 4,
+      featured: true,
+      cover: '',
+      html: '<p>A</p>',
+      wordCount: 120,
+    },
+    {
+      title: 'Post B',
+      slug: 'post-b',
+      excerpt: 'Employer branding na prática',
+      date: '2026-02-15',
+      author: 'ana',
+      category: 'Cultura',
+      tags: [],
+      readTime: 6,
+      featured: false,
+      cover: '',
+      html: '<p>B</p>',
+      wordCount: 200,
+    },
+    {
+      title: 'Post C',
+      slug: 'post-c',
+      excerpt: 'Indicadores de clima organizacional',
+      date: '2026-03-20',
+      author: 'bia',
+      category: 'RH',
+      tags: [],
+      readTime: 3,
+      featured: false,
+      cover: '',
+      html: '<p>C</p>',
+      wordCount: 80,
+    },
+  ]
+
+  const getAllCategories = () => {
+    const map = new Map<string, number>()
+    for (const post of posts) {
+      map.set(post.category, (map.get(post.category) ?? 0) + 1)
+    }
+    return [...map.entries()].sort((a, b) => b[1] - a[1]).map(([category, count]) => ({ category, count }))
+  }
+
+  return {
+    posts,
+    getPost: (slug: string) => posts.find(p => p.slug === slug) ?? null,
+    getPostsByAuthor: (authorSlug: string) => posts.filter(p => p.author === authorSlug),
+    getPostsByCategory: (category: string) => posts.filter(p => p.category.toLowerCase() === category.toLowerCase()),
+    getFeaturedPosts: (limit = 3) => posts.filter(p => p.featured).slice(0, limit),
+    getAllCategories,
+  }
+})
+
 import { useBlog, formatDate } from '@/composables/useBlog'
 
 beforeAll(() => {
@@ -17,7 +81,7 @@ describe('useBlog', () => {
   it('busca por termo inexistente zera os resultados', () => {
     const blog = useBlog()
     blog.query.value = '___nada_que_exista___'
-    expect(blog.filtered.value.length).toBe(0)
+    expect(blog.filtered.value).toHaveLength(0)
   })
 
   it('filtra por categoria real', () => {
@@ -31,7 +95,7 @@ describe('useBlog', () => {
 
   it('pagina conforme perPage', () => {
     const blog = useBlog({ perPage: 1 })
-    expect(blog.paginated.value.length).toBe(1)
+    expect(blog.paginated.value).toHaveLength(1)
     expect(blog.totalPages.value).toBe(blog.total.value)
   })
 

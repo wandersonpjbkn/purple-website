@@ -1,7 +1,8 @@
 # Positioning — Purple Comunicação
 
 > **Status: ✅ validado pela discovery (modelo de negócio, jul/2026).** Este doc
-> registra o posicionamento confirmado e o histórico da hipótese anterior.
+> registra o posicionamento confirmado. Histórico de hipóteses anteriores:
+> [`CHANGELOG`](../../CHANGELOG.md).
 
 ## O posicionamento validado ✅
 
@@ -21,25 +22,19 @@ porte (40+ colaboradores) que não têm área estruturada para isso.**
 
 ### Onde vive no site
 
-Os dois slots antes reservados foram preenchidos e `src/content/placeholders.ts`
-foi aposentado:
-
 - **Hero** → `src/data/home.json` (`hero`): título com typewriter, stats com
-  valor+sinal e card visual (números restaurados do develop; fontes pendentes de
-  confirmação — ver `PROJECT_STATE.md`).
+  valor+sinal e card visual (fontes pendentes de confirmação — ver
+  `PROJECT_STATE.md`).
 - **Oferta** → `src/data/services.json`: catálogo de 7 serviços (formato rico) +
   3 planos recorrentes **sem preço publicado** ("Sob consulta") + projetos
   pontuais.
 
-## Histórico: a hipótese NR-1 (superada como cunha de entrada)
+## Território de marca ✅
 
-A aposta anterior — a camada humana/comunicacional do risco psicossocial, com a
-**NR-1 como gatilho de compra** — **não foi o que a discovery confirmou** como
-porta de entrada. O modelo de negócio validou a entrada pelo prático
-(LinkedIn/comunicados), não pela urgência legal. O território "ambientes de
-trabalho saudáveis" permanece como pano de fundo da marca (panorama de dados,
-blog) e o gatilho NR-1 pode voltar como argumento comercial pontual — mas não é
-o produto nem o headline.
+"Ambientes de trabalho saudáveis" segue como pano de fundo da marca (panorama
+de dados na Home, blog), sem ser o produto nem o headline. O gatilho legal
+(NR-1) pode ser usado pontualmente como argumento comercial, mas a entrada é
+pelo prático (LinkedIn/comunicados), não pela urgência legal.
 
 ## Visão de longo prazo _(inalterada)_
 

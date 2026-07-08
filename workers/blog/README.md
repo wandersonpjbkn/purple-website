@@ -1,4 +1,4 @@
-# Worker :: Mail
+# Worker :: Blog
 
 ## Install
 

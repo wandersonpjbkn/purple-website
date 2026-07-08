@@ -1,5 +1,6 @@
 <template>
   <header
+    ref="headerRef"
     class="site-header"
     :class="{ scrolled: isScrolled }"
   >
@@ -20,17 +21,20 @@
           aria-label="Navegação principal"
         >
           <RouterLink
-            v-for="(route, index) in pages"
+            v-for="(page, index) in pages"
             :key="index"
-            :to="route.to"
-            >{{ route.name }}</RouterLink
+            :to="{ name: page.routeName }"
+            >{{ page.label }}</RouterLink
           >
         </nav>
 
         <!-- CTA -->
         <BaseButton
-          tag="RouterLink"
-          to="/contato"
+          tag="a"
+          :href="whatsappUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="trackHeaderWhatsappClick"
           >Vamos conversar</BaseButton
         >
 
@@ -54,11 +58,11 @@
         aria-label="Navegação mobile"
       >
         <RouterLink
-          v-for="(route, index) in pages"
+          v-for="(page, index) in pages"
           :key="index"
-          :to="route.to"
+          :to="{ name: page.routeName }"
           @click="mobileOpen = false"
-          >{{ route.name }}</RouterLink
+          >{{ page.label }}</RouterLink
         >
       </nav>
     </BaseContainer>
@@ -67,23 +71,50 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
+import { onClickOutside } from '@vueuse/core'
 
 import pages from '@/data/pages.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BrandLogo from '@/components/ui/BrandLogo.vue'
+import { useWhatsappUrl } from '@/composables/useWhatsapp'
+import { useCtaTracking } from '@/composables/useCtaTracking'
 
+const route = useRoute()
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
+const headerRef = ref<HTMLElement | null>(null)
+
+const whatsappUrl = useWhatsappUrl(
+  'Olá! Estou no site da Purple e gostaria de conversar. [mensagem provisória — copy final pendente]'
+)
+const { trackWhatsappClick } = useCtaTracking()
+const trackHeaderWhatsappClick = () => trackWhatsappClick(`header:${String(route.name ?? route.path)}`)
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 24
 }
 
-onMounted(() => window.addEventListener('scroll', handleScroll, { passive: true }))
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && mobileOpen.value) {
+    mobileOpen.value = false
+  }
+}
+
+onClickOutside(headerRef, () => {
+  mobileOpen.value = false
+})
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('keydown', handleKeydown)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <style scoped>
@@ -100,11 +131,15 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 .nav-toggle {
   display: none;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
+  width: var(--tap-target-min);
+  height: var(--tap-target-min);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
 }
 
 .nav-toggle span {

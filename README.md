@@ -32,12 +32,14 @@ cp .env.example .env
 | `VITE_BASE_EMAIL`         | E-mail exibido na página de Contato                               |
 | `VITE_BASE_ADDRESS`       | Endereço exibido na página de Contato                             |
 | `VITE_CDN_URL`            | Base da CDN para imagens de blog/time                             |
+| `VITE_POSTS_API_URL`      | URL do Cloudflare Worker que serve os posts do blog (R2)          |
 
-O site sobe sem essas variáveis, mas contato, WhatsApp, imagens via CDN e analytics ficam degradados.
+O site sobe sem essas variáveis, mas contato, WhatsApp, imagens via CDN, posts do blog e analytics ficam degradados.
 
 O envio do formulário de contato depende também do Worker em `workers/mail/`
-(Cloudflare Worker + Resend) — ver [`ARCHITECTURE`](src/docs/ARCHITECTURE.md)
-para como configurá-lo e publicá-lo.
+(Cloudflare Worker + Resend), e o blog depende do Worker em `workers/blog/`
+(Cloudflare Worker + R2) — ver [`ARCHITECTURE`](src/docs/ARCHITECTURE.md)
+para como configurá-los e publicá-los.
 
 ## Rodando o projeto
 
@@ -63,4 +65,4 @@ yarn dev
 
 ## Documentação
 
-O guia completo de arquitetura, modelo de conteúdo, design system, convenções de código e testes está em [`src/docs/README.md`](src/docs/README.md).
+O guia completo de arquitetura, modelo de conteúdo, design system, convenções de código e testes está em [`src/docs/README.md`](src/docs/README.md). Histórico de mudanças em [`CHANGELOG.md`](CHANGELOG.md).

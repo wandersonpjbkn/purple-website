@@ -9,7 +9,9 @@ import { ICONS } from '@/components/ui/icons'
 // placeholders (que garantia o inverso — copy ainda em validação).
 describe('services.json / home.json — integridade do conteúdo', () => {
   it('não sobrou nenhum token de placeholder ({{...}})', () => {
+    // eslint-disable-next-line sonarjs/super-linear-regex -- single unbounded group between fixed delimiters, no backtracking ambiguity; verified empirically.
     expect(JSON.stringify(services)).not.toMatch(/\{\{.*\}\}/)
+    // eslint-disable-next-line sonarjs/super-linear-regex -- same pattern as above.
     expect(JSON.stringify(home)).not.toMatch(/\{\{.*\}\}/)
   })
 

@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
-import { useTurnstile } from '@/composables/useTurnstile'
+import { useTurnstile } from '@/composables'
 
 const emit = defineEmits<{
   (e: 'verified', token: string): void
@@ -83,7 +83,7 @@ defineExpose({ reset })
   }
 
   &__error {
-    color: #c0392b;
+    color: var(--danger);
   }
 
   &__warning {

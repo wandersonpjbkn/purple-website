@@ -130,10 +130,10 @@
     <CtaBanner
       eyebrow="Do conteúdo à prática"
       title="Quer aplicar isso na sua empresa?"
-      description="A gente assume a execução da comunicação com o seu time — dos comunicados internos ao employer branding. Fale com um consultor ou conheça os serviços."
-      primary-label="Falar com um consultor"
-      secondary-to="/servicos"
-      secondary-label="Conhecer os serviços"
+      description="A gente assume a execução da comunicação com o seu time — dos comunicados internos ao employer branding."
+      :whatsapp-message="whatsappMessage"
+      content-to="/servicos"
+      content-label="Conhecer os serviços"
     />
 
     <!-- ── Card do autor ──────────────────────────────── -->
@@ -142,6 +142,7 @@
       class="section-block section-block--sm post-author-section"
     >
       <BaseContainer>
+        <h2 class="sr-only">Sobre o autor</h2>
         <div class="post-author-card">
           <BaseAvatar
             :name="author.name"
@@ -251,21 +252,15 @@ usePageMeta(
   }))
 )
 
-// Serviço relacionado ao tema do post (mapeado pela categoria) — convite
-// contextual à contratação, sem alterar o conteúdo editorial dos .md.
-const CATEGORY_TO_SERVICE: Record<string, string> = {
-  'Comunicação Interna': 'comunicacao-interna',
-  'Employer Branding': 'employer-branding',
-  Endomarketing: 'endomarketing',
-  'Cultura e Clima': 'diagnostico-cultura',
-  'Bem-estar': 'endomarketing',
-}
+const whatsappMessage = computed(
+  () =>
+    `Olá! Li o artigo "${post.value?.title ?? ''}" no blog da Purple e quero conversar sobre isso. [mensagem provisória — copy final pendente]`
+)
 
 const relatedService = computed(() => {
   const cat = post.value?.category
   if (!cat) return undefined
-  const id = CATEGORY_TO_SERVICE[cat]
-  return id ? services.catalog.find(s => s.id === id) : undefined
+  return services.catalog.find(s => s.blogCategories?.includes(cat))
 })
 
 // Posts relacionados
@@ -288,6 +283,7 @@ const headings = computed(() => {
     result.push({
       level: parseInt(m[1] ?? '2'),
       id: m[2] ?? '',
+      // eslint-disable-next-line sonarjs/super-linear-regex -- single unbounded group, no nested/overlapping quantifiers; verified empirically.
       text: (m[3] ?? '').replace(/<[^>]+>/g, ''),
     })
   }
@@ -539,6 +535,8 @@ const headings = computed(() => {
   }
 
   :deep(table) {
+    display: block;
+    overflow-x: auto;
     width: 100%;
     border-collapse: collapse;
     margin-bottom: var(--space-6);

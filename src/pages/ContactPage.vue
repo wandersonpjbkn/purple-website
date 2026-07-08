@@ -16,6 +16,7 @@
               target="_blank"
               rel="noopener noreferrer"
               class="button--lg contact-hero__whatsapp"
+              @click="trackWhatsappClick('contact_page_hero')"
             >
               <span class="contact-hero__whatsapp-icon"><BaseIcon name="whatsapp" /></span>
               Falar no WhatsApp
@@ -27,6 +28,7 @@
               rel="noopener noreferrer"
               variant="lime"
               class="button--lg"
+              @click="trackWhatsappClick('contact_page_hero_hire')"
             >
               Contratar agora
             </BaseButton>
@@ -90,6 +92,7 @@
               <label class="field">
                 <span class="field__label">Nome <span aria-hidden="true">*</span></span>
                 <input
+                  ref="nameInput"
                   v-model="form.name"
                   type="text"
                   placeholder="Seu nome"
@@ -111,6 +114,7 @@
               <label class="field">
                 <span class="field__label">E-mail <span aria-hidden="true">*</span></span>
                 <input
+                  ref="emailInput"
                   v-model="form.email"
                   type="email"
                   placeholder="voce@empresa.com"
@@ -132,6 +136,7 @@
               <label class="field field--full">
                 <span class="field__label">Serviço de interesse <span aria-hidden="true">*</span></span>
                 <select
+                  ref="subjectSelect"
                   v-model="form.subject"
                   required
                   :class="{ 'field__input--error': errors.subject }"
@@ -144,11 +149,13 @@
                   >
                     Selecione um interesse
                   </option>
-                  <option value="Employer Branding">Employer Branding</option>
-                  <option value="Endomarketing">Endomarketing</option>
-                  <option value="Comunicação Interna">Comunicação Interna</option>
-                  <option value="Publicidade Online">Publicidade Online</option>
-                  <option value="UX/UI para websites">UX/UI para websites</option>
+                  <option
+                    v-for="service in services.catalog"
+                    :key="service.id"
+                    :value="service.title"
+                  >
+                    {{ service.title }}
+                  </option>
                   <option value="Orçamento geral">Orçamento geral</option>
                   <option value="Outro">Outro</option>
                 </select>
@@ -164,6 +171,7 @@
               <label class="field field--full">
                 <span class="field__label">Mensagem <span aria-hidden="true">*</span></span>
                 <textarea
+                  ref="messageTextarea"
                   v-model="form.message"
                   rows="5"
                   placeholder="Conte um pouco sobre o seu desafio ou como podemos ajudar..."
@@ -233,6 +241,7 @@
             rel="noopener noreferrer"
             variant="lime"
             class="button--lg"
+            @click="trackWhatsappClick('contact_page_alt_cta')"
           >
             <BaseIcon name="whatsapp" /> Abrir WhatsApp
           </BaseButton>
@@ -243,6 +252,7 @@
             rel="noopener noreferrer"
             variant="secondary"
             class="button--lg on-dark"
+            @click="trackWhatsappClick('contact_page_alt_cta_hire')"
           >
             Contratar um serviço
           </BaseButton>
@@ -253,15 +263,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
 import TurnstileWidget from '@/components/forms/TurnstileWidget.vue'
-import { useMail } from '@/composables/useMail'
-import { useContactForm } from '@/composables/useContactForm'
-import { usePageMeta, useContact } from '@/composables'
+import { usePageMeta, useContact, useMail, useContactForm } from '@/composables'
+import { useWhatsappUrl } from '@/composables/useWhatsapp'
+import { useCtaTracking } from '@/composables/useCtaTracking'
+import services from '@/data/services.json'
 
 usePageMeta({
   title: 'Contato',
@@ -269,15 +280,9 @@ usePageMeta({
 })
 
 // ── WhatsApp URLs ──────────────────────────────────────────
-const whatsappUrl = computed(
-  () =>
-    `https://wa.me/${useContact().phone}?text=${encodeURIComponent('Olá! Vim pelo site da Purple e gostaria de saber mais.')}`
-)
-
-const whatsappHireUrl = computed(
-  () =>
-    `https://wa.me/${useContact().phone}?text=${encodeURIComponent('Olá! Gostaria de contratar um serviço da Purple Comunicação.')}`
-)
+const whatsappUrl = useWhatsappUrl('Olá! Vim pelo site da Purple e gostaria de saber mais.')
+const whatsappHireUrl = useWhatsappUrl('Olá! Gostaria de contratar um serviço da Purple Comunicação.')
+const { trackWhatsappClick, trackContactFormSubmit } = useCtaTracking()
 
 // ── Form ───────────────────────────────────────────────────
 const { status, errorMsg, send, reset } = useMail()
@@ -286,8 +291,23 @@ const { form, errors, validate, clearForm } = useContactForm()
 const turnstileToken = ref('')
 const turnstileWidget = ref<InstanceType<typeof TurnstileWidget> | null>(null)
 
+const nameInput = ref<HTMLInputElement | null>(null)
+const emailInput = ref<HTMLInputElement | null>(null)
+const subjectSelect = ref<HTMLSelectElement | null>(null)
+const messageTextarea = ref<HTMLTextAreaElement | null>(null)
+
+const focusFirstError = () => {
+  if (errors.name) nameInput.value?.focus()
+  else if (errors.email) emailInput.value?.focus()
+  else if (errors.subject) subjectSelect.value?.focus()
+  else if (errors.message) messageTextarea.value?.focus()
+}
+
 const handleSubmit = async () => {
-  if (!validate()) return
+  if (!validate()) {
+    focusFirstError()
+    return
+  }
 
   if (!turnstileToken.value) {
     status.value = 'error'
@@ -300,6 +320,7 @@ const handleSubmit = async () => {
     turnstileToken.value
   )
   if (ok) {
+    trackContactFormSubmit('contact_page_form', { service: form.subject })
     clearForm()
     turnstileToken.value = ''
     turnstileWidget.value?.reset()
@@ -346,10 +367,12 @@ const resetForm = () => {
   &__whatsapp {
     background: var(--whatsapp);
     border-color: var(--whatsapp);
+    color: var(--text);
 
     &:hover {
       background: var(--whatsapp-dark);
       border-color: var(--whatsapp-dark);
+      color: var(--text);
     }
 
     &-icon {

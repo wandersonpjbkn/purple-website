@@ -31,6 +31,8 @@ const failed = ref(false)
 </script>
 
 <style scoped lang="scss">
+@use '@/styles/abstracts/mixins' as *;
+
 .media-block {
   border-radius: var(--radius-xl);
   background: var(--bg-alt);
@@ -38,6 +40,14 @@ const failed = ref(false)
   min-height: 690px;
   position: relative;
   overflow: hidden;
+
+  @include respond-to(md) {
+    min-height: 420px;
+  }
+
+  @include respond-to(sm) {
+    min-height: 280px;
+  }
 
   &::before {
     content: '';

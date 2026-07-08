@@ -193,6 +193,19 @@
               >
             </div>
           </div>
+
+          <div
+            v-else
+            class="blog-empty"
+          >
+            <p>Não conseguimos carregar os posts do blog no momento.</p>
+            <BaseButton
+              variant="secondary"
+              tag="RouterLink"
+              to="/servicos"
+              >Conhecer os serviços</BaseButton
+            >
+          </div>
         </BaseContainer>
       </section>
 
@@ -349,9 +362,13 @@ const categoryGroups = computed(() =>
 
   &__clear {
     position: absolute;
-    right: 0.875rem;
+    right: 0.375rem;
     top: 50%;
     transform: translateY(-50%);
+    width: var(--tap-target-min);
+    height: var(--tap-target-min);
+    display: grid;
+    place-items: center;
     background: none;
     border: none;
     cursor: pointer;
@@ -376,6 +393,10 @@ const categoryGroups = computed(() =>
   position: sticky;
   top: 76px;
   z-index: 10;
+
+  @include respond-to(md) {
+    top: 65px;
+  }
 }
 
 .blog-filter-pills {

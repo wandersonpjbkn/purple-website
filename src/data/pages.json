@@ -1,25 +1,25 @@
 [{
-    "name": "Home",
-    "to": "/"
+    "routeName": "home",
+    "label": "Home"
   },
   {
-    "name": "Sobre",
-    "to": "/sobre"
+    "routeName": "about",
+    "label": "Sobre"
   },
   {
-    "name": "Abordagem",
-    "to": "/abordagem"
+    "routeName": "approach",
+    "label": "Abordagem"
   },
   {
-    "name": "Serviços",
-    "to": "/servicos"
+    "routeName": "services",
+    "label": "Serviços"
   },
   {
-    "name": "Blog",
-    "to": "/blog"
+    "routeName": "blog",
+    "label": "Blog"
   },
   {
-    "name": "Contato",
-    "to": "/contato"
+    "routeName": "contact",
+    "label": "Contato"
   }
 ]

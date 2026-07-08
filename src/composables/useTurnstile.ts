@@ -24,6 +24,11 @@ export type TurnstileStatus = 'idle' | 'loading' | 'ready' | 'verified' | 'expir
 
 const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string
 
+// The Turnstile script loads via CDN with `async defer` (see index.html);
+// on a slow connection it may not be ready yet when the widget mounts.
+const SCRIPT_POLL_INTERVAL_MS = 150
+const SCRIPT_MAX_WAIT_MS = 8000
+
 export function useTurnstile() {
   const token = ref('')
   const widgetId = ref<string>()
@@ -31,13 +36,8 @@ export function useTurnstile() {
 
   const isValid = computed(() => token.value.length > 0)
 
-  function render(container: HTMLElement) {
-    if (!window.turnstile) {
-      status.value = 'error'
-      return
-    }
-
-    status.value = 'loading'
+  function renderWidget(container: HTMLElement) {
+    if (!window.turnstile) return
 
     widgetId.value = window.turnstile.render(container, {
       sitekey: siteKey,
@@ -61,6 +61,31 @@ export function useTurnstile() {
     })
 
     status.value = 'ready'
+  }
+
+  function render(container: HTMLElement) {
+    status.value = 'loading'
+
+    if (window.turnstile) {
+      renderWidget(container)
+      return
+    }
+
+    let waited = 0
+    const poll = setInterval(() => {
+      waited += SCRIPT_POLL_INTERVAL_MS
+
+      if (window.turnstile) {
+        clearInterval(poll)
+        renderWidget(container)
+        return
+      }
+
+      if (waited >= SCRIPT_MAX_WAIT_MS) {
+        clearInterval(poll)
+        status.value = 'error'
+      }
+    }, SCRIPT_POLL_INTERVAL_MS)
   }
 
   function reset() {

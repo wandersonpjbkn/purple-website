@@ -1,6 +1,6 @@
 {
   "hero": {
-    "eyebrow": "Comunicação interna e employer branding",
+    "eyebrow": ["Comunicação Interna", "Liderança", "Employer Branding"],
     "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
     "rotating": ["reduzem o turnover", "o time engaja mais", "atraem mais talentos", "fortalecem sua cultura"],
     "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",

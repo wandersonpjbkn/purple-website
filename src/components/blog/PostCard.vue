@@ -81,8 +81,7 @@ import { RouterLink } from 'vue-router'
 
 import type { Post } from 'virtual:blog-posts'
 
-import { formatDate, getAuthor } from '@/composables/useBlog'
-import { useCdnAsset } from '@/composables'
+import { formatDate, getAuthor, useCdnAsset } from '@/composables'
 
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 

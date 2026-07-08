@@ -30,12 +30,6 @@
   }
 }
 
-// ── Search input ───────────────────────────────────────────
-.search-input {
-  @extend %input-base;
-  width: 280px;
-}
-
 // ── Form fields (ContactPage and future forms) ─────────────
 .field {
   display: flex;
@@ -59,7 +53,7 @@
 
 .field__error {
   font-size: var(--text-xs);
-  color: #e53e3e;
+  color: var(--danger);
   font-weight: 500;
 }
 
@@ -88,9 +82,9 @@ textarea {
 
 // ── Error state ────────────────────────────────────────────
 .field__input--error {
-  border-color: #e53e3e !important;
+  border-color: var(--danger) !important;
   &:focus {
-    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(var(--danger-rgb), 0.1) !important;
   }
 }
 
@@ -115,12 +109,12 @@ textarea {
 // ── Submit error message ───────────────────────────────────
 .form-send-error {
   margin-bottom: var(--space-6);
-  background: #fff5f5;
-  border: 1px solid #fed7d7;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
   border-radius: var(--radius);
   padding: 0.875rem var(--space-4);
   font-size: var(--text-sm);
-  color: #c53030;
+  color: var(--danger);
 }
 
 // ── Success state ──────────────────────────────────────────

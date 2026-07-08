@@ -1,8 +1,9 @@
 # Design System (as-built) — site Purple
 
-> Verdade observada no código em **2026-07-06**. É um site de poucas páginas:
+> Verdade observada no código em **2026-07-08**. É um site de poucas páginas:
 > isto é um **conjunto de tokens + componentes Base**, não um design system de
-> produto. Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
+> produto. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
+> Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`CONTENT_MODEL`](CONTENT_MODEL.md) · [`POSITIONING`](POSITIONING.md).
 
 Status: ✅ no código · 🟡 parcial/provisório · ⏳ pendente.
@@ -112,8 +113,7 @@ Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usa
 `--cols-3`) e o card é o componente **`StatCard.vue`** (dono do estilo `.stat-card`
 
 - `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
-  (panorama, `--cols-3`) e na Sobre (dados). Os antigos
-  `.panorama-card*`/`.data-stat-card*`/`.stats-band*` foram removidos.
+  (panorama, `--cols-3`) e na Sobre (dados).
 
 ## Números com valor + sinal em lime ✅ (convenção de exibição)
 
@@ -121,9 +121,6 @@ Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
 (`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e o
 `span` interno de `stat-card__number`. A barra do card do hero usa gradiente
 `purple → lime`. Preservar ao criar novos blocos numéricos.
-
-> Os antigos placeholders de conteúdo (⛔) foram preenchidos pela discovery —
-> ver [`CONTENT_MODEL`](CONTENT_MODEL.md) e [`POSITIONING`](POSITIONING.md).
 
 ## Tema escuro ✅
 

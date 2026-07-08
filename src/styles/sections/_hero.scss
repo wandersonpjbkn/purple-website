@@ -46,9 +46,11 @@
 
 // ── Kicker (badge animada) ─────────────────────────────────
 .hero__kicker {
+  $gap: 0.5rem;
+
   display: inline-flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: $gap;
   background: var(--purple-100);
   color: var(--purple-700);
   font-size: 0.8rem;
@@ -58,8 +60,12 @@
   margin-bottom: var(--space-6);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
+  flex-wrap: wrap;
 
   .dot {
+    margin-right: $gap;
+    display: inline-block;
     width: 6px;
     height: 6px;
     background: var(--lime);

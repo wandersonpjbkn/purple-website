@@ -24,7 +24,9 @@ export const blogPlugin = (workerUrl?: string): Plugin => {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
 
-        const blogPosts = await response.json()
+        const blogPosts = (await response.json()) as unknown[]
+
+        console.log(`[vite-plugin-blog] Encontrados ${blogPosts.length} posts`)
 
         return `
 export const posts = ${JSON.stringify(blogPosts, null, 0)};
@@ -57,8 +59,9 @@ export function getAllCategories() {
     .map(([category, count]) => ({ category, count }));
 }
 `
-      } catch (error: any) {
-        console.error('[vite-plugin-blog] Erro ao carregar posts do R2:', error.message)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        console.error('[vite-plugin-blog] Erro ao carregar posts do R2:', message)
         return `
 export const posts = [];
 export function getPost() { return null; }

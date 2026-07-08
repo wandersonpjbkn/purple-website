@@ -1,6 +1,7 @@
 import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
+import sonarjs, { configs as sonarjsConfigs } from 'eslint-plugin-sonarjs'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 export default defineConfigWithVueTs(
@@ -22,7 +23,10 @@ export default defineConfigWithVueTs(
 
   {
     name: 'app/rules',
+    plugins: { sonarjs },
     rules: {
+      ...sonarjsConfigs.recommended.rules,
+
       // Vue specific rules
       'vue/no-v-html': 'off',
 

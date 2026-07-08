@@ -13,12 +13,12 @@
     }
   ],
   "legal": [{
-      "name": "Perguntas frequentes",
-      "to": "/faq"
+      "routeName": "faq",
+      "label": "Perguntas frequentes"
     },
     {
-      "name": "Política de Privacidade",
-      "to": "/privacidade"
+      "routeName": "privacy",
+      "label": "Política de Privacidade"
     }
   ]
 }

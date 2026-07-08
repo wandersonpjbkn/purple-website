@@ -33,6 +33,7 @@
     },
     {
       "id": "comunicacao-interna",
+      "blogCategories": ["Comunicação Interna"],
       "icon": "megaphone",
       "title": "Comunicação Interna",
       "tagline": "Para que todos possam caminhar na mesma direção, é essencial que estejam informados.",
@@ -56,6 +57,7 @@
     },
     {
       "id": "endomarketing",
+      "blogCategories": ["Endomarketing", "Bem-estar"],
       "icon": "handshake",
       "title": "Endomarketing",
       "tagline": "Como o engajamento dos seus colaboradores impacta diretamente nos resultados.",
@@ -79,6 +81,7 @@
     },
     {
       "id": "employer-branding",
+      "blogCategories": ["Employer Branding"],
       "icon": "trophy",
       "title": "Employer Branding",
       "tagline": "Como a sua marca é percebida por quem trabalha — e por quem pode trabalhar — nela.",
@@ -125,6 +128,7 @@
     },
     {
       "id": "diagnostico-cultura",
+      "blogCategories": ["Cultura e Clima"],
       "icon": "search",
       "title": "Diagnóstico de Cultura e Clima",
       "tagline": "Entender antes de comunicar — a base de toda decisão bem tomada.",

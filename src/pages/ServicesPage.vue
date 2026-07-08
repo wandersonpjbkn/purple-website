@@ -25,16 +25,22 @@
           <a
             href="#catalogo"
             class="svc-subnav__pill"
+            :class="{ active: activeSection === 'catalogo' }"
+            :aria-current="activeSection === 'catalogo' ? 'true' : undefined"
             >Serviços</a
           >
           <a
             href="#planos"
             class="svc-subnav__pill"
+            :class="{ active: activeSection === 'planos' }"
+            :aria-current="activeSection === 'planos' ? 'true' : undefined"
             >Planos mensais</a
           >
           <a
             href="#projetos"
             class="svc-subnav__pill"
+            :class="{ active: activeSection === 'projetos' }"
+            :aria-current="activeSection === 'projetos' ? 'true' : undefined"
             >Projetos pontuais</a
           >
         </nav>
@@ -61,23 +67,25 @@
             class="svc-item"
             :class="{ 'svc-item--open': isOpen(service.id) }"
           >
-            <button
-              type="button"
-              class="svc-item__head"
-              :aria-expanded="isOpen(service.id)"
-              :aria-controls="`svc-panel-${service.id}`"
-              @click="toggle(service.id)"
-            >
-              <span class="svc-item__icon"><BaseIcon :name="service.icon" /></span>
-              <span class="svc-item__heading">
-                <span class="svc-item__title">{{ service.title }}</span>
-                <span class="svc-item__tagline">{{ service.tagline }}</span>
-              </span>
-              <span
-                class="svc-item__chevron"
-                aria-hidden="true"
-              ></span>
-            </button>
+            <h3 class="svc-item__head-heading">
+              <button
+                type="button"
+                class="svc-item__head"
+                :aria-expanded="isOpen(service.id)"
+                :aria-controls="`svc-panel-${service.id}`"
+                @click="toggle(service.id)"
+              >
+                <span class="svc-item__icon"><BaseIcon :name="service.icon" /></span>
+                <span class="svc-item__heading">
+                  <span class="svc-item__title">{{ service.title }}</span>
+                  <span class="svc-item__tagline">{{ service.tagline }}</span>
+                </span>
+                <span
+                  class="svc-item__chevron"
+                  aria-hidden="true"
+                ></span>
+              </button>
+            </h3>
 
             <p class="svc-item__summary">{{ service.summary }}</p>
 
@@ -89,7 +97,7 @@
               <p class="svc-item__description">{{ service.description }}</p>
               <div class="svc-item__cols">
                 <div>
-                  <h3 class="svc-item__subtitle">O que sua empresa ganha</h3>
+                  <h4 class="svc-item__subtitle">O que sua empresa ganha</h4>
                   <ul class="svc-item__benefits">
                     <li
                       v-for="benefit in service.benefits"
@@ -104,7 +112,7 @@
                   </ul>
                 </div>
                 <div>
-                  <h3 class="svc-item__subtitle">Como fazemos</h3>
+                  <h4 class="svc-item__subtitle">Como fazemos</h4>
                   <ol class="svc-item__process">
                     <li
                       v-for="step in service.process"
@@ -235,14 +243,15 @@
     <CtaBanner
       title="Pronto para transformar sua comunicação interna?"
       description="Vamos entender o contexto da sua empresa e construir juntos uma estratégia que faz sentido para o seu time."
-      secondary-to="/abordagem"
-      secondary-label="Ver nossa abordagem"
+      whatsapp-message="Olá! Vi os serviços da Purple e quero saber mais sobre como contratar. [mensagem provisória — copy final pendente]"
+      content-to="/abordagem"
+      content-label="Ver nossa abordagem"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, watch, nextTick } from 'vue'
+import { reactive, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { usePageMeta } from '@/composables'
@@ -283,9 +292,34 @@ const openFromHash = (hash: string) => {
   }
 }
 
+const SUBNAV_SECTIONS = ['catalogo', 'planos', 'projetos']
+const activeSection = ref(SUBNAV_SECTIONS[0])
+let sectionObserver: IntersectionObserver | null = null
+
 onMounted(() => {
   if (route.hash) openFromHash(route.hash)
+
+  if (typeof IntersectionObserver === 'undefined') return
+
+  sectionObserver = new IntersectionObserver(
+    entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+      if (visible) activeSection.value = visible.target.id
+    },
+    { rootMargin: '-45% 0px -50% 0px' }
+  )
+  for (const id of SUBNAV_SECTIONS) {
+    const el = document.getElementById(id)
+    if (el) sectionObserver.observe(el)
+  }
 })
+
+onUnmounted(() => {
+  sectionObserver?.disconnect()
+})
+
 watch(
   () => route.hash,
   hash => hash && openFromHash(hash)
@@ -335,6 +369,12 @@ watch(
     border-color: var(--purple-100);
     background: var(--purple-50);
   }
+
+  &.active {
+    color: var(--purple-700);
+    border-color: var(--purple-400);
+    background: var(--purple-100);
+  }
 }
 
 // ── Catalog (expandable cards) ─────────────────────────────
@@ -367,6 +407,11 @@ watch(
   &--open {
     border-color: var(--purple-100);
   }
+}
+
+.svc-item__head-heading {
+  margin: 0;
+  font-size: inherit;
 }
 
 .svc-item__head {
@@ -529,7 +574,8 @@ watch(
   margin-top: var(--space-4);
   background: none;
   border: none;
-  padding: 0;
+  padding: var(--space-3) 0;
+  min-height: var(--tap-target-min);
   cursor: pointer;
   font: inherit;
   font-size: var(--text-sm);

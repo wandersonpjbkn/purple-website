@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "ts": "tsc --noEmit"
+    "ts": "tsc --noEmit",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5",
     "typescript": "~5.9.3",
+    "vitest": "^3",
     "wrangler": "^4"
   }
 }

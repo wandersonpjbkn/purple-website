@@ -1,67 +1,70 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 
-import { parseFrontmatter, slugify, markdownToHtml, countWords } from '@/plugins/vite-plugin-blog'
+import { blogPlugin } from '@/plugins/vite-plugin-blog'
 
-describe('slugify', () => {
-  it('normaliza acentos, espaços e maiúsculas', () => {
-    expect(slugify('Comunicação Interna')).toBe('comunicacao-interna')
+const samplePosts = [
+  { slug: 'post-a', title: 'Post A', category: 'Cultura', featured: true },
+  { slug: 'post-b', title: 'Post B', category: 'RH', featured: false },
+]
+
+describe('blogPlugin', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
   })
 
-  it('remove caracteres especiais', () => {
-    expect(slugify('Olá, mundo! (2026)')).toBe('ola-mundo-2026')
-  })
-})
+  it('resolve virtual:blog-posts para um id interno e ignora outros ids', () => {
+    const plugin = blogPlugin()
+    const resolveId = plugin.resolveId as (id: string) => string | undefined
 
-describe('parseFrontmatter', () => {
-  it('extrai chaves, arrays, booleanos e números; separa o corpo', () => {
-    const raw = [
-      '---',
-      'title: Meu Post',
-      'tags: [rh, cultura]',
-      'featured: true',
-      'readTime: 5',
-      '---',
-      'Conteúdo do corpo.',
-    ].join('\n')
+    const resolved = resolveId('virtual:blog-posts')
 
-    const { fm, body } = parseFrontmatter(raw)
-
-    expect(fm.title).toBe('Meu Post')
-    expect(fm.tags).toEqual(['rh', 'cultura'])
-    expect(fm.featured).toBe(true)
-    expect(fm.readTime).toBe(5)
-    expect(body.trim()).toBe('Conteúdo do corpo.')
+    expect(resolved).toBeTruthy()
+    expect(resolveId('outro-modulo')).toBeUndefined()
   })
 
-  it('sem frontmatter, retorna fm vazio e corpo intacto', () => {
-    const { fm, body } = parseFrontmatter('Só corpo, sem frontmatter.')
-    expect(fm).toEqual({})
-    expect(body).toContain('Só corpo')
-  })
-})
+  it('load() busca posts do worker e exporta os helpers com os dados reais', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve(samplePosts) })
+    )
+    const plugin = blogPlugin('https://blog.worker.dev')
+    const resolveId = plugin.resolveId as (id: string) => string | undefined
+    const load = plugin.load as (id: string) => Promise<string | undefined>
 
-describe('markdownToHtml', () => {
-  it('gera headings com id de âncora', () => {
-    expect(markdownToHtml('## Como atuamos')).toContain('<h2 id="como-atuamos">Como atuamos</h2>')
-  })
+    const code = await load(resolveId('virtual:blog-posts')!)
 
-  it('converte negrito, itálico, código e links', () => {
-    const html = markdownToHtml('Texto **forte**, *ênfase*, `código` e [link](https://ex.com).')
-    expect(html).toContain('<strong>forte</strong>')
-    expect(html).toContain('<em>ênfase</em>')
-    expect(html).toContain('<code>código</code>')
-    expect(html).toContain('<a href="https://ex.com">link</a>')
+    expect(fetch).toHaveBeenCalledWith('https://blog.worker.dev/posts')
+    expect(code).toContain('"slug":"post-a"')
+    expect(code).toContain('export function getPost')
+    expect(code).toContain('export function getAllCategories')
   })
 
-  it('converte lista não ordenada', () => {
-    const html = markdownToHtml('- um\n- dois')
-    expect(html).toContain('<ul>')
-    expect(html).toContain('<li>um</li>')
-  })
-})
+  it('load() cai em fallback vazio quando o fetch falha, sem lançar', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')))
+    const plugin = blogPlugin()
+    const resolveId = plugin.resolveId as (id: string) => string | undefined
+    const load = plugin.load as (id: string) => Promise<string | undefined>
 
-describe('countWords', () => {
-  it('conta palavras ignorando espaços extras', () => {
-    expect(countWords('  uma   duas três ')).toBe(3)
+    const code = await load(resolveId('virtual:blog-posts')!)
+
+    expect(code).toContain('export const posts = [];')
+  })
+
+  it('load() cai em fallback vazio quando a resposta HTTP não é ok', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }))
+    const plugin = blogPlugin()
+    const resolveId = plugin.resolveId as (id: string) => string | undefined
+    const load = plugin.load as (id: string) => Promise<string | undefined>
+
+    const code = await load(resolveId('virtual:blog-posts')!)
+
+    expect(code).toContain('export const posts = [];')
+  })
+
+  it('load() não retorna nada para ids que não são o módulo virtual', async () => {
+    const plugin = blogPlugin()
+    const load = plugin.load as (id: string) => Promise<string | undefined>
+
+    expect(await load('outro-id')).toBeUndefined()
   })
 })

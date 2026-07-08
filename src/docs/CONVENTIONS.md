@@ -1,8 +1,8 @@
 # Code Conventions — site Purple
 
 > As-built + acordadas com a dupla. Valem para todo código novo; o existente é
-> migrado quando tocado. Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
-> [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
+> migrado quando tocado. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
+> Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) · [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
 
 ## Idioma ✅
 
@@ -56,9 +56,7 @@ projeto:
 - **Só CSS repetido** → utilitário/classe compartilhada (ex.: `.button-row`,
   `.section-block--dark`, `.stat-grid`) num partial global apropriado.
 - **Markup repetido** → **componente** (ex.: `StatCard`, `ServiceTeaserCard`,
-  `PageHero`), com o estilo co-localizado no componente (posse de estilo). O card
-  antes duplicado (Home + Sobre) virou `StatCard`; o teaser de serviço (Home +
-  Abordagem) virou `ServiceTeaserCard`; o hero de página interna virou `PageHero`.
+  `PageHero`), com o estilo co-localizado no componente (posse de estilo).
 
 Variações de uso único ou com estrutura diferente (ex.: o card `--featured` da
 Home, o card de projetos da Serviços) **não** forçam abstração — DRY vale quando a
@@ -87,8 +85,7 @@ prop:
   call site deve depender de um comportamento que só uma das variantes tem.
 - **I — Segregação de interface:** a prop de um componente só existe se o
   próprio componente a usa. Prop declarada e nunca lida/repassada é sinal de
-  código morto (ver [Código morto](#código-morto-)) — foi o caso do `alt` que
-  existia em `BaseAvatar` sem nunca chegar a `AvImage`/`AvInitials`, removido.
+  código morto (ver [Código morto](#código-morto-)).
 - **D — Inversão de dependência:** um módulo de alto nível não deve depender
   direto de um detalhe de baixo nível — a dependência passa por uma
   abstração local. Exemplo já seguido: `useMail` isola o `fetch()` ao Worker
@@ -120,3 +117,40 @@ comentário explícito justificando por que precisa ficar (ex.: `// keep: ...`).
 (`team`, `panorama`, `approach`, `about`, `footer`, `home`, `services`, `pages`)
 — sem um arquivo "site" genérico. Toda afirmação factual carrega `source` (ver
 [`CONTENT_MODEL`](CONTENT_MODEL.md)).
+
+## UX ✅
+
+Toda UI nova ou alterada segue as heurísticas de Nielsen e as leis de UX
+usuais (Jakob, Fitts, Hick, Miller) e contraste WCAG AA. Isso é regra do
+projeto, não algo a justificar comentário por comentário no código — a
+heurística/lei não aparece citada inline; achados e exceções ficam
+registrados em [`UX_REVIEW`](UX_REVIEW.md).
+
+## Vieses cognitivos ✅
+
+Decisões de design podem considerar deliberadamente vieses cognitivos (ex.:
+ancoragem) para **orientar** — nunca para manipular — o usuário: sem esconder,
+encolher ou dificultar a opção que não é a sugerida. Toda vez que uma decisão
+de UI for motivada por um viés, o código carrega **exatamente um comentário
+permanente** declarando qual viés foi usado e onde — esse comentário nunca
+deve ser removido, mesmo em refino futuro (é a única exceção à regra de
+[Comentários](#comentários-)). Exemplo já seguido: `CookieConsent.vue`
+(ancoragem — comentário junto aos botões Aceitar/Recusar).
+
+## Composables ✅
+
+Todo composable em `src/composables/` é reexportado por
+`src/composables/index.ts`; código de aplicação sempre importa de
+`@/composables`, nunca por caminho direto ao arquivo (`@/composables/useX`)
+— exceção: os próprios testes unitários do composable, que podem importar
+direto o módulo que testam.
+
+## Roteamento e listas de navegação ✅
+
+- Listas voltadas a menu/rodapé (`pages.json`, `footer.json`'s `legal`)
+  referenciam rotas por **nome** (`routeName`, o `name` já declarado em
+  `router/modules/*`), nunca por `path` hardcoded fora de `router/modules/*`
+  — resolvido via `RouterLink :to="{ name: routeName }"`. Evita quebra
+  silenciosa (404 no menu/rodapé) quando um path muda no router.
+- Repetição de markup para itens de uma lista usa **`v-for`** sobre uma única
+  fonte de dados — não declarações repetidas por item.
