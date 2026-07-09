@@ -146,8 +146,13 @@ Solução **autoral e local**, sem biblioteca de consentimento de terceiros:
   cookies" (`consent.reopen()`).
 - **GTM** (`@gtm-support/vue-gtm`, `createGtm`) é registrado em `main.ts` **só se
   houver `VITE_GTM_ID`**, com `enabled` partindo do consentimento já persistido.
-  O `<script>` do GTM **só carrega após opt-in** — o banner chama
-  `useGtm()?.enable(true/false)`.
+  O pacote em si é carregado via `import()` dinâmico dentro desse `if` (não no
+  topo do módulo) — sem `VITE_GTM_ID`, o código do GTM nunca é buscado nem
+  entra no chunk principal. O `import()` é aguardado (`await`) antes de
+  `app.mount()` porque `useGtm()` é chamado de forma síncrona em tempo de
+  `setup()` (ex.: `useCtaTracking.ts`) — registrar o plugin depois do mount
+  faria esse `useGtm()` capturar `undefined` para sempre. O `<script>` do GTM
+  em si **só carrega após opt-in** — o banner chama `useGtm()?.enable(true/false)`.
 
 ## Instalado mas inativo (cuidado ao documentar) 🟡
 

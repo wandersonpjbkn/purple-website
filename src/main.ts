@@ -2,7 +2,6 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createHead } from '@unhead/vue/client'
 import persisteStorage from 'pinia-plugin-persistedstate'
-import { createGtm } from '@gtm-support/vue-gtm'
 
 import router from '@/router'
 import { useConsentStore } from '@/stores/consent'
@@ -23,6 +22,7 @@ app.use(router)
 
 const gtmId = import.meta.env.VITE_GTM_ID
 if (gtmId) {
+  const { createGtm } = await import('@gtm-support/vue-gtm')
   const consent = useConsentStore(pinia)
   app.use(
     createGtm({
