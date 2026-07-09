@@ -20,7 +20,8 @@ Tudo em **`src/styles/abstracts/_tokens.scss`** como CSS custom properties em
 sistema: "resultado / positivo / ação secundária".
 `--lime #c5e22e` · `--lime-dark #9bb81f` · `--lime-light #e8f79a` · `--lime-ink #5f7213`
 (verde escurecido para **texto/link sobre fundo claro** — `--lime` puro não passa
-contraste em texto). Canais RGB para `rgba()`: `--purple-rgb`, `--lime-rgb`, `--bg-rgb`.
+contraste em texto). Canais RGB para `rgba()`: `--purple-rgb`, `--lime-rgb`,
+`--bg-rgb`, `--on-dark-rgb`.
 
 **Fundo escuro das seções:** `--section-dark #241047` (roxo profundo, porém mais
 quente/claro que `--purple-900`, para suavizar o contraste com as seções claras)

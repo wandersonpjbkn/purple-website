@@ -535,7 +535,7 @@ const headings = computed(() => {
     margin-bottom: var(--space-6);
     code {
       background: none;
-      color: #e8d5ff;
+      color: var(--purple-100);
       font-size: var(--text-sm);
       padding: 0;
     }

@@ -73,11 +73,11 @@
   &.on-dark {
     background: transparent;
     color: var(--on-dark);
-    border-color: rgba(255, 255, 255, 0.28);
+    border-color: rgba(var(--on-dark-rgb), 0.28);
 
     &:hover {
       background: var(--on-dark-surface);
-      border-color: rgba(255, 255, 255, 0.5);
+      border-color: rgba(var(--on-dark-rgb), 0.5);
       color: var(--on-dark);
     }
   }

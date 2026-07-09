@@ -14,6 +14,10 @@
 - **Português:** o que é **informação/conteúdo** exibido ou redigido para humanos
   — copy do site, valores de conteúdo no `src/data/*.json`, posts do blog e
   **esta documentação**.
+- **Exceção — pastas de teste:** comentários dentro de `__tests__/` e `e2e/`
+  têm **bypass** da regra de inglês e podem ser escritos em português,
+  acompanhando o estilo Given/When/Then das descrições de teste (pt-BR, ver
+  [`TESTING`](TESTING.md)). Fora dessas pastas, vale a regra normal (inglês).
 
 ## JavaScript / TypeScript ✅
 
@@ -107,7 +111,9 @@ contexto não óbvio, armadilha), não o **o quê** (que o código já diz). E
 mesmo neste casos os comentários **não devem** registrar passado (eles
 devem explicar a situação atual). Informações que expliquem revisões,
 alterações ou decisões passadas devem preferir o [`CHANGELOG`](../../CHANGELOG.md).
-Em testes, comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)).
+Em testes, comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)) —
+**exceto em `__tests__/` e `e2e/`**, onde o comentário pode ser em português
+(bypass documentado em [Idioma](#idioma-)).
 
 ## Código morto ✅
 

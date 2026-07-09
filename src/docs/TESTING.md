@@ -118,6 +118,9 @@ install chromium` antes do primeiro `yarn test:e2e`.
 
 - Co-localizar em `__tests__/` (já excluído do build app); nome `*.spec.ts`.
 - Descrições em pt-BR descrevendo **comportamento**, não implementação.
+- Comentários em `__tests__/` e `e2e/` têm bypass da regra de inglês do
+  [`CONVENTIONS`](CONVENTIONS.md#idioma-) — podem ser em português,
+  acompanhando o estilo Given/When/Then das descrições acima.
 
 ## Estilo BDD (Given / When / Then)
 

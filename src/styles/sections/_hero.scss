@@ -341,9 +341,8 @@
     right: calc(var(--space-4) * -1);
     animation: float1 4s ease-in-out infinite;
 
-    // "Marca Empregadora" é um resultado/selo positivo — papel documentado
-    // do lima no DESIGN_SYSTEM.md. --lime-ink (não --lime) porque o ícone
-    // herda currentColor sobre o fundo claro do card.
+    // --lime-ink (not --lime) because .icon inherits currentColor
+    // over this card's light background.
     .icon {
       background: rgba(var(--lime-rgb), 0.18);
       color: var(--lime-ink);
