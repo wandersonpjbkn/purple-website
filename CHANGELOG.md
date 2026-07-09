@@ -5,6 +5,63 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-07-09
+
+- **Regra 60/30/10 de cor formalizada + `yarn color-audit`** — a proporção
+  neutro/roxo/lima já existia na prática mas não estava escrita em nenhum
+  doc; nova seção em `DESIGN_SYSTEM.md` formaliza os números e
+  `scripts/color-audit.mjs` (relatório, não teste) confere por screenshot
+  full-page de cada rota, classificando pixels por matiz (HSL) sem depender
+  de lib de imagem nova. `scripts/prerender.mjs` teve `ROUTES` e
+  `resolveChromium` extraídos para `scripts/shared.mjs`, reaproveitados
+  pelos dois scripts.
+- **Blog migrado de build-time para runtime (worker + cache)** — o
+  `vite-plugin-blog.ts` baixava **todos** os posts (já com HTML) durante o
+  build e os embutia no bundle JS via `virtual:blog-posts`: com o catálogo
+  crescendo, todo visitante baixaria todos os posts, e publicar exigia rebuild
+  no Render. Removidos o plugin e o módulo virtual; o Worker ganhou
+  `GET /index` (metadados sem HTML) e `GET /posts/:slug` (post completo), com
+  edge cache (`caches.default`), `Cache-Control` (300s/3600s), ETag fraco +
+  `304`, CORS anexado por request e listagem R2 paginada por cursor (>1000
+  objetos). As rotas legadas `GET /` e `GET /posts` seguem no ar durante a
+  transição. `POST /deploy` passou a purgar o cache do índice; o hook do
+  Render virou opcional (só refresca o snapshot SEO prerenderizado).
+- **Cache client-side em IndexedDB (stale-while-revalidate)** — novos
+  `useBlogData` (singleton reativo: índice compartilhado, dedupe, throttle de
+  revalidação de 60s) e `useBlogCache` (DB `purple-blog`, stores `meta` e
+  `posts`, invalidação por stamp = ETag do índice; sem IndexedDB degrada para
+  network-only). Visitas repetidas praticamente não geram requests — relevante
+  no free tier do Cloudflare/Render. Tipos do blog agora em
+  `src/types/blog.ts`; `BlogPage` ganhou skeleton de carregamento e
+  `BlogPostPage` estados `loading | ready | not-found` (sem flash de 404).
+- **Barra de categorias virou filtro de verdade (`CategoryFilter.vue`)** — a
+  barra sticky renderizava todas as categorias como pills, crescendo sem
+  limite conforme os posts. Agora: "Todos" + até 4 quick pills + botão
+  "Filtrar" com dropdown acessível (aria-expanded/haspopup, Escape devolve o
+  foco, click-outside) listando todas as categorias com contagem; no mobile
+  (≤640px) as quick pills somem e a barra vira uma linha só. Novo ícone
+  `chevron-down` no registry.
+- **Typewriter do hero pausa fora de vista e não derruba mais o layout** —
+  extraído para `useTypewriter` (composable): `IntersectionObserver` +
+  `visibilitychange` pausam o loop quando o hero sai da viewport ou a aba
+  fica oculta (retoma do ponto exato); no template, sizers invisíveis em
+  `inline-grid` (`hero__rotator`) reservam a altura/largura da frase mais
+  longa — o conteúdo abaixo não pula quando uma frase quebra em 2 linhas.
+- **Título do hero não corta mais em 360px** — o piso do clamp global de h1
+  (2.5rem) + `white-space: nowrap` no `<em>` estouravam a largura. Override
+  local no tier `xs` (`clamp(1.9rem, 9vw, 2.5rem)`) e, se ainda precisar
+  quebrar, o sublinhado lime vira `background` clonado por fragmento
+  (`box-decoration-break`), já que o `::before` absoluto não acompanha quebra
+  de linha. Removida regra morta `.hero__typewriter.is-complete::before`.
+- **Prerender espera o conteúdo do blog** — `scripts/prerender.mjs` aguarda os
+  cards (ou o estado vazio) nas rotas `/` e `/blog` antes do snapshot, com
+  timeout tolerante; CORS do Worker ganhou `localhost:4180` (prerender) e
+  `localhost:4173` (vite preview).
+- **Testes** — suíte da raiz foi de 46 para 66 (novos specs: `useBlogData`,
+  `useBlogCache` com `fake-indexeddb` dev-only, `useTypewriter`,
+  `CategoryFilter`; `vite-plugin-blog.spec.ts` removido junto do plugin);
+  `workers/blog` foi de 14 para 26 (rotas, cache/ETag/304, CORS, deploy).
+
 ## 2026-07-08
 
 - **Testes corrigidos pós-migração do blog para R2** — a suíte quebrou (12/49

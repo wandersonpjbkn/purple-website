@@ -116,7 +116,6 @@ export function buildEmail(data: EmailData): string {
 </head>
 <body>
   <div class="container">
-    <!-- header -->
     <div class="header">
       <h1>Novo contato pelo site</h1>
       <p>Um potencial cliente acabou de preencher o formulário da Purple Comunicação.</p>
@@ -124,34 +123,27 @@ export function buildEmail(data: EmailData): string {
 
     <div class="content">
       <div class="grid">
-        <!-- title -->
         <div class="title">Nome</div>
         <div class="info">${name}</div>
 
-        <!-- email -->
         <div class="title">E-mail</div>
         <div class="info"><a href="mailto:${email}">${email}</a></div>
 
-        <!-- service -->
         <div class="title">Serviço</div>
         <div class="info">${service}</div>
 
-        <!-- sent at -->
         <div class="title">Recebido em</div>
         <div class="info">${sentAt}</div>
 
-        <!-- source -->
         <div class="title">Origem</div>
         <div class="info"><a href="${url}">${url}</a></div>
       </div>
 
-      <!-- message -->
       <div class="section">
         <div class="label">Mensagem enviada</div>
         <div class="card">${message}</div>
       </div>
 
-      <!-- reply -->
       <a class="button" href="mailto:${email}?subject=Re:%20${encodeURIComponent(service)}">Responder ao cliente</a>
     </div>
 

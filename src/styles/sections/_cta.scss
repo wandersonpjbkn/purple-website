@@ -1,6 +1,5 @@
 @use '../abstracts/mixins' as *;
 
-// ── CTA Banner ─────────────────────────────────────────────
 .cta-banner {
   padding: var(--space-8) 0 var(--space-20);
 }
@@ -17,25 +16,19 @@
   overflow: hidden;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: -40%;
-    right: 5%;
-    width: 400px;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.12) 0%, transparent 65%);
-    pointer-events: none;
+    @include radial-glow($offset: -40%, $hoffset: 5%, $opacity: 0.12);
   }
 
   &::after {
-    content: '';
-    position: absolute;
-    bottom: -30%;
-    left: 10%;
-    width: 300px;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(var(--purple-rgb), 0.3) 0%, transparent 65%);
-    pointer-events: none;
+    @include radial-glow(
+      $color: purple,
+      $vpos: bottom,
+      $hpos: left,
+      $offset: -30%,
+      $hoffset: 10%,
+      $size: 300px,
+      $opacity: 0.3
+    );
   }
 
   h2 {
@@ -74,39 +67,4 @@
 .cta-banner__content-link {
   color: var(--on-dark-muted);
   font-size: var(--text-sm);
-}
-
-// ── Contact grid ───────────────────────────────────────────
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-16);
-  align-items: start;
-
-  @include respond-to(md) {
-    grid-template-columns: 1fr;
-    gap: var(--space-10);
-  }
-}
-
-.contact-info__item {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  padding: var(--space-4) 0;
-  border-bottom: 1px solid var(--border-subtle);
-  font-size: 0.95rem;
-  color: var(--text);
-  font-weight: 500;
-}
-
-.contact-info__icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--purple-100);
-  display: grid;
-  place-items: center;
-  font-size: 15px;
-  flex-shrink: 0;
 }

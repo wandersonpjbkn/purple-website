@@ -3,11 +3,26 @@
     v-if="member && member.isVisibleTeamMember"
     class="team-card-member"
   >
-    <BaseAvatar
-      :name="member.name"
-      :src="useCdnAsset(member.avatar)"
-      size="lg"
-    />
+    <div class="team-card-member__header">
+      <BaseAvatar
+        :name="member.name"
+        :src="useCdnAsset(member.avatar)"
+        size="lg"
+      />
+      <div
+        v-if="memberSocialLinks.length"
+        class="team-card-member__social"
+      >
+        <SocialLink
+          v-for="[key, url] in memberSocialLinks"
+          :key="key"
+          :href="url"
+          :icon="key"
+          :label="`${SOCIAL_NETWORK_LABELS[key]} de ${member.name}`"
+          size="sm"
+        />
+      </div>
+    </div>
 
     <div class="team-card-member__info">
       <h3>{{ member.name }}</h3>
@@ -19,20 +34,20 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import { useCdnAsset } from '@/composables'
 
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
+import SocialLink from '@/components/ui/SocialLink.vue'
 
-defineProps<{
-  member?: {
-    name: string
-    role: string
-    bio: string
-    isVisibleTeamMember: boolean
-    avatar?: string
-    quote?: string
-  }
+import { SOCIAL_NETWORK_LABELS, socialLinksOf, type TeamMember } from '@/types/team'
+
+const props = defineProps<{
+  member?: TeamMember
 }>()
+
+const memberSocialLinks = computed(() => socialLinksOf(props.member?.social))
 </script>
 
 <style scoped lang="scss">
@@ -45,6 +60,18 @@ defineProps<{
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+}
+
+.team-card-member__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.team-card-member__social {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .team-card-member__info {

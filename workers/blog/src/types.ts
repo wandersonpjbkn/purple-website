@@ -36,3 +36,7 @@ export interface BlogPost {
   html: string
   wordCount: number
 }
+
+// Listing payload (/index): everything the front needs to render cards,
+// without the heavy `html` body.
+export type PostMeta = Omit<BlogPost, 'html'>

@@ -1,4 +1,3 @@
-// ── Breakpoints ────────────────────────────────────────────
 $bp-xl: 1280px;
 $bp-lg: 1024px;
 $bp-md: 900px;
@@ -29,7 +28,6 @@ $bp-xs: 420px;
   }
 }
 
-// ── Superfície card ────────────────────────────────────────
 @mixin card-surface($padding: var(--space-6)) {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -38,7 +36,6 @@ $bp-xs: 420px;
   box-shadow: var(--shadow-sm);
 }
 
-// ── Card hover lift ────────────────────────────────────────
 @mixin card-hover {
   transition:
     box-shadow 0.2s var(--ease),
@@ -52,7 +49,6 @@ $bp-xs: 420px;
   }
 }
 
-// ── Linha gradiente no topo do card ───────────────────────
 @mixin top-accent-line {
   position: relative;
   overflow: hidden;
@@ -75,23 +71,34 @@ $bp-xs: 420px;
   }
 }
 
-// ── Fundo com gradiente radial sutil ──────────────────────
-@mixin radial-glow($color: var(--purple), $opacity: 0.08, $pos: 'top right') {
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    right: -10%;
-    width: 55%;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse at center, rgba(var(--purple-rgb), #{$opacity}) 0%, transparent 70%);
-    pointer-events: none;
-  }
+// Vertical corner is $vpos ('top'/'bottom'); horizontal corner is $hpos ('left'/'right').
+@mixin radial-glow(
+  $color: lime,
+  $vpos: top,
+  $hpos: right,
+  $offset: -20%,
+  $hoffset: -5%,
+  $opacity: 0.08,
+  $size: 400px,
+  $fade: 65%
+) {
+  content: '';
+  position: absolute;
+  #{$vpos}: $offset;
+  #{$hpos}: $hoffset;
+  width: $size;
+  aspect-ratio: 1;
+  background: radial-gradient(ellipse, rgba(var(--#{$color}-rgb), $opacity) 0%, transparent $fade);
+  pointer-events: none;
 }
 
-// ── Section eyebrow padronizada ────────────────────────────
+@mixin line-clamp($lines: 3) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @mixin eyebrow {
   display: inline-flex;
   align-items: center;
@@ -112,25 +119,4 @@ $bp-xs: 420px;
     border-radius: 2px;
     flex-shrink: 0;
   }
-}
-
-// ── Clamp fluido de tamanho de fonte ──────────────────────
-@mixin fluid-type($min, $max, $min-vw: 360px, $max-vw: 1200px) {
-  font-size: clamp(
-    #{$min},
-    calc(#{$min} + (#{strip-unit($max - $min)}) * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})),
-    #{$max}
-  );
-}
-
-@function strip-unit($number) {
-  @return $number / ($number * 0 + 1);
-}
-
-// ── Texto truncado com ellipsis ────────────────────────────
-@mixin line-clamp($lines: 3) {
-  display: -webkit-box;
-  -webkit-line-clamp: $lines;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }

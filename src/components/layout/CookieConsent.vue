@@ -171,7 +171,6 @@ onUnmounted(() => {
   }
 }
 
-// Enter/leave transition
 .consent-enter-active,
 .consent-leave-active {
   transition:

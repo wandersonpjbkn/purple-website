@@ -46,8 +46,7 @@ import { useRoute } from 'vue-router'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
-import { useWhatsappUrl } from '@/composables/useWhatsapp'
-import { useCtaTracking } from '@/composables/useCtaTracking'
+import { useWhatsappUrl, useCtaTracking } from '@/composables'
 
 const props = withDefaults(
   defineProps<{

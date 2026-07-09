@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- ── Page Hero ──────────────────────────────────────── -->
     <PageHero
       :eyebrow="services.intro.eyebrow"
       :title="services.intro.title"
@@ -8,14 +7,17 @@
     >
       <div class="button-row">
         <BaseButton
-          tag="RouterLink"
-          to="/contato"
-          >Falar com a Purple</BaseButton
+          tag="a"
+          :href="whatsappUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="trackServicePageWhatsappClick"
         >
+          Falar com uma consultora
+        </BaseButton>
       </div>
     </PageHero>
 
-    <!-- ── Fixed sub-nav: quick access to the 3 layers ─────── -->
     <div class="svc-subnav">
       <BaseContainer>
         <nav
@@ -47,7 +49,6 @@
       </BaseContainer>
     </div>
 
-    <!-- ── Catalog as expandable cards ─────────────────────── -->
     <section
       id="catalogo"
       class="section-block"
@@ -126,7 +127,7 @@
               <div class="svc-item__actions">
                 <BaseButton
                   tag="RouterLink"
-                  to="/contato"
+                  :to="`/contato?servico=${encodeURIComponent(service.id)}`"
                   variant="lime"
                   >Pedir proposta</BaseButton
                 >
@@ -147,7 +148,6 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Recurring plans ──────────────────────────────────── -->
     <section
       id="planos"
       class="packages-section"
@@ -185,7 +185,7 @@
               <span class="package-card__price">{{ services.packages.priceLabel }}</span>
               <BaseButton
                 tag="RouterLink"
-                to="/contato"
+                :to="`/contato?servico=${encodeURIComponent(pkg.id)}`"
                 variant="lime"
               >
                 {{ services.packages.ctaLabel }}
@@ -196,7 +196,6 @@
       </BaseContainer>
     </section>
 
-    <!-- ── One-off projects ─────────────────────────────────── -->
     <section
       id="projetos"
       class="section-block"
@@ -219,7 +218,7 @@
             <div class="service-card__links">
               <RouterLink
                 class="text-link"
-                to="/contato"
+                :to="project.serviceId ? `/contato?servico=${encodeURIComponent(project.serviceId)}` : '/contato'"
                 >Pedir proposta</RouterLink
               >
               <a
@@ -236,14 +235,12 @@
       </BaseContainer>
     </section>
 
-    <!-- ── FAQ ──────────────────────────────────────────────── -->
     <FaqSection alt />
 
-    <!-- ── CTA ──────────────────────────────────────────────── -->
     <CtaBanner
       title="Pronto para transformar sua comunicação interna?"
       description="Vamos entender o contexto da sua empresa e construir juntos uma estratégia que faz sentido para o seu time."
-      whatsapp-message="Olá! Vi os serviços da Purple e quero saber mais sobre como contratar. [mensagem provisória — copy final pendente]"
+      whatsapp-message="Olá! Vi os serviços da Purple e quero saber mais sobre como contratar."
       content-to="/abordagem"
       content-label="Ver nossa abordagem"
     />
@@ -254,7 +251,7 @@
 import { reactive, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { usePageMeta } from '@/composables'
+import { usePageMeta, useWhatsappUrl, useCtaTracking } from '@/composables'
 import services from '@/data/services.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
@@ -271,6 +268,10 @@ usePageMeta({
 })
 
 const route = useRoute()
+
+const whatsappUrl = useWhatsappUrl('Gostei dos serviços e quero conversar!')
+const { trackWhatsappClick } = useCtaTracking()
+const trackServicePageWhatsappClick = () => trackWhatsappClick(`header:${String(route.name ?? route.path)}`)
 
 // Expansion state of the catalog cards (several can stay open at once).
 const openState = reactive<Record<string, boolean>>({})
@@ -329,7 +330,6 @@ watch(
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Fixed sub-nav ──────────────────────────────────────────
 .svc-subnav {
   position: sticky;
   top: 76px;
@@ -377,7 +377,6 @@ watch(
   }
 }
 
-// ── Catalog (expandable cards) ─────────────────────────────
 .svc-catalog {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -587,7 +586,6 @@ watch(
   }
 }
 
-// "Ver detalhes" link on one-off projects (anchors into the catalog).
 .svc-detail-link {
   font-size: var(--text-sm);
   font-weight: 600;
@@ -598,7 +596,6 @@ watch(
   }
 }
 
-// ── Recurring plans (dark background) ──────────────────────
 .packages-section {
   background: var(--section-dark);
   padding: var(--space-20) 0;
@@ -607,14 +604,7 @@ watch(
   scroll-margin-top: 120px;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: -20%;
-    right: -5%;
-    width: 420px;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.08) 0%, transparent 65%);
-    pointer-events: none;
+    @include radial-glow($size: 420px);
   }
 }
 

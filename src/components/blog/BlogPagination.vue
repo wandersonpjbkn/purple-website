@@ -56,7 +56,7 @@ const props = defineProps<{
 
 defineEmits<{ change: [page: number] }>()
 
-// Exibe no máximo 7 páginas com ellipsis
+// Shows at most 7 pages with ellipsis
 const displayedPages = computed(() => {
   const { page, totalPages } = props
   if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)

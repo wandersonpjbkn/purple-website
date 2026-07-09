@@ -2,11 +2,10 @@ import { computed, ref, type Ref } from 'vue'
 
 import team from '@/data/team.json'
 
-import { posts as allPosts, getAllCategories } from 'virtual:blog-posts'
-import type { Post } from 'virtual:blog-posts'
-import type { TeamMember } from '@/types/team'
+import { useBlogData } from '@/composables/useBlogData'
 
-// ── Utilitários ───────────────────────────────────────────
+import type { PostMeta } from '@/types/blog'
+import type { TeamMember } from '@/types/team'
 
 export const formatDate = (iso: string): string => {
   return new Intl.DateTimeFormat('pt-BR', {
@@ -20,24 +19,26 @@ export const getAuthor = (slug: string): TeamMember | undefined => {
   return (team as TeamMember[]).find(member => member.slug === slug)
 }
 
-// ── Composable principal ──────────────────────────────────
 export const useBlog = (options?: { initialCategory?: Ref<string>; initialQuery?: Ref<string>; perPage?: number }) => {
+  const { posts, categories, isLoading, isReady, loadIndex } = useBlogData()
+  loadIndex()
+
   const query = options?.initialQuery ?? ref('')
   const activeCategory = options?.initialCategory ?? ref('')
   const page = ref(1)
   const perPage = options?.perPage ?? 9
 
   const filtered = computed(() => {
-    let result: Post[] = allPosts
+    let result: PostMeta[] = posts.value
 
     if (activeCategory.value) {
-      result = result.filter((p: Post) => p.category.toLowerCase() === activeCategory.value.toLowerCase())
+      result = result.filter((p: PostMeta) => p.category.toLowerCase() === activeCategory.value.toLowerCase())
     }
 
     const q = query.value.trim().toLowerCase()
     if (q) {
       result = result.filter(
-        (p: Post) =>
+        (p: PostMeta) =>
           p.title.toLowerCase().includes(q) ||
           p.excerpt.toLowerCase().includes(q) ||
           p.category.toLowerCase().includes(q)
@@ -73,7 +74,9 @@ export const useBlog = (options?: { initialCategory?: Ref<string>; initialQuery?
     paginated,
     totalPages,
     total: computed(() => filtered.value.length),
-    categories: getAllCategories(),
+    categories,
+    isLoading,
+    isReady,
     setPage,
     clearFilters,
     watchReset,

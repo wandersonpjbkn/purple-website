@@ -1,5 +1,4 @@
 <template>
-  <!-- ── Hero ─────────────────────────────────────────────── -->
   <section class="contact-hero">
     <BaseContainer>
       <div class="contact-hero__inner">
@@ -8,60 +7,37 @@
           <h1>{{ useContact().title }}</h1>
           <p class="lead lead--narrow">{{ useContact().subtitle }}</p>
 
-          <!-- Direct CTAs -->
-          <div class="contact-hero__ctas">
-            <BaseButton
-              tag="a"
-              :href="whatsappUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="button--lg contact-hero__whatsapp"
-              @click="trackWhatsappClick('contact_page_hero')"
-            >
-              <span class="contact-hero__whatsapp-icon"><BaseIcon name="whatsapp" /></span>
-              Falar no WhatsApp
-            </BaseButton>
-            <BaseButton
-              tag="a"
-              :href="whatsappHireUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="lime"
-              class="button--lg"
-              @click="trackWhatsappClick('contact_page_hero_hire')"
-            >
-              Contratar agora
-            </BaseButton>
-          </div>
-
-          <!-- Contact info -->
           <div class="contact-info">
-            <a
-              :href="`mailto:${useContact().email}`"
-              class="contact-info__item"
-            >
-              <span class="contact-info__icon"><BaseIcon name="mail" /></span>
-              <span>{{ useContact().email }}</span>
-            </a>
-            <a
-              :href="whatsappUrl"
-              target="_blank"
-              rel="noopener"
-              class="contact-info__item"
-            >
-              <span class="contact-info__icon"><BaseIcon name="phone" /></span>
-              <span>{{ useContact().tel }}</span>
-            </a>
-            <div class="contact-info__item">
-              <span class="contact-info__icon"><BaseIcon name="pin" /></span>
-              <span>{{ useContact().address }}</span>
+            <div class="contact-info__row">
+              <a
+                :href="`mailto:${useContact().email}`"
+                class="contact-info__item"
+              >
+                <span class="contact-info__icon"><BaseIcon name="mail" /></span>
+                <span>{{ useContact().email }}</span>
+              </a>
+            </div>
+            <div class="contact-info__row">
+              <a
+                :href="whatsappUrl"
+                target="_blank"
+                rel="noopener"
+                class="contact-info__item"
+              >
+                <span class="contact-info__icon"><BaseIcon name="phone" /></span>
+                <span>{{ useContact().tel }}</span>
+              </a>
+            </div>
+            <div class="contact-info__row">
+              <div class="contact-info__item">
+                <span class="contact-info__icon"><BaseIcon name="pin" /></span>
+                <span>{{ useContact().address }}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Form -->
         <div class="contact-form-wrap">
-          <!-- State: success -->
           <div
             v-if="status === 'success'"
             class="form-success"
@@ -76,7 +52,6 @@
             >
           </div>
 
-          <!-- Normal form -->
           <form
             v-else
             class="contact-form"
@@ -133,32 +108,16 @@
                 >
               </label>
 
-              <label class="field field--full">
+              <label class="field">
                 <span class="field__label">Serviço de interesse <span aria-hidden="true">*</span></span>
-                <select
+                <BaseCombobox
                   ref="subjectSelect"
                   v-model="form.subject"
-                  required
-                  :class="{ 'field__input--error': errors.subject }"
-                  :aria-invalid="!!errors.subject"
-                  :aria-describedby="errors.subject ? 'subject-error' : undefined"
-                >
-                  <option
-                    value=""
-                    disabled
-                  >
-                    Selecione um interesse
-                  </option>
-                  <option
-                    v-for="service in services.catalog"
-                    :key="service.id"
-                    :value="service.title"
-                  >
-                    {{ service.title }}
-                  </option>
-                  <option value="Orçamento geral">Orçamento geral</option>
-                  <option value="Outro">Outro</option>
-                </select>
+                  :options="SERVICE_INTEREST_OPTIONS"
+                  placeholder="Selecione um interesse"
+                  :error="!!errors.subject"
+                  :described-by="errors.subject ? 'subject-error' : undefined"
+                />
                 <span
                   v-if="errors.subject"
                   id="subject-error"
@@ -168,13 +127,13 @@
                 >
               </label>
 
-              <label class="field field--full">
+              <label class="field">
                 <span class="field__label">Mensagem <span aria-hidden="true">*</span></span>
                 <textarea
                   ref="messageTextarea"
                   v-model="form.message"
                   rows="5"
-                  placeholder="Conte um pouco sobre o seu desafio ou como podemos ajudar..."
+                  placeholder="Nos conte um pouco sobre o seu desafio"
                   required
                   :class="{ 'field__input--error': errors.message }"
                   :aria-invalid="!!errors.message"
@@ -197,7 +156,6 @@
               @expired="turnstileToken = ''"
             />
 
-            <!-- Submit error -->
             <div
               v-if="status === 'error'"
               class="form-send-error"
@@ -224,14 +182,13 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Secondary CTA ────────────────────────────────────── -->
   <section class="contact-alt-cta">
     <BaseContainer>
       <div class="contact-alt-cta__inner">
         <div>
-          <p class="section-eyebrow section-eyebrow--lime">Resposta imediata</p>
+          <p class="section-eyebrow section-eyebrow--lime">Comunicação eficiente</p>
           <h2>Prefere falar agora?</h2>
-          <p>O WhatsApp é o canal mais rápido. Respondemos no mesmo dia.</p>
+          <p>Nos envie uma mensagem. Responderemos rapidamente.</p>
         </div>
         <div class="contact-alt-cta__actions">
           <BaseButton
@@ -243,18 +200,7 @@
             class="button--lg"
             @click="trackWhatsappClick('contact_page_alt_cta')"
           >
-            <BaseIcon name="whatsapp" /> Abrir WhatsApp
-          </BaseButton>
-          <BaseButton
-            tag="a"
-            :href="whatsappHireUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="secondary"
-            class="button--lg on-dark"
-            @click="trackWhatsappClick('contact_page_alt_cta_hire')"
-          >
-            Contratar um serviço
+            Fale com uma consultora
           </BaseButton>
         </div>
       </div>
@@ -263,37 +209,55 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
+import BaseCombobox from '@/components/ui/BaseCombobox.vue'
 import TurnstileWidget from '@/components/forms/TurnstileWidget.vue'
-import { usePageMeta, useContact, useMail, useContactForm } from '@/composables'
-import { useWhatsappUrl } from '@/composables/useWhatsapp'
-import { useCtaTracking } from '@/composables/useCtaTracking'
-import services from '@/data/services.json'
+import {
+  usePageMeta,
+  useContact,
+  useMail,
+  useContactForm,
+  useWhatsappUrl,
+  useCtaTracking,
+  resolveServiceInterest,
+  SERVICE_INTEREST_OPTIONS,
+} from '@/composables'
 
 usePageMeta({
   title: 'Contato',
-  description: 'Entre em contato com a Purple Comunicação. Formulário, WhatsApp e e-mail disponíveis.',
+  description: 'Entre em contato com a Purple Comunicação. Formulário de contato ou por mensagem.',
 })
 
-// ── WhatsApp URLs ──────────────────────────────────────────
+const route = useRoute()
+const router = useRouter()
+
 const whatsappUrl = useWhatsappUrl('Olá! Vim pelo site da Purple e gostaria de saber mais.')
-const whatsappHireUrl = useWhatsappUrl('Olá! Gostaria de contratar um serviço da Purple Comunicação.')
 const { trackWhatsappClick, trackContactFormSubmit } = useCtaTracking()
 
-// ── Form ───────────────────────────────────────────────────
 const { status, errorMsg, send, reset } = useMail()
 const { form, errors, validate, clearForm } = useContactForm()
+
+// Comes from "Pedir proposta" on the Services page (?servico=<id>) — applied before
+// the first render so the field doesn't flash empty before showing the prefilled value.
+const prefilledInterest = resolveServiceInterest(route.query.servico)
+if (prefilledInterest) form.subject = prefilledInterest
+
+onMounted(() => {
+  // Clears the URL so a page reload doesn't reapply this value after the user picks something else.
+  if (route.query.servico) router.replace({ query: {} })
+})
 
 const turnstileToken = ref('')
 const turnstileWidget = ref<InstanceType<typeof TurnstileWidget> | null>(null)
 
 const nameInput = ref<HTMLInputElement | null>(null)
 const emailInput = ref<HTMLInputElement | null>(null)
-const subjectSelect = ref<HTMLSelectElement | null>(null)
+const subjectSelect = ref<InstanceType<typeof BaseCombobox> | null>(null)
 const messageTextarea = ref<HTMLTextAreaElement | null>(null)
 
 const focusFirstError = () => {
@@ -338,7 +302,6 @@ const resetForm = () => {
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Hero ───────────────────────────────────────────────────
 .contact-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -355,43 +318,29 @@ const resetForm = () => {
       gap: var(--space-12);
     }
   }
-
-  // ── Direct CTAs ────────────────────────────────────────────
-  &__ctas {
-    display: flex;
-    gap: 0.875rem;
-    flex-wrap: wrap;
-    margin: var(--space-8) 0 var(--space-10);
-  }
-
-  &__whatsapp {
-    background: var(--whatsapp);
-    border-color: var(--whatsapp);
-    color: var(--text);
-
-    &:hover {
-      background: var(--whatsapp-dark);
-      border-color: var(--whatsapp-dark);
-      color: var(--text);
-    }
-
-    &-icon {
-      font-size: 1.1em;
-    }
-  }
 }
 
-// ── Contact info ───────────────────────────────────────────
 .contact-info {
+  margin-top: var(--space-8);
+
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
 
+  &__row {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: var(--space-4) 0;
+  }
+
+  // inline-flex, not flex: a block-level flex item still stretches to 100% of the
+  // row; it needs to shrink to content so the click/hover area doesn't cover the
+  // blank space to the right of the text.
   &__item {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--space-3);
     font-size: 0.9rem;
+    font-weight: 500;
     color: var(--muted);
     text-decoration: none;
     transition: color 0.15s;
@@ -413,7 +362,6 @@ const resetForm = () => {
   }
 }
 
-// ── Form ───────────────────────────────────────────────────
 .contact-form {
   padding: var(--space-10);
   display: flex;
@@ -443,20 +391,15 @@ const resetForm = () => {
 
   &__fields {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--space-5);
     margin-bottom: var(--space-6);
-
-    @include respond-to(sm) {
-      grid-template-columns: 1fr;
-    }
   }
 
   &__turnstile {
     margin-bottom: var(--space-4);
   }
 
-  // ── Submit ─────────────────────────────────────────────────
   &__submit {
     width: 100%;
     display: flex;
@@ -465,23 +408,12 @@ const resetForm = () => {
     gap: var(--space-2);
   }
 
-  // ── Field ──────────────────────────────────────────────────
-  select {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239c8aad' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.875rem center;
-    padding-right: var(--space-10);
-  }
-
   textarea {
     resize: vertical;
     min-height: 120px;
   }
 }
 
-// ── Dark CTA ───────────────────────────────────────────────
 .contact-alt-cta {
   background: var(--section-dark);
   padding: var(--space-20) 0;
@@ -489,14 +421,7 @@ const resetForm = () => {
   overflow: hidden;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    right: -5%;
-    width: 400px;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.1) 0%, transparent 65%);
-    pointer-events: none;
+    @include radial-glow($opacity: 0.1, $offset: -30%);
   }
 
   &__inner {

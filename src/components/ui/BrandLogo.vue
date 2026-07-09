@@ -27,7 +27,6 @@ import LogoSvg from '@/assets/brand/logo-ppl.svg?component'
   display: block;
 }
 
-/* Fallback textual (mesmo desenho do header antigo) */
 .brand-wordmark {
   display: inline-flex;
   align-items: baseline;

@@ -1,6 +1,5 @@
 <template>
   <div v-if="post">
-    <!-- ── Hero ──────────────────────────────────────── -->
     <section class="post-hero">
       <BaseContainer>
         <nav
@@ -8,11 +7,11 @@
           aria-label="Navegação"
         >
           <RouterLink to="/blog">Blog</RouterLink>
-          <span aria-hidden="true">›</span>
+          <BaseIcon name="chevron-right" />
           <RouterLink :to="`/blog?categoria=${encodeURIComponent(post.category)}`">
             {{ post.category }}
           </RouterLink>
-          <span aria-hidden="true">›</span>
+          <BaseIcon name="chevron-right" />
           <span aria-current="page">{{ post.title }}</span>
         </nav>
 
@@ -46,6 +45,7 @@
             class="post-hero__author"
           >
             <BaseAvatar
+              :src="useCdnAsset(author.avatar)"
               :name="author.name"
               size="md"
             />
@@ -58,11 +58,9 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Conteúdo ───────────────────────────────────── -->
     <section class="section-block section-block--sm">
       <BaseContainer>
         <div class="post-layout-grid">
-          <!-- Sumário lateral -->
           <aside
             class="post-toc"
             aria-label="Sumário do artigo"
@@ -96,14 +94,12 @@
             </div>
           </aside>
 
-          <!-- Corpo do post -->
           <div class="post-body">
             <article
               class="prose"
               v-html="post.html"
             />
 
-            <!-- Convite contextual ao serviço relacionado ao tema -->
             <aside
               v-if="relatedService"
               class="post-service-cta"
@@ -126,7 +122,6 @@
       </BaseContainer>
     </section>
 
-    <!-- ── CTA de conversão ao fim do artigo ──────────── -->
     <CtaBanner
       eyebrow="Do conteúdo à prática"
       title="Quer aplicar isso na sua empresa?"
@@ -136,7 +131,6 @@
       content-label="Conhecer os serviços"
     />
 
-    <!-- ── Card do autor ──────────────────────────────── -->
     <section
       v-if="author"
       class="section-block section-block--sm post-author-section"
@@ -145,6 +139,7 @@
         <h2 class="sr-only">Sobre o autor</h2>
         <div class="post-author-card">
           <BaseAvatar
+            :src="useCdnAsset(author.avatar)"
             :name="author.name"
             size="lg"
           />
@@ -164,7 +159,6 @@
       </BaseContainer>
     </section>
 
-    <!-- ── Posts relacionados ────────────────────────── -->
     <section
       v-if="related.length"
       class="section-block section-block--surface"
@@ -193,9 +187,9 @@
     </section>
   </div>
 
-  <!-- 404 -->
+  <!-- 404 — only after loading finishes, never during loading -->
   <section
-    v-else
+    v-else-if="state === 'not-found'"
     class="section-block"
   >
     <BaseContainer>
@@ -205,7 +199,7 @@
         <BaseButton
           tag="RouterLink"
           to="/blog"
-          >← Voltar para o blog</BaseButton
+          >Voltar para o blog</BaseButton
         >
       </div>
     </BaseContainer>
@@ -213,14 +207,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute, RouterLink } from 'vue-router'
 
-import { getPost, posts } from 'virtual:blog-posts'
-import type { Post } from 'virtual:blog-posts'
-
-import { formatDate, getAuthor, usePageMeta } from '@/composables'
+import { formatDate, getAuthor, usePageMeta, useBlogData, useCdnAsset } from '@/composables'
 import services from '@/data/services.json'
+
+import type { Post, PostMeta } from '@/types/blog'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -232,6 +225,8 @@ import PostCard from '@/components/blog/PostCard.vue'
 const route = useRoute()
 const router = useRouter()
 
+const { posts, getPost } = useBlogData()
+
 onMounted(() => {
   if (!route.params.slug) return router.push({ name: 'blog' })
 })
@@ -241,7 +236,23 @@ const slug = computed(() => {
   return Array.isArray(s) ? (s[0] ?? '') : s
 })
 
-const post = computed(() => getPost(slug.value))
+const post = ref<Post | null>(null)
+const state = ref<'loading' | 'ready' | 'not-found'>('loading')
+
+watch(
+  slug,
+  async value => {
+    if (!value) return
+    state.value = 'loading'
+    const loaded = await getPost(value)
+    // Quick navigation guard: only the latest slug may resolve the state.
+    if (slug.value !== value) return
+    post.value = loaded
+    state.value = loaded ? 'ready' : 'not-found'
+  },
+  { immediate: true }
+)
+
 const author = computed(() => (post.value ? getAuthor(post.value.author) : undefined))
 
 usePageMeta(
@@ -253,8 +264,7 @@ usePageMeta(
 )
 
 const whatsappMessage = computed(
-  () =>
-    `Olá! Li o artigo "${post.value?.title ?? ''}" no blog da Purple e quero conversar sobre isso. [mensagem provisória — copy final pendente]`
+  () => `Olá! Li o artigo "${post.value?.title ?? ''}" no blog da Purple e quero conversar sobre isso.`
 )
 
 const relatedService = computed(() => {
@@ -263,16 +273,17 @@ const relatedService = computed(() => {
   return services.catalog.find(s => s.blogCategories?.includes(cat))
 })
 
-// Posts relacionados
+// Related posts — index metadata is enough for the cards
 const related = computed(() => {
   const current = post.value
   if (!current) return []
-  return posts
-    .filter((p: Post) => p.slug !== current.slug && (p.category === current.category || p.author === current.author))
+  return posts.value
+    .filter(
+      (p: PostMeta) => p.slug !== current.slug && (p.category === current.category || p.author === current.author)
+    )
     .slice(0, 3)
 })
 
-// Sumário — extrai h2/h3 com id do HTML gerado pelo plugin
 const headings = computed(() => {
   const current = post.value
   if (!current) return []
@@ -294,7 +305,6 @@ const headings = computed(() => {
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Hero ───────────────────────────────────────────────────
 .post-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -398,7 +408,6 @@ const headings = computed(() => {
   }
 }
 
-// ── Layout: sumário + prose ────────────────────────────────
 .post-layout-grid {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -410,7 +419,6 @@ const headings = computed(() => {
   }
 }
 
-// ── Sumário ────────────────────────────────────────────────
 .post-toc {
   position: sticky;
   top: 96px;
@@ -427,7 +435,6 @@ const headings = computed(() => {
   padding-left: 0.875rem;
 }
 
-// ── Prose ──────────────────────────────────────────────────
 .prose {
   font-size: var(--text-base);
   line-height: 1.8;
@@ -437,7 +444,7 @@ const headings = computed(() => {
   border-radius: var(--radius-xl);
   padding: var(--space-10);
   box-shadow: var(--shadow-sm);
-  min-width: 0; // evita overflow em grid
+  min-width: 0; // avoids overflow in grid
 
   :deep(h2) {
     font-size: var(--text-xl);
@@ -528,7 +535,7 @@ const headings = computed(() => {
     margin-bottom: var(--space-6);
     code {
       background: none;
-      color: #e8d5ff;
+      color: var(--purple-100);
       font-size: var(--text-sm);
       padding: 0;
     }
@@ -568,8 +575,8 @@ const headings = computed(() => {
     margin: var(--space-10) 0;
   }
 
-  // Só imagens de conteúdo do markdown (filhas diretas de p/figure);
-  // nunca alcança o <img> de um avatar (que é filho de span.avatar).
+  // Only markdown content images (direct children of p/figure);
+  // never reaches an avatar's <img> (which is a child of span.avatar).
   :deep(p > img),
   :deep(figure img) {
     width: 100%;
@@ -578,7 +585,6 @@ const headings = computed(() => {
   }
 }
 
-// ── Convite ao serviço relacionado ─────────────────────────
 .post-body {
   min-width: 0;
 }
@@ -627,7 +633,6 @@ const headings = computed(() => {
   }
 }
 
-// ── Card autor ─────────────────────────────────────────────
 .post-author-section {
   background: var(--bg-alt);
   border-top: 1px solid var(--border);
@@ -660,7 +665,6 @@ const headings = computed(() => {
   margin-bottom: var(--space-3);
 }
 
-// ── Relacionados ───────────────────────────────────────────
 .post-related-header {
   display: flex;
   justify-content: space-between;

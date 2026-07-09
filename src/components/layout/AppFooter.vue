@@ -20,18 +20,11 @@
               v-for="item in footer.social"
               :key="item.label"
             >
-              <a
+              <SocialLink
                 :href="item.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                :aria-label="item.label"
-                class="footer-social__link"
-              >
-                <BaseIcon
-                  :name="item.icon"
-                  :label="item.label"
-                />
-              </a>
+                :icon="item.icon"
+                :label="item.label"
+              />
             </li>
           </ul>
         </div>
@@ -104,7 +97,7 @@ import pages from '@/data/pages.json'
 import footer from '@/data/footer.json'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
-import BaseIcon from '@/components/ui/BaseIcon.vue'
+import SocialLink from '@/components/ui/SocialLink.vue'
 import BrandLogo from '@/components/ui/BrandLogo.vue'
 import { useContact } from '@/composables'
 import { useConsentStore } from '@/stores/consent'

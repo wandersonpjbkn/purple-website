@@ -1,6 +1,5 @@
 @use '../abstracts/mixins' as *;
 
-// ── Service cards grid ─────────────────────────────────────
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -94,7 +93,6 @@
   }
 }
 
-// ── Blog grid ────────────────────────────────────────────────
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -108,7 +106,6 @@
   }
 }
 
-// ── Team cards (used in TeamCard.vue — Home + About) ────────
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -121,7 +118,6 @@
   }
 }
 
-// ── Sidebar box ────────────────────────────────────────────
 .sidebar-box {
   @include card-surface(var(--space-5));
 
@@ -155,7 +151,6 @@
   }
 }
 
-// ── Sidebar category link ───────────────────────────────────
 .sidebar-category-link {
   font-size: 0.82rem;
   font-weight: 600;
@@ -170,7 +165,6 @@
   }
 }
 
-// ── Post layout grid ───────────────────────────────────────
 .post-layout-grid {
   display: grid;
   grid-template-columns: 220px 1fr;

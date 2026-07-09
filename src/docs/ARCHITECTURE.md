@@ -1,6 +1,6 @@
 # Architecture (as-built) — site Purple
 
-> Verdade técnica observada no repositório em **2026-07-08**. Gerado lendo o
+> Verdade técnica observada no repositório em **2026-07-09**. Gerado lendo o
 > código, não as intenções. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
 > [`POSITIONING`](POSITIONING.md) · [`PROJECT_STATE`](PROJECT_STATE.md).
@@ -31,13 +31,12 @@ src/
     sections/        CtaBanner, FaqSection, PageHero
     ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
-    blog/            PostCard, BlogPagination
-  composables/       usePageMeta, useBlog, useCdnAsset, useContact (reexport em index.ts) · useMail, useTurnstile, useContactForm (import direto)
+    blog/            PostCard, BlogPagination, CategoryFilter
+  composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useWhatsapp, useCtaTracking, useTypewriter (reexport em index.ts)
   data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
-  plugins/           vite-plugin-blog.ts
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
-  types/             team.ts
+  types/             team.ts, blog.ts
   docs/              esta documentação
 public/              robots.txt, images/
 ```
@@ -48,7 +47,7 @@ public/              robots.txt, images/
 2. `App.vue` monta o shell e define head global: `lang="pt-BR"` e **`robots: noindex, nofollow`**.
 3. Páginas são componentes de rota (lazy `import()`), cada uma chama `usePageMeta(...)`.
 
-**Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Tem **uma store**:
+**Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Store atual:
 `src/stores/consent.ts` (consentimento LGPD, persistido em localStorage).
 
 ## Roteamento ✅
@@ -73,30 +72,46 @@ public/              robots.txt, images/
 
 ## Blog via Cloudflare Worker + R2 ✅
 
-`src/plugins/vite-plugin-blog.ts` expõe o módulo virtual **`virtual:blog-posts`**:
+O front busca os posts **em runtime**, direto do Worker (`workers/blog/src/index.ts`) —
+não existe mais módulo virtual nem fetch em build-time; o bundle não carrega
+post nenhum e conteúdo novo aparece sem rebuild no Render.
 
-- No `load()`, faz `fetch` em `${VITE_POSTS_API_URL}/posts` (sem a env, default
-  `http://localhost:8787/posts`) e recebe os posts **já processados** em JSON.
-- O parsing propriamente dito — **frontmatter YAML próprio** (não usa lib) e
-  **markdown→HTML por regex**: tabelas GFM, code blocks, blockquotes, headings
-  com `id` de âncora, listas, inline — roda no Worker
-  (`workers/blog/src/index.ts`), que lê os arquivos `.md` de um bucket R2
-  (binding `POSTS_BUCKET`). O front-end nunca lê markdown diretamente.
-- `readTime` (≈200 wpm) e `wordCount` são calculados no Worker; a ordenação
-  por data (desc) também acontece lá antes de responder.
-- Exporta `posts`, `getPost`, `getPostsByAuthor`, `getPostsByCategory`,
-  `getFeaturedPosts`, `getAllCategories`. Tipos do módulo declarados em
-  `src/vite-env.d.ts`.
-- **Falha de rede é silenciosa por design:** se o `fetch` falhar (Worker fora
-  do ar, `VITE_POSTS_API_URL` incorreta etc.), `load()` cai para `posts = []`
-  sem interromper build/dev — só um `console.error`. `BlogPage.vue` e o
-  teaser da `HomePage.vue` mostram uma mensagem de "não foi possível carregar"
-  quando `posts` vem vazio, em vez de uma grade em branco sem explicação.
-- Consumido por `useBlog`, `BlogPage`, `BlogPostPage`, `AuthorPage`,
-  `PostCard` **e a Home** (destaques via `posts.slice(0, 3)`).
+- **Endpoints do Worker** (base = `VITE_POSTS_API_URL`, default
+  `http://localhost:8787`): `GET /index` → array de **metadados** sem `html`
+  (`PostMeta[]`, ordenado por data desc); `GET /posts/:slug` → post completo
+  com `html` (404 se não existir); `GET /` e `GET /posts` → array completo
+  **legado** (mantido na transição, remoção futura); `POST /deploy` →
+  autenticado por token, purga o cache do `/index` (PoP local) e dispara o
+  hook do Render — o hook agora é **opcional**: só refresca o snapshot SEO
+  prerenderizado do `/blog`, não o conteúdo.
+- **Edge cache** (`caches.default`): `/index` com `Cache-Control` de 300s e
+  `/posts/:slug` de 3600s, ambos com **ETag fraco** (djb2 do JSON) e resposta
+  `304` para `If-None-Match`. As respostas são cacheadas **sem** headers CORS;
+  `Access-Control-Allow-Origin` (+ `Access-Control-Expose-Headers: ETag`) é
+  anexado por request.
+- O parsing continua no Worker — **frontmatter YAML próprio** (não usa lib) e
+  **markdown→HTML por regex** (tabelas GFM, code blocks, blockquotes, headings
+  com `id` de âncora, listas, inline); `readTime` (≈200 wpm) e `wordCount`
+  idem. A listagem do R2 pagina com cursor (suporta >1000 objetos).
+- **Camada de dados no front:** `useBlogData` (singleton por módulo — Home,
+  Blog, Post e Author compartilham um fetch) faz **stale-while-revalidate**
+  sobre IndexedDB via `useBlogCache` (DB `purple-blog`, stores `meta` e
+  `posts`): índice servido do cache na hora e revalidado em background
+  (throttle de 60s + dedupe de chamadas concorrentes); posts individuais são
+  buscados sob demanda por slug e considerados frescos quando o `stamp`
+  gravado bate com o ETag do índice atual. Sem IndexedDB (Safari privado),
+  degrada para network-only. Tipos em `src/types/blog.ts`.
+- **Falha de rede é silenciosa por design (agora em runtime):** o estado
+  mantém o cache (ou lista vazia) com um `console.error`. `BlogPage.vue`
+  mostra skeleton enquanto o índice carrega e a mensagem de "não foi possível
+  carregar" só depois de `isReady`; `BlogPostPage.vue` tem estados
+  `loading | ready | not-found` — o 404 nunca pisca durante a carga.
+- Consumido por `useBlog` (filtro/busca/paginação client-side sobre o índice),
+  `BlogPage`, `BlogPostPage`, `AuthorPage`, `PostCard` **e a Home**
+  (destaques via `posts.slice(0, 3)` reativo).
 
 **Fonte única ✅** — todo o blog (inclusive os destaques da Home) lê de
-`virtual:blog-posts`; não há outra fonte de posts no repositório.
+`useBlogData`; não há outra fonte de posts no repositório.
 
 ## Formulário de contato ✅
 
@@ -116,7 +131,7 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 ## Build & deploy
 
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
-- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`) e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade). Os scripts do bundle ficam — o SPA assume no cliente; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
+- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`) e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade). Nas rotas `/` e `/blog`, espera (com timeout tolerante) os cards do blog carregarem do Worker para o snapshot sair com conteúdo — Worker fora do ar gera snapshot com estado vazio, válido por design. Os scripts do bundle ficam — o SPA assume no cliente e revalida os posts; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
 - **Deploy (Render) ✅ no painel / 🟡 no repo:** Static Site já existe e está conectado ao repo — **auto-deploy** a cada commit na branch e o **rewrite `/* → /index.html`** (SPA/history mode) estão configurados **no painel** do Render. `render.yaml` foi adicionado como infra-as-code/documentação dessa config (Build Command, `staticPublishPath: dist`, rota de rewrite, chaves de `envVars` com `sync: false`); como o serviço foi criado manualmente (não via Blueprint), o arquivo **não se aplica sozinho** — é referência, sincronizável depois se decidirem migrar para Blueprint. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command passou a rodar o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static` — 🟡 **não validado em produção**: se o ambiente de build do Render não tiver as libs de sistema do Chromium (sem `sudo`/`apt-get` confirmado), o passo de prerender falha e derruba o build; contingência é trocar o Build Command para `yarn build` (sem prerender) até resolver.
 
 ## Consentimento LGPD + GTM ✅

@@ -2,11 +2,10 @@
   <header
     ref="headerRef"
     class="site-header"
-    :class="{ scrolled: isScrolled }"
+    :class="{ scrolled: isScrolled, 'nav-open': mobileOpen }"
   >
     <BaseContainer>
       <div class="site-header__inner">
-        <!-- Logo / Brand -->
         <RouterLink
           to="/"
           class="brand"
@@ -15,7 +14,6 @@
           <BrandLogo />
         </RouterLink>
 
-        <!-- Nav desktop -->
         <nav
           class="nav"
           aria-label="Navegação principal"
@@ -28,7 +26,6 @@
           >
         </nav>
 
-        <!-- CTA -->
         <BaseButton
           tag="a"
           :href="whatsappUrl"
@@ -38,7 +35,6 @@
           >Vamos conversar</BaseButton
         >
 
-        <!-- Hamburger mobile -->
         <button
           class="nav-toggle"
           :aria-label="mobileOpen ? 'Fechar menu' : 'Abrir menu'"
@@ -50,7 +46,6 @@
         </button>
       </div>
 
-      <!-- Mobile nav -->
       <nav
         v-if="mobileOpen"
         id="mobile-nav"
@@ -79,17 +74,14 @@ import pages from '@/data/pages.json'
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BrandLogo from '@/components/ui/BrandLogo.vue'
-import { useWhatsappUrl } from '@/composables/useWhatsapp'
-import { useCtaTracking } from '@/composables/useCtaTracking'
+import { useWhatsappUrl, useCtaTracking } from '@/composables'
 
 const route = useRoute()
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
 const headerRef = ref<HTMLElement | null>(null)
 
-const whatsappUrl = useWhatsappUrl(
-  'Olá! Estou no site da Purple e gostaria de conversar. [mensagem provisória — copy final pendente]'
-)
+const whatsappUrl = useWhatsappUrl('Olá! Estou no site da Purple e gostaria de conversar.')
 const { trackWhatsappClick } = useCtaTracking()
 const trackHeaderWhatsappClick = () => trackWhatsappClick(`header:${String(route.name ?? route.path)}`)
 
@@ -123,11 +115,9 @@ onUnmounted(() => {
   align-items: center;
   text-decoration: none;
   line-height: 1;
-  /* Altura do logo consumida pelo BrandLogo (var --brand-logo-height). */
   --brand-logo-height: 32px;
 }
 
-/* Nav toggle (mobile) */
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -151,7 +141,15 @@ onUnmounted(() => {
   transition: all 0.2s;
 }
 
-/* Mobile nav */
+/* .site-header's own background is a translucent, blurred glass
+   (rgba + backdrop-filter, see _header.scss) — fine for the collapsed bar
+   over scrolled content, but with the mobile drawer open it lets page
+   content (e.g. the hero's animated text) show through behind the nav
+   items. Force it opaque only while the drawer is open. */
+.site-header.nav-open {
+  background: var(--bg);
+}
+
 .nav-mobile {
   display: flex;
   flex-direction: column;

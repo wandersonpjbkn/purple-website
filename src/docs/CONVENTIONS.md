@@ -14,6 +14,10 @@
 - **Português:** o que é **informação/conteúdo** exibido ou redigido para humanos
   — copy do site, valores de conteúdo no `src/data/*.json`, posts do blog e
   **esta documentação**.
+- **Exceção — pastas de teste:** comentários dentro de `__tests__/` e `e2e/`
+  têm **bypass** da regra de inglês e podem ser escritos em português,
+  acompanhando o estilo Given/When/Then das descrições de teste (pt-BR, ver
+  [`TESTING`](TESTING.md)). Fora dessas pastas, vale a regra normal (inglês).
 
 ## JavaScript / TypeScript ✅
 
@@ -28,7 +32,8 @@
 ghost | lime`); não escrever `class="button primary"` à mão.
 - **Tokens primeiro:** cor/espaçamento/tipografia vêm de `_tokens.scss`
   (`--space-*`, `--text-*`, etc.), não valores crus. Ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
-- **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup).
+- **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup ou glifo
+  tipográfico).
 
 ## Estilos (SCSS) — posse e escopo ✅
 
@@ -77,8 +82,8 @@ prop:
 - **O — Aberto/fechado:** estender deve significar **adicionar**, não editar
   código existente. Exemplos: novo ícone = nova entrada em
   `components/ui/icons.ts` (nunca mexer em `BaseIcon.vue`); novo recurso de
-  markdown no blog = novo `replace` em `vite-plugin-blog.ts` (os passes
-  existentes não mudam).
+  markdown no blog = novo `replace` em `workers/blog/src/index.ts`
+  (`markdownToHtml` — os passes existentes não mudam).
 - **L — Substituição de Liskov:** variantes de um componente polimórfico
   precisam honrar o mesmo contrato em todo call site. Ex.: `BaseButton` com
   `tag="RouterLink"` sempre recebe `to`; com `tag="a"`, sempre `href` — nenhum
@@ -102,8 +107,13 @@ prop:
 ## Comentários ✅
 
 Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,
-contexto não óbvio, armadilha), não o **o quê** (que o código já diz). Em testes,
-comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)).
+contexto não óbvio, armadilha), não o **o quê** (que o código já diz). E
+mesmo neste casos os comentários **não devem** registrar passado (eles
+devem explicar a situação atual). Informações que expliquem revisões,
+alterações ou decisões passadas devem preferir o [`CHANGELOG`](../../CHANGELOG.md).
+Em testes, comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)) —
+**exceto em `__tests__/` e `e2e/`**, onde o comentário pode ser em português
+(bypass documentado em [Idioma](#idioma-)).
 
 ## Código morto ✅
 

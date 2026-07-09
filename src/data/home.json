@@ -4,9 +4,10 @@
     "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
     "rotating": ["reduzem o turnover", "o time engaja mais", "atraem mais talentos", "fortalecem sua cultura"],
     "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
-    "primaryCta": "Falar com a Purple",
+    "primaryCta": "Falar com uma consultora",
     "secondaryCta": "Conheça os serviços",
-    "stats": [{
+    "stats": [
+      {
         "value": "64",
         "sign": "%",
         "label": "sem engajamento no trabalho",

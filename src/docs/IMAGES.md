@@ -34,16 +34,16 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
 
 ## Assets pendentes ⏳
 
-| Slot                  | Caminho exato                   | Formato | Proporção            | Tamanho mínimo | Observações                                                                        |
-| --------------------- | ------------------------------- | ------- | -------------------- | -------------- | ---------------------------------------------------------------------------------- |
-| Foto da Suelen (time) | `public/images/team/suelen.jpg` | JPG     | 1:1 (quadrada)       | 640×640px      | Mesmo enquadramento/estilo da `wanderson.jpg` já existente                         |
-| Logo definitivo       | `src/assets/brand/logo-ppl.svg` | SVG     | ~170×32 (horizontal) | —              | **Substituir o placeholder** existente; fundo transparente. Inline via `BrandLogo` |
+| Slot            | Caminho exato                   | Formato | Proporção            | Tamanho mínimo | Observações                                                                        |
+| --------------- | ------------------------------- | ------- | -------------------- | -------------- | ---------------------------------------------------------------------------------- |
+| Logo definitivo | `src/assets/brand/logo-ppl.svg` | SVG     | ~170×32 (horizontal) | —              | **Substituir o placeholder** existente; fundo transparente. Inline via `BrandLogo` |
 
 ## Assets já entregues ✅
 
 | Slot                         | Caminho                                                                          |
 | ---------------------------- | -------------------------------------------------------------------------------- |
 | Foto do Wanderson            | `team/wanderson.jpg`                                                             |
+| Foto da Suelen               | `team/suelen.jpg`                                                                |
 | Seção destaque da Home       | `sections/home-highlight.jpg`                                                    |
 | Seção "Nossa crença" (Sobre) | `sections/about.jpg`                                                             |
 | Capas do blog (4 posts)      | `blog/post-1.jpg` … `post-4.jpg`                                                 |

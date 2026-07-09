@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest'
 
-vi.mock('virtual:blog-posts', () => {
-  const posts = [
+vi.mock('@/composables/useBlogData', async () => {
+  const { ref, computed } = await import('vue')
+
+  const posts = ref([
     {
       title: 'Post A',
       slug: 'post-a',
@@ -13,7 +15,6 @@ vi.mock('virtual:blog-posts', () => {
       readTime: 4,
       featured: true,
       cover: '',
-      html: '<p>A</p>',
       wordCount: 120,
     },
     {
@@ -27,7 +28,6 @@ vi.mock('virtual:blog-posts', () => {
       readTime: 6,
       featured: false,
       cover: '',
-      html: '<p>B</p>',
       wordCount: 200,
     },
     {
@@ -41,26 +41,27 @@ vi.mock('virtual:blog-posts', () => {
       readTime: 3,
       featured: false,
       cover: '',
-      html: '<p>C</p>',
       wordCount: 80,
     },
-  ]
+  ])
 
-  const getAllCategories = () => {
+  const categories = computed(() => {
     const map = new Map<string, number>()
-    for (const post of posts) {
+    for (const post of posts.value) {
       map.set(post.category, (map.get(post.category) ?? 0) + 1)
     }
     return [...map.entries()].sort((a, b) => b[1] - a[1]).map(([category, count]) => ({ category, count }))
-  }
+  })
 
   return {
-    posts,
-    getPost: (slug: string) => posts.find(p => p.slug === slug) ?? null,
-    getPostsByAuthor: (authorSlug: string) => posts.filter(p => p.author === authorSlug),
-    getPostsByCategory: (category: string) => posts.filter(p => p.category.toLowerCase() === category.toLowerCase()),
-    getFeaturedPosts: (limit = 3) => posts.filter(p => p.featured).slice(0, limit),
-    getAllCategories,
+    useBlogData: () => ({
+      posts,
+      categories,
+      isLoading: ref(false),
+      isReady: ref(true),
+      loadIndex: vi.fn().mockResolvedValue(undefined),
+      getPost: vi.fn().mockResolvedValue(null),
+    }),
   }
 })
 
@@ -72,10 +73,10 @@ beforeAll(() => {
 })
 
 describe('useBlog', () => {
-  it('carrega posts e categorias do virtual:blog-posts', () => {
+  it('carrega posts e categorias do useBlogData', () => {
     const blog = useBlog()
     expect(blog.total.value).toBeGreaterThan(0)
-    expect(Array.isArray(blog.categories)).toBe(true)
+    expect(Array.isArray(blog.categories.value)).toBe(true)
   })
 
   it('busca por termo inexistente zera os resultados', () => {
@@ -86,7 +87,7 @@ describe('useBlog', () => {
 
   it('filtra por categoria real', () => {
     const blog = useBlog()
-    const cat = blog.categories[0]?.category
+    const cat = blog.categories.value[0]?.category
     expect(cat).toBeTruthy()
     blog.activeCategory.value = cat as string
     expect(blog.filtered.value.length).toBeGreaterThan(0)

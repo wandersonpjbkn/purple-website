@@ -1,12 +1,10 @@
 <template>
-  <!-- ── Page Hero ──────────────────────────────────── -->
   <PageHero
     eyebrow="Como atuamos"
     title="Nossa abordagem"
     subtitle="Cada empresa tem um contexto. Antes de propor qualquer ação, entendemos o que está acontecendo de verdade."
   />
 
-  <!-- ── Pilares da abordagem ───────────────────────── -->
   <section class="section-block section-block--alt">
     <BaseContainer>
       <div class="section-header section-header--center">
@@ -25,7 +23,6 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Diferenciais (por que a Purple) ────────────── -->
   <section class="section-block section-block--dark">
     <BaseContainer>
       <div class="section-header section-header--center">
@@ -48,7 +45,6 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Processo ───────────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
       <div class="split-section">
@@ -60,10 +56,14 @@
           </p>
           <div class="button-row">
             <BaseButton
-              tag="RouterLink"
-              to="/contato"
-              >Quero começar</BaseButton
+              tag="a"
+              :href="whatsappUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click="trackApproachPageWhatsappClick"
             >
+              Quero começar
+            </BaseButton>
             <BaseButton
               tag="RouterLink"
               to="/servicos"
@@ -89,7 +89,6 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Ponte para os serviços (evita beco sem saída) ── -->
   <section class="section-block section-block--alt">
     <BaseContainer>
       <div class="section-header section-header--center">
@@ -117,18 +116,19 @@
     </BaseContainer>
   </section>
 
-  <!-- ── CTA ────────────────────────────────────────── -->
   <CtaBanner
     title="Vamos entender o seu contexto?"
     description="Cada estratégia começa por ouvir. Conte o seu desafio e construímos o caminho junto com o seu time."
-    whatsapp-message="Olá! Vi como a Purple trabalha (Abordagem) e quero aplicar isso na minha empresa. [mensagem provisória — copy final pendente]"
+    whatsapp-message="Olá! Vi como a Purple trabalha (Abordagem) e quero aplicar isso na minha empresa."
     content-to="/servicos"
     content-label="Conhecer os serviços"
   />
 </template>
 
 <script setup lang="ts">
-import { usePageMeta } from '@/composables'
+import { useRoute } from 'vue-router'
+
+import { usePageMeta, useWhatsappUrl, useCtaTracking } from '@/composables'
 import approach from '@/data/approach.json'
 import services from '@/data/services.json'
 
@@ -139,7 +139,7 @@ import FeaturePillar from '@/components/ui/FeaturePillar.vue'
 import PageHero from '@/components/sections/PageHero.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 
-// Ponte para Serviços: os 3 serviços "porta de entrada" (camada prática).
+const route = useRoute()
 const bridgeServices = services.catalog.slice(0, 3)
 
 usePageMeta({
@@ -147,6 +147,10 @@ usePageMeta({
   description:
     'Como a Purple Comunicação trabalha: diagnóstico antes da ação, foco nas pessoas e um processo claro do briefing ao acompanhamento.',
 })
+
+const whatsappUrl = useWhatsappUrl('Gostei da abordagem de vocês e gostaria de conversar!')
+const { trackWhatsappClick } = useCtaTracking()
+const trackApproachPageWhatsappClick = () => trackWhatsappClick(`header:${String(route.name ?? route.path)}`)
 </script>
 
 <style scoped lang="scss">

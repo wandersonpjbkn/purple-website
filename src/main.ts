@@ -21,7 +21,6 @@ app.use(pinia)
 app.use(head)
 app.use(router)
 
-// ── GTM condicionado ao consentimento (LGPD) ──────────────
 const gtmId = import.meta.env.VITE_GTM_ID
 if (gtmId) {
   const consent = useConsentStore(pinia)

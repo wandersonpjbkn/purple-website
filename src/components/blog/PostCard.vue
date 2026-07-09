@@ -3,7 +3,6 @@
     class="post-card"
     :class="`post-card--${variant}`"
   >
-    <!-- Cover -->
     <RouterLink
       :to="`/blog/${post.slug}`"
       class="post-card__cover"
@@ -24,9 +23,7 @@
       </div>
     </RouterLink>
 
-    <!-- Body -->
     <div class="post-card__body">
-      <!-- CATEGORIA — X MIN  (estilo Remote) -->
       <div class="post-card__eyebrow">
         <RouterLink
           :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
@@ -38,12 +35,10 @@
         <span class="post-card__readtime">{{ post.readTime }} min</span>
       </div>
 
-      <!-- Título -->
       <h3 class="post-card__title">
         <RouterLink :to="`/blog/${post.slug}`">{{ post.title }}</RouterLink>
       </h3>
 
-      <!-- Excerpt: só em featured -->
       <p
         v-if="variant === 'featured'"
         class="post-card__excerpt"
@@ -51,7 +46,6 @@
         {{ post.excerpt }}
       </p>
 
-      <!-- Autor + data: só em grid e featured -->
       <div
         v-if="variant !== 'list' && author"
         class="post-card__author"
@@ -79,20 +73,20 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import type { Post } from 'virtual:blog-posts'
+import type { PostMeta } from '@/types/blog'
 
 import { formatDate, getAuthor, useCdnAsset } from '@/composables'
 
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 
-// Variantes:
-//   "grid"     → card vertical padrão (4 colunas, estilo Remote)
-//   "featured" → card horizontal grande (post em destaque)
-//   "list"     → card horizontal compacto (sidebar)
+// Variants:
+//   "grid"     → standard vertical card (4 columns, Remote-style)
+//   "featured" → large horizontal card (featured post)
+//   "list"     → compact horizontal card (sidebar)
 
 const props = withDefaults(
   defineProps<{
-    post: Post
+    post: PostMeta
     variant?: 'grid' | 'featured' | 'list'
   }>(),
   { variant: 'grid' }
@@ -104,7 +98,6 @@ const author = computed(() => getAuthor(props.post.author))
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Base — sem borda nem sombra, o card É a imagem + texto ─
 .post-card {
   background: transparent;
   border: none;
@@ -117,7 +110,6 @@ const author = computed(() => getAuthor(props.post.author))
   }
 }
 
-// ── Cover ──────────────────────────────────────────────────
 .post-card__cover {
   display: block;
   overflow: hidden;
@@ -149,7 +141,6 @@ const author = computed(() => getAuthor(props.post.author))
   user-select: none;
 }
 
-// ── Body ───────────────────────────────────────────────────
 .post-card__body {
   padding: 0.875rem 0 0;
   display: flex;
@@ -157,7 +148,6 @@ const author = computed(() => getAuthor(props.post.author))
   gap: 0.375rem;
 }
 
-// ── CATEGORIA — X MIN ──────────────────────────────────────
 .post-card__eyebrow {
   display: flex;
   align-items: center;
@@ -191,7 +181,6 @@ const author = computed(() => getAuthor(props.post.author))
   letter-spacing: 0.06em;
 }
 
-// ── Título ─────────────────────────────────────────────────
 .post-card__title {
   font-size: var(--text-base);
   font-weight: 700;
@@ -204,19 +193,14 @@ const author = computed(() => getAuthor(props.post.author))
   }
 }
 
-// ── Excerpt ────────────────────────────────────────────────
 .post-card__excerpt {
   font-size: 0.9rem;
   line-height: 1.65;
   color: var(--muted);
   margin: var(--space-1) 0 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  @include line-clamp(3);
 }
 
-// ── Autor ──────────────────────────────────────────────────
 .post-card__author {
   display: flex;
   align-items: center;
@@ -239,9 +223,6 @@ const author = computed(() => getAuthor(props.post.author))
   color: var(--border);
 }
 
-// ══════════════════════════════════════════════════════════
-//  Variante: grid — vertical, imagem quadrada/tall
-// ══════════════════════════════════════════════════════════
 .post-card--grid {
   .post-card__cover {
     aspect-ratio: 4 / 3;
@@ -251,9 +232,6 @@ const author = computed(() => getAuthor(props.post.author))
   }
 }
 
-// ══════════════════════════════════════════════════════════
-//  Variante: featured — horizontal grande
-// ══════════════════════════════════════════════════════════
 .post-card--featured {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -283,9 +261,6 @@ const author = computed(() => getAuthor(props.post.author))
   }
 }
 
-// ══════════════════════════════════════════════════════════
-//  Variante: list — horizontal compacto (sidebar)
-// ══════════════════════════════════════════════════════════
 .post-card--list {
   display: grid;
   grid-template-columns: 80px 1fr;
@@ -305,10 +280,7 @@ const author = computed(() => getAuthor(props.post.author))
   .post-card__title {
     font-size: var(--text-sm);
     line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    @include line-clamp(2);
   }
 }
 </style>

@@ -10,10 +10,7 @@ describe('useMail', () => {
   })
 
   it('envia com sucesso quando a API responde success: true', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true }) })
-    )
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true }) }))
     const { status, send } = useMail()
 
     const ok = await send(form, 'turnstile-token')
@@ -25,7 +22,10 @@ describe('useMail', () => {
   it('erra quando a API responde success: false', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({ ok: false, json: () => Promise.resolve({ success: false, message: 'Falha na validação.' }) })
+      vi.fn().mockResolvedValue({
+        ok: false,
+        json: () => Promise.resolve({ success: false, message: 'Falha na validação.' }),
+      })
     )
     const { status, errorMsg, send } = useMail()
 
@@ -37,10 +37,7 @@ describe('useMail', () => {
   })
 
   it('trata timeout da requisição', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockRejectedValue(new DOMException('Aborted', 'AbortError'))
-    )
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new DOMException('Aborted', 'AbortError')))
     const { status, errorMsg, send } = useMail()
 
     const ok = await send(form, 'turnstile-token')

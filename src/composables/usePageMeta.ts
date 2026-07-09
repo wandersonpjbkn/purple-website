@@ -69,8 +69,8 @@ export const usePageMeta = (options: MaybeRefOrGetter<PageMetaOptions>) => {
     articleAuthor: () => (resolved.value.author ? [resolved.value.author] : undefined),
     articleSection: () => resolved.value.category,
 
-    // `robots` é fonte única em App.vue (noindex,nofollow enquanto o site é
-    // pré-lançamento). Não emitir aqui para não conflitar — ver ARCHITECTURE.md.
+    // `robots` has a single source in App.vue (noindex,nofollow while the site is
+    // pre-launch). Don't emit it here to avoid conflicting — see ARCHITECTURE.md.
   })
 
   useHead({

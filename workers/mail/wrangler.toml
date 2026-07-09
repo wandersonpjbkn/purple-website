@@ -14,3 +14,5 @@ ALLOWED_ORIGIN_WWW = "https://www.purplecomunicacao.com.br"
 # Secrets are NOT set here (this file is committed to git). Set them once via:
 #   wrangler secret put TURNSTILE_SECRET
 #   wrangler secret put RESEND_API_KEY
+#   wrangler put EMAIL_FROM
+#   wrangler put EMAIL_TO

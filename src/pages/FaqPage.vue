@@ -11,7 +11,7 @@
     <CtaBanner
       title="Ainda com dúvidas?"
       description="Conte o seu contexto e a gente responde com clareza — sem compromisso."
-      whatsapp-message="Olá! Tenho uma dúvida que não encontrei no FAQ da Purple. [mensagem provisória — copy final pendente]"
+      whatsapp-message="Olá! Tenho uma dúvida que não encontrei no FAQ da Purple."
       content-to="/servicos"
       content-label="Ver serviços"
     />

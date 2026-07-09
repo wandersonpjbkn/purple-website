@@ -20,7 +20,8 @@ Tudo em **`src/styles/abstracts/_tokens.scss`** como CSS custom properties em
 sistema: "resultado / positivo / ação secundária".
 `--lime #c5e22e` · `--lime-dark #9bb81f` · `--lime-light #e8f79a` · `--lime-ink #5f7213`
 (verde escurecido para **texto/link sobre fundo claro** — `--lime` puro não passa
-contraste em texto). Canais RGB para `rgba()`: `--purple-rgb`, `--lime-rgb`, `--bg-rgb`.
+contraste em texto). Canais RGB para `rgba()`: `--purple-rgb`, `--lime-rgb`,
+`--bg-rgb`, `--on-dark-rgb`.
 
 **Fundo escuro das seções:** `--section-dark #241047` (roxo profundo, porém mais
 quente/claro que `--purple-900`, para suavizar o contraste com as seções claras)
@@ -29,8 +30,6 @@ e `--section-dark-2 #2d1556` (cards de stat). `--purple-900` fica para acentos.
 **Cor — sobre fundo escuro** (`--on-dark #fff`, `--on-dark-strong .88`,
 `--on-dark-muted .74`, `--on-dark-subtle .55`, `--on-dark-surface .06`,
 `--on-dark-border .1` — muted/subtle subidos para passar AA nas legendas) e marca
-**WhatsApp** (`--whatsapp #25d366`, `-dark #1ebe59`). `--muted #5c4f6f` /
-`--subtle #6e6088` foram escurecidos para passar AA sobre fundo claro.
 
 **Texto/superfície:** `--ink`, `--text`, `--muted`, `--subtle` · `--surface`,
 `--bg`, `--bg-alt` · `--border`, `--border-subtle`.
@@ -45,10 +44,22 @@ Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1
 **Forma/elevação:** `--radius-sm/md/lg/xl/pill`, `--shadow-sm/md/lg/glow`,
 `--container 1200px`, `--ease`, `--ease-out`.
 
-> ✅ Os tokens `--space-*` e `--text-*` existem e já cobrem todo valor cru que
-> coincidia exatamente com a escala. Os `rem` que restam no código são
-> one-offs legítimos sem correspondência na escala, não débito de migração.
 > Novos estilos devem preferir os tokens sempre que o valor existir na escala.
+> Caso o novo estilo não possua correspondência com a escala, analisar
+> implementação: faz sentido "arredondar" para caber na escala
+> existente ou se faz sentido atualizar a escala existente com o novo
+> valor.
+
+## Proporção 60/30/10 — neutro/roxo/lima ✅ (regra de composição)
+
+Composição visual do site segue **neutro ≈ 60% dominante** (fundo de página,
+blocos claros, cards, header/footer) · **roxo ≈ 30% secundário** (tinta de
+texto/heading, botões primários, um punhado de seções de fundo escuro — CTA,
+panorama, 1 card em destaque) · **lima ≤ 10% acento** (nunca fundo de seção
+inteira — só detalhes, ícones, sublinhados, botão do CTA). Conferir/reconferir
+com `yarn color-audit` (`scripts/color-audit.mjs`): relatório de proporção por
+rota, feito sobre screenshot full-page — **não é teste** (não faz assertions,
+não roda em `yarn test`/CI).
 
 ## Arquitetura SCSS ✅
 
@@ -63,8 +74,7 @@ por scoped de página. Regra completa em [`CONVENTIONS`](CONVENTIONS.md).
 
 `abstracts/_mixins.scss` traz: `respond-to($bp)` (breakpoints `xl 1280 · lg 1024
 · md 900 · sm 640 · xs 420`, **mobile-last/`max-width`**), `card-surface`,
-`card-hover`, `top-accent-line`, `radial-glow`, `eyebrow`, `fluid-type`,
-`line-clamp`.
+`card-hover`, `top-accent-line`, `radial-glow`, `eyebrow`, `line-clamp`.
 
 ## Convenção de nomes — BEM ✅
 
@@ -82,11 +92,11 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   **Caminho único de botão** — não escrever `class="button primary"` à mão.
 - `BaseContainer` — wrapper `.container` (largura/centralização).
 - `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (18 ícones, viewBox 24×24).
+  mapa tipado **`src/components/ui/icons.ts`** (21 ícones, viewBox 24×24).
   Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
-  de marca preenchidos** (`fill: true` — `whatsapp`, `linkedin`; `instagram` é
+  de marca preenchidos** (`fill: true` — `linkedin`; `instagram` é
   stroke). Nome desconhecido cai num placeholder neutro (degradação graciosa —
-  coberto por teste). Glifos tipográficos (`→ ← ✕`) seguem como **texto**.
+  coberto por teste). Não introduzir glifos tipográficos (exemplo: `→ ← ✕`).
   ⚠️ `BaseIcon` **herda a cor do pai** (`currentColor`): sobre fundo escuro, o
   contêiner precisa setar `color` (ex.: `--lime`/`--on-dark`), senão o ícone
   herda `--text` e some (escuro-sobre-escuro).
