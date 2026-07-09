@@ -90,6 +90,12 @@
 .hero__title {
   position: relative;
 
+  // O clamp global de h1 tem piso de 2.5rem — largo demais para o <em>
+  // em nowrap caber em viewports estreitas (ex.: 360px).
+  @include respond-to(xs) {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+  }
+
   // Mantém o <em> estático caso seja usado em outro contexto
   em {
     display: inline;
@@ -109,7 +115,39 @@
       background: var(--lime);
       border-radius: 2px;
     }
+
+    @include respond-to(xs) {
+      // Rede de segurança: se mesmo reduzido o texto não couber, ele quebra.
+      // O ::before absoluto não acompanha fragmentos de linha quebrados, então
+      // o sublinhado vira background clonado por fragmento.
+      white-space: normal;
+      background: linear-gradient(var(--lime), var(--lime)) left bottom / 100% 0.1em no-repeat;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      padding-bottom: 0.12em;
+
+      &::before {
+        content: none;
+      }
+    }
   }
+}
+
+// Stack: invisible sizers + typewriter share the same grid cell, so the
+// tallest/widest phrase reserves the space and nothing below ever shifts.
+.hero__rotator {
+  display: inline-grid;
+  text-align: left;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.hero__rotator-sizer {
+  visibility: hidden;
+  // Reserves the width of the blinking cursor (typewriter's ::after).
+  padding-right: 0.6ch;
 }
 
 // Span controlado por JS — recebe o texto letra a letra
@@ -119,10 +157,6 @@
   position: relative;
   display: inline;
   // white-space: nowrap;
-
-  &.is-complete::before {
-    transform: scaleX(1);
-  }
 
   // Cursor piscante
   &::after {

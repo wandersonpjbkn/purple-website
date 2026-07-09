@@ -1,6 +1,6 @@
 # Content Model (as-built) — site Purple
 
-> Verdade observada no código em **2026-07-08**. Onde mora cada conteúdo e qual
+> Verdade observada no código em **2026-07-09**. Onde mora cada conteúdo e qual
 > é a regra de validação. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) · [`POSITIONING`](POSITIONING.md) ·
@@ -10,10 +10,10 @@ Status: ✅ dado real publicável · ⏳ pendência registrada.
 
 ## Fonte única de conteúdo ✅
 
-| Fonte                       | Papel                                                                      | Status |
-| --------------------------- | -------------------------------------------------------------------------- | ------ |
-| `src/data/*.json`           | Todo o conteúdo do site (fragmentado por domínio)                          | ✅      |
-| Bucket R2 (`workers/blog/`) | Blog: arquivos `.md`, servidos via `virtual:blog-posts`; autores em `team` | ✅      |
+| Fonte                       | Papel                                                                                                             | Status |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------ |
+| `src/data/*.json`           | Todo o conteúdo do site (fragmentado por domínio)                                                                 | ✅     |
+| Bucket R2 (`workers/blog/`) | Blog: arquivos `.md`, servidos em runtime via `useBlogData` (Worker `/index` + `/posts/:slug`); autores em `team` | ✅     |
 
 O conteúdo do blog não está versionado neste repositório — vive num bucket R2,
 lido pelo Worker `workers/blog` (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
@@ -52,10 +52,10 @@ garante que todo ícone referenciado existe no mapa.
 | **Sobre**     | `/sobre`                                       | hero (copy no template) · crença `about.helpTitle/helpText` (+ `MediaBlock` `about.image`) · time `team` · dados `about.dataStats` · CTA                                                                             |
 | **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                                                                               |
 | **Serviços**  | `/servicos`                                    | hero `services.intro` · catálogo `services.catalog` (âncoras `#id`) · planos `services.packages` · projetos `services.projects` · CTA                                                                                |
-| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `virtual:blog-posts` + `team` (autores)                                                                                                                                                                              |
+| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `useBlogData` (Worker + R2, cache IndexedDB) + `team` (autores)                                                                                                                                                      |
 | **Contato**   | `/contato`                                     | `useContact()` + WhatsApp (`VITE_BASE_PHONE`) + form (`useMail` + Turnstile → Worker → Resend)                                                                                                                       |
 
-Os destaques de blog na Home também vêm de `virtual:blog-posts` (`posts.slice(0, 3)`).
+Os destaques de blog na Home também vêm de `useBlogData` (`posts.slice(0, 3)` reativo).
 
 Além das 6 do menu, há páginas institucionais no rodapé — **FAQ** (`/faq` ←
 `faq.json`) e **Privacidade** (`/privacidade` ← `privacy.json`) — e uma

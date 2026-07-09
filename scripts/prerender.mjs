@@ -88,6 +88,14 @@ const run = async () => {
     // O sinal real é o app ter renderizado dentro de #app.
     await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'domcontentloaded' })
     await page.waitForSelector('#app > *', { timeout: 15000 })
+
+    // Blog carrega em runtime (worker /index): espera os cards aparecerem para
+    // o snapshot sair com conteúdo. Tolerante — worker fora do ar = estado
+    // vazio, que é um snapshot válido (falha silenciosa por design).
+    if (route === '/' || route === '/blog') {
+      await page.waitForSelector('.post-card, .blog-empty, .home-blog-empty', { timeout: 8000 }).catch(() => {})
+    }
+
     await page.waitForTimeout(300)
 
     const html = '<!DOCTYPE html>\n' + (await page.content()).replace(/^<!DOCTYPE html>/i, '').trimStart()

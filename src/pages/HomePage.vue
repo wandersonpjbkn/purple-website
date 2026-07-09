@@ -16,11 +16,22 @@
           <h1 class="hero__title">
             <span v-html="home.hero.titlePrefix" />
             <br />
-            <span
-              ref="typewriterEl"
-              class="hero__typewriter"
-              aria-hidden="true"
-            />
+            <!-- Sizers invisíveis reservam a altura/largura da frase mais longa,
+                 para o conteúdo abaixo não pular enquanto o typewriter digita -->
+            <span class="hero__rotator">
+              <span
+                v-for="phrase in home.hero.rotating"
+                :key="phrase"
+                class="hero__rotator-sizer"
+                aria-hidden="true"
+                >{{ phrase }}</span
+              >
+              <span
+                ref="typewriterEl"
+                class="hero__typewriter"
+                aria-hidden="true"
+              />
+            </span>
             <span class="sr-only">{{ home.hero.rotating.join(' · ') }}</span>
           </h1>
 
@@ -237,8 +248,9 @@
           variant="grid"
         />
       </div>
+      <!-- Só mostra o vazio após a carga terminar — sem flash de erro -->
       <div
-        v-else
+        v-else-if="blogReady"
         class="home-blog-empty"
       >
         <p>Não conseguimos carregar os posts do blog no momento.</p>
@@ -273,16 +285,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import home from '@/data/home.json'
 import panorama from '@/data/panorama.json'
 import services from '@/data/services.json'
 import team from '@/data/team.json'
-import { posts } from 'virtual:blog-posts'
 
-import { usePageMeta, useCdnAsset } from '@/composables'
+import { usePageMeta, useCdnAsset, useTypewriter, useBlogData } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -301,7 +312,9 @@ usePageMeta({
     'Somos uma empresa que une estratégia e comunicação para transformar o ambiente interno em vantagem competitiva real.',
 })
 
-const featuredPosts = posts.slice(0, 3)
+const { posts, isReady: blogReady, loadIndex } = useBlogData()
+loadIndex()
+const featuredPosts = computed(() => posts.value.slice(0, 3))
 
 // Teaser: 4 cards comuns + 1 destaque (mesma malha 3×2 do develop);
 // o catálogo completo vive em /servicos.
@@ -310,72 +323,7 @@ const featuredService = services.catalog.find(service => service.featured)
 
 // ── Typewriter ────────────────────────────────────────────
 const typewriterEl = ref<HTMLElement | null>(null)
-const phrases = home.hero.rotating
-
-let phraseIndex = 0
-let charIndex = 0
-let isDeleting = false
-let timeoutId: ReturnType<typeof setTimeout> | null = null
-
-const SPEEDS = {
-  type: 85,
-  delete: 35,
-  pauseAfter: 4500,
-  pauseEmpty: 350,
-}
-
-const tick = () => {
-  const el = typewriterEl.value
-  if (!el) return
-
-  const current = phrases[phraseIndex]
-  if (current === undefined) return
-
-  if (isDeleting) {
-    charIndex -= 1
-    el.textContent = current.slice(0, charIndex)
-    el.classList.remove('is-complete', 'is-paused')
-
-    if (charIndex === 0) {
-      isDeleting = false
-      phraseIndex = (phraseIndex + 1) % phrases.length
-      el.classList.remove('is-paused')
-      timeoutId = setTimeout(tick, SPEEDS.pauseEmpty)
-      return
-    }
-
-    timeoutId = setTimeout(tick, SPEEDS.delete)
-  } else {
-    charIndex += 1
-    el.textContent = current.slice(0, charIndex)
-
-    if (charIndex === current.length) {
-      el.classList.add('is-complete', 'is-paused')
-      isDeleting = true
-      timeoutId = setTimeout(tick, SPEEDS.pauseAfter)
-      return
-    }
-
-    timeoutId = setTimeout(tick, SPEEDS.type)
-  }
-}
-
-onMounted(() => {
-  // Movimento reduzido: mostra a 1ª frase estática, sem animar o typewriter.
-  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-  if (reduced) {
-    if (typewriterEl.value) {
-      typewriterEl.value.textContent = phrases[0] ?? ''
-      typewriterEl.value.classList.add('is-complete')
-    }
-    return
-  }
-  timeoutId = setTimeout(tick, 600)
-})
-
-onUnmounted(() => {
-  if (timeoutId) clearTimeout(timeoutId)
-})
+useTypewriter(typewriterEl, home.hero.rotating)
 </script>
 
 <style scoped lang="scss">

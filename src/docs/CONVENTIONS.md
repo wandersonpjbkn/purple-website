@@ -77,8 +77,8 @@ prop:
 - **O — Aberto/fechado:** estender deve significar **adicionar**, não editar
   código existente. Exemplos: novo ícone = nova entrada em
   `components/ui/icons.ts` (nunca mexer em `BaseIcon.vue`); novo recurso de
-  markdown no blog = novo `replace` em `vite-plugin-blog.ts` (os passes
-  existentes não mudam).
+  markdown no blog = novo `replace` em `workers/blog/src/index.ts`
+  (`markdownToHtml` — os passes existentes não mudam).
 - **L — Substituição de Liskov:** variantes de um componente polimórfico
   precisam honrar o mesmo contrato em todo call site. Ex.: `BaseButton` com
   `tag="RouterLink"` sempre recebe `to`; com `tag="a"`, sempre `href` — nenhum

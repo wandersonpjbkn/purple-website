@@ -98,9 +98,7 @@
 import { computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 
-import { getPostsByAuthor } from 'virtual:blog-posts'
-
-import { getAuthor, usePageMeta } from '@/composables'
+import { getAuthor, usePageMeta, useBlogData } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -108,8 +106,11 @@ import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 
 const route = useRoute()
+const { posts, loadIndex } = useBlogData()
+loadIndex()
+
 const author = computed(() => getAuthor(route.params.slug as string))
-const authorPosts = computed(() => getPostsByAuthor(route.params.slug as string))
+const authorPosts = computed(() => posts.value.filter(post => post.author === (route.params.slug as string)))
 
 usePageMeta(
   computed(() => ({

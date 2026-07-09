@@ -79,7 +79,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import type { Post } from 'virtual:blog-posts'
+import type { PostMeta } from '@/types/blog'
 
 import { formatDate, getAuthor, useCdnAsset } from '@/composables'
 
@@ -92,7 +92,7 @@ import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 
 const props = withDefaults(
   defineProps<{
-    post: Post
+    post: PostMeta
     variant?: 'grid' | 'featured' | 'list'
   }>(),
   { variant: 'grid' }

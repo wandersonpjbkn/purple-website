@@ -193,9 +193,9 @@
     </section>
   </div>
 
-  <!-- 404 -->
+  <!-- 404 — só depois da carga terminar, nunca durante o loading -->
   <section
-    v-else
+    v-else-if="state === 'not-found'"
     class="section-block"
   >
     <BaseContainer>
@@ -213,14 +213,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute, RouterLink } from 'vue-router'
 
-import { getPost, posts } from 'virtual:blog-posts'
-import type { Post } from 'virtual:blog-posts'
-
-import { formatDate, getAuthor, usePageMeta } from '@/composables'
+import { formatDate, getAuthor, usePageMeta, useBlogData } from '@/composables'
 import services from '@/data/services.json'
+
+import type { Post, PostMeta } from '@/types/blog'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -232,6 +231,8 @@ import PostCard from '@/components/blog/PostCard.vue'
 const route = useRoute()
 const router = useRouter()
 
+const { posts, getPost } = useBlogData()
+
 onMounted(() => {
   if (!route.params.slug) return router.push({ name: 'blog' })
 })
@@ -241,7 +242,23 @@ const slug = computed(() => {
   return Array.isArray(s) ? (s[0] ?? '') : s
 })
 
-const post = computed(() => getPost(slug.value))
+const post = ref<Post | null>(null)
+const state = ref<'loading' | 'ready' | 'not-found'>('loading')
+
+watch(
+  slug,
+  async value => {
+    if (!value) return
+    state.value = 'loading'
+    const loaded = await getPost(value)
+    // Quick navigation guard: only the latest slug may resolve the state.
+    if (slug.value !== value) return
+    post.value = loaded
+    state.value = loaded ? 'ready' : 'not-found'
+  },
+  { immediate: true }
+)
+
 const author = computed(() => (post.value ? getAuthor(post.value.author) : undefined))
 
 usePageMeta(
@@ -263,12 +280,14 @@ const relatedService = computed(() => {
   return services.catalog.find(s => s.blogCategories?.includes(cat))
 })
 
-// Posts relacionados
+// Posts relacionados — metadados do índice bastam para os cards
 const related = computed(() => {
   const current = post.value
   if (!current) return []
-  return posts
-    .filter((p: Post) => p.slug !== current.slug && (p.category === current.category || p.author === current.author))
+  return posts.value
+    .filter(
+      (p: PostMeta) => p.slug !== current.slug && (p.category === current.category || p.author === current.author)
+    )
     .slice(0, 3)
 })
 
