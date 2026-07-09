@@ -1,12 +1,10 @@
 @use '../abstracts/mixins' as *;
 
-// ── Container ──────────────────────────────────────────────
 .container {
   width: min(calc(100% - 2.5rem), var(--container));
   margin: 0 auto;
 }
 
-// ── Section block ──────────────────────────────────────────
 .section-block {
   padding: var(--space-20) 0;
 
@@ -38,7 +36,6 @@
   }
 }
 
-// ── Section header ─────────────────────────────────────────
 .section-header {
   margin-bottom: var(--space-12);
 
@@ -54,7 +51,6 @@
   }
 }
 
-// ── Linha de ações (botões) ────────────────────────────────
 .button-row {
   display: flex;
   align-items: center;
@@ -67,7 +63,6 @@
   }
 }
 
-// ── Cabeçalho de seção em linha (título à esquerda, link à direita) ──
 .section-head-row {
   display: flex;
   justify-content: space-between;
@@ -80,7 +75,6 @@
   }
 }
 
-// ── Split 2 colunas ────────────────────────────────────────
 .split-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -100,7 +94,6 @@
   }
 }
 
-// ── Feature list (checkmarks) ──────────────────────────────
 .feature-list {
   display: grid;
   gap: var(--space-4);
@@ -129,26 +122,5 @@
       flex-shrink: 0;
       margin-top: 0.1rem;
     }
-  }
-}
-
-// ── Visual placeholder ─────────────────────────────────────
-.visual-block {
-  border-radius: var(--radius-xl);
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  min-height: 380px;
-  display: grid;
-  place-items: center;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 80%, rgba(var(--lime-rgb), 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(var(--purple-rgb), 0.12) 0%, transparent 50%);
   }
 }

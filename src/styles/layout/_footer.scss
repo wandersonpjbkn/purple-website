@@ -6,7 +6,6 @@
   padding: var(--space-12) 0 var(--space-8);
 }
 
-// ── Footer grid ────────────────────────────────────────────
 .footer-grid {
   display: grid;
   grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
@@ -67,7 +66,6 @@
   }
 }
 
-// ── Marca + redes sociais ──────────────────────────────────
 .footer-brand__logo {
   display: inline-flex;
   margin-bottom: var(--space-4);
@@ -81,28 +79,6 @@
 
   @include respond-to(sm) {
     justify-content: center;
-  }
-}
-
-.footer-social__link {
-  width: var(--tap-target-min);
-  height: var(--tap-target-min);
-  border-radius: var(--radius-sm);
-  display: grid;
-  place-items: center;
-  font-size: 1.05rem;
-  color: var(--purple);
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  transition:
-    color 0.15s,
-    background 0.15s,
-    transform 0.15s;
-
-  &:hover {
-    color: var(--surface);
-    background: var(--purple);
-    transform: translateY(-2px);
   }
 }
 

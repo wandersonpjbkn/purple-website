@@ -47,7 +47,7 @@ public/              robots.txt, images/
 2. `App.vue` monta o shell e define head global: `lang="pt-BR"` e **`robots: noindex, nofollow`**.
 3. Páginas são componentes de rota (lazy `import()`), cada uma chama `usePageMeta(...)`.
 
-**Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Tem **uma store**:
+**Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Store atual:
 `src/stores/consent.ts` (consentimento LGPD, persistido em localStorage).
 
 ## Roteamento ✅

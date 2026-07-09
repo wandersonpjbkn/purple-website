@@ -36,8 +36,6 @@ async function handleDeployRequest(request: Request, env: Env, ctx: ExecutionCon
   }
 }
 
-// ── R2 → posts ─────────────────────────────────────────────
-
 async function listMarkdownKeys(bucket: R2Bucket): Promise<string[]> {
   const keys: string[] = []
   let cursor: string | undefined
@@ -132,8 +130,6 @@ async function listPosts(env: Env): Promise<BlogPost[]> {
   return blogPosts.filter((p): p is BlogPost => p !== null).sort(byDateDesc)
 }
 
-// ── Edge cache ─────────────────────────────────────────────
-
 const weakEtag = (payload: string): string => {
   // djb2 — cheap and stable; only needs to change when the payload changes.
   let hash = 5381
@@ -175,7 +171,6 @@ async function withEdgeCache(
   return response
 }
 
-// Appends per-request CORS headers and resolves conditional requests (304).
 const finalize = (response: Response, request: Request, origin: string): Response => {
   const headers = new Headers(response.headers)
   headers.set('Access-Control-Allow-Origin', origin)
@@ -192,8 +187,6 @@ const finalize = (response: Response, request: Request, origin: string): Respons
 
   return new Response(response.body, { status: response.status, headers })
 }
-
-// ── Router ─────────────────────────────────────────────────
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
@@ -246,8 +239,6 @@ export default {
   },
 }
 
-// ── Parser de frontmatter YAML simples ────────────────────
-
 export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/m)
   if (!match) return { fm: {}, body: raw }
@@ -283,8 +274,6 @@ export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: strin
   return { fm, body }
 }
 
-// ── Markdown → HTML ───────────────────────────────────────
-
 export function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -298,7 +287,6 @@ export function slugify(text: string): string {
 export function markdownToHtml(md: string): string {
   let html = md
 
-  // Tabelas GFM
   html = html.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_, header: string, rows: string) => {
     const th = header
       .split('|')
@@ -320,13 +308,12 @@ export function markdownToHtml(md: string): string {
     return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`
   })
 
-  // Code blocks (antes de tudo para não processar conteúdo interno)
+  // Code blocks (before everything else, so inner content isn't processed)
   html = html.replace(/```\w*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
 
-  // Blockquotes
   html = html.replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
 
-  // Headings com id para âncoras (h2, h3 — suficiente para sumário)
+  // Only h2/h3 get ids — that's what BlogPostPage's table of contents extracts.
   const headingCounters: Record<string, number> = {}
   html = html.replace(/^(#{2,6}) (.+)$/gm, (_, hashes: string, text: string) => {
     const level = hashes.length
@@ -336,10 +323,8 @@ export function markdownToHtml(md: string): string {
     return `<h${level} id="${id}">${text}</h${level}>`
   })
 
-  // HR
   html = html.replace(/^---$/gm, '<hr>')
 
-  // Listas não ordenadas
   html = html.replace(/^((?:^- .+\n?)+)/gm, (block: string) => {
     const items = block
       .trim()
@@ -349,7 +334,6 @@ export function markdownToHtml(md: string): string {
     return `<ul>${items}</ul>`
   })
 
-  // Listas ordenadas
   html = html.replace(/^((?:^\d+\. .+\n?)+)/gm, (block: string) => {
     const items = block
       .trim()
@@ -359,7 +343,6 @@ export function markdownToHtml(md: string): string {
     return `<ol>${items}</ol>`
   })
 
-  // Inline
   html = html.replace(/!\[(.*?)\]\((.+?)\)/g, '<img alt="$1" src="$2">')
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
@@ -367,7 +350,6 @@ export function markdownToHtml(md: string): string {
   // eslint-disable-next-line sonarjs/super-linear-regex -- both groups are bounded by fixed delimiters ], (, ), no backtracking ambiguity; verified empirically.
   html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
 
-  // Parágrafos
   html = html
     .split(/\n\n+/)
     .map(block => {

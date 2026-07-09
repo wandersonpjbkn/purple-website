@@ -1,5 +1,4 @@
 <template>
-  <!-- ── Hero ──────────────────────────────────────── -->
   <section class="about-hero">
     <BaseContainer>
       <div class="about-hero__inner">
@@ -21,7 +20,6 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Nossa crença ───────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
       <div class="split-section">
@@ -50,12 +48,12 @@
         <MediaBlock
           :src="useCdnAsset(about.image)"
           :alt="about.imageAlt"
+          size="sm"
         />
       </div>
     </BaseContainer>
   </section>
 
-  <!-- ── Time ───────────────────────────────────────── -->
   <section class="section-block">
     <BaseContainer>
       <div class="section-header section-header--center">
@@ -76,7 +74,6 @@
     </BaseContainer>
   </section>
 
-  <!-- ── Dados de mercado ───────────────────────────── -->
   <section class="about-data-section">
     <BaseContainer>
       <div class="section-header section-header--center">
@@ -86,7 +83,6 @@
           Os números mostram que o mercado ainda tem muito a evoluir no cuidado com as pessoas.
         </p>
       </div>
-      <!-- .stat-grid (layout) + StatCard (componente) -->
       <div class="stat-grid">
         <StatCard
           v-for="stat in about.dataStats"
@@ -100,11 +96,10 @@
     </BaseContainer>
   </section>
 
-  <!-- ── CTA ────────────────────────────────────────── -->
   <CtaBanner
     title="Tudo começa com uma boa conversa"
     description="Estamos aqui para ouvir, entender seu contexto e construir juntos uma estratégia que faz sentido."
-    whatsapp-message="Olá! Conheci a Purple pela página Sobre e quero conversar. [mensagem provisória — copy final pendente]"
+    whatsapp-message="Olá! Conheci a Purple pela página Sobre e quero conversar."
     content-to="/abordagem"
     content-label="Conhecer nossa abordagem"
   />
@@ -196,20 +191,12 @@ usePageMeta({
   position: relative;
   overflow: hidden;
 
-  // Contexto on-dark: o título vive sobre fundo escuro.
   h2 {
     color: var(--on-dark);
   }
 
   &::before {
-    content: '';
-    position: absolute;
-    bottom: -20%;
-    right: -5%;
-    width: 400px;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse, rgba(var(--lime-rgb), 0.08) 0%, transparent 65%);
-    pointer-events: none;
+    @include radial-glow($vpos: bottom);
   }
 }
 

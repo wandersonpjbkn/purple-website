@@ -28,7 +28,8 @@
 ghost | lime`); não escrever `class="button primary"` à mão.
 - **Tokens primeiro:** cor/espaçamento/tipografia vêm de `_tokens.scss`
   (`--space-*`, `--text-*`, etc.), não valores crus. Ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
-- **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup).
+- **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup ou glifo
+  tipográfico).
 
 ## Estilos (SCSS) — posse e escopo ✅
 
@@ -102,8 +103,11 @@ prop:
 ## Comentários ✅
 
 Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,
-contexto não óbvio, armadilha), não o **o quê** (que o código já diz). Em testes,
-comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)).
+contexto não óbvio, armadilha), não o **o quê** (que o código já diz). E
+mesmo neste casos os comentários **não devem** registrar passado (eles
+devem explicar a situação atual). Informações que expliquem revisões,
+alterações ou decisões passadas devem preferir o [`CHANGELOG`](../../CHANGELOG.md).
+Em testes, comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)).
 
 ## Código morto ✅
 

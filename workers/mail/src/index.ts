@@ -54,8 +54,8 @@ export default {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Purple Comunicação <contato@purplecomunicacao.com.br>',
-          to: ['purplecomunica@gmail.com'],
+          from: `Purple Comunicação <${env.EMAIL_FROM}>`,
+          to: [env.EMAIL_TO],
           subject: `Novo contato | ${body.interest.service}`,
           html: buildEmail({
             name: body.contact.name,

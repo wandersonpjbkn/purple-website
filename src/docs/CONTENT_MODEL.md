@@ -22,7 +22,7 @@ lido pelo Worker `workers/blog` (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
 
 Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
 
-- **`team.json`** — array de pessoas: `slug`, `name`, `role`, `bio`, `quote`, `avatar`, `linkedin`, `isAuthor`. **Fonte única do time E dos autores do blog**; `isAuthor` marca quem assina posts.
+- **`team.json`** — array de pessoas: `slug`, `name`, `role`, `bio`, `quote`, `avatar`, `social` (`{ linkedin?, instagram?, medium? }`), `isAuthor`, `isVisibleTeamMember`. **Fonte única do time E dos autores do blog**; `isAuthor` marca quem assina posts, `isVisibleTeamMember` controla quem aparece nos cards de time (Home/Sobre).
 - **`panorama.json`** — seção de dados de mercado da Home: `eyebrow`, `title`, `subtitle`, `stats[]`, `context[]`.
 - **`approach.json`** — `pillars[]`, `differentials[]`, `process` (`steps[]`); fonte única da página Abordagem.
 - **`about.json`** — `title`, `intro`, `helpTitle`, `helpText`, `image`/`imageAlt` (slot de foto — ver `IMAGES.md`), `dataStats[]`.

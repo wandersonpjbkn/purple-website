@@ -18,15 +18,6 @@
 ## Pendências ⏳
 
 - **Fontes dos números do hero da Home:** os stats restaurados (64% sem engajamento · 14x mais produtivas · 23% mais receita · +43% de engajamento no card) são dados reais usados desde o `develop`, mas as referências exatas se perderam na adaptação — campos `source` em `home.json.hero` estão vazios aguardando confirmação da dupla. Candidata citada no modelo de negócio para o 43%: redução de custo de atração com EVP estruturada (ESPM / Jornal Empresas & Negócios, 2026). **Preencher `source` assim que confirmadas.**
-- **Imagens:** slots prontos com fallback; arquivos a subir pela dupla — ver `IMAGES.md` (foto da Suelen, **logo definitivo** substituindo o placeholder em `src/assets/brand/logo-ppl.svg`, 2 fotos de seção).
-- **Redes sociais:** URLs de LinkedIn/Instagram no `footer.json` são **chutes plausíveis** — confirmar/corrigir com a dupla.
+- **Imagens:** slots prontos com fallback; arquivos a subir pela dupla — ver `IMAGES.md` ( **logo definitivo** substituindo o placeholder em `src/assets/brand/logo-ppl.svg`).
 - **Política de Privacidade:** `privacy.json` é **texto-base LGPD**; precisa de revisão jurídica antes do go-live.
-- **Go-live SEO:** robots segue `noindex, nofollow` (fonte única em `App.vue`) até decisão explícita de lançamento. Checklist do go-live: preencher fontes pendentes, subir imagens, publicar o Worker de contato (`wrangler deploy` + secrets `TURNSTILE_SECRET`/`RESEND_API_KEY` — ver `workers/mail/`) e configurar `VITE_TURNSTILE_SITE_KEY`, flipar robots + `public/robots.txt`.
-
-## Nota de método
-
-Risco recorrente do projeto: o **build** (confortável, controlável, sem rejeição)
-virar fuga do **discovery** (relacional, com rejeição). A espera terminou do jeito
-certo: o site só foi preenchido **depois** que o modelo de negócio existiu. O
-próximo risco é o inverso — polir o site em vez de prospectar. O site está pronto;
-a fila agora é comercial.
+- **Go-live SEO:** robots segue `noindex, nofollow` (fonte única em `App.vue`) até decisão explícita de lançamento. Checklist do go-live: preencher fontes pendentes, subir imagens e flipar robots + `public/robots.txt`.

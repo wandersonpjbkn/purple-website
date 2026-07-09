@@ -46,8 +46,6 @@ p {
   margin-bottom: 0;
 }
 
-// ── Utilitários ────────────────────────────────────────────
-
 .lead {
   font-size: var(--text-lead);
   font-weight: 400;
@@ -79,24 +77,9 @@ p {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--purple);
-  transition: gap 0.15s var(--ease);
 
   &--lime {
     color: var(--lime);
-  }
-
-  &::after {
-    content: '→';
-    font-size: 0.85em;
-    transition: transform 0.15s var(--ease);
-  }
-
-  &:hover {
-    gap: 0.6rem;
-
-    &::after {
-      transform: translateX(2px);
-    }
   }
 }
 

@@ -1,10 +1,13 @@
 # UX Review — heurísticas, leis de UX, SOLID e Clean Code
 
-> Auditoria feita em **2026-07-08**, baseada em leitura de código (sem
-> ferramenta de navegador disponível no ambiente — nenhum achado depende de
-> captura visual não confirmável no código-fonte). Relacionados:
-> [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) · [`CONVENTIONS`](CONVENTIONS.md) ·
-> [`ARCHITECTURE`](ARCHITECTURE.md). Histórico: [`CHANGELOG`](../../CHANGELOG.md).
+> Auditoria de código em **2026-07-08**; auditoria de **navegação real em
+> browser** (Playwright/Chromium, dev stack completo) em **2026-07-09** —
+> ver seção dedicada abaixo. A ressalva original ("sem ferramenta de
+> navegador disponível no ambiente") não vale mais: o ambiente passou a ter
+> Chromium via `@playwright/test` (ver [`TESTING`](TESTING.md)).
+> Relacionados: [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) ·
+> [`CONVENTIONS`](CONVENTIONS.md) · [`ARCHITECTURE`](ARCHITECTURE.md).
+> Histórico: [`CHANGELOG`](../../CHANGELOG.md).
 
 Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decisão de produto/design ou risco maior).
 
@@ -23,6 +26,31 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   pageview automático, sem medir a origem de cada clique.
 - **Acordeões com comportamento diferente** — `FaqSection.vue` (um item por
   vez) migrado para o mesmo modelo multi-aberto de `ServicesPage.vue`.
+
+**Modelo completo do funil (fonte única — decisão do dono do produto,
+2026-07-09):**
+
+- **Cor não é marcador de tipo de conversão.** `purple` é o estilo primário
+  padrão; `lime` é primário só quando o fundo não comporta `purple` por
+  contraste (ex.: seções escuras do `CtaBanner`). `purple`/`lime` = primário,
+  branco = secundário, text-link = terciário — a cor é escolha de
+  contraste/identidade de marca, nunca um código para "isto é o link do
+  WhatsApp".
+- **Padrão por bloco de conversão:** em geral, macro + micro juntos (macro
+  em destaque/primário). Micro I + micro II juntos também é aceitável.
+  **Nunca** o inverso — micro em destaque com macro subordinado/secundário.
+- **Peso, não contagem:** pensar em macro-conversão como peso ~2–3× o de uma
+  micro. Uma tela com muitas chamadas macro fica desequilibrada ("se tudo é
+  importante, nada é importante") — por isso nem todo bloco precisa de um
+  WhatsApp ao lado; às vezes a ausência é a escolha certa.
+- **Página-destino não convida à saída.** Contato e Serviços já **são** o
+  destino de uma conversão — não competem com CTAs de saída (outra
+  micro-conversão) acima da dobra ou dentro do mesmo bloco. Foi por isso que
+  os CTAs de topo de Contato foram removidos; pelo mesmo motivo, o hero de
+  Serviços ter só o CTA de WhatsApp (sem um par de micro ao lado) e os cards
+  de plano/catálogo ("Pedir proposta") terem só micro I (sem WhatsApp em
+  cada um dos 3 planos + 7 serviços) são **intencionais**, não gaps — evita
+  tanto a navegação cíclica quanto a saturação de peso macro.
 
 ### Acessibilidade / heurísticas de Nielsen
 
@@ -61,6 +89,16 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   viés de ancoragem deliberadamente (documentado com comentário permanente
   no próprio componente, por regra do projeto — ver `CONVENTIONS.md` §
   Vieses cognitivos).
+- **Menu mobile aberto sem fundo opaco próprio** — achado na navegação real
+  de 2026-07-09: `.nav-mobile` não definia `background`, herdava o
+  `rgba(var(--bg-rgb), 0.88)` + `backdrop-filter: blur(20px)` do
+  `.site-header` (`sticky`), deixando o conteúdo da página (inclusive o
+  typewriter do hero em animação) visível por trás dos itens do menu — risco
+  de contraste caso `backdrop-filter` não renderize (navegadores mais
+  antigos, `forced-colors`, alguns webviews). Corrigido: `.site-header`
+  ganha o modificador `nav-open` (mesmo padrão de `scrolled`) enquanto o
+  menu mobile está aberto, com `background: var(--bg)` opaco só nesse
+  estado — o header colapsado/scrollado mantém o frosted-glass normal.
 
 ### Mobile / telas estreitas (≤360px)
 
@@ -70,9 +108,10 @@ decorativo já contido em `overflow: hidden`. Achados reais corrigidos:
 `.search-input` (CSS morto, sem uso) removido; tabelas geradas de markdown
 (`BlogPostPage.vue` `.prose :deep(table)`) ganharam `overflow-x: auto` para
 não arriscar esticar a página com conteúdo real do R2 imprevisível.
-Verificação visual final (360×640, 320×568) ainda pendente de confirmação
-humana — esta auditoria cobre só "a página ganha scroll horizontal?", não
-espaçamento/legibilidade a 280px.
+**Verificação visual em browser real feita em 2026-07-09** (375×812, 360×640,
+320×568, rotas `/`, `/servicos`, `/blog`, `/contato`): nenhum scroll
+horizontal em nenhuma combinação — pendência fechada. Espaçamento/legibilidade
+a 320px conferidos visualmente via screenshot, sem achados novos.
 
 ### SOLID / Clean Code
 
@@ -92,11 +131,56 @@ suporte a sintaxe de imagem (`![alt](src)`, antes quebrava como link), e
 retry/poll no Turnstile (`useTurnstile.ts` falhava direto se o script do CDN
 ainda não tivesse carregado).
 
+## Navegação real em browser (2026-07-09) ✅
+
+Primeira auditoria com Chromium real (Playwright), rodando contra a stack
+completa (`yarn dev` + `workers/blog --remote`, R2 real com os 4 posts hoje
+publicados — não a emulação local vazia). Confirma visualmente o que a
+auditoria de código só podia inferir:
+
+- **Funil de CTA** (Sobre, Abordagem, Serviços): botão primário → WhatsApp
+  (`wa.me`), secundário → `/contato` — confirmado nas 3 páginas.
+- **Cookie consent:** Esc fecha o banner (= Recusar), `overflow` da página
+  trava enquanto está aberto, foco preso ao banner.
+- **Menu mobile:** Esc e clique fora fecham o drawer; item de menu ativo
+  ganha destaque visual no header desktop ("você está aqui").
+- **Turnstile degradando bem:** com o CDN da Cloudflare inacessível, o
+  widget cai em estado de erro visível e legível em ~8s
+  (`useTurnstile.ts` `SCRIPT_MAX_WAIT_MS`) — e mesmo com o resto do
+  formulário válido, clicar "Enviar mensagem" sem token nunca chama a API
+  real (`ContactPage.vue` `handleSubmit` — checa `turnstileToken` antes de
+  chamar `send()`), só mostra o erro amigável local. Confirmado também que
+  a validação de campo (nome/e-mail/interesse/mensagem) roda **antes** dessa
+  checagem, incluindo abrir o combobox de interesse ao focar um erro nele.
+- **Estados de erro/vazio:** 404 de rota e de post inexistente sem flicker,
+  com CTA de recuperação; busca do blog sem resultado mostra "Ver todos".
+- **Imagens** (capas do blog, destaque da Home, avatares do time) carregam
+  normalmente do CDN R2.
+- **Responsivo 375×812/360×640/320×568** em `/`, `/servicos`, `/blog`,
+  `/contato`: sem scroll horizontal em nenhuma combinação (fecha a
+  pendência antiga, ver seção Mobile acima).
+
+Dois achados desta auditoria (cor do CTA do hero da Home; hero de Serviços e
+cards "Pedir proposta" sem par de WhatsApp) foram revisados com o dono do
+produto e fecharam como **intencionais** — o raciocínio completo está
+registrado no modelo do funil, acima, em vez de repetido aqui.
+
 ## Recomendações — decisão de produto/design ⏳
 
 - **Dois padrões de "ver mais conteúdo" na mesma página** — `BlogPage.vue`
   usa "Carregar mais" na visão padrão e paginação numerada na busca. Unificar
-  é uma decisão de navegação, não um bug.
+  é uma decisão de navegação, não um bug. Não pôde ser reconfirmado
+  visualmente em 2026-07-09: com só 4 posts reais no R2 hoje, nenhum dos dois
+  padrões chega a aparecer (abaixo do tamanho de página).
+- **`/blog` (lista) sem nenhum CTA de WhatsApp** — diferente das outras 5
+  páginas do menu, a listagem do blog não renderiza `CtaBanner` nem atalho
+  de WhatsApp (só os posts individuais têm). Aceito como está por ora —
+  decisão de produto, não bug.
+- **Categoria "Planejamento" sem serviço associado** — `services.json` não
+  tem nenhum `catalog[].blogCategories` contendo `"Planejamento"`, categoria
+  real de um dos 4 posts publicados ("Calendário de datas especiais..."),
+  que por isso é o único hoje sem o CTA contextual "Como a Purple ajuda".
+  Aceito como está por ora — gap de conteúdo/dado, não de código.
 - **`markdownToHtml` não escapa HTML bruto** no corpo do markdown — gap real
   de defesa em profundidade, não corrigido porque não há visibilidade do
   conteúdo já publicado no bucket R2 para confirmar se algum post depende de

@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-// vite-svg-loader: importar SVG como componente Vue (`...svg?component`).
+// vite-svg-loader: import SVG as a Vue component (`...svg?component`).
 declare module '*.svg?component' {
   import type { FunctionalComponent, SVGAttributes } from 'vue'
   const component: FunctionalComponent<SVGAttributes>

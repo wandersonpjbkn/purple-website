@@ -5,7 +5,8 @@
   "helpText": "Com todos os desafios do dia a dia, muitas empresas perdem oportunidades ao deixar de olhar para quem move a organização: as pessoas.",
   "image": "sections/about.jpg",
   "imageAlt": "Suelen e Wanderson, fundadores da Purple Comunicação",
-  "dataStats": [{
+  "dataStats": [
+    {
       "number": "57",
       "suffix": "%",
       "label": "dos trabalhadores não estão engajados globalmente",

@@ -6,14 +6,7 @@
   overflow: hidden;
 
   &::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    right: -10%;
-    width: 55%;
-    aspect-ratio: 1;
-    background: radial-gradient(ellipse at center, rgba(var(--purple-rgb), 0.08) 0%, transparent 70%);
-    pointer-events: none;
+    @include radial-glow($color: purple, $offset: -30%, $hoffset: -10%, $size: 55%, $fade: 70%);
   }
 
   @include respond-to(md) {
@@ -27,8 +20,8 @@
   gap: var(--space-16);
   align-items: center;
 
-  // Sem isto, a coluna 1fr não encolhe abaixo do seu conteúdo (min-width: auto)
-  // e conteúdo largo na coluna de texto empurra a coluna do card para fora.
+  // Without this, the 1fr column doesn't shrink below its content (min-width: auto)
+  // and wide content in the text column pushes the card column out.
   > * {
     min-width: 0;
   }
@@ -44,7 +37,6 @@
   }
 }
 
-// ── Kicker (badge animada) ─────────────────────────────────
 .hero__kicker {
   $gap: 0.5rem;
 
@@ -86,27 +78,23 @@
   }
 }
 
-// ── Título + typewriter ────────────────────────────────────
 .hero__title {
   position: relative;
 
-  // O clamp global de h1 tem piso de 2.5rem — largo demais para o <em>
-  // em nowrap caber em viewports estreitas (ex.: 360px).
+  // The global h1 clamp has a 2.5rem floor — too wide for the <em>
+  // in nowrap to fit on narrow viewports (e.g. 360px).
   @include respond-to(xs) {
     font-size: clamp(1.9rem, 9vw, 2.5rem);
   }
 
-  // Mantém o <em> estático caso seja usado em outro contexto
   em {
     display: inline;
     font-style: normal;
     white-space: nowrap;
 
-    // Sublinhado limão — aparece quando o texto está completo
     &::before {
       content: '';
       position: absolute;
-      // bottom: 0.05em;
       top: 100%;
       left: 0;
       right: 0;
@@ -117,9 +105,9 @@
     }
 
     @include respond-to(xs) {
-      // Rede de segurança: se mesmo reduzido o texto não couber, ele quebra.
-      // O ::before absoluto não acompanha fragmentos de linha quebrados, então
-      // o sublinhado vira background clonado por fragmento.
+      // Safety net: if the text still doesn't fit even reduced, it wraps.
+      // The absolute ::before doesn't follow wrapped line fragments, so
+      // the underline becomes a background cloned per fragment instead.
       white-space: normal;
       background: linear-gradient(var(--lime), var(--lime)) left bottom / 100% 0.1em no-repeat;
       box-decoration-break: clone;
@@ -150,15 +138,12 @@
   padding-right: 0.6ch;
 }
 
-// Span controlado por JS — recebe o texto letra a letra
 .hero__typewriter {
   color: var(--purple);
   font-style: normal;
   position: relative;
   display: inline;
-  // white-space: nowrap;
 
-  // Cursor piscante
   &::after {
     content: '|';
     display: inline-block;
@@ -168,7 +153,6 @@
     animation: blink 0.7s step-end infinite;
   }
 
-  // Animação do cursor durante a pausa
   &.is-paused::after {
     animation-duration: 1s;
     opacity: 1;
@@ -185,7 +169,6 @@
   }
 }
 
-// ── CTAs ───────────────────────────────────────────────────
 .hero__actions {
   display: flex;
   align-items: center;
@@ -194,7 +177,6 @@
   flex-wrap: wrap;
 }
 
-// ── Stats inline ───────────────────────────────────────────
 .hero__stat {
   display: flex;
   flex-wrap: wrap;
@@ -216,7 +198,6 @@
   line-height: 1;
 }
 
-// Sinal/sufixo do número (%, x) em limão — detalhe de marca.
 .hero__stat-sign {
   color: var(--lime);
 }
@@ -239,7 +220,6 @@
   }
 }
 
-// ── Visual card ────────────────────────────────────────────
 .hero__media {
   position: relative;
 }
@@ -281,7 +261,6 @@
   margin-bottom: var(--space-2);
 }
 
-// Sinal do valor do card (ex.: % do +43%) em limão, menor que o número.
 .hero__card-sign {
   color: var(--lime);
   font-size: 1.8rem;
@@ -331,7 +310,6 @@
   }
 }
 
-// ── Floating mini cards ────────────────────────────────────
 .hero__float {
   position: absolute;
   background: var(--surface);
@@ -393,7 +371,6 @@
   }
 }
 
-// ── Page hero (páginas internas) ───────────────────────────
 .page-hero {
   padding: var(--space-16) 0 var(--space-12);
   border-bottom: 1px solid var(--border);

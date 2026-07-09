@@ -13,7 +13,6 @@
       Todos
     </button>
 
-    <!-- Quick access: as categorias mais frequentes (já vêm ordenadas) -->
     <button
       v-for="{ category } in quickCategories"
       :key="category"
@@ -77,7 +76,6 @@
 
 <script setup lang="ts">
 import { computed, ref, useId } from 'vue'
-
 import { onClickOutside } from '@vueuse/core'
 
 import BaseIcon from '@/components/ui/BaseIcon.vue'
@@ -103,8 +101,6 @@ const panelId = useId()
 const quickCategories = computed(() => props.categories.slice(0, props.quickCount))
 const isQuick = (category: string) => quickCategories.value.some(entry => entry.category === category)
 
-// A category picked inside the dropdown has no visible pill — the trigger
-// takes over showing the active state and the selected name.
 const triggerActive = computed(() => Boolean(props.modelValue) && !isQuick(props.modelValue))
 const triggerLabel = computed(() => (triggerActive.value ? props.modelValue : 'Filtrar'))
 
@@ -135,7 +131,6 @@ onClickOutside(dropdownEl, () => close())
   flex-wrap: wrap;
   gap: 0.375rem;
 
-  // Mobile: uma linha só — Todos + Filtrar (o dropdown lista tudo)
   @include respond-to(sm) {
     flex-wrap: nowrap;
   }
@@ -145,7 +140,7 @@ onClickOutside(dropdownEl, () => close())
   padding: 0.35rem 0.875rem;
   border-radius: var(--radius-pill);
   border: 1.5px solid transparent;
-  background: transparent;
+  background: var(--bg);
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--muted);
@@ -173,6 +168,7 @@ onClickOutside(dropdownEl, () => close())
 
 .category-filter__dropdown {
   position: relative;
+  margin-left: auto;
 }
 
 .category-filter__trigger {

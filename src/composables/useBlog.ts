@@ -7,8 +7,6 @@ import { useBlogData } from '@/composables/useBlogData'
 import type { PostMeta } from '@/types/blog'
 import type { TeamMember } from '@/types/team'
 
-// ── Utilitários ───────────────────────────────────────────
-
 export const formatDate = (iso: string): string => {
   return new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
@@ -21,7 +19,6 @@ export const getAuthor = (slug: string): TeamMember | undefined => {
   return (team as TeamMember[]).find(member => member.slug === slug)
 }
 
-// ── Composable principal ──────────────────────────────────
 export const useBlog = (options?: { initialCategory?: Ref<string>; initialQuery?: Ref<string>; perPage?: number }) => {
   const { posts, categories, isLoading, isReady, loadIndex } = useBlogData()
   loadIndex()

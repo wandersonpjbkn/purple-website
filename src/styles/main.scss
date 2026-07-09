@@ -1,22 +1,17 @@
-// ── 1. Abstracts (sem output direto) ──────────────────────
 @use 'abstracts/tokens';
 @use 'abstracts/mixins';
 
-// ── 2. Base ───────────────────────────────────────────────
 @use 'base/reset';
 @use 'base/typography';
 
-// ── 3. Layout ─────────────────────────────────────────────
 @use 'layout/grid';
 @use 'layout/header';
 @use 'layout/footer';
 
-// ── 4. Components ─────────────────────────────────────────
 @use 'components/buttons';
 @use 'components/forms';
 @use 'components/cards';
 
-// ── 5. Sections ───────────────────────────────────────────
 @use 'sections/hero';
 @use 'sections/stats';
 @use 'sections/process';

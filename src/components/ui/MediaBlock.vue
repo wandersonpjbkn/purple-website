@@ -1,7 +1,7 @@
 <template>
   <div
     class="media-block"
-    :class="{ 'media-block--loaded': loaded }"
+    :class="[sizeClass, { 'media-block--loaded': loaded }]"
   >
     <img
       v-if="src && !failed"
@@ -16,18 +16,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     src?: string
     alt?: string
+    size?: 'sm' | 'lg' | null
   }>(),
-  { src: '', alt: '' }
+  { src: '', alt: '', size: null }
 )
 
 const loaded = ref(false)
 const failed = ref(false)
+
+const sizeClass = computed(() => (props.size ? `media-block--${props.size}` : ''))
 </script>
 
 <style scoped lang="scss">
@@ -37,9 +40,17 @@ const failed = ref(false)
   border-radius: var(--radius-xl);
   background: var(--bg-alt);
   border: 1px solid var(--border);
-  min-height: 690px;
+  min-height: 500px;
   position: relative;
   overflow: hidden;
+
+  &--sm {
+    min-height: 420px;
+  }
+
+  &--lg {
+    min-height: 690px;
+  }
 
   @include respond-to(md) {
     min-height: 420px;

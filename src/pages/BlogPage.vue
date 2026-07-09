@@ -1,6 +1,5 @@
 <template>
   <div class="blog-page">
-    <!-- ── Hero: title + search ─────────────────────────── -->
     <section class="blog-hero">
       <BaseContainer>
         <div class="blog-hero__inner">
@@ -23,14 +22,13 @@
               aria-label="Limpar"
               @click="((query = ''), watchReset())"
             >
-              ✕
+              <BaseIcon name="close" />
             </button>
           </div>
         </div>
       </BaseContainer>
     </section>
 
-    <!-- ── Categories (sticky) ──────────────────────────── -->
     <div class="blog-categories-bar">
       <BaseContainer>
         <CategoryFilter
@@ -93,7 +91,6 @@
     </section>
 
     <template v-else>
-      <!-- ── Section filtered by category ─────────────────── -->
       <section
         v-if="activeCategory"
         class="blog-section"
@@ -105,7 +102,7 @@
               class="filter-clear"
               @click="((activeCategory = ''), watchReset())"
             >
-              ← Todas as categorias
+              Todas as categorias
             </button>
           </div>
           <div
@@ -128,7 +125,6 @@
         </BaseContainer>
       </section>
 
-      <!-- ── Section: Recent ───────────────────────────────── -->
       <section
         v-else
         class="blog-section"
@@ -138,12 +134,10 @@
             <h2 class="blog-section__title">Recentes</h2>
           </div>
 
-          <!-- Layout: side highlight + grid -->
           <div
             v-if="recentPosts.length"
             class="blog-recent"
           >
-            <!-- Featured post (first) -->
             <PostCard
               v-if="recentPosts[0]"
               :post="recentPosts[0]"
@@ -151,7 +145,6 @@
               class="blog-recent__featured"
             />
 
-            <!-- 4-column grid with the rest -->
             <div
               v-if="recentPosts.length > 1"
               class="blog-grid blog-grid--4 blog-recent__grid"
@@ -176,7 +169,7 @@
             </div>
           </div>
 
-          <!-- Skeleton enquanto o índice carrega; vazio real só depois -->
+          <!-- Skeleton while the index loads; real empty state only afterward -->
           <div
             v-else-if="!isReady"
             class="blog-skeleton"
@@ -207,7 +200,6 @@
         </BaseContainer>
       </section>
 
-      <!-- ── Sections by category ─────────────────────────── -->
       <template v-if="!activeCategory">
         <section
           v-for="{ category, posts: catPosts } in categoryGroups"
@@ -221,7 +213,7 @@
                 class="filter-clear"
                 @click="((activeCategory = category), watchReset())"
               >
-                Ver todos →
+                Ver todos
               </button>
             </div>
 
@@ -261,13 +253,13 @@ usePageMeta({
 })
 
 const route = useRoute()
-// Same singleton state under useBlog — the raw list feeds the sections below.
+// useBlog() also reads useBlogData() internally, so this shares the same
+// module-level fetch/cache rather than triggering a second one.
 const { posts: allPosts, isReady } = useBlogData()
 const { query, activeCategory, page, paginated, total, totalPages, categories, setPage, watchReset } = useBlog({
   perPage: 12,
 })
 
-// Applies the URL filter
 if (route.query.categoria) {
   activeCategory.value = decodeURIComponent(route.query.categoria as string)
 }
@@ -277,7 +269,6 @@ const setCategory = (category: string) => {
   watchReset()
 }
 
-// ── Recent posts with "load more" ─────────────────────────
 const INITIAL_LIMIT = 8
 const visibleLimit = ref(INITIAL_LIMIT)
 const recentPosts = computed(() => allPosts.value.slice(0, visibleLimit.value + 1))
@@ -286,12 +277,10 @@ const loadMore = () => {
   visibleLimit.value += 8
 }
 
-// ── Posts filtered when a category is active ──────────────
 const filteredByCat = computed(() =>
   allPosts.value.filter((p: PostMeta) => p.category.toLowerCase() === activeCategory.value.toLowerCase())
 )
 
-// ── Groups by category (max 4 per group) ───────────────────
 const categoryGroups = computed(() =>
   categories.value
     .map(({ category }: CategoryCount) => ({
@@ -305,7 +294,6 @@ const categoryGroups = computed(() =>
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
 
-// ── Hero ───────────────────────────────────────────────────
 .blog-hero {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -390,7 +378,6 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Categories bar ─────────────────────────────────────────
 .blog-categories-bar {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -404,7 +391,6 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Sections ───────────────────────────────────────────────
 .blog-section {
   padding: var(--space-12) 0;
 
@@ -451,7 +437,6 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Grids ──────────────────────────────────────────────────
 .blog-grid--4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -468,7 +453,6 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Recent: featured on top + grid below ───────────────────
 .blog-recent {
 }
 
@@ -481,13 +465,11 @@ const categoryGroups = computed(() =>
 .blog-recent__grid {
 }
 
-// ── Load more ──────────────────────────────────────────────
 .blog-load-more {
   margin-top: var(--space-10);
   text-align: center;
 }
 
-// ── Skeleton (index loading) ───────────────────────────────
 .blog-skeleton__featured {
   height: 280px;
   border-radius: var(--radius-lg);
@@ -519,7 +501,6 @@ const categoryGroups = computed(() =>
   }
 }
 
-// ── Empty state ────────────────────────────────────────────
 .blog-empty {
   text-align: center;
   padding: var(--space-16) var(--space-8);

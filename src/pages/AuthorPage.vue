@@ -1,6 +1,5 @@
 <template>
   <div v-if="author">
-    <!-- ── Hero do autor ─────────────────────────────── -->
     <section class="page-hero">
       <BaseContainer>
         <nav
@@ -8,14 +7,15 @@
           aria-label="Navegação"
         >
           <RouterLink to="/blog">Blog</RouterLink>
-          <span aria-hidden="true">›</span>
+          <BaseIcon name="chevron-right" />
           <span>Autores</span>
-          <span aria-hidden="true">›</span>
+          <BaseIcon name="chevron-right" />
           <span aria-current="page">{{ author.name }}</span>
         </nav>
 
         <div class="author-hero">
           <BaseAvatar
+            :src="useCdnAsset(author.avatar)"
             :name="author.name"
             size="xl"
           />
@@ -24,20 +24,23 @@
             <h1>{{ author.name }}</h1>
             <p class="author-hero__role">{{ author.role }}</p>
             <p class="lead lead--narrow">{{ author.bio }}</p>
-            <a
-              v-if="author.linkedin"
-              :href="author.linkedin"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-link author-hero__link"
-              >LinkedIn →</a
+            <div
+              v-if="authorSocialLinks.length"
+              class="author-hero__social"
             >
+              <SocialLink
+                v-for="[key, url] in authorSocialLinks"
+                :key="key"
+                :href="url"
+                :icon="key"
+                :label="`${SOCIAL_NETWORK_LABELS[key]} de ${author.name}`"
+              />
+            </div>
           </div>
         </div>
       </BaseContainer>
     </section>
 
-    <!-- ── Posts do autor ────────────────────────────── -->
     <section class="section-block section-block--sm">
       <BaseContainer>
         <div class="author-posts-header">
@@ -69,14 +72,13 @@
             tag="RouterLink"
             to="/blog"
             variant="secondary"
-            >← Voltar ao blog</BaseButton
+            >Voltar ao blog</BaseButton
           >
         </div>
       </BaseContainer>
     </section>
   </div>
 
-  <!-- Autor não encontrado -->
   <section
     v-else
     class="section-block"
@@ -87,7 +89,7 @@
         <BaseButton
           tag="RouterLink"
           to="/blog"
-          >← Voltar para o blog</BaseButton
+          >Voltar para o blog</BaseButton
         >
       </div>
     </BaseContainer>
@@ -98,18 +100,23 @@
 import { computed } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 
-import { getAuthor, usePageMeta, useBlogData } from '@/composables'
+import { getAuthor, usePageMeta, useBlogData, useCdnAsset } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseIcon from '@/components/ui/BaseIcon.vue'
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
+import SocialLink from '@/components/ui/SocialLink.vue'
 import PostCard from '@/components/blog/PostCard.vue'
+
+import { SOCIAL_NETWORK_LABELS, socialLinksOf } from '@/types/team'
 
 const route = useRoute()
 const { posts, loadIndex } = useBlogData()
 loadIndex()
 
 const author = computed(() => getAuthor(route.params.slug as string))
+const authorSocialLinks = computed(() => socialLinksOf(author.value?.social))
 const authorPosts = computed(() => posts.value.filter(post => post.author === (route.params.slug as string)))
 
 usePageMeta(
@@ -161,7 +168,9 @@ usePageMeta(
   margin-bottom: var(--space-3);
 }
 
-.author-hero__link {
+.author-hero__social {
+  display: flex;
+  gap: var(--space-4);
   margin-top: var(--space-4);
 }
 

@@ -2,7 +2,6 @@
   <section class="hero">
     <BaseContainer>
       <div class="hero__grid">
-        <!-- Coluna texto -->
         <div>
           <div class="hero__kicker">
             <span
@@ -12,12 +11,12 @@
             >
           </div>
 
-          <!-- titlePrefix carrega <em> de destaque — conteúdo controlado (home.json), não input de usuário -->
+          <!-- titlePrefix carries a highlighted <em> — controlled content (home.json), not user input -->
           <h1 class="hero__title">
             <span v-html="home.hero.titlePrefix" />
             <br />
-            <!-- Sizers invisíveis reservam a altura/largura da frase mais longa,
-                 para o conteúdo abaixo não pular enquanto o typewriter digita -->
+            <!-- Invisible sizers reserve the height/width of the longest phrase,
+                 so content below doesn't jump while the typewriter types -->
             <span class="hero__rotator">
               <span
                 v-for="phrase in home.hero.rotating"
@@ -40,8 +39,11 @@
           <div class="hero__actions">
             <BaseButton
               class="button--lg"
-              tag="RouterLink"
-              to="/contato"
+              tag="a"
+              :href="whatsappUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click="trackHomePageWhatsappClick"
             >
               {{ home.hero.primaryCta }}
             </BaseButton>
@@ -55,7 +57,6 @@
             </BaseButton>
           </div>
 
-          <!-- 3 indicadores compactos · valor + sinal em lime -->
           <div class="hero__stat">
             <template
               v-for="(stat, i) in home.hero.stats"
@@ -75,7 +76,6 @@
           </div>
         </div>
 
-        <!-- Coluna card visual -->
         <div class="hero__media">
           <div class="hero__card">
             <div class="hero__card-label">{{ home.hero.card.label }}</div>
@@ -119,6 +119,7 @@
         <MediaBlock
           :src="useCdnAsset(home.highlight.image)"
           :alt="home.highlight.imageAlt"
+          size="lg"
         />
         <div>
           <p class="section-eyebrow">{{ home.highlight.eyebrow }}</p>
@@ -193,7 +194,6 @@
         <p>{{ panorama.subtitle }}</p>
       </div>
 
-      <!-- Apenas alguns dados mais impactantes -->
       <div class="stat-grid stat-grid--cols-3">
         <StatCard
           v-for="stat in panorama.stats.slice(0, 3)"
@@ -248,7 +248,7 @@
           variant="grid"
         />
       </div>
-      <!-- Só mostra o vazio após a carga terminar — sem flash de erro -->
+      <!-- Only shows the empty state after loading finishes — no error flash -->
       <div
         v-else-if="blogReady"
         class="home-blog-empty"
@@ -280,20 +280,20 @@
   <CtaBanner
     :title="home.cta.title"
     :description="home.cta.description"
-    whatsapp-message="Olá! Vim pela página inicial do site da Purple e quero saber mais. [mensagem provisória — copy final pendente]"
+    whatsapp-message="Olá! Vim pela página inicial do site da Purple e quero saber mais."
   />
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 
 import home from '@/data/home.json'
 import panorama from '@/data/panorama.json'
 import services from '@/data/services.json'
 import team from '@/data/team.json'
 
-import { usePageMeta, useCdnAsset, useTypewriter, useBlogData } from '@/composables'
+import { usePageMeta, useCdnAsset, useTypewriter, useBlogData, useWhatsappUrl, useCtaTracking } from '@/composables'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -306,24 +306,26 @@ import PostCard from '@/components/blog/PostCard.vue'
 import TeamCard from '@/components/ui/TeamCard.vue'
 
 usePageMeta({
-  // usePageMeta já anexa "| Purple Comunicação"; não repetir a marca aqui.
+  // usePageMeta already appends "| Purple Comunicação"; don't repeat the brand here.
   title: 'A mudança é de dentro para fora',
   description:
     'Somos uma empresa que une estratégia e comunicação para transformar o ambiente interno em vantagem competitiva real.',
 })
 
 const { posts, isReady: blogReady, loadIndex } = useBlogData()
+const route = useRoute()
 loadIndex()
 const featuredPosts = computed(() => posts.value.slice(0, 3))
 
-// Teaser: 4 cards comuns + 1 destaque (mesma malha 3×2 do develop);
-// o catálogo completo vive em /servicos.
 const teaserServices = services.catalog.filter(service => !service.featured).slice(0, 4)
 const featuredService = services.catalog.find(service => service.featured)
 
-// ── Typewriter ────────────────────────────────────────────
 const typewriterEl = ref<HTMLElement | null>(null)
 useTypewriter(typewriterEl, home.hero.rotating)
+
+const whatsappUrl = useWhatsappUrl('Acessei a Home Page de vocês e gostaria de conversar!')
+const { trackWhatsappClick } = useCtaTracking()
+const trackHomePageWhatsappClick = () => trackWhatsappClick(`header:${String(route.name ?? route.path)}`)
 </script>
 
 <style scoped lang="scss">

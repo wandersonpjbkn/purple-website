@@ -1,6 +1,5 @@
 @use '../abstracts/mixins' as *;
 
-// ── Shared base via placeholder ───────────────────────────
 %input-base {
   width: 100%;
   border: 1.5px solid var(--border);
@@ -30,7 +29,6 @@
   }
 }
 
-// ── Form fields (ContactPage and future forms) ─────────────
 .field {
   display: flex;
   flex-direction: column;
@@ -57,7 +55,6 @@
   font-weight: 500;
 }
 
-// Applies the base style to every form input ─────────────────
 input[type='text'],
 input[type='email'],
 input[type='tel'],
@@ -80,7 +77,6 @@ textarea {
   min-height: 120px;
 }
 
-// ── Error state ────────────────────────────────────────────
 .field__input--error {
   border-color: var(--danger) !important;
   &:focus {
@@ -88,8 +84,6 @@ textarea {
   }
 }
 
-// ── Loading spinner ────────────────────────────────────────
-// Reusable on any button with a "sending" state
 .form-spinner {
   width: 16px;
   height: 16px;
@@ -106,7 +100,6 @@ textarea {
   }
 }
 
-// ── Submit error message ───────────────────────────────────
 .form-send-error {
   margin-bottom: var(--space-6);
   background: var(--danger-bg);
@@ -117,7 +110,6 @@ textarea {
   color: var(--danger);
 }
 
-// ── Success state ──────────────────────────────────────────
 .form-success {
   padding: var(--space-12) var(--space-10);
   text-align: center;

@@ -54,12 +54,36 @@ suíte, independente da raiz: `workers/blog/vitest.config.ts` (ambiente
 memória) e `security.spec.ts`, **26 testes**. Roda com
 `cd workers/blog && yarn test`. `workers/mail` ainda não tem suíte própria.
 
+### `e2e/` — smoke Playwright ✅
+
+`playwright.config.ts` (raiz) sobe dois `webServer` (frontend `yarn dev` +
+`workers/blog` com `yarn dev --remote`, que dá acesso ao R2 real em vez da
+emulação local vazia) e roda `e2e/smoke.spec.ts` contra `http://localhost:5173`.
+Cobre exatamente o escopo previsto: navega as 6 páginas do menu (`src/data/pages.json`)
+e faz um envio simulado do formulário de contato — **8 testes**, roda com
+`yarn test:e2e`.
+
+- **Turnstile real é bloqueado e mocado** (`page.route` aborta
+  `challenges.cloudflare.com` + `page.addInitScript` injeta um
+  `window.turnstile` falso que "verifica" na hora): o CDN real não é
+  alcançável de forma confiável neste tipo de ambiente (headless/CI) e,
+  mais importante, `VITE_CONTACT_API_URL` local aponta para o Worker de
+  mail de **produção** (`mail.purplecomunicacao.com.br` → Resend → Gmail
+  real da Purple) — testar contra ele geraria e-mail real. O POST para esse
+  host também é interceptado e respondido com um mock (`{ success: true }`),
+  então o "envio simulado" nunca sai do browser.
+- `e2e/tsconfig.json` (referenciado em `tsconfig.json`) dá ao smoke o mesmo
+  lib DOM do app; `vitest.config.ts` já excluía `e2e/**` desde antes.
+
 ### Ainda pendente ⏳
 
 - **Smoke de render** das demais páginas (Sobre, Abordagem, Contato, Blog) —
   Home e Serviços ✅.
-- **Playwright e2e** (1 smoke navegando as 6 páginas + envio simulado).
 - **Testes em `workers/mail`** — só `workers/blog` tem suíte própria hoje.
+- **Paginação numerada da busca do blog** não foi exercitada pelo smoke nem
+  pela auditoria de 2026-07-09 (ver `UX_REVIEW.md`): o R2 real só tem 4
+  posts hoje, abaixo do tamanho de página — cenário sem conteúdo suficiente
+  para forçar a paginação a aparecer.
 
 ## Right-size (importante)
 
@@ -82,10 +106,11 @@ resto para type-check + lint + revisão visual.
 **Não** testar: snapshot de copy (o texto muda sem ser bug), detalhes
 visuais/pixel.
 
-## Ferramentas ⏳ (ainda não adicionadas)
+## Ferramentas ✅
 
-- **Playwright** para 1 smoke e2e (Chromium já disponível no ambiente). Manter
-  mínimo: navegar pelas 6 páginas, enviar o form em modo simulado.
+- **Playwright** (`@playwright/test`) — smoke e2e em `e2e/`, ver seção acima.
+  Binário do Chromium não vem pré-instalado no ambiente; `npx playwright
+install chromium` antes do primeiro `yarn test:e2e`.
 
 ## Convenções ✅
 
