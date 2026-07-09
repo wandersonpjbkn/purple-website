@@ -104,7 +104,9 @@ resto para type-check + lint + revisão visual.
 4. ✅ **Consentimento LGPD:** store + banner `CookieConsent`.
 
 **Não** testar: snapshot de copy (o texto muda sem ser bug), detalhes
-visuais/pixel.
+visuais/pixel. (`scripts/color-audit.mjs` é um relatório de proporção de
+cor, não um teste com assertions — não roda em `yarn test`/CI; ver
+`DESIGN_SYSTEM.md`.)
 
 ## Ferramentas ✅
 

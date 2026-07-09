@@ -49,6 +49,17 @@ Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1
 > existente ou se faz sentido atualizar a escala existente com o novo
 > valor.
 
+## Proporção 60/30/10 — neutro/roxo/lima ✅ (regra de composição)
+
+Composição visual do site segue **neutro ≈ 60% dominante** (fundo de página,
+blocos claros, cards, header/footer) · **roxo ≈ 30% secundário** (tinta de
+texto/heading, botões primários, um punhado de seções de fundo escuro — CTA,
+panorama, 1 card em destaque) · **lima ≤ 10% acento** (nunca fundo de seção
+inteira — só detalhes, ícones, sublinhados, botão do CTA). Conferir/reconferir
+com `yarn color-audit` (`scripts/color-audit.mjs`): relatório de proporção por
+rota, feito sobre screenshot full-page — **não é teste** (não faz assertions,
+não roda em `yarn test`/CI).
+
 ## Arquitetura SCSS ✅
 
 7-1 em `src/styles/`, orquestrada por `main.scss` na ordem

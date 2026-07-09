@@ -7,6 +7,14 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-07-09
 
+- **Regra 60/30/10 de cor formalizada + `yarn color-audit`** — a proporção
+  neutro/roxo/lima já existia na prática mas não estava escrita em nenhum
+  doc; nova seção em `DESIGN_SYSTEM.md` formaliza os números e
+  `scripts/color-audit.mjs` (relatório, não teste) confere por screenshot
+  full-page de cada rota, classificando pixels por matiz (HSL) sem depender
+  de lib de imagem nova. `scripts/prerender.mjs` teve `ROUTES` e
+  `resolveChromium` extraídos para `scripts/shared.mjs`, reaproveitados
+  pelos dois scripts.
 - **Blog migrado de build-time para runtime (worker + cache)** — o
   `vite-plugin-blog.ts` baixava **todos** os posts (já com HTML) durante o
   build e os embutia no bundle JS via `virtual:blog-posts`: com o catálogo

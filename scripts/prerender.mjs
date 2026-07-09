@@ -12,17 +12,16 @@
  * `npx playwright install chromium`.
  */
 import http from 'node:http'
-import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises'
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, extname, dirname } from 'node:path'
 
 import { chromium } from 'playwright-core'
 
+import { ROUTES, resolveChromium } from './shared.mjs'
+
 const DIST = join(process.cwd(), 'dist')
 const PORT = 4180
-
-// Rotas estáticas (as dinâmicas do blog ficam client-rendered).
-const ROUTES = ['/', '/sobre', '/abordagem', '/servicos', '/contato', '/blog', '/faq', '/privacidade']
 
 const MIME = {
   '.html': 'text/html',
@@ -36,21 +35,6 @@ const MIME = {
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
   '.txt': 'text/plain',
-}
-
-const resolveChromium = async () => {
-  if (process.env.PRERENDER_CHROMIUM) return process.env.PRERENDER_CHROMIUM
-  const base = '/opt/pw-browsers'
-  if (existsSync(base)) {
-    const dir = (await readdir(base)).find((d) => /^chromium-\d+$/.test(d))
-    const candidate = dir && join(base, dir, 'chrome-linux', 'chrome')
-    if (candidate && existsSync(candidate)) return candidate
-  }
-  try {
-    return chromium.executablePath()
-  } catch {
-    return undefined
-  }
 }
 
 // Servidor estático com fallback SPA (qualquer rota → index.html).

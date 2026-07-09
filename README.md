@@ -57,6 +57,7 @@ yarn dev
 | `yarn build:static` | `run-s build prerender`        | Build + prerender das rotas estáticas                                     |
 | `yarn prerender`    | `node scripts/prerender.mjs`   | Gera HTML prerenderizado (`dist/<rota>/index.html`) via Chromium headless |
 | `yarn preview`      | `vite preview`                 | Serve o build de produção localmente                                      |
+| `yarn color-audit`  | `node scripts/color-audit.mjs` | Relatório de proporção de cor por rota (requer `yarn dev`); não é teste   |
 | `yarn ts`           | `vue-tsc --build`              | Só checagem de tipos                                                      |
 | `yarn test`         | `vitest run`                   | Roda os testes uma vez                                                    |
 | `yarn test:watch`   | `vitest`                       | Roda os testes em modo watch                                              |
