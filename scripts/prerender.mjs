@@ -82,6 +82,13 @@ const run = async () => {
 
     await page.waitForTimeout(300)
 
+    // CookieConsent locks body scroll (`overflow: hidden`) while consent is
+    // unset, which is always true in this fresh headless context — strip it
+    // so the frozen snapshot doesn't ship real visitors an unscrollable page.
+    await page.evaluate(() => {
+      document.body.style.overflow = ''
+    })
+
     const html = '<!DOCTYPE html>\n' + (await page.content()).replace(/^<!DOCTYPE html>/i, '').trimStart()
     const outFile = route === '/' ? join(DIST, 'index.html') : join(DIST, route, 'index.html')
     await mkdir(dirname(outFile), { recursive: true })

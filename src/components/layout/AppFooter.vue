@@ -29,7 +29,7 @@
           </ul>
         </div>
         <div>
-          <h4>Navegação</h4>
+          <h3>Navegação</h3>
           <ul>
             <li
               v-for="(page, index) in pages"
@@ -40,7 +40,7 @@
           </ul>
         </div>
         <div>
-          <h4>Tópicos</h4>
+          <h3>Tópicos</h3>
           <ul>
             <li
               v-for="topic in footer.topics"
@@ -51,7 +51,7 @@
           </ul>
         </div>
         <address>
-          <h4>Contato</h4>
+          <h3>Contato</h3>
           <p>{{ useContact().address }}</p>
           <p>
             <a :href="`tel:${useContact().phone}`">{{ useContact().tel }}</a>

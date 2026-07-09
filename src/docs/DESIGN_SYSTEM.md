@@ -34,7 +34,11 @@ e `--section-dark-2 #2d1556` (cards de stat). `--purple-900` fica para acentos.
 **Texto/superfície:** `--ink`, `--text`, `--muted`, `--subtle` · `--surface`,
 `--bg`, `--bg-alt` · `--border`, `--border-subtle`.
 
-**Tipografia:** `--font: 'Plus Jakarta Sans'` (via Google Fonts no `index.html`).
+**Tipografia:** `--font: 'Plus Jakarta Sans'` — variable font self-hosted
+(`src/assets/fonts/plus-jakarta-sans-latin{,-italic}.woff2`, `@font-face` em
+`src/styles/base/_fonts.scss`, subset latin cobre acentuação pt-BR). Não vem
+mais do Google Fonts — evita a cadeia externa `googleapis.com → gstatic.com`
+no caminho crítico de renderização.
 Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1.08`
 → `-lg 1.2` → `-xl 1.5` → `-2xl 2` → `-3xl 2.8rem`.
 **Headings** (h1–h4) ficam em `base/_typography.scss` com `clamp()` fluido.
