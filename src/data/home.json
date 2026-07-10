@@ -2,12 +2,18 @@
   "hero": {
     "eyebrow": ["Comunicação Interna", "Liderança", "Employer Branding"],
     "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
-    "rotating": ["reduzem o turnover", "o time engaja mais", "atraem mais talentos", "fortalecem sua cultura"],
+    "rotating": [
+      "reduzem o turnover",
+      "o time engaja mais",
+      "atraem mais talentos",
+      "cultura se fortalece",
+      "clima se fortalece",
+      "retem talentos"
+    ],
     "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
     "primaryCta": "Falar com uma consultora",
     "secondaryCta": "Conheça os serviços",
-    "stats": [
-      {
+    "stats": [{
         "value": "64",
         "sign": "%",
         "label": "sem engajamento no trabalho",
