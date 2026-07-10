@@ -46,6 +46,7 @@
 
 <script setup lang="ts">
 import { useGtm } from '@gtm-support/vue-gtm'
+import { useIntersectionObserver } from '@vueuse/core'
 import { RouterLink } from 'vue-router'
 import { ref, onUnmounted, watch, nextTick } from 'vue'
 
@@ -98,6 +99,16 @@ watch(
   },
   { immediate: true }
 )
+
+// Ad/tracking blockers commonly cosmetic-filter cookie banners (`display: none`)
+// without ever calling accept()/reject() — the store stays `unset` forever, so
+// body scroll stays locked with nothing left on screen to dismiss it. If the
+// banner stops actually rendering while consent is still unset, fail open
+// (reject, the privacy-safe default) so the page stays usable.
+useIntersectionObserver(bannerRef, entries => {
+  const entry = entries[entries.length - 1]
+  if (entry && !entry.isIntersecting && !consent.decided) reject()
+})
 
 onUnmounted(() => {
   document.body.style.overflow = ''
