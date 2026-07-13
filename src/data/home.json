@@ -4,32 +4,31 @@
     "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
     "rotating": [
       "reduzem o turnover",
-      "o time engaja mais",
-      "atraem mais talentos",
-      "cultura se fortalece",
-      "clima se fortalece",
-      "retem talentos"
+      "têm times mais engajados",
+      "atraem os melhores talentos",
+      "cultura se fortalece"
     ],
-    "subtitle": "A Purple une estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
+    "subtitle": "Na Purple unificamos estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
     "primaryCta": "Falar com uma consultora",
     "secondaryCta": "Conheça os serviços",
-    "stats": [{
-        "value": "64",
+    "stats": [
+      {
+        "value": "61",
         "sign": "%",
-        "label": "sem engajamento no trabalho",
-        "source": ""
+        "label": "não se sentem engajados no trabalho",
+        "source": "VocêRH, 2025"
       },
       {
         "value": "14",
         "sign": "x",
-        "label": "mais produtivas com boa cultura",
-        "source": ""
+        "label": "mais produtivas as empresas com boa cultura",
+        "source": "Business Moment, 2024"
       },
       {
         "value": "23",
         "sign": "%",
         "label": "mais receita com engajamento",
-        "source": ""
+        "source": "NOZ, 2025"
       }
     ],
     "card": {
@@ -43,7 +42,7 @@
     }
   },
   "highlight": {
-    "eyebrow": "Por que isso importa",
+    "eyebrow": "Por que olhar para dentro importa",
     "title": "Na busca pelo crescimento, muitas empresas esquecem de olhar para dentro",
     "description": "Marketing, investimento em mídia, promoções e campanhas são excelentes para engajar os clientes externos. Mas quando a comunicação e as ações internas não recebem a mesma atenção, os times ficam desengajados e a marca empregadora não transmite confiança.",
     "image": "sections/home-highlight.jpg",

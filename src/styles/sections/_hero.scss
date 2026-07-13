@@ -184,6 +184,15 @@
   padding-top: var(--space-8);
   border-top: 1px solid var(--border);
 
+  > div:not([class*='divider']) {
+    align-self: flex-start;
+    flex: 1;
+
+    @include respond-to(sm) {
+      flex: unset;
+    }
+  }
+
   @include respond-to(sm) {
     gap: var(--space-4);
   }
@@ -203,8 +212,18 @@
 .hero__stat-label {
   font-size: 0.85rem;
   color: var(--muted);
-  max-width: 120px;
   line-height: 1.35;
+
+  @include respond-to(sm) {
+    max-width: 120px;
+  }
+}
+
+.hero__stat-source {
+  font-size: var(--text-xs);
+  color: var(--subtle);
+  font-style: italic;
+  margin-top: var(--space-1);
 }
 
 .hero__stat-divider {

@@ -4,9 +4,9 @@
       <div class="about-hero__inner">
         <div>
           <p class="section-eyebrow">Sobre nós</p>
-          <h1>Um espaço criado por gente que não se conforma</h1>
+          <h1>Criada por gente que se importa</h1>
           <p class="lead">
-            Com lideranças abusivas, espaços que adoecem as pessoas e a falta de integração entre times. A Purple nasceu
+            Lideranças abusivas, espaços que adoecem as pessoas e a falta de integração entre times. A Purple nasceu
             para mudar isso.
           </p>
         </div>
@@ -60,8 +60,8 @@
         <p class="section-eyebrow">Quem somos</p>
         <h2>As pessoas por trás da Purple</h2>
         <p class="lead lead--center">
-          A união de uma publicitária/marketeira e de um UX/psicólogo que já trabalharam juntos, resultou em uma
-          consultoria focada em Comunicação Interna, Endomarketing e Employer Branding.
+          A união de uma comunicóloga e de um UX/psicólogo que já trabalharam juntos, resultou em uma consultoria focada
+          em Comunicação Interna, Endomarketing e Employer Branding.
         </p>
       </div>
       <div class="team-grid">

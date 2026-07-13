@@ -65,12 +65,18 @@
               <div
                 v-if="i > 0"
                 class="hero__stat-divider"
-              ></div>
+              />
               <div>
                 <div class="hero__stat-number">
                   {{ stat.value }}<span class="hero__stat-sign">{{ stat.sign }}</span>
                 </div>
                 <div class="hero__stat-label">{{ stat.label }}</div>
+                <div
+                  v-if="stat.source"
+                  class="hero__stat-source"
+                >
+                  {{ stat.source }}
+                </div>
               </div>
             </template>
           </div>
