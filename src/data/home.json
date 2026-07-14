@@ -1,18 +1,18 @@
 {
   "hero": {
+    "background": "sections/hero-bg-gradient.png",
     "eyebrow": ["Comunicação Interna", "Liderança", "Employer Branding"],
     "titlePrefix": "Empresas que <em>cuidam das pessoas</em>",
     "rotating": [
       "reduzem o turnover",
       "têm times mais engajados",
       "atraem os melhores talentos",
-      "cultura se fortalece"
+      "a cultura se fortalece"
     ],
     "subtitle": "Na Purple unificamos estratégia, comunicação e marca empregadora para transformar o ambiente interno em vantagem competitiva real.",
     "primaryCta": "Falar com uma consultora",
     "secondaryCta": "Conheça os serviços",
-    "stats": [
-      {
+    "stats": [{
         "value": "61",
         "sign": "%",
         "label": "não se sentem engajados no trabalho",

@@ -1,5 +1,9 @@
 <template>
   <section class="hero">
+    <div
+      class="hero__background"
+      :style="`--src:url('${useCdnAsset(home.hero.background)}')`"
+    />
     <BaseContainer>
       <div class="hero__grid">
         <div>
