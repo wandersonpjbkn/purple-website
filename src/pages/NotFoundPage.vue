@@ -5,7 +5,7 @@
         <p class="notfound__code">404</p>
         <h1>Esta página saiu de cena</h1>
         <p class="lead lead--narrow lead--center">
-          O link pode estar quebrado ou a página foi movida. Mas a conversa continua — veja por onde seguir.
+          O link pode estar quebrado ou a página foi movida. Mas a conversa continua, veja por onde seguir.
         </p>
         <div class="notfound__actions">
           <BaseButton

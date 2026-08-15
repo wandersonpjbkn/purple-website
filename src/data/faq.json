@@ -2,14 +2,13 @@
   "eyebrow": "Dúvidas frequentes",
   "title": "Como podemos te ajudar",
   "subtitle": "Reunimos as dúvidas mais comuns de quem está avaliando trabalhar com a Purple. Não achou a sua? Fale com a gente.",
-  "items": [
-    {
+  "items": [{
       "question": "Como funciona a contratação?",
-      "answer": "Trabalhamos com assinatura mensal e permanência mínima de 3 meses. Cada proposta é fechada sob consulta, de acordo com o contexto e o momento da sua empresa — do plano Essencial ao Employer Branding Completo."
+      "answer": "Trabalhamos com assinatura mensal e permanência mínima de 3 meses. Cada proposta é fechada sob consulta, de acordo com o contexto e o momento da sua empresa do plano Essencial ao Employer Branding Completo."
     },
     {
       "question": "Por que os preços não estão publicados?",
-      "answer": "Cada empresa tem um contexto: número de colaboradores, canais existentes, maturidade da comunicação e objetivos. Por isso o valor é \"sob consulta\" — montamos uma proposta sob medida em vez de um preço genérico que não caberia na sua realidade."
+      "answer": "Cada empresa tem um contexto: número de colaboradores, canais existentes, maturidade da comunicação e objetivos. Por isso o valor é \"sob consulta\" montamos uma proposta sob medida em vez de um preço genérico que não caberia na sua realidade."
     },
     {
       "question": "Para empresas de que tamanho vocês trabalham?",
@@ -17,7 +16,7 @@
     },
     {
       "question": "Vocês só recomendam ou também executam?",
-      "answer": "Executamos. A Purple assume a produção: posts, comunicados, campanhas e peças. Você vê valor na prática antes de comprar consultoria estratégica — entregamos, publicamos e acompanhamos, não apenas recomendamos."
+      "answer": "Executamos. A Purple assume a produção: posts, comunicados, campanhas e peças. Você vê valor na prática antes de comprar consultoria estratégica; entregamos, publicamos e acompanhamos, não apenas recomendamos."
     },
     {
       "question": "Preciso ter um time de comunicação interno?",
@@ -25,7 +24,7 @@
     },
     {
       "question": "Dá para contratar um projeto pontual?",
-      "answer": "Sim. Além dos planos recorrentes, entregamos projetos fechados com começo, meio e fim — como um diagnóstico de cultura, uma campanha de endomarketing avulsa ou o design de uma página de carreiras."
+      "answer": "Sim. Além dos planos recorrentes, entregamos projetos fechados com começo, meio e fim; como um diagnóstico de cultura, uma campanha de endomarketing avulsa ou o design de uma página de carreiras."
     },
     {
       "question": "Em quanto tempo vocês respondem?",

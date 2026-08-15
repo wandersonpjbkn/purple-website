@@ -264,7 +264,7 @@ import CtaBanner from '@/components/sections/CtaBanner.vue'
 usePageMeta({
   title: 'Serviços',
   description:
-    'Gestão de LinkedIn, comunicação interna, endomarketing, mídia de atração, diagnóstico de cultura e UX — em planos mensais ou projetos pontuais.',
+    'Gestão de LinkedIn, comunicação interna, endomarketing, mídia de atração, diagnóstico de cultura e UX, em planos mensais ou projetos pontuais.',
 })
 
 const route = useRoute()

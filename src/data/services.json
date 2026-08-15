@@ -2,20 +2,19 @@
   "intro": {
     "eyebrow": "Serviços",
     "title": "Comunicação profissional, sem precisar montar um time interno",
-    "subtitle": "A Purple assume a comunicação da sua empresa com quem já trabalha nela — e com quem ainda vai trabalhar. Entrega prática, contínua e sob medida: produzimos, publicamos e executamos, não apenas recomendamos."
+    "subtitle": "A Purple assume a comunicação da sua empresa com quem já trabalha nela e com quem ainda vai trabalhar. Entrega prática, contínua e sob medida: produzimos, publicamos e executamos, não apenas recomendamos."
   },
   "homeTeaser": {
     "eyebrow": "Soluções",
     "title": "O que fazemos pela sua empresa"
   },
-  "catalog": [
-    {
+  "catalog": [{
       "id": "linkedin-corporativo",
       "icon": "linkedin",
       "title": "Gestão de LinkedIn Corporativo",
       "tagline": "A vitrine da sua empresa para candidatos, clientes e mercado.",
       "summary": "Linha editorial, redação estratégica e design profissional para a presença B2B da sua marca.",
-      "description": "Cuidamos da presença da sua empresa no LinkedIn de ponta a ponta: linha editorial, redação estratégica, design das peças e agendamento. Conteúdo B2B que fortalece a autoridade da marca e dá visibilidade à cultura — sem sobrecarregar o seu time.",
+      "description": "Cuidamos da presença da sua empresa no LinkedIn de ponta a ponta: linha editorial, redação estratégica, design das peças e agendamento. Conteúdo B2B que fortalece a autoridade da marca e dá visibilidade à cultura sem sobrecarregar o seu time.",
       "benefits": [
         "Linha editorial alinhada ao posicionamento da empresa",
         "Posts com texto e design profissionais, toda semana",
@@ -30,7 +29,7 @@
         "Publicação e agendamento",
         "Relatório de desempenho e ajustes contínuos"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "id": "comunicacao-interna",
@@ -39,7 +38,7 @@
       "title": "Comunicação Interna",
       "tagline": "Para que todos possam caminhar na mesma direção, é essencial que estejam informados.",
       "summary": "Comunicados, canais e rituais que mantêm todos informados e alinhados.",
-      "description": "Planejamos e produzimos os comunicados da sua empresa — e-mails, banners, avisos e rituais de comunicação — com texto claro e design que as pessoas realmente leem. Times alinhados, lideranças comunicativas e colaboradores conectados ao propósito.",
+      "description": "Planejamos e produzimos os comunicados da sua empresa, e-mails, banners, avisos e rituais de comunicação. Com textos claros e design seguindo a identidade da sua empresa, criamos peças focadas em garantir o alinhamento dos times, lideranças comunicativas e colaboradores conectados ao propósito.",
       "benefits": [
         "Times alinhados com objetivos e estratégia",
         "Redução de ruídos e mal-entendidos",
@@ -54,14 +53,14 @@
         "Criação de peças e comunicados recorrentes",
         "Acompanhamento e alinhamento com o time interno"
       ],
-      "featured": true
+      "featured": false
     },
     {
       "id": "endomarketing",
       "blogCategories": ["Endomarketing", "Bem-estar"],
       "icon": "handshake",
       "title": "Endomarketing",
-      "tagline": "Como o engajamento dos seus colaboradores impacta diretamente nos resultados.",
+      "tagline": "O engajamento dos seus colaboradores impacta diretamente nos resultados.",
       "summary": "Campanhas completas para engajar, motivar e conectar colaboradores com o propósito da empresa.",
       "description": "Campanhas completas para engajar e motivar colaboradores: conceito criativo, identidade visual da campanha, kit de peças e cronograma de ativação. De datas estratégicas a movimentos internos de reconhecimento, cada campanha reforça a cultura da empresa.",
       "benefits": [
@@ -85,9 +84,9 @@
       "blogCategories": ["Employer Branding"],
       "icon": "trophy",
       "title": "Employer Branding",
-      "tagline": "Como a sua marca é percebida por quem trabalha — e por quem pode trabalhar — nela.",
-      "summary": "Os atributos que tornam sua empresa um lugar desejado para trabalhar — dentro e fora.",
-      "description": "Trabalhar a Marca Empregadora significa tratar os atributos e diferenciais que a empresa tem como empregadora e como os colaboradores enxergam o negócio e o ambiente de trabalho — para atrair talentos de forma consistente e reter quem já está.",
+      "tagline": "Aumente e consolide a reputação da sua marca como um bom local para trabalhar. ",
+      "summary": "Os atributos que tornam sua empresa um lugar desejado para trabalhar, de dentro para fora.",
+      "description": "Trabalhar a Marca Empregadora significa tratar os atributos e diferenciais que a empresa tem como empregadora e como os colaboradores enxergam o negócio e o ambiente de trabalho. Esse fortalecimento da reputação ajuda a atrair talentos, além de reter os que já fazem parte da equipe.",
       "benefits": [
         "Atração de novos talentos qualificados",
         "Retenção e fidelização de colaboradores",
@@ -108,7 +107,7 @@
       "id": "midia-atracao",
       "icon": "chart",
       "title": "Mídia Paga para Atração de Talentos",
-      "tagline": "Anúncios certeiros para a vaga certa chegar à pessoa certa.",
+      "tagline": "Anúncios estratégicos para que sua vaga chegue ao talento certo.",
       "summary": "Campanhas segmentadas para atrair candidatos qualificados e encurtar processos seletivos.",
       "description": "Campanhas segmentadas no LinkedIn Ads e Meta Ads para atrair candidatos qualificados e fortalecer a marca empregadora no digital. A verba de mídia é sempre investida em nome da empresa, com total transparência sobre a gestão.",
       "benefits": [
@@ -132,9 +131,9 @@
       "blogCategories": ["Cultura e Clima"],
       "icon": "search",
       "title": "Diagnóstico de Cultura e Clima",
-      "tagline": "Entender antes de comunicar — a base de toda decisão bem tomada.",
+      "tagline": "Entender antes de comunicar é a base para tomar boas decisões.",
       "summary": "Pesquisa com colaboradores, análise e relatório com recomendações práticas.",
-      "description": "Criamos e aplicamos a pesquisa junto aos colaboradores, acompanhamos a taxa de resposta, tabulamos os dados e entregamos um relatório visual com recomendações práticas e plano de ação — a base para comunicar com contexto.",
+      "description": "Criamos e aplicamos a pesquisa junto aos colaboradores, acompanhamos a taxa de resposta, compilamos os dados e entregamos um relatório visual com recomendações práticas e plano de ação.",
       "benefits": [
         "Leitura real do clima e da cultura da empresa",
         "Dados para embasar decisões de gestão e RH",
@@ -157,7 +156,7 @@
       "title": "Página de Carreiras e Portal do Colaborador",
       "tagline": "Design de experiências digitais que refletem a identidade e os valores da sua marca.",
       "summary": "UX/UI para páginas de carreiras, sites institucionais e portais internos.",
-      "description": "UX/UI para páginas de carreiras, sites institucionais e portais internos — pensados para funcionar bem no celular, onde o colaborador realmente acessa. Entregamos o design completo e prototipado, pronto para o time de desenvolvimento implementar.",
+      "description": "UX/UI para páginas de carreiras, sites institucionais e portais internos pensados para funcionar bem no celular, onde o colaborador realmente acessa. Entregamos o design completo e prototipado, pronto para o time de desenvolvimento implementar.",
       "benefits": [
         "Página de carreiras que traduz a experiência real de trabalho",
         "Portais internos intuitivos e fáceis de usar no celular",
@@ -181,8 +180,7 @@
     "subtitle": "Assinatura mensal com permanência mínima de 3 meses. Cada proposta é fechada sob consulta, de acordo com o contexto e o momento da empresa.",
     "priceLabel": "Sob consulta",
     "ctaLabel": "Pedir proposta",
-    "items": [
-      {
+    "items": [{
         "id": "essencial",
         "name": "Essencial",
         "audience": "40 a 80 colaboradores",
@@ -215,9 +213,8 @@
   "projects": {
     "eyebrow": "Projetos pontuais",
     "title": "Precisa de algo específico?",
-    "subtitle": "Além dos planos recorrentes, entregamos projetos fechados — com começo, meio e fim.",
-    "items": [
-      {
+    "subtitle": "Além dos planos recorrentes, entregamos projetos fechados com começo, meio e fim.",
+    "items": [{
         "icon": "search",
         "serviceId": "diagnostico-cultura",
         "title": "Diagnóstico de Cultura",

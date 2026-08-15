@@ -125,7 +125,7 @@
     <CtaBanner
       eyebrow="Do conteúdo à prática"
       title="Quer aplicar isso na sua empresa?"
-      description="A gente assume a execução da comunicação com o seu time — dos comunicados internos ao employer branding."
+      description="A gente assume a execução da comunicação com o seu time, dos comunicados internos ao employer branding."
       :whatsapp-message="whatsappMessage"
       content-to="/servicos"
       content-label="Conhecer os serviços"

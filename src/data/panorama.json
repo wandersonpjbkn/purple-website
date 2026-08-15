@@ -2,8 +2,7 @@
   "eyebrow": "Panorama do mercado",
   "title": "Os números que ninguém pode ignorar",
   "subtitle": "Dados de pesquisas recentes mostram por que cuidar dos colaboradores deixou de ser diferencial para se tornar estratégia de negócio.",
-  "stats": [
-    {
+  "stats": [{
       "number": "86",
       "suffix": "%",
       "label": "consideram bem-estar tão importante quanto o salário",
@@ -29,7 +28,7 @@
       "number": "61",
       "suffix": "%",
       "label": "dos colaboradores com programas de bem-estar avaliam sua saúde como boa ou excelente",
-      "source": "Weehub — Panorama do Bem-Estar Corporativo 2026",
+      "source": "Weehub; Panorama do Bem-Estar Corporativo 2026",
       "highlight": false,
       "comparison": "vs. 40% entre os que não têm acesso"
     },
@@ -37,7 +36,7 @@
       "number": "90",
       "suffix": "%",
       "label": "consideram sua remuneração adequada quando há programa de bem-estar",
-      "source": "Weehub — Panorama do Bem-Estar Corporativo 2026",
+      "source": "Weehub; Panorama do Bem-Estar Corporativo 2026",
       "highlight": true,
       "comparison": "vs. 57% sem programa"
     },
@@ -49,8 +48,7 @@
       "highlight": false
     }
   ],
-  "context": [
-    {
+  "context": [{
       "strong": "70% → 90%",
       "text": "de engajamento após implementação de estratégias de saúde corporativa (Forbes Brasil, 2022)"
     },
@@ -64,7 +62,7 @@
     },
     {
       "strong": "77%",
-      "text": "sentem que o RH se preocupa com seu bem-estar quando há programa estruturado — vs. 38% sem (Weehub 2026)"
+      "text": "sentem que o RH se preocupa com seu bem-estar quando há programa estruturado; vs. 38% sem (Weehub 2026)"
     }
   ]
 }

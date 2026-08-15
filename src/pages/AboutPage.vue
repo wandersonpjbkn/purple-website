@@ -28,7 +28,7 @@
           <h2>{{ about.helpTitle }}</h2>
           <p class="lead">{{ about.helpText }}</p>
           <p class="about-belief__note">
-            Por isso, antes de olhar para fora, ajudamos empresas a olharem para dentro — para as pessoas que movem o
+            Por isso, antes de olhar para fora, ajudamos empresas a olharem para dentro, para as pessoas que movem o
             negócio todos os dias.
           </p>
           <div class="button-row">
@@ -120,7 +120,7 @@ import CtaBanner from '@/components/sections/CtaBanner.vue'
 usePageMeta({
   title: 'Sobre Nós',
   description:
-    'Conheça a Purple Comunicação — consultoria especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
+    'Conheça a Purple Comunicação, uma consultoria especializada em Employer Branding, Endomarketing e Comunicação Interna, criada por quem acredita em espaços de trabalho mais humanos.',
 })
 </script>
 
