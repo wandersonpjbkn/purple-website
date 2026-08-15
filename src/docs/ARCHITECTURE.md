@@ -44,7 +44,7 @@ public/              robots.txt, images/
 ## Camadas / fluxo de boot ✅
 
 1. `main.ts` cria o app e registra: **Pinia** (`createPinia` + `pinia-plugin-persistedstate`), **unhead**, **router**.
-2. `App.vue` monta o shell e define head global: `lang="pt-BR"` e **`robots: noindex, nofollow`**.
+2. `App.vue` monta o shell e define head global: `lang="pt-BR"` e **`robots: index, follow`**.
 3. Páginas são componentes de rota (lazy `import()`), cada uma chama `usePageMeta(...)`.
 
 **Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Store atual:
@@ -126,7 +126,8 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 
 `usePageMeta` (em `composables/usePageMeta.ts`) emite `useSeoMeta` (OG/Twitter) + **JSON-LD** (WebPage/Article) + canonical, lendo `VITE_SITE_URL`.
 
-- **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`noindex, nofollow`** (site pré-lançamento). `usePageMeta` não emite `robots` — evita duas fontes divergentes. Reforçado por `public/robots.txt` (`Disallow: /`). Quando o site for ao ar, basta trocar a linha no `App.vue`.
+- **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`index, follow`** (site aberto à indexação desde 2026-07-09). `usePageMeta` não emite `robots` — evita duas fontes divergentes. `public/robots.txt` permite crawling (`Allow: /`) e aponta `Sitemap: https://purplecomunicacao.com.br/sitemap.xml`.
+- **`public/sitemap.xml` ✅:** estático, lista as 8 rotas estáticas (mesma lista de `ROUTES` em `scripts/shared.mjs`, usada pelo prerender) — copiado para `dist/` em todo build, sem depender do passo de prerender. Posts do blog (dinâmicos, servidos pelo Worker/R2) não entram no sitemap; descoberta via crawling dos links internos (`/blog` → cada post).
 
 ## Build & deploy
 

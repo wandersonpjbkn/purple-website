@@ -24,7 +24,7 @@ import CookieConsent from '@/components/layout/CookieConsent.vue'
 
 useHead({
   htmlAttrs: { lang: 'pt-BR' },
-  meta: [{ name: 'robots', content: 'noindex, nofollow' }],
+  meta: [{ name: 'robots', content: 'index, follow' }],
 })
 </script>
 
