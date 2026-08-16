@@ -28,8 +28,14 @@
 
 ## Vue / UI ✅
 
-- **Um caminho de botão:** sempre `BaseButton` (variantes `primary | secondary |
-ghost | lime`); não escrever `class="button primary"` à mão.
+- **Um caminho de botão para CTA com marca:** ação com peso de marca (variantes
+  `primary | secondary | ghost | lime`) sempre via `BaseButton`; não escrever
+  `class="button primary"` à mão. **Não se aplica** a controle estrutural sem
+  variante de marca (paginação, trigger de accordion, seletor de card, botão
+  de menu) — esses são `<button>` com estilo próprio, co-localizado no
+  componente (ver "Posse de estilo" abaixo); é o padrão já seguido em
+  `BlogPagination.vue`, `FaqSection.vue`, `AppHeader.vue`, `CategoryFilter.vue`
+  e `ServicesPage.vue`.
 - **Tokens primeiro:** cor/espaçamento/tipografia vêm de `_tokens.scss`
   (`--space-*`, `--text-*`, etc.), não valores crus. Ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
 - **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup ou glifo

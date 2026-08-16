@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-Instruções para o Claude Code neste repositório.
+Instruções para o Claude Code neste repositório. Valem para **toda**
+solicitação feita aqui, sem exceção — independente da superfície (extensão,
+terminal ou web).
 
 ## Documentação como fonte de verdade
 
@@ -39,3 +41,28 @@ estáticos: eles evoluem junto com o projeto. Quando uma tarefa exigir mudança
 de comportamento, arquitetura, convenção ou conteúdo que já está documentado,
 atualize o documento correspondente como parte da tarefa, mantendo a
 documentação sempre alinhada com a realidade do código.
+
+Isso também vale ao contrário: se a pesquisa, a implementação ou um achado
+novo mostrar que uma instrução do doc não é mais a melhor prática, **levante
+isso explicitamente** — cite o achado, proponha a atualização. Seguir uma
+instrução do doc sem questionar quando há evidência em contrário não é
+aceitável; a fonte de verdade tem prioridade sobre preferência genérica, mas
+não é dogma incontestável diante de evidência nova. A decisão de qual lado
+vence é do usuário — o trabalho é tornar o conflito visível, nunca escondê-lo
+(nem seguindo cego, nem corrigindo por conta própria sem avisar).
+
+## Processo de entrega
+
+Toda mudança substantiva (feature nova, decisão de UX/produto/arquitetura,
+qualquer coisa que altere comportamento visível/interativo ou conteúdo
+público) segue o processo Double Diamond descrito na skill
+[`double-diamond-delivery`](.claude/skills/double-diamond-delivery/SKILL.md)
+— discovery (docs + pesquisa de mercado) → define (plano) → develop →
+deliver (testes, conformidade com as docs, contraste, acessibilidade, leis
+de UX, heurísticas de Nielsen). Invoque essa skill antes de propor plano ou
+implementar. Mudanças mecânicas/triviais (typo, config, bug óbvio de uma
+linha) dispensam a pesquisa online do discovery, mas nunca dispensam a
+leitura das docs (acima) nem o checklist de deliver — critério completo na
+skill.
+
+Nenhuma entrega é considerada concluída sem esse processo ter acontecido.

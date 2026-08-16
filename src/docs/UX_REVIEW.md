@@ -26,6 +26,10 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   pageview automático, sem medir a origem de cada clique.
 - **Acordeões com comportamento diferente** — `FaqSection.vue` (um item por
   vez) migrado para o mesmo modelo multi-aberto de `ServicesPage.vue`.
+  **Nota (2026-08-16):** `ServicesPage.vue` voltou a ser um-item-por-vez —
+  ver "Catálogo de serviços" abaixo. A divergência com `FaqSection.vue`
+  (que segue multi-open) passou a ser intencional; motivo detalhado na
+  seção seguinte.
 
 **Modelo completo do funil (fonte única — decisão do dono do produto,
 2026-07-09):**
@@ -51,6 +55,75 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   de plano/catálogo ("Pedir proposta") terem só micro I (sem WhatsApp em
   cada um dos 3 planos + 7 serviços) são **intencionais**, não gaps — evita
   tanto a navegação cíclica quanto a saturação de peso macro.
+
+### Catálogo de serviços — "buraco" no grid ao expandir um card
+
+- **Achado (feedback direto, 2026-08-16):** `.svc-catalog` é um grid de 2
+  colunas e cada `.svc-item` expande individualmente (`v-show` no
+  `.svc-item__detail`). Ao abrir só um dos dois cards de uma linha, a altura
+  da linha do grid passava a ser ditada pelo card aberto, deixando uma área
+  vazia grande ao lado do card vizinho, que continuava com sua altura
+  fechada.
+- **Primeira tentativa (revertida):** `grid-auto-flow: dense` +
+  `.svc-item--open { grid-column: 1 / -1 }` — o card clicado ocupava a linha
+  inteira e o packing denso realocava os cards seguintes para preencher o
+  espaço, sem deixar buraco. Efeito colateral descoberto em teste manual:
+  como a realocação é instantânea e sem nenhuma transição, o card que
+  "pulava" para a posição do card recém-aberto ficava exatamente sob o
+  cursor — um segundo clique rápido no mesmo ponto (comum ao checar se o
+  clique "pegou") acertava esse novo card em vez de repetir o card já
+  aberto, e o ciclo se repetia a cada clique acidental, abrindo em cascata
+  todos os cards do catálogo sem o usuário perceber a causa.
+- **Segunda tentativa:** `ServicesPage.vue` ganhou o computed
+  `hasOpenService`, que aplica o modificador `.svc-catalog--stacked`
+  (`grid-template-columns: 1fr`) enquanto qualquer card estiver aberto — o
+  grid empilha em 1 coluna até fechar de novo. Nenhum card troca de posição
+  sob o cursor, então o clique acidental em cascata deixa de ser possível.
+  Manteve o multi-open (vários cards abertos ao mesmo tempo). Problema
+  encontrado em teste com o dono do produto: o motivo original do grid de 2
+  colunas era justamente evitar uma página longa/arrastada ao exibir os 7
+  serviços — com multi-open, cada card aberto empilha um painel de detalhe
+  completo, então abrir vários cards contradiz esse objetivo (a página cresce
+  sem limite).
+- **Correção definitiva:** catálogo de serviços passou a ser **single-open**
+  (`closeAll()` antes de abrir um novo id, tanto em `toggle` quanto em
+  `open`) — abrir um card fecha qualquer outro que estivesse aberto,
+  limitando a página a no máximo 1 painel de detalhe expandido por vez.
+  `.svc-catalog--stacked` continua evitando o buraco no grid. Divergência
+  intencional do multi-open do `FaqSection.vue`: só o catálogo de serviços
+  tem o grid de 2 colunas + conteúdo rico por card que motiva esse limite;
+  o FAQ é uma lista simples de 1 coluna com respostas curtas, sem esse
+  problema. `.svc-catalog` também ganhou
+  `transition: grid-template-columns 0.25s var(--ease)` para suavizar a
+  troca 2↔1 coluna (antes trocava sem nenhuma transição, o que também
+  contribuía para a sensação de comportamento quebrado).
+- **Nota (2026-08-16):** a "correção definitiva" acima (single-open +
+  `--stacked`) foi revisitada em teste com o dono do produto e substituída
+  por **master-detail**: uma grade de cards seletores que nunca mudam de
+  altura (ícone + título + tagline + resumo, sem expandir) e um único
+  painel de detalhe compartilhado abaixo da grade, que troca de conteúdo
+  conforme o card selecionado (`selectedId`/`selectedService` em
+  `ServicesPage.vue`, substituindo `openState`/`toggle`/`open`/`closeAll`).
+  Motivo: abrir um acordeão por item tem alto custo de interação quando o
+  conteúdo por item é longo — cada abertura é uma decisão + reflow — e um
+  grid 2D de acordeões é estruturalmente a forma errada para esse conteúdo
+  (NN/g, "In-Page Links: When They Work"). O bug de "buraco no grid"/clique
+  em cascata descrito acima deixa de ser possível **por construção**: como
+  os cards nunca mudam de altura, nenhuma seleção altera a altura de linha
+  do grid — não há mais nada para vazar ou realocar sob o cursor.
+  `.svc-catalog--stacked` foi removido (o grid agora só colapsa por
+  breakpoint de viewport, nunca por estado de seleção).
+- **Nota (2026-08-16):** o painel de detalhe ganhou navegação anterior/
+  próximo (`.svc-detail__nav`), pedida pelo dono do produto — sem ela, trocar
+  de serviço exigia rolar de volta até a grade a cada clique. Segue o mesmo
+  padrão de `BlogPagination.vue` (setas desabilitadas nas pontas, sem
+  wraparound) por consistência de interação no site. Contador "X de 7"
+  aplica a heurística de Nielsen "visibilidade do status do sistema". A
+  barra de navegação fica **fora** da `<Transition>` do conteúdo — se
+  estivesse dentro, cada clique recriaria os botões e o foco do teclado se
+  perderia a cada troca (mesma classe de armadilha do "alvo que se move sob
+  o cursor" documentada acima, agora evitada por manter os botões fixos
+  fora do bloco que muda de altura).
 
 ### Acessibilidade / heurísticas de Nielsen
 

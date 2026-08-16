@@ -106,6 +106,9 @@ export const ICONS: Record<string, IconDef> = {
   'chevron-right': {
     paths: ['m9 18 6-6-6-6'],
   },
+  'chevron-left': {
+    paths: ['m15 18-6-6 6-6'],
+  },
   close: {
     paths: ['M18 6 6 18', 'M6 6l12 12'],
   },

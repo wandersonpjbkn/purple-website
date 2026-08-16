@@ -57,66 +57,94 @@
         <div class="section-header">
           <p class="section-eyebrow">{{ services.homeTeaser.eyebrow }}</p>
           <h2>{{ services.homeTeaser.title }}</h2>
-          <p class="lead">Clique em um serviço para ver o que sua empresa ganha e como fazemos.</p>
+          <p class="lead">Escolha um serviço para ver o que sua empresa ganha e como fazemos.</p>
         </div>
 
         <div class="svc-catalog">
-          <article
+          <button
             v-for="service in services.catalog"
             :id="service.id"
             :key="service.id"
-            class="svc-item"
-            :class="{ 'svc-item--open': isOpen(service.id) }"
+            type="button"
+            class="svc-card"
+            :class="{ 'svc-card--active': selectedId === service.id }"
+            :aria-current="selectedId === service.id ? 'true' : undefined"
+            aria-controls="svc-detail"
+            @click="select(service.id)"
           >
-            <h3 class="svc-item__head-heading">
-              <button
-                type="button"
-                class="svc-item__head"
-                :aria-expanded="isOpen(service.id)"
-                :aria-controls="`svc-panel-${service.id}`"
-                @click="toggle(service.id)"
-              >
-                <span class="svc-item__icon"><BaseIcon :name="service.icon" /></span>
-                <span class="svc-item__heading">
-                  <span class="svc-item__title">{{ service.title }}</span>
-                  <span class="svc-item__tagline">{{ service.tagline }}</span>
-                </span>
-                <span
-                  class="svc-item__chevron"
-                  aria-hidden="true"
-                ></span>
-              </button>
-            </h3>
+            <span class="svc-card__icon"><BaseIcon :name="service.icon" /></span>
+            <span class="svc-card__heading">
+              <span class="svc-card__title">{{ service.title }}</span>
+              <span class="svc-card__tagline">{{ service.tagline }}</span>
+            </span>
+            <span class="svc-card__summary">{{ service.summary }}</span>
+          </button>
+        </div>
 
-            <p class="svc-item__summary">{{ service.summary }}</p>
-
-            <div
-              v-show="isOpen(service.id)"
-              :id="`svc-panel-${service.id}`"
-              class="svc-item__detail"
+        <div
+          v-if="selectedService"
+          id="svc-detail"
+          ref="detailRef"
+          class="svc-detail"
+        >
+          <div class="svc-detail__nav">
+            <button
+              type="button"
+              class="svc-detail__nav-arrow"
+              :disabled="currentIndex === 0"
+              aria-label="Serviço anterior"
+              @click="goPrev"
             >
-              <p class="svc-item__description">{{ service.description }}</p>
-              <div class="svc-item__cols">
+              <BaseIcon name="chevron-left" />
+            </button>
+            <span class="svc-detail__nav-count">{{ currentIndex + 1 }} de {{ services.catalog.length }}</span>
+            <button
+              type="button"
+              class="svc-detail__nav-arrow"
+              :disabled="currentIndex === services.catalog.length - 1"
+              aria-label="Próximo serviço"
+              @click="goNext"
+            >
+              <BaseIcon name="chevron-right" />
+            </button>
+          </div>
+
+          <Transition
+            name="svc-detail-fade"
+            mode="out-in"
+          >
+            <div :key="selectedService.id">
+              <div class="svc-detail__head">
+                <span class="svc-detail__icon"><BaseIcon :name="selectedService.icon" /></span>
+                <span class="svc-detail__heading">
+                  <h3 class="svc-detail__title">{{ selectedService.title }}</h3>
+                  <span class="svc-detail__tagline">{{ selectedService.tagline }}</span>
+                </span>
+              </div>
+
+              <p class="svc-detail__description">{{ selectedService.description }}</p>
+
+              <div class="svc-detail__cols">
                 <div>
-                  <h4 class="svc-item__subtitle">O que sua empresa ganha</h4>
-                  <ul class="svc-item__benefits">
+                  <h4 class="svc-detail__subtitle">O que sua empresa ganha</h4>
+                  <ul class="svc-detail__benefits">
                     <li
-                      v-for="benefit in service.benefits"
+                      v-for="benefit in selectedService.benefits"
                       :key="benefit"
                     >
                       <BaseIcon
                         name="check"
-                        class="svc-item__check"
+                        class="svc-detail__check"
                       />
                       {{ benefit }}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h4 class="svc-item__subtitle">Como fazemos</h4>
-                  <ol class="svc-item__process">
+                  <h4 class="svc-detail__subtitle">Como fazemos</h4>
+                  <ol class="svc-detail__process">
                     <li
-                      v-for="step in service.process"
+                      v-for="step in selectedService.process"
                       :key="step"
                     >
                       {{ step }}
@@ -124,26 +152,17 @@
                   </ol>
                 </div>
               </div>
-              <div class="svc-item__actions">
+
+              <div class="svc-detail__actions">
                 <BaseButton
                   tag="RouterLink"
-                  :to="`/contato?servico=${encodeURIComponent(service.id)}`"
+                  :to="`/contato?servico=${encodeURIComponent(selectedService.id)}`"
                   variant="lime"
                   >Pedir proposta</BaseButton
                 >
               </div>
             </div>
-
-            <button
-              type="button"
-              class="svc-item__more"
-              :aria-expanded="isOpen(service.id)"
-              :aria-controls="`svc-panel-${service.id}`"
-              @click="toggle(service.id)"
-            >
-              {{ isOpen(service.id) ? 'Fechar' : 'Saiba mais' }}
-            </button>
-          </article>
+          </Transition>
         </div>
       </BaseContainer>
     </section>
@@ -225,7 +244,7 @@
                 v-if="project.serviceId"
                 class="svc-detail-link"
                 :href="`#${project.serviceId}`"
-                @click="open(project.serviceId)"
+                @click="select(project.serviceId)"
               >
                 Ver detalhes
               </a>
@@ -248,7 +267,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { usePageMeta, useWhatsappUrl, useCtaTracking } from '@/composables'
@@ -273,22 +292,36 @@ const whatsappUrl = useWhatsappUrl('Gostei dos serviços e quero conversar!')
 const { trackWhatsappClick } = useCtaTracking()
 const trackServicePageWhatsappClick = () => trackWhatsappClick(`header:${String(route.name ?? route.path)}`)
 
-// Expansion state of the catalog cards (several can stay open at once).
-const openState = reactive<Record<string, boolean>>({})
-const isOpen = (id: string) => !!openState[id]
-const toggle = (id: string) => {
-  openState[id] = !openState[id]
-}
-const open = (id: string) => {
-  openState[id] = true
+const featuredService = services.catalog.find(s => s.featured)
+// Resolved at setup, not onMounted, so first paint already shows the right service.
+const initialId =
+  route.hash && services.catalog.some(s => s.id === route.hash.slice(1)) ? route.hash.slice(1) : featuredService?.id
+const selectedId = ref(initialId)
+const selectedService = computed(() => services.catalog.find(s => s.id === selectedId.value) ?? featuredService)
+const currentIndex = computed(() => services.catalog.findIndex(s => s.id === selectedId.value))
+const detailRef = ref<HTMLElement | null>(null)
+
+const select = (id: string) => {
+  selectedId.value = id
+  nextTick(() => detailRef.value?.scrollIntoView({ block: 'nearest' }))
 }
 
-// Deep-link: /servicos#comunicacao-interna (coming from Home or Projects) opens
-// the matching card and scrolls to it.
-const openFromHash = (hash: string) => {
+const goPrev = () => {
+  const prev = services.catalog[currentIndex.value - 1]
+  if (prev) select(prev.id)
+}
+
+const goNext = () => {
+  const next = services.catalog[currentIndex.value + 1]
+  if (next) select(next.id)
+}
+
+// Scrolls to the card, not the panel — the same target router/index.ts's
+// scrollBehavior already uses for this hash; scrolling elsewhere would race it.
+const selectFromHash = (hash: string) => {
   const id = hash.replace('#', '')
   if (id && services.catalog.some(s => s.id === id)) {
-    open(id)
+    selectedId.value = id
     nextTick(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }))
   }
 }
@@ -298,7 +331,8 @@ const activeSection = ref(SUBNAV_SECTIONS[0])
 let sectionObserver: IntersectionObserver | null = null
 
 onMounted(() => {
-  if (route.hash) openFromHash(route.hash)
+  // Only for the scroll side effect — selection itself is already resolved at setup.
+  if (route.hash) selectFromHash(route.hash)
 
   if (typeof IntersectionObserver === 'undefined') return
 
@@ -323,7 +357,7 @@ onUnmounted(() => {
 
 watch(
   () => route.hash,
-  hash => hash && openFromHash(hash)
+  hash => hash && selectFromHash(hash)
 )
 </script>
 
@@ -379,54 +413,51 @@ watch(
 
 .svc-catalog {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
-  align-items: start;
+  align-items: stretch;
   margin-top: var(--space-10);
 
-  @include respond-to(md) {
+  @include respond-to(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to(sm) {
     grid-template-columns: 1fr;
   }
 }
 
-.svc-item {
+// Height must stay constant across every card — anything that lets it vary
+// here breaks the grid layout for the whole row.
+.svc-card {
+  @include top-accent-line;
+  @include card-hover;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   scroll-margin-top: 140px;
-  transition:
-    box-shadow 0.2s var(--ease),
-    border-color 0.2s var(--ease);
-
-  &--open,
-  &:hover {
-    box-shadow: var(--shadow);
-  }
-  &--open {
-    border-color: var(--purple-100);
-  }
-}
-
-.svc-item__head-heading {
-  margin: 0;
-  font-size: inherit;
-}
-
-.svc-item__head {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  background: none;
-  border: none;
-  padding: 0;
   cursor: pointer;
   text-align: left;
   font: inherit;
+
+  &.svc-card--active {
+    border-color: var(--purple-400);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
 }
 
-.svc-item__icon {
+.svc-card__icon,
+.svc-detail__icon {
   width: 48px;
   height: 48px;
   border-radius: var(--radius);
@@ -438,62 +469,124 @@ watch(
   flex-shrink: 0;
 }
 
-.svc-item__heading {
+.svc-card__heading {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  flex: 1;
-  min-width: 0;
 }
 
-.svc-item__title {
+.svc-card__title {
   font-size: var(--text-lg);
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.01em;
 }
 
-.svc-item__tagline {
+.svc-card__tagline {
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--purple);
 }
 
-.svc-item__chevron {
-  width: 11px;
-  height: 11px;
-  border-right: 2px solid var(--subtle);
-  border-bottom: 2px solid var(--subtle);
-  transform: rotate(45deg);
-  transition: transform 0.2s var(--ease);
-  flex-shrink: 0;
-
-  .svc-item--open & {
-    transform: rotate(-135deg);
-  }
-}
-
-.svc-item__summary {
-  margin-top: var(--space-4);
+.svc-card__summary {
   font-size: var(--text-sm);
   color: var(--muted);
   line-height: 1.6;
 }
 
-.svc-item__detail {
-  margin-top: var(--space-5);
-  padding-top: var(--space-5);
-  border-top: 1px solid var(--border-subtle);
+.svc-detail {
+  @include card-surface(var(--space-8));
+
+  margin-top: var(--space-8);
+  scroll-margin-top: 140px;
 }
 
-.svc-item__description {
+// Outside the fade transition on purpose — keeps focus on the same button
+// across consecutive prev/next clicks instead of losing it on every switch.
+.svc-detail__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.svc-detail__nav-arrow {
+  width: var(--tap-target-min);
+  height: var(--tap-target-min);
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border);
+  background: none;
+  color: var(--purple);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+
+  &:hover:not(:disabled) {
+    border-color: var(--purple-400);
+    background: var(--purple-50);
+  }
+
+  &:disabled {
+    color: var(--subtle);
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.svc-detail__nav-count {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--subtle);
+}
+
+.svc-detail-fade-enter-active,
+.svc-detail-fade-leave-active {
+  transition: opacity 0.15s var(--ease);
+}
+
+.svc-detail-fade-enter-from,
+.svc-detail-fade-leave-to {
+  opacity: 0;
+}
+
+.svc-detail__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.svc-detail__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.svc-detail__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.svc-detail__tagline {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--purple);
+}
+
+.svc-detail__description {
   font-size: var(--text-sm);
   color: var(--muted);
   line-height: 1.7;
   margin-bottom: var(--space-6);
 }
 
-.svc-item__cols {
+.svc-detail__cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-6);
@@ -504,7 +597,7 @@ watch(
   }
 }
 
-.svc-item__subtitle {
+.svc-detail__subtitle {
   font-size: var(--text-xs);
   font-weight: 700;
   text-transform: uppercase;
@@ -513,7 +606,7 @@ watch(
   margin-bottom: var(--space-3);
 }
 
-.svc-item__benefits {
+.svc-detail__benefits {
   list-style: none;
   padding: 0;
   display: grid;
@@ -528,13 +621,13 @@ watch(
   }
 }
 
-.svc-item__check {
+.svc-detail__check {
   color: var(--lime-dark);
   margin-top: 2px;
   flex-shrink: 0;
 }
 
-.svc-item__process {
+.svc-detail__process {
   list-style: none;
   padding: 0;
   counter-reset: step;
@@ -565,25 +658,8 @@ watch(
   }
 }
 
-.svc-item__actions {
+.svc-detail__actions {
   margin-top: var(--space-6);
-}
-
-.svc-item__more {
-  margin-top: var(--space-4);
-  background: none;
-  border: none;
-  padding: var(--space-3) 0;
-  min-height: var(--tap-target-min);
-  cursor: pointer;
-  font: inherit;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--purple);
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .svc-detail-link {

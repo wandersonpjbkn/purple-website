@@ -5,6 +5,27 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-08-16
+
+- **Catálogo de serviços virou master-detail** — o catálogo de 7 serviços em
+  `ServicesPage.vue` era um grid de 2 colunas onde cada card expandia em
+  linha (accordion), o que exigia sucessivas correções pontuais (single-open,
+  `.svc-catalog--stacked`) para conter um bug de "buraco no grid" quando um
+  card abria ao lado de outro fechado — histórico completo em
+  `UX_REVIEW.md` § Catálogo de serviços. Substituído por um grid de cards
+  seletores que nunca mudam de altura + um único painel de detalhe
+  compartilhado abaixo, que troca de conteúdo conforme o card selecionado —
+  elimina a classe inteira do bug por construção, já que nenhuma seleção
+  altera a altura de nenhuma linha do grid. Âncoras (`/servicos#<id>`) e o
+  CTA de "Pedir proposta" (pré-preenche `/contato?servico=<id>`) seguem
+  funcionando sem alteração de contrato.
+- **Navegação anterior/próximo no painel de detalhe** — o painel único do
+  catálogo master-detail (item acima) ganhou setas de navegação
+  (`.svc-detail__nav`, ícone `chevron-left`/`chevron-right` novo em
+  `icons.ts`) e um contador "X de 7", no mesmo padrão (desabilita nas
+  pontas, sem wraparound) de `BlogPagination.vue`. Evita ter que rolar de
+  volta até a grade a cada troca de serviço.
+
 ## 2026-07-09
 
 - **Regra 60/30/10 de cor formalizada + `yarn color-audit`** — a proporção
