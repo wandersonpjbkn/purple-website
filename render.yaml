@@ -1,7 +1,7 @@
 # Infra-as-code do site institucional Purple (Vue 3 + Vite SPA).
 #
 # O serviço no Render já existe e foi criado manualmente pelo painel (não via
-# Blueprint): auto-deploy a cada commit na branch e o rewrite de SPA já estão
+# Blueprint): auto-deploy a cada commit na branch e as regras de rota já estão
 # configurados por lá. Este arquivo documenta essa configuração como
 # referência — como o serviço não é gerenciado por Blueprint, ele não se
 # aplica sozinho ao painel. Ajuste `name`/`branch` abaixo para bater com o
@@ -16,7 +16,34 @@ services:
       npx playwright-core install chromium &&
       yarn build:static
     staticPublishPath: ./dist
+    # O Render só ignora as regras abaixo quando existe um recurso no caminho
+    # exato pedido — e `/blog` não é um recurso, o arquivo é `/blog/index.html`
+    # (sem resolução automática de índice de diretório). Sem uma regra por
+    # rota, a catch-all de SPA engole todas elas e devolve a home, anulando o
+    # prerender. Ordem importa: a catch-all fica por último.
     routes:
+      - type: rewrite
+        source: /sobre
+        destination: /sobre/index.html
+      - type: rewrite
+        source: /abordagem
+        destination: /abordagem/index.html
+      - type: rewrite
+        source: /servicos
+        destination: /servicos/index.html
+      - type: rewrite
+        source: /contato
+        destination: /contato/index.html
+      - type: rewrite
+        source: /blog
+        destination: /blog/index.html
+      - type: rewrite
+        source: /faq
+        destination: /faq/index.html
+      - type: rewrite
+        source: /privacidade
+        destination: /privacidade/index.html
+      # Rotas client-side sem snapshot (`/blog/:slug`, `/blog/autor/:slug`) e 404.
       - type: rewrite
         source: /*
         destination: /index.html
@@ -24,6 +51,8 @@ services:
       - key: VITE_SITE_URL
         sync: false
       - key: VITE_CONTACT_API_URL
+        sync: false
+      - key: VITE_POSTS_API_URL
         sync: false
       - key: VITE_TURNSTILE_SITE_KEY
         sync: false

@@ -26,8 +26,8 @@ Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
 - **`panorama.json`** — seção de dados de mercado da Home: `eyebrow`, `title`, `subtitle`, `stats[]`, `context[]`.
 - **`approach.json`** — `pillars[]`, `differentials[]`, `process` (`steps[]`); fonte única da página Abordagem.
 - **`about.json`** — `title`, `intro`, `helpTitle`, `helpText`, `image`/`imageAlt` (slot de foto — ver `IMAGES.md`), `dataStats[]`.
-- **`footer.json`** — `aboutText`, `topics[]`, `social[]` (`{ label, icon, url }` — LinkedIn/Instagram no rodapé).
-- **`pages.json`** — array `{ name, to }` com os links do menu principal; fonte única da navegação, consumida por `AppHeader.vue` e `AppFooter.vue`.
+- **`footer.json`** — `aboutText`, `topics[]` (`{ label, serviceId }` — cada tópico aponta para a âncora do serviço correspondente em `services.catalog`; validado por `src/data/__tests__/footer.spec.ts`), `social[]` (`{ label, icon, url }` — LinkedIn/Instagram no rodapé).
+- **`pages.json`** — array `{ routeName, label }` com os links do menu principal (rota por **nome**, ver `CONVENTIONS.md` § Roteamento); fonte única da navegação, consumida por `AppHeader.vue` e `AppFooter.vue`.
 - **`home.json`** — copy da Home:
   - `hero`: `eyebrow`, `titlePrefix` (com `<em>` de destaque), `rotating[]` (typewriter), `subtitle`, CTAs, `stats[]` (`{ value, sign, label, source }` — sinal renderiza em lime) e `card` (`{ label, value, sign, sub, barWidth, tags[], source }`).
   - `highlight` (inclui `image`/`imageAlt` — slot de foto), `cta`.
@@ -72,8 +72,9 @@ Além das 6 do menu, há páginas institucionais no rodapé — **FAQ** (`/faq` 
 Compromisso editorial da Purple (ver [`PRODUCT_VISION`](PRODUCT_VISION.md)): todo
 dado/estatística exibido carrega a **fonte**. Verificável no código — cada item de
 `panorama.stats` e `about.dataStats` tem `source`; os de `panorama.context`
-citam a fonte no próprio texto. **Exceção registrada:** os stats do hero
-(`home.hero.stats` e `home.hero.card`) foram restaurados do develop com `source`
-vazio, aguardando confirmação das referências pela dupla — pendência rastreada em
+citam a fonte no próprio texto. **Exceção registrada:** os três
+`home.hero.stats` já citam fonte; só `home.hero.card` (o `+43%`) segue com
+`source` vazio, aguardando confirmação da referência pela dupla — é o único dado
+publicado sem fonte hoje, pendência rastreada em
 [`PROJECT_STATE`](PROJECT_STATE.md). **Ao adicionar conteúdo factual novo, o
 `source` é obrigatório.** Não publicamos preços (decisão: "Sob consulta").

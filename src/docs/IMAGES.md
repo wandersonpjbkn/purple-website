@@ -40,19 +40,21 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
 
 ## Assets já entregues ✅
 
-| Slot                         | Caminho                                                                          |
-| ---------------------------- | -------------------------------------------------------------------------------- |
-| Foto do Wanderson            | `team/wanderson.jpg`                                                             |
-| Foto da Suelen               | `team/suelen.jpg`                                                                |
-| Seção destaque da Home       | `sections/home-highlight.jpg`                                                    |
-| Seção "Nossa crença" (Sobre) | `sections/about.jpg`                                                             |
-| Capas do blog (4 posts)      | `blog/post-1.jpg` … `post-4.jpg`                                                 |
-| Logo placeholder             | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo)                         |
-| Favicon / touch / OG         | `public/favicon.svg` · `favicon.png` · `apple-touch-icon.png` · `og-default.jpg` |
+| Slot                         | Caminho                                                                                          |
+| ---------------------------- | ------------------------------------------------------------------------------------------------ |
+| Foto do Wanderson            | `team/wanderson.jpg`                                                                             |
+| Foto da Suelen               | `team/suelen.jpg`                                                                                |
+| Seção destaque da Home       | `sections/home-highlight.jpg`                                                                    |
+| Seção "Nossa crença" (Sobre) | `sections/about.jpg`                                                                             |
+| Capas do blog (4 posts)      | `blog/post-1.jpg` … `post-4.jpg`                                                                 |
+| Logo placeholder             | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo)                                         |
+| Favicon / touch / OG         | `public/favicon.ico` · `favicon.svg` · `favicon.png` · `apple-touch-icon.png` · `og-default.jpg` |
 
-> Os assets de marca raster (favicon PNG, apple-touch, OG 1200×630) são gerados
-> da marca por `scripts/gen-brand-assets.mjs` (Chromium headless) — rodar de novo
-> se o logo/paleta mudar.
+> Os assets de marca raster (favicon PNG, favicon ICO com 16/32/48, apple-touch,
+> OG 1200×630) são gerados da marca por `scripts/gen-brand-assets.mjs` (Chromium
+> headless) — rodar de novo se o logo/paleta mudar. O `.ico` existe porque o
+> Google e os navegadores buscam `/favicon.ico` mesmo quando a página declara
+> outros ícones.
 
 ## Dicas de preparação
 

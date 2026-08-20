@@ -44,9 +44,9 @@
           <ul>
             <li
               v-for="topic in footer.topics"
-              :key="topic"
+              :key="topic.serviceId"
             >
-              <RouterLink to="/servicos">{{ topic }}</RouterLink>
+              <RouterLink :to="{ name: 'services', hash: `#${topic.serviceId}` }">{{ topic.label }}</RouterLink>
             </li>
           </ul>
         </div>

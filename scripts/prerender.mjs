@@ -56,6 +56,17 @@ const startServer = () =>
     server.listen(PORT, () => resolve(server))
   })
 
+// Routes whose snapshot depends on the blog index (fetched at runtime).
+const BLOG_ROUTES = ['/', '/blog']
+
+// Posts only: the empty/error states render as soon as the index settles, so
+// accepting them here would cut a slow-but-successful fetch short.
+const waitForPosts = async page =>
+  page
+    .waitForSelector('.post-card', { timeout: 8000 })
+    .then(() => true)
+    .catch(() => false)
+
 const run = async () => {
   if (!existsSync(join(DIST, 'index.html'))) {
     console.error('[prerender] dist/index.html não existe. Rode `yarn build` antes.')
@@ -73,20 +84,33 @@ const run = async () => {
     await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'domcontentloaded' })
     await page.waitForSelector('#app > *', { timeout: 15000 })
 
-    // Blog carrega em runtime (worker /index): espera os cards aparecerem para
-    // o snapshot sair com conteúdo. Tolerante — worker fora do ar = estado
-    // vazio, que é um snapshot válido (falha silenciosa por design).
-    if (route === '/' || route === '/blog') {
-      await page.waitForSelector('.post-card, .blog-empty, .home-blog-empty', { timeout: 8000 }).catch(() => {})
+    if (BLOG_ROUTES.includes(route)) {
+      let loaded = await waitForPosts(page)
+
+      // One retry: the index comes from the network at runtime, so a single
+      // hiccup during the build would otherwise freeze an error state into the
+      // snapshot every crawler reads.
+      if (!loaded) {
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await page.waitForSelector('#app > *', { timeout: 15000 })
+        loaded = await waitForPosts(page)
+      }
+
+      if (!loaded) console.warn(`[prerender] AVISO: ${route} saiu sem posts — o índice do blog não respondeu.`)
     }
 
     await page.waitForTimeout(300)
 
-    // CookieConsent locks body scroll (`overflow: hidden`) while consent is
-    // unset, which is always true in this fresh headless context — strip it
-    // so the frozen snapshot doesn't ship real visitors an unscrollable page.
     await page.evaluate(() => {
+      // CookieConsent locks body scroll (`overflow: hidden`) while consent is
+      // unset, which is always true in this fresh headless context — strip it
+      // so the frozen snapshot doesn't ship real visitors an unscrollable page.
       document.body.style.overflow = ''
+
+      // The blog failure notice is transient runtime state, not page content:
+      // the visitor's browser refetches and renders posts (or its own error).
+      // Freezing it here would publish a false claim to every crawler.
+      document.querySelectorAll('.home-blog-empty, .blog-empty').forEach(node => node.remove())
     })
 
     const html = '<!DOCTYPE html>\n' + (await page.content()).replace(/^<!DOCTYPE html>/i, '').trimStart()

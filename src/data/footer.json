@@ -1,6 +1,23 @@
 {
   "aboutText": "Na busca por vendas e crescimento, muitas empresas esquecem de olhar para dentro. A Purple Comunicação surge para ajudar marcas a cuidarem melhor da experiência das pessoas colaboradoras.",
-  "topics": ["Employer Branding", "Comunicação Interna", "Endomarketing", "UX Design"],
+  "topics": [
+    {
+      "label": "Employer Branding",
+      "serviceId": "employer-branding"
+    },
+    {
+      "label": "Comunicação Interna",
+      "serviceId": "comunicacao-interna"
+    },
+    {
+      "label": "Endomarketing",
+      "serviceId": "endomarketing"
+    },
+    {
+      "label": "UX Design",
+      "serviceId": "carreiras-portal"
+    }
+  ],
   "social": [
     {
       "label": "LinkedIn",

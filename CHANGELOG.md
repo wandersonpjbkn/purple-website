@@ -5,6 +5,54 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-08-20
+
+- **Rotas do site deixavam de existir para crawlers** — auditoria do site já
+  publicado mostrou que `/blog`, `/servicos`, `/sobre` e as demais rotas
+  **sem barra final** devolviam o HTML da home: mesmo `<title>`, mesmo
+  `canonical`, mesmas OG tags. Causa: o Render só ignora as regras de rota
+  quando existe um recurso no caminho exato pedido, e `/blog` não é um recurso
+  (o arquivo é `/blog/index.html`, sem resolução de índice de diretório) — a
+  catch-all `/* → /index.html` engolia tudo e anulava o prerender inteiro.
+  Agravante: `public/sitemap.xml` lista exatamente as URLs sem barra, então o
+  sitemap entregava 8 cópias da home ao Google. `render.yaml` passou a declarar
+  um rewrite por rota prerenderizada antes da catch-all, com
+  `scripts/__tests__/render-routes.spec.ts` guardando a correspondência com
+  `ROUTES`. **Como o serviço no Render não é gerenciado por Blueprint, as
+  regras precisam ser aplicadas à mão no painel** — rastreado em
+  `PROJECT_STATE.md`.
+- **Prerender publicava um erro de runtime como conteúdo** — o snapshot no ar
+  trazia "Não conseguimos carregar os posts do blog no momento" congelado na
+  Home e no `/blog`, apesar de o Worker estar no ar e o visitante com JS ver os
+  posts normalmente (a falha foi de rede no ambiente de build). O
+  `scripts/prerender.mjs` esperava `.post-card, .blog-empty, .home-blog-empty`
+  com `.catch(() => {})`, então qualquer falha virava snapshot publicado. Agora
+  espera **só** os cards, recarrega e tenta uma segunda vez, avisa alto no log
+  se ainda assim não vierem — e **remove o bloco de erro do snapshot** antes de
+  gravar, pelo mesmo motivo que já removia o `overflow` travado do
+  `CookieConsent`: estado transitório de runtime não é conteúdo de página.
+- **`/favicon.ico` respondia HTML** — não existia arquivo nesse caminho, então
+  ele caía na catch-all e devolvia a home com `Content-Type: text/html`.
+  Como o Google exige que o Googlebot-Image consiga rastrear o arquivo do
+  favicon, isso é candidato direto a explicar o favicon ausente nos resultados
+  de busca. `scripts/gen-brand-assets.mjs` passou a empacotar um
+  `public/favicon.ico` real (16/32/48, PNG embutido, sem dependência nova) e
+  o `index.html` a declará-lo. O mesmo script deixou de apontar para um
+  Chromium hardcoded inexistente e passou a reusar o `resolveChromium()` de
+  `scripts/shared.mjs`, com os dois laços de screenshot compartilhando um
+  helper em vez de repetir a sequência de abrir página/capturar/fechar.
+- **Tópicos do rodapé apontavam todos para o mesmo lugar** — os 4 itens de
+  `footer.topics` linkavam `/servicos` sem âncora, e um deles ("UX Design") não
+  correspondia a nenhum dos 7 serviços do catálogo. `topics` passou de
+  `string[]` para `{ label, serviceId }[]`, com `AppFooter.vue` resolvendo a
+  rota por nome (`{ name: 'services', hash }`) conforme `CONVENTIONS.md`;
+  "UX Design" passou a apontar para `carreiras-portal` (Página de Carreiras e
+  Portal do Colaborador), por decisão do dono do produto. Novo
+  `src/data/__tests__/footer.spec.ts` garante que todo tópico aponta para um
+  serviço real e sem destino repetido.
+- **Typo na bio da fundadora** — "soma ações e **estratégicas** focadas nas
+  pessoas colaboradoras" → "estratégias", em `team.json`.
+
 ## 2026-08-16
 
 - **Catálogo de serviços virou master-detail** — o catálogo de 7 serviços em

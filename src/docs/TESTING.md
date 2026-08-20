@@ -10,7 +10,7 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 - **Runner: Vitest 3** (`vitest.config.ts` próprio, standalone) + **@vue/test-utils**
   - **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
-- **66 testes** em 13 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
+- **95 testes** em 19 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`). `workers/**` é excluído do
   `vitest.config.ts` da raiz — cada Worker roda sua própria suíte (ver abaixo).
 - **fake-indexeddb** (devDependency) fornece um IndexedDB em memória para os
@@ -37,6 +37,8 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 | `components/ui/__tests__/BaseIcon.spec.ts`         | paths reais por `name`, glifo de marca preenchido, fallback p/ nome desconhecido, aria (`label`)                                                                                                                  |
 | `pages/__tests__/HomePage.spec.ts`                 | smoke de render: hero validado (stats valor+sinal, card, tags), teaser 4+1 featured                                                                                                                               |
 | `pages/__tests__/ServicesPage.spec.ts`             | smoke de render: catálogo com âncoras, 3 `package-card` sem preço, projetos                                                                                                                                       |
+| `data/__tests__/footer.spec.ts`                    | tópicos do rodapé apontam para `id` real de `services.catalog`, sem destino repetido                                                                                                                              |
+| `scripts/__tests__/render-routes.spec.ts`          | `render.yaml` tem um rewrite por rota de `ROUTES` (`scripts/shared.mjs`) e mantém a catch-all de SPA por último — sem isso a catch-all engole as rotas e anula o prerender (ver `ARCHITECTURE.md`)                |
 | `stores/__tests__/consent.spec.ts`                 | transições do consentimento LGPD + getters                                                                                                                                                                        |
 | `components/__tests__/CookieConsent.spec.ts`       | banner aparece/oculta; aceitar/recusar                                                                                                                                                                            |
 

@@ -238,7 +238,47 @@ cards "Pedir proposta" sem par de WhatsApp) foram revisados com o dono do
 produto e fecharam como **intencionais** — o raciocínio completo está
 registrado no modelo do funil, acima, em vez de repetido aqui.
 
+## Verificado e correto — não reabrir ✅
+
+Auditoria de **produção** em 2026-08-20 (HTTP cru + navegação real em
+Chromium). Três itens que uma leitura do HTML **sem executar JS** acusa como
+falha de acessibilidade estão, de fato, corretos — ficam registrados aqui para
+uma auditoria futura não gastar ciclo reabrindo:
+
+- **H1 rotativo do hero** — as variantes do typewriter (`.hero__rotator-sizer`,
+  `.hero__typewriter`) são todas `aria-hidden="true"` e há um `<span class="sr-only">`
+  com a lista completa separada por "·". O nome acessível do H1 é coerente;
+  quem lê o HTML achatado é que vê as variantes concatenadas.
+- **Links de rede social** (`SocialLink.vue`) — têm `aria-label` descritivo
+  ("LinkedIn de Suelen Fernanda"), conteúdo é SVG via `BaseIcon` e texto vazio.
+  WCAG 2.4.4 atendido; extrator de texto que imprime a `href` no lugar do texto
+  do link dá o falso positivo.
+- **"Um espaço para pessoas, feito por pessoas"** — o "espaço duplo" é um
+  `<br />` no `HomePage.vue`, não um erro de digitação.
+
 ## Recomendações — decisão de produto/design ⏳
+
+- **OG por post do blog** — `/blog/:slug` não tem snapshot prerenderizado (os
+  posts são runtime, por decisão de arquitetura), então compartilhar um post no
+  LinkedIn renderiza o meta do fallback, não o do post. Resolver exige
+  prerender por post (conflita com "conteúdo novo sem rebuild") ou um Worker de
+  edge injetando as tags. Decisão de arquitetura, não bug de UI.
+- **Soft 404** — rota inexistente responde HTTP 200 com o HTML da home; o
+  visitante com JS vê a `NotFoundPage`, o crawler vê a home. Limitação de
+  static host no Render.
+- **Fontes fracas no `panorama.json`** — "Pesquisa Global, 2024" (em dois
+  stats), "Panorama Corporativo 2024", "Mindsight" sem ano e "OMS" sem
+  relatório não são rastreáveis por um leitor. Não infringe a regra de `source`
+  (o campo existe), mas enfraquece justamente o argumento de decisão baseada em
+  evidência. Precisa da dupla.
+- **Bio do Wanderson (`team.json`)** — abre com "Desenvolvedor web com vivências
+  em experiência do usuário" e fecha com "Especialista em experiências digitais
+  centradas em pessoas", duas afirmações de senioridade diferentes em três
+  linhas, sob o cargo "UX Design & Estratégia". Escolha editorial.
+- **`public/favicon.svg` depende de fonte** — o "p" da marca é um `<text>` com
+  `font-family: 'Plus Jakarta Sans'`. Renderizador sem a fonte cai para
+  `system-ui`, então desenha, mas diferente do PNG/ICO. Converter o glifo em
+  `path` é o conserto definitivo.
 
 - **Dois padrões de "ver mais conteúdo" na mesma página** — `BlogPage.vue`
   usa "Carregar mais" na visão padrão e paginação numerada na busca. Unificar

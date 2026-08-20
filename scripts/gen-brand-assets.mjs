@@ -4,10 +4,16 @@
 import { chromium } from 'playwright-core'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
+import { writeFile } from 'node:fs/promises'
+
+import { resolveChromium } from './shared.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const pub = resolve(__dirname, '../public')
-const EXECUTABLE = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
+
+// Sizes packed into favicon.ico. Google fetches /favicon.ico when a page
+// declares no icon it can use, and every browser still probes that path.
+const ICO_SIZES = [16, 32, 48]
 
 const mark = (size) => `
   <div style="width:${size}px;height:${size}px;display:grid;place-items:center;
@@ -40,18 +46,62 @@ const shots = [
   { html: page(og, 1200, 630), file: 'og-default.jpg', w: 1200, h: 630, type: 'jpeg' },
 ]
 
-const browser = await chromium.launch({ executablePath: EXECUTABLE })
-for (const s of shots) {
-  const p = await browser.newPage({ viewport: { width: s.w, height: s.h }, deviceScaleFactor: 1 })
-  await p.setContent(s.html, { waitUntil: 'networkidle' })
+/**
+ * Packs PNG buffers into an .ico container (ICONDIR + one ICONDIRENTRY each,
+ * then the payloads). PNG-in-ICO is what every current browser and crawler
+ * reads, so no BMP re-encoding — and no image dependency — is needed.
+ */
+const packIco = (images) => {
+  const header = Buffer.alloc(6)
+  header.writeUInt16LE(0, 0)
+  header.writeUInt16LE(1, 2)
+  header.writeUInt16LE(images.length, 4)
+
+  let offset = 6 + images.length * 16
+  const entries = images.map(({ size, data }) => {
+    const entry = Buffer.alloc(16)
+    entry.writeUInt8(size >= 256 ? 0 : size, 0)
+    entry.writeUInt8(size >= 256 ? 0 : size, 1)
+    entry.writeUInt16LE(1, 4)
+    entry.writeUInt16LE(32, 6)
+    entry.writeUInt32LE(data.length, 8)
+    entry.writeUInt32LE(offset, 12)
+    offset += data.length
+    return entry
+  })
+
+  return Buffer.concat([header, ...entries, ...images.map(({ data }) => data)])
+}
+
+const browser = await chromium.launch({ executablePath: await resolveChromium() })
+
+// Screenshots the single root element of `html` at w×h. Without `path` the PNG
+// comes back as a buffer, which is what the .ico packer needs.
+const shoot = async (html, w, h, options) => {
+  const p = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 })
+  await p.setContent(html, { waitUntil: 'networkidle' })
   await p.waitForTimeout(300)
   const el = await p.$('body > *')
-  await el.screenshot({
+  const buffer = await el.screenshot(options)
+  await p.close()
+  return buffer
+}
+
+for (const s of shots) {
+  await shoot(s.html, s.w, s.h, {
     path: resolve(pub, s.file),
     type: s.type,
     ...(s.type === 'jpeg' ? { quality: 88 } : { omitBackground: true }),
   })
-  await p.close()
   console.log('wrote', s.file)
 }
+
+const icoImages = []
+for (const size of ICO_SIZES) {
+  const data = await shoot(page(mark(size), size, size), size, size, { type: 'png', omitBackground: true })
+  icoImages.push({ size, data })
+}
+await writeFile(resolve(pub, 'favicon.ico'), packIco(icoImages))
+console.log('wrote favicon.ico')
+
 await browser.close()
