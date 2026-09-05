@@ -11,50 +11,17 @@
  * Point it at a browser via PRERENDER_CHROMIUM, or rely on auto-detection /
  * `npx playwright install chromium`.
  */
-import http from 'node:http'
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
-import { join, extname, dirname } from 'node:path'
+import { writeFile, mkdir } from 'node:fs/promises'
+import { join, dirname } from 'node:path'
 
 import { chromium } from 'playwright-core'
 
 import { ROUTES, resolveChromium } from './shared.mjs'
+import { createDistServer } from './dist-server.mjs'
 
 const DIST = join(process.cwd(), 'dist')
+// Fixed port: the blog Worker's CORS allowlist names it (workers/shared/http.ts).
 const PORT = 4180
-
-const MIME = {
-  '.html': 'text/html',
-  '.js': 'text/javascript',
-  '.css': 'text/css',
-  '.json': 'application/json',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.webp': 'image/webp',
-  '.ico': 'image/x-icon',
-  '.woff2': 'font/woff2',
-  '.txt': 'text/plain',
-}
-
-// Servidor estático com fallback SPA (qualquer rota → index.html).
-const startServer = () =>
-  new Promise((resolve) => {
-    const server = http.createServer(async (req, res) => {
-      const path = decodeURIComponent((req.url ?? '/').split('?')[0])
-      let file = join(DIST, path)
-      if (!extname(file) || !existsSync(file)) file = join(DIST, 'index.html')
-      try {
-        const buf = await readFile(file)
-        res.setHeader('Content-Type', MIME[extname(file)] ?? 'application/octet-stream')
-        res.end(buf)
-      } catch {
-        res.statusCode = 404
-        res.end('not found')
-      }
-    })
-    server.listen(PORT, () => resolve(server))
-  })
 
 // Routes whose snapshot depends on the blog index (fetched at runtime).
 const BLOG_ROUTES = ['/', '/blog']
@@ -68,19 +35,15 @@ const waitForPosts = async page =>
     .catch(() => false)
 
 const run = async () => {
-  if (!existsSync(join(DIST, 'index.html'))) {
-    console.error('[prerender] dist/index.html não existe. Rode `yarn build` antes.')
-    process.exit(1)
-  }
-
   const executablePath = await resolveChromium()
-  const server = await startServer()
+  const server = await createDistServer({ dist: DIST, port: PORT })
   const browser = await chromium.launch({ executablePath })
   const page = await browser.newPage()
+  const routesWithoutPosts = []
 
   for (const route of ROUTES) {
-    // Não esperar `networkidle`: CDNs externos (fontes, GTM) podem travar.
-    // O sinal real é o app ter renderizado dentro de #app.
+    // Don't wait for `networkidle`: external CDNs (fonts, GTM) can hang. The
+    // real signal is the app having rendered inside #app.
     await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'domcontentloaded' })
     await page.waitForSelector('#app > *', { timeout: 15000 })
 
@@ -96,7 +59,10 @@ const run = async () => {
         loaded = await waitForPosts(page)
       }
 
-      if (!loaded) console.warn(`[prerender] AVISO: ${route} saiu sem posts — o índice do blog não respondeu.`)
+      if (!loaded) {
+        console.warn(`[prerender] AVISO: ${route} saiu sem posts — o índice do blog não respondeu.`)
+        routesWithoutPosts.push(route)
+      }
     }
 
     await page.waitForTimeout(300)
@@ -123,9 +89,17 @@ const run = async () => {
   await browser.close()
   server.close()
   console.log(`[prerender] ${ROUTES.length} rotas geradas.`)
+
+  // The per-route warning scrolls away in a build log, and a snapshot
+  // published without posts must not read as a clean run.
+  if (routesWithoutPosts.length) {
+    console.warn(
+      `[prerender] AVISO: ${routesWithoutPosts.join(', ')} sem posts no snapshot — crawler lê o blog vazio até o próximo deploy.`
+    )
+  }
 }
 
-run().catch((err) => {
+run().catch(err => {
   console.error('[prerender] falhou:', err.message)
   process.exit(1)
 })

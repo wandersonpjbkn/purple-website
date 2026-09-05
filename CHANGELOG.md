@@ -33,14 +33,38 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   sem barra final devolve a home) está fechada: as 8 rotas estáticas respondem
   com `<title>`, `canonical` e OG próprios. Com isso caiu também a ressalva de
   que o prerender no Build Command do Render não estava validado.
-- **Dois desvios novos encontrados na auditoria** (registrados como pendência
-  em `PROJECT_STATE.md`, não corrigidos): (1) toda rota prerenderizada que não
-  é a home publica **dois** blocos JSON-LD, o `WebPage` da home à frente do
-  correto — o servidor estático de `scripts/prerender.mjs` faz fallback SPA
-  para o `dist/index.html` que a primeira iteração do laço já sobrescreveu com
-  o snapshot da home; (2) os snapshots de `/` e `/blog` em produção saíram sem
-  nenhum post, com o Worker no ar e o build local trazendo os cards — é o
-  fallback do prerender disparando por falha de rede no build.
+- **JSON-LD duplicado em toda rota prerenderizada — corrigido** — `/sobre`,
+  `/abordagem`, `/servicos`, `/contato`, `/blog`, `/faq` e `/privacidade`
+  publicavam **dois** blocos `application/ld+json`, o `WebPage` da home à
+  frente do correto. Causa: o servidor estático do prerender fazia fallback SPA
+  lendo `dist/index.html` a cada request, e a primeira iteração do laço (`/`)
+  já havia sobrescrito esse arquivo com o snapshot da home — as rotas seguintes
+  bootavam sobre o `<head>` dela. `canonical`/OG/`description` escapavam porque
+  o unhead deduplica por chave; um `<script>` inline não tem chave que case.
+  O servidor saiu de `scripts/prerender.mjs` para `scripts/dist-server.mjs` e
+  passou a ler o shell **uma vez, antes do laço**, servindo-o de memória.
+  Descartadas: reordenar `ROUTES` para gravar `/` por último (dependência de
+  ordem implícita num array compartilhado com `color-audit.mjs` e
+  `render-routes.spec.ts`) e deduplicar o JSON-LD na limpeza do snapshot
+  (trata sintoma; qualquer tag futura sem chave vazaria igual).
+- **Prerender recusa rodar sobre um `dist/` já prerenderizado** — a correção
+  acima sozinha não cobria `yarn prerender` duas vezes sem `yarn build` no
+  meio: o shell "pristino" lido do disco seria o snapshot da run anterior, e a
+  duplicação voltava — inclusive na home. Agora o script falha com mensagem
+  acionável quando `dist/index.html` não tem mais o ponto de montagem vazio que
+  o Vite emite. `yarn build:static` builda antes, então a guarda não dispara no
+  deploy. Coberto por `scripts/__tests__/dist-server.spec.ts`.
+- **Aviso de snapshot sem posts repetido no resumo final** — o `console.warn`
+  por rota some no meio do log de build e o script encerrava com "8 rotas
+  geradas." e código 0, fazendo uma publicação sem conteúdo de blog parecer
+  execução limpa. O comportamento de publicar assim mesmo **não** mudou (é
+  deliberado: não derrubar o deploy inteiro por um fetch de terceiro) — só
+  deixou de ser silencioso.
+- **Snapshots de `/` e `/blog` em produção sem nenhum post** — observado no
+  deploy no ar, com o Worker respondendo e o build local trazendo os cards.
+  Causa raiz **não diagnosticada** (depende do log de build do Render);
+  nenhuma mudança de comportamento feita a esse respeito, para não consertar no
+  escuro. Rastreado em `PROJECT_STATE.md`.
 
 ## 2026-08-20
 
