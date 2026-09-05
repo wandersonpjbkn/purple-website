@@ -5,6 +5,43 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-09-05
+
+- **Bio do Wanderson reescrita** — a versão anterior abria com "Desenvolvedor
+  web com vivências em experiência do usuário" e fechava com "Especialista em
+  experiências digitais centradas em pessoas", duas afirmações de senioridade
+  diferentes em três linhas. O texto novo em `team.json` traz uma leitura só
+  (desenvolvedor web que migrou para UX/pesquisa/produto, bacharel em
+  Psicologia). Fecha a recomendação registrada em `UX_REVIEW.md`.
+- **Auditoria doc↔código** — varredura de `src/docs/*.md` contra o repositório
+  e contra o site em produção. Ficou legado e foi corrigido: `ARCHITECTURE.md`
+  ainda descrevia as 11 rotas dentro de `router/index.ts` (hoje em
+  `router/modules/{base,blog}.ts`), não listava `BaseCombobox`, `SocialLink`,
+  `components/forms/`, `useServiceInterest` nem `workers/shared/security.ts`, e
+  dizia que `public/` tinha uma pasta `images/` inexistente; `DESIGN_SYSTEM.md`
+  citava tokens `--radius-md`/`--shadow-md` que nunca existiram (o passo do
+  meio é o token sem sufixo), contava 21 ícones em vez de 22, dava só
+  `linkedin` como glifo preenchido (é `linkedin` **e** `medium`) e omitia
+  `--surface-soft`, `--danger*` e `--tap-target-min`; `CONTENT_MODEL.md` não
+  registrava `footer.legal[]` nem `home.hero.background`; `TESTING.md` listava
+  15 dos 19 arquivos de teste e ainda dava `workers/mail` como sem suíte
+  própria (tem 6 testes desde 2026-07-09, o que o próprio `UX_REVIEW.md` já
+  afirmava — os dois docs estavam em conflito); `IMAGES.md` não tinha o fundo
+  do hero da Home.
+- **Regras de rota do Render confirmadas em produção** — a pendência aberta em
+  2026-08-20 (regras precisam ser aplicadas à mão no painel, senão toda rota
+  sem barra final devolve a home) está fechada: as 8 rotas estáticas respondem
+  com `<title>`, `canonical` e OG próprios. Com isso caiu também a ressalva de
+  que o prerender no Build Command do Render não estava validado.
+- **Dois desvios novos encontrados na auditoria** (registrados como pendência
+  em `PROJECT_STATE.md`, não corrigidos): (1) toda rota prerenderizada que não
+  é a home publica **dois** blocos JSON-LD, o `WebPage` da home à frente do
+  correto — o servidor estático de `scripts/prerender.mjs` faz fallback SPA
+  para o `dist/index.html` que a primeira iteração do laço já sobrescreveu com
+  o snapshot da home; (2) os snapshots de `/` e `/blog` em produção saíram sem
+  nenhum post, com o Worker no ar e o build local trazendo os cards — é o
+  fallback do prerender disparando por falha de rede no build.
+
 ## 2026-08-20
 
 - **Rotas do site deixavam de existir para crawlers** — auditoria do site já

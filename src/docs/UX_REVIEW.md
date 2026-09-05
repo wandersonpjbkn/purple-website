@@ -266,15 +266,13 @@ uma auditoria futura não gastar ciclo reabrindo:
 - **Soft 404** — rota inexistente responde HTTP 200 com o HTML da home; o
   visitante com JS vê a `NotFoundPage`, o crawler vê a home. Limitação de
   static host no Render.
-- **Fontes fracas no `panorama.json`** — "Pesquisa Global, 2024" (em dois
-  stats), "Panorama Corporativo 2024", "Mindsight" sem ano e "OMS" sem
-  relatório não são rastreáveis por um leitor. Não infringe a regra de `source`
+- **Fontes fracas no `panorama.json`** — parcialmente endereçado: dois dos seis
+  stats já citam referência rastreável ("Weehub; Panorama do Bem-Estar
+  Corporativo 2026", "ISMA-Brasil, 2019"). Seguem genéricos "Pesquisa Global,
+  2024" (em dois stats) e "Panorama Corporativo 2024", e em `context` continuam
+  "Mindsight" sem ano e "OMS" sem relatório. Não infringe a regra de `source`
   (o campo existe), mas enfraquece justamente o argumento de decisão baseada em
   evidência. Precisa da dupla.
-- **Bio do Wanderson (`team.json`)** — abre com "Desenvolvedor web com vivências
-  em experiência do usuário" e fecha com "Especialista em experiências digitais
-  centradas em pessoas", duas afirmações de senioridade diferentes em três
-  linhas, sob o cargo "UX Design & Estratégia". Escolha editorial.
 - **`public/favicon.svg` depende de fonte** — o "p" da marca é um `<text>` com
   `font-family: 'Plus Jakarta Sans'`. Renderizador sem a fonte cai para
   `system-ui`, então desenha, mas diferente do PNG/ICO. Converter o glifo em

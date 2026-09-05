@@ -1,6 +1,6 @@
 # Design System (as-built) — site Purple
 
-> Verdade observada no código em **2026-07-08**. É um site de poucas páginas:
+> Verdade observada no código em **2026-09-05**. É um site de poucas páginas:
 > isto é um **conjunto de tokens + componentes Base**, não um design system de
 > produto. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
@@ -32,7 +32,11 @@ e `--section-dark-2 #2d1556` (cards de stat). `--purple-900` fica para acentos.
 `--on-dark-border .1` — muted/subtle subidos para passar AA nas legendas) e marca
 
 **Texto/superfície:** `--ink`, `--text`, `--muted`, `--subtle` · `--surface`,
-`--bg`, `--bg-alt` · `--border`, `--border-subtle`.
+`--surface-soft`, `--bg`, `--bg-alt` · `--border`, `--border-subtle`.
+
+**Erro:** `--danger`, `--danger-bg`, `--danger-border`, `--danger-rgb` — fonte
+única do vermelho de validação (formulário de contato); não escrever outro
+vermelho à mão.
 
 **Tipografia:** `--font: 'Plus Jakarta Sans'` — variable font self-hosted
 (`src/assets/fonts/plus-jakarta-sans-latin{,-italic}.woff2`, `@font-face` em
@@ -45,8 +49,15 @@ Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1
 
 **Espaçamento:** escala `--space-1 .25rem` … `--space-20 5rem` (número = rem×4).
 
-**Forma/elevação:** `--radius-sm/md/lg/xl/pill`, `--shadow-sm/md/lg/glow`,
-`--container 1200px`, `--ease`, `--ease-out`.
+**Forma/elevação:** `--radius-sm` · `--radius` (padrão, 16px) · `--radius-lg`
+· `--radius-xl` · `--radius-pill`; `--shadow-sm` · `--shadow` (padrão) ·
+`--shadow-lg` · `--shadow-glow`. Note que o passo intermediário **não** se
+chama `-md`: é o token sem sufixo.
+
+**Alvo de toque:** `--tap-target-min: 44px` — piso de área clicável para
+controles só-ícone (hambúrguer, redes sociais, limpar busca).
+
+**Layout/movimento:** `--container 1200px`, `--ease`, `--ease-out`.
 
 > Novos estilos devem preferir os tokens sempre que o valor existir na escala.
 > Caso o novo estilo não possua correspondência com a escala, analisar
@@ -95,10 +106,15 @@ sem BEM: `.lead`, `.section-eyebrow` (+ `--lime`), `.text-link`, `.section-block
 secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink"`.
   **Caminho único de botão** — não escrever `class="button primary"` à mão.
 - `BaseContainer` — wrapper `.container` (largura/centralização).
+- `BaseCombobox` — combobox filtrável acessível (`role="listbox"`,
+  `aria-activedescendant`, setas/Enter/Esc, fecha revertendo por
+  `onClickOutside`), usado no campo "interesse" do formulário de contato no
+  lugar de um `<select>` nativo. Expõe `focus()` para a página levar o foco ao
+  primeiro campo inválido.
 - `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (21 ícones, viewBox 24×24).
+  mapa tipado **`src/components/ui/icons.ts`** (22 ícones, viewBox 24×24).
   Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
-  de marca preenchidos** (`fill: true` — `linkedin`; `instagram` é
+  de marca preenchidos** (`fill: true` — `linkedin` e `medium`; `instagram` é
   stroke). Nome desconhecido cai num placeholder neutro (degradação graciosa —
   coberto por teste). Não introduzir glifos tipográficos (exemplo: `→ ← ✕`).
   ⚠️ `BaseIcon` **herda a cor do pai** (`currentColor`): sobre fundo escuro, o
@@ -111,13 +127,20 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   decorativo do `.visual-block`; em erro/ausência do arquivo, só o gradiente
   aparece (nunca broken image). Assets pendentes em [`IMAGES`](IMAGES.md).
 - `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`.
+- `SocialLink` — âncora só-ícone para rede social (`href`/`icon`/`label`,
+  tamanhos `sm|md`); o `md` usa `--tap-target-min`, e o `aria-label` é o que dá
+  nome acessível ao link (o conteúdo é SVG). Usado no rodapé, nos cards de time
+  e na página de autor — os três montam a lista com `socialLinksOf` +
+  `SOCIAL_NETWORK_LABELS` de `src/types/team.ts`, fonte única do rótulo por
+  rede.
 - `BaseAvatar` (`ui/avatar/`) — imagem com **fallback de inicial** ao falhar o
   load (compõe `AvImage` + `AvInitials`); tamanhos `sm/md/lg/xl`. **Estilo
   co-localizado** (scoped + `:deep()`), não global.
 
 **sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
-`AppFooter` · **ui/** (+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`,
-`BlogPagination`.
+`AppFooter`, `CookieConsent` · **forms/** `TurnstileWidget` · **ui/**
+(+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `BlogPagination`,
+`CategoryFilter`.
 
 ## Stat grid canônico ✅
 

@@ -25,6 +25,10 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
 - **`TeamCard.vue`** passa o resultado como `:src` do `BaseAvatar` — se a URL
   falhar ao carregar, o `@error` do `AvImage` já cai para as iniciais (mesmo
   fallback gracioso descrito acima).
+- **`HomePage.vue`** usa `useCdnAsset(home.hero.background)` numa custom
+  property (`--src`) do `.hero__background`, não num `<img>` — é imagem
+  decorativa de fundo, então a ausência do arquivo não deixa nada quebrado
+  na tela (o fundo simplesmente não pinta).
 - **`PostCard.vue`** usa `useCdnAsset(post.cover)` direto no `<img>` da capa do
   post, **sem** handler de erro: se a URL do CDN quebrar (404, `VITE_CDN_URL`
   ausente etc.), aparece o ícone nativo de imagem quebrada em vez de um
@@ -46,6 +50,7 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
 | Foto da Suelen               | `team/suelen.jpg`                                                                                |
 | Seção destaque da Home       | `sections/home-highlight.jpg`                                                                    |
 | Seção "Nossa crença" (Sobre) | `sections/about.jpg`                                                                             |
+| Fundo do hero da Home        | `sections/hero-bg-gradient.png`                                                                  |
 | Capas do blog (4 posts)      | `blog/post-1.jpg` … `post-4.jpg`                                                                 |
 | Logo placeholder             | `src/assets/brand/logo-ppl.svg` (trocar pelo definitivo)                                         |
 | Favicon / touch / OG         | `public/favicon.ico` · `favicon.svg` · `favicon.png` · `apple-touch-icon.png` · `og-default.jpg` |

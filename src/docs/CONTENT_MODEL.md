@@ -1,6 +1,6 @@
 # Content Model (as-built) — site Purple
 
-> Verdade observada no código em **2026-07-09**. Onde mora cada conteúdo e qual
+> Verdade observada no código em **2026-09-05**. Onde mora cada conteúdo e qual
 > é a regra de validação. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) · [`POSITIONING`](POSITIONING.md) ·
@@ -26,10 +26,10 @@ Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
 - **`panorama.json`** — seção de dados de mercado da Home: `eyebrow`, `title`, `subtitle`, `stats[]`, `context[]`.
 - **`approach.json`** — `pillars[]`, `differentials[]`, `process` (`steps[]`); fonte única da página Abordagem.
 - **`about.json`** — `title`, `intro`, `helpTitle`, `helpText`, `image`/`imageAlt` (slot de foto — ver `IMAGES.md`), `dataStats[]`.
-- **`footer.json`** — `aboutText`, `topics[]` (`{ label, serviceId }` — cada tópico aponta para a âncora do serviço correspondente em `services.catalog`; validado por `src/data/__tests__/footer.spec.ts`), `social[]` (`{ label, icon, url }` — LinkedIn/Instagram no rodapé).
+- **`footer.json`** — `aboutText`, `topics[]` (`{ label, serviceId }` — cada tópico aponta para a âncora do serviço correspondente em `services.catalog`; validado por `src/data/__tests__/footer.spec.ts`), `social[]` (`{ label, icon, url }` — LinkedIn/Instagram no rodapé) e `legal[]` (`{ routeName, label }` — FAQ e Política de Privacidade, rota por **nome**, ver `CONVENTIONS.md` § Roteamento).
 - **`pages.json`** — array `{ routeName, label }` com os links do menu principal (rota por **nome**, ver `CONVENTIONS.md` § Roteamento); fonte única da navegação, consumida por `AppHeader.vue` e `AppFooter.vue`.
 - **`home.json`** — copy da Home:
-  - `hero`: `eyebrow`, `titlePrefix` (com `<em>` de destaque), `rotating[]` (typewriter), `subtitle`, CTAs, `stats[]` (`{ value, sign, label, source }` — sinal renderiza em lime) e `card` (`{ label, value, sign, sub, barWidth, tags[], source }`).
+  - `hero`: `background` (caminho de imagem servido pelo CDN — ver [`IMAGES`](IMAGES.md)), `eyebrow`, `titlePrefix` (com `<em>` de destaque), `rotating[]` (typewriter), `subtitle`, CTAs, `stats[]` (`{ value, sign, label, source }` — sinal renderiza em lime) e `card` (`{ label, value, sign, sub, barWidth, tags[], source }`).
   - `highlight` (inclui `image`/`imageAlt` — slot de foto), `cta`.
 - **`services.json`** — **fonte única da oferta**:
   - `intro` (hero da página), `homeTeaser` (seção da Home);
@@ -46,14 +46,14 @@ garante que todo ícone referenciado existe no mapa.
 
 ## As 6 páginas e a Arquitetura de Informação ✅
 
-| Página        | Rota                                           | Seções → fonte                                                                                                                                                                                                       |
-| ------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Home**      | `/`                                            | hero `home.hero` · highlight `home.highlight` (+ `MediaBlock`) · serviços `services.homeTeaser` + `services.catalog` (4 comuns + 1 featured) · panorama `panorama` · blog (destaques) · time `team` · CTA `home.cta` |
-| **Sobre**     | `/sobre`                                       | hero (copy no template) · crença `about.helpTitle/helpText` (+ `MediaBlock` `about.image`) · time `team` · dados `about.dataStats` · CTA                                                                             |
-| **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                                                                               |
-| **Serviços**  | `/servicos`                                    | hero `services.intro` · catálogo `services.catalog` (âncoras `#id`) · planos `services.packages` · projetos `services.projects` · CTA                                                                                |
-| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `useBlogData` (Worker + R2, cache IndexedDB) + `team` (autores)                                                                                                                                                      |
-| **Contato**   | `/contato`                                     | `useContact()` + WhatsApp (`VITE_BASE_PHONE`) + form (`useMail` + Turnstile → Worker → Resend)                                                                                                                       |
+| Página        | Rota                                           | Seções → fonte                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Home**      | `/`                                            | hero `home.hero` · highlight `home.highlight` (+ `MediaBlock`) · serviços `services.homeTeaser` + `services.catalog` (4 comuns + 1 featured) · panorama `panorama` · blog (destaques) · time `team` · CTA `home.cta`                                                         |
+| **Sobre**     | `/sobre`                                       | hero (copy no template) · crença `about.helpTitle/helpText` (+ `MediaBlock` `about.image`) · time `team` · dados `about.dataStats` · CTA                                                                                                                                     |
+| **Abordagem** | `/abordagem`                                   | pilares `approach.pillars` · diferenciais `approach.differentials` · processo `approach.process` · CTA                                                                                                                                                                       |
+| **Serviços**  | `/servicos`                                    | hero `services.intro` · catálogo `services.catalog` (âncoras `#id`) · planos `services.packages` · projetos `services.projects` · CTA                                                                                                                                        |
+| **Blog**      | `/blog` (+ `/blog/:slug`, `/blog/autor/:slug`) | `useBlogData` (Worker + R2, cache IndexedDB) + `team` (autores)                                                                                                                                                                                                              |
+| **Contato**   | `/contato`                                     | `useContact()` + WhatsApp (`VITE_BASE_PHONE`) + form (`useMail` + Turnstile → Worker → Resend); o campo "interesse" vem de `services.json` via `useServiceInterest` (7 serviços + 3 planos + "Orçamento geral"/"Outro"), com preenchimento prévio pelo `id` na query da rota |
 
 Os destaques de blog na Home também vêm de `useBlogData` (`posts.slice(0, 3)` reativo).
 

@@ -1,6 +1,6 @@
 # Architecture (as-built) — site Purple
 
-> Verdade técnica observada no repositório em **2026-07-09**. Gerado lendo o
+> Verdade técnica observada no repositório em **2026-09-05**. Gerado lendo o
 > código, não as intenções. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
 > [`POSITIONING`](POSITIONING.md) · [`PROJECT_STATE`](PROJECT_STATE.md).
@@ -24,21 +24,23 @@ Status: ✅ no código · 🟡 presente mas não ativo/coerente · ⏳ ausente (
 src/
   main.ts            bootstrap (createApp + pinia + unhead + router)
   App.vue            shell: skip-link / AppHeader / <RouterView/> / AppFooter + head global
-  router/index.ts    11 rotas, lazy-loaded (inclui catch-all 404)
+  router/index.ts    monta as rotas dos módulos + catch-all 404; scrollBehavior
+  router/modules/    base.ts (7 rotas institucionais), blog.ts (3 rotas de blog)
   pages/             Home, About, Abordagem, Services, Blog, BlogPost, Author, Contact, Faq, Privacy, NotFound
   components/
     layout/          AppHeader, AppFooter, CookieConsent
     sections/        CtaBanner, FaqSection, PageHero
-    ui/              BaseButton, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, StatCard, ServiceTeaserCard, TeamCard
+    forms/           TurnstileWidget
+    ui/              BaseButton, BaseCombobox, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, SocialLink, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
     blog/            PostCard, BlogPagination, CategoryFilter
-  composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useWhatsapp, useCtaTracking, useTypewriter (reexport em index.ts)
+  composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useServiceInterest, useWhatsapp, useCtaTracking, useTypewriter (reexport em index.ts)
   data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
   types/             team.ts, blog.ts
   docs/              esta documentação
-public/              robots.txt, images/
+public/              robots.txt, sitemap.xml, favicon.{ico,svg,png}, apple-touch-icon.png, og-default.jpg
 ```
 
 ## Camadas / fluxo de boot ✅
@@ -52,7 +54,11 @@ public/              robots.txt, images/
 
 ## Roteamento ✅
 
-11 rotas em `src/router/index.ts` (todas `() => import()`):
+11 rotas, todas `() => import()`. `src/router/index.ts` só compõe: espalha
+`baseRoutes` (`router/modules/base.ts`, as 7 institucionais) e `blogRoutes`
+(`router/modules/blog.ts`, as 3 do blog), acrescenta a catch-all e define o
+`scrollBehavior`. Os nomes declarados nesses módulos são o que `pages.json` e
+`footer.json` referenciam (ver [`CONVENTIONS`](CONVENTIONS.md) § Roteamento).
 
 | path                | name        | página        |
 | ------------------- | ----------- | ------------- |
@@ -83,7 +89,12 @@ post nenhum e conteúdo novo aparece sem rebuild no Render.
   **legado** (mantido na transição, remoção futura); `POST /deploy` →
   autenticado por token, purga o cache do `/index` (PoP local) e dispara o
   hook do Render — o hook agora é **opcional**: só refresca o snapshot SEO
-  prerenderizado do `/blog`, não o conteúdo.
+  prerenderizado do `/blog`, não o conteúdo. O token é comparado em tempo
+  constante (`timingSafeEqual`, `workers/shared/security.ts`).
+- **Módulos compartilhados entre os dois Workers** (`workers/shared/`):
+  `http.ts` (resposta JSON + allowlist de origem/CORS) e `security.ts`
+  (`timingSafeEqual`). Não são um pacote publicado — cada Worker importa por
+  caminho relativo.
 - **Edge cache** (`caches.default`): `/index` com `Cache-Control` de 300s e
   `/posts/:slug` de 3600s, ambos com **ETag fraco** (djb2 do JSON) e resposta
   `304` para `If-None-Match`. As respostas são cacheadas **sem** headers CORS;
@@ -119,8 +130,11 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 
 - **`TurnstileWidget.vue`** (`components/forms/`) + **`useTurnstile`** renderizam o widget anti-spam da Cloudflare (`window.turnstile`, script carregado por CDN em `index.html`) usando `VITE_TURNSTILE_SITE_KEY`; emite `verified`/`expired`/`error` com o token do desafio.
 - **`useMail`** (`composables/useMail.ts`) faz `POST` do payload (`contact`, `interest`, `metadata`, `turnstileToken`) para `VITE_CONTACT_API_URL`, com timeout de 10s via `AbortController`.
-- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW`, `workers/shared/http.ts`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`) para `purplecomunica@gmail.com`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`), não pelo `yarn build` do site.
+- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW` + os `localhost` de dev/preview/prerender, `workers/shared/http.ts`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`) para `purplecomunica@gmail.com`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`), não pelo `yarn build` do site.
 - **`useContact`** (`composables/useContact.ts`) continua isolado — só dados estáticos de contato (título/subtítulo/telefone/e-mail/endereço), não tem relação com o envio.
+- **`useServiceInterest`** (`composables/useServiceInterest.ts`) deriva de `services.json` as opções do campo "interesse" (`SERVICE_INTEREST_OPTIONS` = os 7 serviços + os 3 planos + "Orçamento geral"/"Outro") e resolve o `id` vindo da query da rota para o rótulo correspondente (`resolveServiceInterest`) — é o que faz um clique em "Pedir proposta" chegar ao formulário já com o serviço/plano preenchido. Exporta funções puras, não um `useX` com estado.
+- **`BaseCombobox.vue`** (`components/ui/`) renderiza esse campo como combobox filtrável acessível (`role="listbox"`, `aria-activedescendant`, navegação por setas/Enter/Esc, `onClickOutside` para fechar revertendo), no lugar de um `<select>` nativo.
+- **`workers/mail/src/`** separa `validate.ts` (campos obrigatórios) e `emailTemplate.ts` (corpo do e-mail) do `index.ts` — cada um com sua suíte (ver [`TESTING`](TESTING.md)).
 
 ## SEO / meta ✅
 
@@ -133,7 +147,33 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
 - **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`) e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade). Nas rotas `/` e `/blog`, espera **os cards** (`.post-card`) carregarem do Worker; se não vierem, recarrega a página e tenta uma segunda vez. Persistindo a falha, avisa no log (`[prerender] AVISO: …`) e **segue publicando** — mas remove do snapshot o bloco de erro do blog (`.home-blog-empty`/`.blog-empty`) antes de gravar, junto com o `overflow` travado pelo `CookieConsent`. O motivo é o mesmo nos dois casos: estado transitório de runtime não pode congelar num HTML que crawler lê como conteúdo da página. Os scripts do bundle ficam — o SPA assume no cliente e revalida os posts; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
-- **Deploy (Render) ✅ no painel / 🟡 no repo:** Static Site já existe e está conectado ao repo — **auto-deploy** a cada commit na branch e as **regras de rota** estão configurados **no painel** do Render. `render.yaml` foi adicionado como infra-as-code/documentação dessa config (Build Command, `staticPublishPath: dist`, regras de rota, chaves de `envVars` com `sync: false`); como o serviço foi criado manualmente (não via Blueprint), o arquivo **não se aplica sozinho** — é referência, sincronizável depois se decidirem migrar para Blueprint. **Regras de rota — a catch-all sozinha não basta ⚠️:** o Render só ignora as regras quando existe um recurso no **caminho exato** pedido ("Render does not apply redirect or rewrite rules to a path if a resource exists at that path"), e não faz resolução de índice de diretório. `/blog` não é um recurso — o arquivo é `/blog/index.html` — então uma catch-all `/* → /index.html` sozinha engole **todas** as rotas e devolve a home, com o `<title>`, o `canonical` e as OG tags da home, anulando o prerender inteiro (`/blog/` com barra servia o arquivo certo; `/blog` sem barra, não). Por isso `render.yaml` declara **um rewrite por rota prerenderizada** (`/sobre → /sobre/index.html` etc.) **antes** da catch-all, que permanece por último para `/blog/:slug`, `/blog/autor/:slug` e o 404. O teste `scripts/__tests__/render-routes.spec.ts` guarda essa correspondência entre `ROUTES` e as regras do arquivo. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command passou a rodar o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static` — 🟡 **não validado em produção**: se o ambiente de build do Render não tiver as libs de sistema do Chromium (sem `sudo`/`apt-get` confirmado), o passo de prerender falha e derruba o build; contingência é trocar o Build Command para `yarn build` (sem prerender) até resolver.
+- **Deploy (Render) ✅:** Static Site conectado ao repo, com **auto-deploy** a cada commit na branch. `render.yaml` é infra-as-code/documentação da config (Build Command, `staticPublishPath: dist`, regras de rota, chaves de `envVars` com `sync: false`); como o serviço foi criado pelo painel e **não é gerenciado por Blueprint**, o arquivo não se aplica sozinho — é referência, sincronizável se decidirem migrar para Blueprint. **Regras de rota — a catch-all sozinha não basta:** o Render só ignora as regras quando existe um recurso no **caminho exato** pedido ("Render does not apply redirect or rewrite rules to a path if a resource exists at that path"), e não faz resolução de índice de diretório. `/blog` não é um recurso — o arquivo é `/blog/index.html` — então uma catch-all `/* → /index.html` sozinha engoliria **todas** as rotas e devolveria a home, com o `<title>`, o `canonical` e as OG tags da home, anulando o prerender inteiro. Por isso `render.yaml` declara **um rewrite por rota prerenderizada** (`/sobre → /sobre/index.html` etc.) **antes** da catch-all, que permanece por último para `/blog/:slug`, `/blog/autor/:slug` e o 404; as mesmas regras estão aplicadas no painel. O teste `scripts/__tests__/render-routes.spec.ts` guarda a correspondência entre `ROUTES` e as regras do arquivo. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command roda o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static`.
+- **Verificado em produção (2026-09-05) ✅:** as 8 rotas estáticas respondem com o snapshot próprio — `<title>`, `canonical` e OG por rota, sem cair na home. Fecha as duas ressalvas anteriores (regras de rota pendentes no painel; prerender no Render "não validado"), que valeram até 2026-08-20.
+
+### Desvios observados no snapshot em produção ⚠️
+
+Ambos verificados em 2026-09-05 (HTTP cru contra produção + `dist/` do build
+local). Estão registrados como pendência em [`PROJECT_STATE`](PROJECT_STATE.md).
+
+- **JSON-LD duplicado em toda rota que não é a home.** `/sobre`, `/abordagem`,
+  `/servicos`, `/contato`, `/blog`, `/faq` e `/privacidade` trazem **dois**
+  blocos `application/ld+json`: primeiro o `WebPage` da **home** (com `name` e
+  `url` da home), depois o correto da rota. Causa em `scripts/prerender.mjs`:
+  o servidor estático do script faz fallback SPA para `dist/index.html`, que a
+  primeira iteração do laço (`/`) já sobrescreveu com o snapshot da home — as
+  rotas seguintes bootam sobre o `<head>` dela. O `<body>` é substituído quando
+  o SPA monta, e `canonical`/OG/`description` não duplicam porque o unhead
+  deduplica por chave; o `<script>` de JSON-LD baked-in não está sob gestão do
+  unhead, então sobrevive. Conserto natural: servir como fallback uma cópia do
+  `index.html` lida **antes** do laço, em vez do arquivo que o próprio laço
+  reescreve.
+- **`/` e `/blog` publicados sem nenhum post.** Os snapshots em produção não
+  têm `.post-card` nem o bloco de erro — é exatamente o fallback descrito acima
+  disparando (índice do blog não respondeu durante o build). Não é falha de
+  Worker nem de CORS: o `/index` responde os 4 posts e a allowlist já cobre a
+  origem do prerender (`http://localhost:4180`); o build local traz os cards
+  normalmente. Efeito: crawler vê o `/blog` sem conteúdo até o próximo deploy
+  bem-sucedido.
 
 ## Consentimento LGPD + GTM ✅
 
