@@ -33,7 +33,7 @@ src/
     forms/           TurnstileWidget
     ui/              BaseButton, BaseCombobox, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, SocialLink, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
-    blog/            PostCard, BlogPagination, CategoryFilter
+    blog/            PostCard, PostToc, BlogPagination, CategoryFilter
   composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useServiceInterest, useWhatsapp, useCtaTracking, useTypewriter (reexport em index.ts)
   data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
@@ -119,7 +119,7 @@ post nenhum e conteúdo novo aparece sem rebuild no Render.
   `Access-Control-Allow-Origin` (+ `Access-Control-Expose-Headers: ETag`) é
   anexado por request.
 - O parsing continua no Worker — **frontmatter YAML próprio** (não usa lib) e
-  **markdown→HTML por regex** (tabelas GFM, code blocks, blockquotes, headings
+  **markdown→HTML por regex** (tabelas GFM com `data-label` do cabeçalho em cada célula, code blocks, blockquotes, headings
   com `id` de âncora, listas, inline); `readTime` (≈200 wpm) e `wordCount`
   idem. A listagem do R2 pagina com cursor (suporta >1000 objetos).
 - **Camada de dados no front:** `useBlogData` (singleton por módulo — Home,

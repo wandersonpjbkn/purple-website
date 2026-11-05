@@ -77,7 +77,7 @@ export const buildPostHead = (post: PostMeta, config: PostPageConfig): PostHead 
     meta('property', 'og:site_name', SITE_NAME),
     meta('property', 'og:locale', SITE_LOCALE),
     meta('property', 'og:image', image),
-    meta('property', 'og:image:alt', post.title),
+    meta('property', 'og:image:alt', post.coverAlt || post.title),
     meta('property', 'og:image:width', size?.width),
     meta('property', 'og:image:height', size?.height),
     meta('name', 'twitter:card', 'summary_large_image'),

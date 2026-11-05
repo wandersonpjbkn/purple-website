@@ -12,7 +12,7 @@
       <img
         v-if="post.cover"
         :src="useCdnAsset(post.cover)"
-        :alt="post.title"
+        alt=""
         loading="lazy"
       />
       <div

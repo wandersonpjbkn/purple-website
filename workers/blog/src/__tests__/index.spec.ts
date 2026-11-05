@@ -72,6 +72,24 @@ describe('markdownToHtml', () => {
   })
 })
 
+describe('markdownToHtml — tabelas', () => {
+  it('rotula cada célula com o cabeçalho da coluna, para o empilhamento no mobile', () => {
+    const html = markdownToHtml('| Indicador | Com programa |\n| --- | --- |\n| Bem-estar | **61%** |')
+
+    expect(html).toContain('<th>Indicador</th><th>Com programa</th>')
+    expect(html).toContain('<td data-label="Indicador">Bem-estar</td>')
+    expect(html).toContain('<td data-label="Com programa"><strong>61%</strong></td>')
+  })
+
+  it('tira a marcação do rótulo e escapa aspas, sem quebrar o atributo', () => {
+    const html = markdownToHtml('| **Frente** | O "plano" |\n| --- | --- |\n| a | b |')
+
+    expect(html).toContain('<th><strong>Frente</strong></th>')
+    expect(html).toContain('<td data-label="Frente">a</td>')
+    expect(html).toContain('<td data-label="O &quot;plano&quot;">b</td>')
+  })
+})
+
 describe('countWords', () => {
   it('conta palavras ignorando espaços extras', () => {
     expect(countWords('  uma   duas três ')).toBe(3)

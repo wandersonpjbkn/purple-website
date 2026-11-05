@@ -12,11 +12,18 @@ export interface PostMeta {
   readTime: number
   featured: boolean
   cover: string
+  coverAlt?: string
   wordCount: number
 }
 
 export interface Post extends PostMeta {
   html: string
+}
+
+export interface PostHeading {
+  level: number
+  id: string
+  text: string
 }
 
 export interface CategoryCount {

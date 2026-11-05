@@ -23,6 +23,7 @@ export interface RawFrontmatter {
   readTime?: number
   featured?: boolean
   cover?: string
+  coverAlt?: string
 }
 
 export interface BlogPost {
@@ -36,6 +37,7 @@ export interface BlogPost {
   readTime: number
   featured: boolean
   cover: string
+  coverAlt: string
   html: string
   wordCount: number
 }

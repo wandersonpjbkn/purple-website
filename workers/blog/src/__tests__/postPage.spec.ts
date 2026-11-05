@@ -15,6 +15,7 @@ const META: PostMeta = {
   readTime: 6,
   featured: false,
   cover: 'blog/post-6.jpg',
+  coverAlt: '',
   wordCount: 1200,
 }
 
@@ -62,6 +63,13 @@ describe('buildPostHead', () => {
     expect(metaContent(tags, 'og:image')).toBe('https://cdn.example/blog/post-6.jpg')
     expect(metaContent(tags, 'twitter:image')).toBe('https://cdn.example/blog/post-6.jpg')
     expect(metaContent(tags, 'og:image:width')).toBeUndefined()
+  })
+
+  it('descreve a imagem com o coverAlt quando existe, e com o título quando não', () => {
+    expect(metaContent(buildPostHead({ ...META, coverAlt: 'Pessoa em reunião' }, CONFIG).tags, 'og:image:alt')).toBe(
+      'Pessoa em reunião'
+    )
+    expect(metaContent(buildPostHead(META, CONFIG).tags, 'og:image:alt')).toBe('Demissão humanizada existe?')
   })
 
   it('sem capa, cai na imagem padrão do site com as dimensões dela', () => {

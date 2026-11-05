@@ -21,9 +21,18 @@ lido pelo Worker `workers/blog` (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
 Frontmatter de post: `title`, `slug` (opcional; padrão = nome do arquivo),
 `excerpt`, `date`, `author` (slug de `team.json`), `category`, `tags[]`,
 `readTime` (opcional; calculado a ≈200 wpm), `featured`, `cover` (caminho
-relativo no CDN, ex.: `blog/post-6.jpg`). Além de capa do card, `title`,
-`excerpt` e `cover` são o `<title>`/description/`og:image` do post — inclusive
-para preview de link (LinkedIn, WhatsApp), que lê o que o Worker injeta.
+relativo no CDN, ex.: `blog/post-6.jpg`) e `coverAlt` (opcional). Além de capa
+do card e do topo do post, `title`, `excerpt` e `cover` são o
+`<title>`/description/`og:image` do post — inclusive para preview de link
+(LinkedIn, WhatsApp), que lê o que o Worker injeta.
+
+- **`coverAlt`** — descreve a capa **só quando ela informa algo que o título
+  não diz** (ex.: um gráfico, uma pessoa específica). Sem ele, a capa é tratada
+  como ilustrativa (`alt=""`) e o `og:image:alt` usa o título.
+- **Tabelas** — sintaxe GFM (`| a | b |` + linha `| --- | --- |`). O parser
+  rotula cada célula com o texto do cabeçalho da coluna (`data-label`, sem a
+  marcação de negrito/itálico/código/link), usado no empilhamento do mobile:
+  o cabeçalho precisa fazer sentido lido ao lado de cada valor.
 
 ## `src/data/*.json` — fragmentado por domínio ✅
 

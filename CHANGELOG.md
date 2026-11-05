@@ -7,6 +7,17 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Página do post (Fase 2)** — capa no topo do corpo (`coverAlt` novo no
+  frontmatter, `alt=""` quando ausente, dimensões reservadas contra CLS,
+  removida se falhar); sumário recolhível (`<details>`) abaixo de `lg`, onde
+  antes não havia sumário (lista extraída para `PostToc.vue`, reaproveitada no
+  lateral); tabelas de 3+ colunas empilhadas abaixo de `sm` com rótulo por
+  célula (`data-label` gerado pelo parser); `scroll-margin-top` nos headings
+  do corpo — o salto do sumário escondia o título atrás do header sticky.
+  `PostCard` passou a `alt=""` (capa decorativa sob link `aria-hidden`).
+  Regressão do parser nos 5 posts publicados: única diferença é o
+  `data-label` nas `<td>`.
+
 - **Posts do blog com meta tags próprias para quem não executa JS** — antes,
   `/blog/:slug` e `/blog/autor/:slug` caíam na catch-all do Render e recebiam o
   snapshot da home: preview de LinkedIn/WhatsApp e crawlers sem JS liam

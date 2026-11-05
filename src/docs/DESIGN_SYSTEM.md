@@ -139,7 +139,7 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 
 **sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
 `AppFooter`, `CookieConsent` · **forms/** `TurnstileWidget` · **ui/**
-(+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `BlogPagination`,
+(+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
 `CategoryFilter`.
 
 ## Stat grid canônico ✅

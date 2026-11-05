@@ -13,8 +13,8 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 - **99 testes** em 20 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`). `workers/**` é excluído do
   `vitest.config.ts` da raiz — **cada Worker roda sua própria suíte** (ver
-  abaixo): `workers/blog` com 43 testes e `workers/mail` com 6. Total do repo:
-  **148 testes unitários** em 3 suítes, mais 8 cenários e2e.
+  abaixo): `workers/blog` com 46 testes e `workers/mail` com 6. Total do repo:
+  **151 testes unitários** em 3 suítes, mais 8 cenários e2e.
 - **fake-indexeddb** (devDependency) fornece um IndexedDB em memória para os
   testes de `useBlogCache` — o runtime continua sem dependência nova.
 - **Portões de qualidade ✅** (rodar antes de subir):
@@ -66,7 +66,8 @@ dimensões, JSON-LD com a chave `jsonld` e sem como fechar a tag) e
 `sitePages.spec.ts` (`/blog/:slug` e `/blog/autor/:slug` no domínio do site:
 post do índice, post recém-publicado fora do índice em cache, 404, repasse à
 origem quando o shell falha, métodos/arquivos repassados, snapshot de autor e
-fallback para o shell), **43 testes**. Roda com `cd workers/blog && yarn test`.
+fallback para o shell), **46 testes** — `index.spec.ts` inclui o `data-label`
+das células de tabela (rótulo sem marcação e com aspas escapadas). Roda com `cd workers/blog && yarn test`.
 
 O `HTMLRewriter` só existe no runtime do Workers: em `sitePages.spec.ts` ele é
 um fake que registra o que cada handler faria. A reescrita real é conferida à

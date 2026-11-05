@@ -70,6 +70,7 @@ const buildMeta = (key: string, fm: RawFrontmatter, body: string): PostMeta => {
     readTime: fm.readTime ?? Math.ceil(wordCount / 200),
     featured: fm.featured ?? false,
     cover: fm.cover ?? '',
+    coverAlt: fm.coverAlt ?? '',
     wordCount,
   }
 }
@@ -355,15 +356,25 @@ export function slugify(text: string): string {
     .replace(/\s+/g, '-')
 }
 
+const tableCellLabel = (headerCell: string): string =>
+  headerCell
+    .replace(/[*_`[\]]/g, '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .trim()
+
 export function markdownToHtml(md: string): string {
   let html = md
 
   html = html.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_, header: string, rows: string) => {
-    const th = header
+    const headerCells = header
       .split('|')
       .filter(Boolean)
-      .map((c: string) => `<th>${c.trim()}</th>`)
-      .join('')
+      .map((c: string) => c.trim())
+    const labels = headerCells.map(tableCellLabel)
+    const th = headerCells.map((c: string) => `<th>${c}</th>`).join('')
     const trs = rows
       .trim()
       .split('\n')
@@ -371,7 +382,10 @@ export function markdownToHtml(md: string): string {
         const tds = row
           .split('|')
           .filter(Boolean)
-          .map((c: string) => `<td>${c.trim()}</td>`)
+          .map((c: string, i: number) => {
+            const label = labels[i]
+            return label ? `<td data-label="${label}">${c.trim()}</td>` : `<td>${c.trim()}</td>`
+          })
           .join('')
         return `<tr>${tds}</tr>`
       })
