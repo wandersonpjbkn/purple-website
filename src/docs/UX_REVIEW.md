@@ -249,7 +249,8 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   contato); "Copiar link" com rótulo, porque não sai da página; "Compartilhar"
   (gaveta nativa) só onde o navegador oferece. Todos com 44px de alvo; o aviso
   de cópia troca o rótulo do botão e é anunciado por `role="status"`
-  (visibilidade do status). Visual próprio, distinto do `SocialLink` do rodapé:
+  (visibilidade do status), inclusive num segundo clique antes de o aviso
+  sumir (o status é zerado antes de ser reescrito). Visual próprio, distinto do `SocialLink` do rodapé:
   lá o link leva ao perfil da Purple, aqui leva o post para a rede de quem lê.
   Contraste: ícone/rótulo `--purple-700` 12,4:1 sobre `--surface`; hover
   `--purple` 5,8:1 sobre `--purple-50`. A borda `--border` (1,4:1) é

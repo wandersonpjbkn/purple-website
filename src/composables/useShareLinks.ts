@@ -19,7 +19,12 @@ const NETWORK_URL: Record<ShareNetwork, (url: string, title: string) => string> 
 }
 
 export const withShareUtm = (url: string, source: ShareSource): string => {
-  const shared = new URL(url)
+  let shared: URL
+  try {
+    shared = new URL(url)
+  } catch {
+    return url
+  }
   shared.searchParams.set('utm_source', source)
   shared.searchParams.set('utm_medium', 'social')
   shared.searchParams.set('utm_campaign', 'blog-share')

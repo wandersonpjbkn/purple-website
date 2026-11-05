@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseIcon from '@/components/ui/BaseIcon.vue'
@@ -79,7 +79,9 @@ const copyLabel = computed(() => (status.value === COPIED ? COPIED : 'Copiar lin
 
 let resetTimer: ReturnType<typeof setTimeout> | undefined
 
-const announce = (message: string) => {
+const announce = async (message: string) => {
+  status.value = ''
+  await nextTick()
   status.value = message
   clearTimeout(resetTimer)
   resetTimer = setTimeout(() => {
@@ -90,9 +92,9 @@ const announce = (message: string) => {
 const copyLink = async () => {
   try {
     await navigator.clipboard.writeText(withShareUtm(url.value, 'copy'))
-    announce(COPIED)
+    await announce(COPIED)
   } catch {
-    announce('Não foi possível copiar o link')
+    await announce('Não foi possível copiar o link')
   }
 }
 

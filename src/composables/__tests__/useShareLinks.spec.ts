@@ -13,6 +13,10 @@ describe('withShareUtm', () => {
     expect(url.searchParams.get('utm_campaign')).toBe('blog-share')
   })
 
+  it('devolve a URL como veio quando ela não é absoluta, em vez de quebrar a página', () => {
+    expect(withShareUtm('purplecomunicacao.com.br/blog/post', 'x')).toBe('purplecomunicacao.com.br/blog/post')
+  })
+
   it('preserva parâmetros que a URL já tinha', () => {
     const url = new URL(withShareUtm('https://example.com/blog/post?ref=abc', 'x'))
 

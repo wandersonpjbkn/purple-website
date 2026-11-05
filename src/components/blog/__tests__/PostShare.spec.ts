@@ -44,6 +44,25 @@ describe('PostShare', () => {
     expect(wrapper.find('[role="status"]').text()).toBe('Link copiado')
   })
 
+  it('anuncia de novo quando copia uma segunda vez antes do aviso sumir', async () => {
+    stubNavigator({ clipboard: { writeText: vi.fn().mockResolvedValue(undefined) } })
+    const wrapper = mountShare()
+    const status = wrapper.find('[role="status"]')
+
+    await wrapper.find('[data-share="copy"]').trigger('click')
+    await flushPromises()
+    const announcements: string[] = []
+    const observer = new MutationObserver(() => announcements.push(status.text()))
+    observer.observe(status.element, { childList: true, characterData: true, subtree: true })
+
+    await wrapper.find('[data-share="copy"]').trigger('click')
+    await flushPromises()
+    observer.disconnect()
+
+    expect(announcements).toContain('')
+    expect(status.text()).toBe('Link copiado')
+  })
+
   it('avisa quando não consegue copiar', async () => {
     stubNavigator({ clipboard: { writeText: vi.fn().mockRejectedValue(new Error('denied')) } })
     const wrapper = mountShare()

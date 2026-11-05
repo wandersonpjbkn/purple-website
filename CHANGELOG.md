@@ -12,6 +12,10 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   cabeçalho do post, a 390px). Ele publica a própria altura em
   `--consent-banner-height` (o `body` reserva esse espaço no fim) e rola a
   página quando o foco cai embaixo dele.
+- **Compartilhar mais robusto** — `withShareUtm` devolve a URL como veio
+  quando ela não é absoluta, em vez de lançar erro e derrubar a página; o
+  "Copiar link" volta a ser anunciado num segundo clique antes de o aviso
+  sumir.
 - **Callouts "Resumo" e "Em números" sem borda lateral** — saíram a borda
   grossa à esquerda, os cantos arredondados só à direita e o título em eyebrow
   em caixa alta; entraram painéis com cantos iguais, título em etiqueta
