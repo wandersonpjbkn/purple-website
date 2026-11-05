@@ -7,6 +7,11 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Card de serviço no fim do post** — a caixa tingida com borda lime deu
+  lugar ao `ServiceTeaserCard` (prop nova `horizontal`), o mesmo card de
+  serviço da Home e da Abordagem. O link de todos os cards de serviço passou a
+  "Conhecer o serviço" (antes "Saiba mais" e "Ver esse serviço") e agora cobre
+  o card inteiro, que já tinha `cursor: pointer` sem ser clicável.
 - **Compartilhar o post** — `PostShare` junto da autoria no cabeçalho e no
   rodapé do card do artigo (o card passou do `.prose` para um
   `<article class="post-article">` que envolve o texto e o `<footer>`): LinkedIn, X e WhatsApp (nova aba), "Copiar link" e, onde o

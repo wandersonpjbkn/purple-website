@@ -147,20 +147,13 @@
 
             <aside
               v-if="relatedService"
-              class="post-service-cta"
+              class="post-service"
+              aria-label="Serviço relacionado"
             >
-              <span class="post-service-cta__icon"><BaseIcon :name="relatedService.icon" /></span>
-              <div class="post-service-cta__body">
-                <p class="post-service-cta__eyebrow">Como a Purple ajuda</p>
-                <h3>{{ relatedService.title }}</h3>
-                <p class="post-service-cta__text">{{ relatedService.summary }}</p>
-                <RouterLink
-                  class="text-link"
-                  :to="`/servicos#${relatedService.id}`"
-                >
-                  Ver esse serviço
-                </RouterLink>
-              </div>
+              <ServiceTeaserCard
+                :service="relatedService"
+                horizontal
+              />
             </aside>
           </div>
         </div>
@@ -268,6 +261,7 @@ import CtaBanner from '@/components/sections/CtaBanner.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import PostToc from '@/components/blog/PostToc.vue'
 import PostShare from '@/components/blog/PostShare.vue'
+import ServiceTeaserCard from '@/components/ui/ServiceTeaserCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -862,48 +856,8 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
   color: var(--subtle);
 }
 
-.post-service-cta {
-  display: flex;
-  gap: var(--space-5);
-  align-items: flex-start;
+.post-service {
   margin-top: var(--space-6);
-  padding: 1.75rem;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--lime);
-  border-radius: var(--radius-lg);
-
-  &__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius);
-    background: var(--purple-100);
-    color: var(--purple);
-    display: grid;
-    place-items: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
-
-  &__eyebrow {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--lime-ink);
-    margin-bottom: var(--space-1);
-  }
-
-  h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.4rem;
-  }
-
-  &__text {
-    font-size: 0.9rem;
-    color: var(--muted);
-    margin-bottom: var(--space-3);
-  }
 }
 
 .post-author-section {

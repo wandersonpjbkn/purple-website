@@ -140,7 +140,10 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 
 **sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
 `AppFooter`, `CookieConsent` · **forms/** `TurnstileWidget` · **ui/**
-(+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
+(+ `StatCard`, `ServiceTeaserCard` — card de serviço da Home, da Abordagem e
+do fim do post; prop `horizontal` para a versão deitada do post; o link
+"Conhecer o serviço" cobre o card inteiro via `.service-card__link::before`,
+que também vale para o card em destaque da Home) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
 `CategoryFilter`, `PostShare` (compartilhar o post: links de saída para LinkedIn, X e
 WhatsApp, "Copiar link" e, onde o navegador oferece, a gaveta nativa; todos
 em pílula/círculo de `--tap-target-min`, fundo `--surface`, borda `--border`,

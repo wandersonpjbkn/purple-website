@@ -46,6 +46,34 @@
     margin-bottom: var(--space-5);
   }
 
+  &__link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &--horizontal {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: var(--space-5);
+    align-items: center;
+    padding: var(--space-6) var(--space-8);
+
+    .service-card__icon,
+    p {
+      margin-bottom: 0;
+    }
+
+    @include respond-to(sm) {
+      grid-template-columns: auto minmax(0, 1fr);
+      padding: var(--space-6);
+
+      .service-card__link {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
   &__links {
     display: flex;
     align-items: center;

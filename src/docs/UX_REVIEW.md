@@ -259,6 +259,16 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   seção, o `h2` seguinte perde o fio de cima: dois fios a 40px um do outro
   liam como ruído.
 
+- **Card de serviço no fim do post** — era uma caixa tingida com borda lime e
+  o rótulo "Como a Purple ajuda" acima do título. Passou a ser o mesmo card de
+  serviço da Home e da Abordagem (`ServiceTeaserCard`, versão horizontal):
+  mesma coisa, mesma aparência (consistência; Jakob). Fica abaixo da faixa
+  escura em peso, porque leva à navegação (serviços), não ao contato. O link
+  diz "Conhecer o serviço" em todos os cards de serviço (antes: "Saiba mais"
+  na Home e na Abordagem, "Ver esse serviço" no post), verbo que convida à
+  ação, e cobre o card inteiro: o `cursor: pointer` do card já prometia o
+  clique que só o link entregava.
+
 ### Callouts no corpo do post (2026-11-05)
 
 Só **dois** tipos, de propósito — destaque demais anula o destaque (lei de

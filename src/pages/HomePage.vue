@@ -176,10 +176,10 @@
             <h3>{{ featuredService.title }}</h3>
             <p>{{ featuredService.summary }}</p>
             <RouterLink
-              class="text-link text-link--lime"
+              class="text-link text-link--lime service-card__link"
               :to="`/servicos#${featuredService.id}`"
             >
-              Saiba mais
+              Conhecer o serviço
             </RouterLink>
           </div>
           <div class="service-card__icon"><BaseIcon :name="featuredService.icon" /></div>
