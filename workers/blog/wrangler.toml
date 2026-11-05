@@ -4,11 +4,12 @@ compatibility_date = "2026-07-07"
 
 # Custom domain the front-end points to (VITE_POSTS_API_URL), plus the post and
 # author pages on the main domain (proxied zone), which this Worker serves with
-# per-post meta tags over the SPA shell hosted on Render.
+# per-post meta tags over the SPA shell hosted on Render, and the posts sitemap.
 routes = [
   { pattern = "blog.purplecomunicacao.com.br", custom_domain = true },
   { pattern = "purplecomunicacao.com.br/blog/*", zone_name = "purplecomunicacao.com.br" },
   { pattern = "www.purplecomunicacao.com.br/blog/*", zone_name = "purplecomunicacao.com.br" },
+  { pattern = "purplecomunicacao.com.br/sitemap-posts.xml", zone_name = "purplecomunicacao.com.br" },
 ]
 
 # Non-secret config, safe to commit.

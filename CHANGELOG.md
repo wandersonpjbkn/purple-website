@@ -7,6 +7,19 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Sitemap dos posts** — `/sitemap-posts.xml`, gerado pelo Worker do blog a
+  partir do índice do R2, declarado no `robots.txt` ao lado do `sitemap.xml`
+  estático (que ganhou as páginas de autor e um teste de sincronia com
+  `ROUTES`/`team.json`). Antes, posts só eram descobertos pelos links
+  internos.
+- **Capa do `PostCard` com fallback** — em erro de carga, cai no placeholder
+  da categoria em vez do ícone de imagem quebrada.
+- **`.post-layout-grid` sem duplicata** — removida a cópia global de
+  `_cards.scss`, idêntica à do `BlogPostPage.vue` (dono do estilo).
+- **`resolveChromium` aceita `chrome-linux64/`** como alternativa ao
+  `chrome-linux/` na auto-detecção (layout das versões recentes do
+  Playwright); o caminho antigo continua tentado primeiro.
+
 - **Parser do blog trocado de regex para `marked` (Fase 3)** —
   `workers/blog/src/markdown.ts`. Corrige: imagem com caminho relativo
   resolvida a partir de `/blog/` (quebrava) — agora vai para o CDN, com

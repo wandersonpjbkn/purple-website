@@ -31,11 +31,26 @@ const meta = (attribute: 'name' | 'property', key: string, content: string | num
 
 const serializeJsonLd = (data: unknown): string => JSON.stringify(data).replace(/</g, '\\u003c')
 
+export const postUrl = (siteOrigin: string, slug: string): string => `${siteOrigin}/blog/${encodeURIComponent(slug)}`
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}/
+
+export const buildPostsSitemap = (posts: PostMeta[], siteOrigin: string): string => {
+  const urls = posts
+    .map(post => {
+      const lastmod = ISO_DATE.exec(post.date)?.[0]
+      const lastmodTag = lastmod ? `<lastmod>${lastmod}</lastmod>` : ''
+      return `<url><loc>${escapeHtml(postUrl(siteOrigin, post.slug))}</loc>${lastmodTag}</url>`
+    })
+    .join('')
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>\n`
+}
+
 export const fullTitle = (title: string): string => `${title} | ${SITE_NAME}`
 
 export const buildPostHead = (post: PostMeta, config: PostPageConfig): PostHead => {
   const title = fullTitle(post.title)
-  const url = `${config.siteOrigin}/blog/${encodeURIComponent(post.slug)}`
+  const url = postUrl(config.siteOrigin, post.slug)
   const cover = resolveCoverUrl(post.cover, config.cdnUrl)
   const image = cover ?? `${config.siteOrigin}${DEFAULT_OG_IMAGE}`
   const size = cover ? undefined : DEFAULT_OG_IMAGE_SIZE

@@ -20,8 +20,8 @@ export const resolveChromium = async () => {
   const base = '/opt/pw-browsers'
   if (existsSync(base)) {
     const dir = (await readdir(base)).find((d) => /^chromium-\d+$/.test(d))
-    const candidate = dir && join(base, dir, 'chrome-linux', 'chrome')
-    if (candidate && existsSync(candidate)) return candidate
+    const candidate = dir && ['chrome-linux', 'chrome-linux64'].map(arch => join(base, dir, arch, 'chrome')).find(existsSync)
+    if (candidate) return candidate
   }
   try {
     return chromium.executablePath()

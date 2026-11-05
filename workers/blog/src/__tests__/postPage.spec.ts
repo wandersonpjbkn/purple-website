@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 import { escapeHtml } from '../markdown'
-import { buildPostHead, notFoundHead, resolveCoverUrl } from '../postPage'
+import { buildPostHead, buildPostsSitemap, notFoundHead, resolveCoverUrl } from '../postPage'
 
 import type { PostMeta } from '../types'
 
@@ -102,5 +102,17 @@ describe('buildPostHead', () => {
 describe('notFoundHead', () => {
   it('só troca o título, sem meta tags de post', () => {
     expect(notFoundHead()).toEqual({ title: 'Post não encontrado | Purple Comunicação', tags: '' })
+  })
+})
+
+describe('buildPostsSitemap', () => {
+  it('lista cada post com a URL canônica e a data como lastmod', () => {
+    const xml = buildPostsSitemap([META, { ...META, slug: 'outro', date: '' }], 'https://purplecomunicacao.com.br')
+
+    expect(xml).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    expect(xml).toContain(
+      '<url><loc>https://purplecomunicacao.com.br/blog/demissao-humanizada</loc><lastmod>2026-11-05</lastmod></url>'
+    )
+    expect(xml).toContain('<url><loc>https://purplecomunicacao.com.br/blog/outro</loc></url>')
   })
 })

@@ -10,10 +10,11 @@
       aria-hidden="true"
     >
       <img
-        v-if="post.cover"
+        v-if="post.cover && !coverFailed"
         :src="useCdnAsset(post.cover)"
         alt=""
         loading="lazy"
+        @error="coverFailed = true"
       />
       <div
         v-else
@@ -70,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import type { PostMeta } from '@/types/blog'
@@ -93,6 +94,14 @@ const props = withDefaults(
 )
 
 const author = computed(() => getAuthor(props.post.author))
+const coverFailed = ref(false)
+
+watch(
+  () => props.post.cover,
+  () => {
+    coverFailed.value = false
+  }
+)
 </script>
 
 <style scoped lang="scss">

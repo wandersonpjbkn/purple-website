@@ -43,11 +43,9 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
   dimensões em [`CONTENT_MODEL`](CONTENT_MODEL.md).
 - **`PostCard.vue`** usa `useCdnAsset(post.cover)` direto no `<img>` da capa do
   post (`alt=""`: o link da capa é `aria-hidden` e o título do card vem logo
-  abaixo), **sem** handler de erro: se a URL do CDN quebrar (404, `VITE_CDN_URL`
-  ausente etc.), aparece o ícone nativo de imagem quebrada em vez de um
-  fallback — assimetria real em relação ao `TeamCard`/`BaseAvatar`, registrada
-  aqui como pendência de robustez (não é falha de acessibilidade: a capa do
-  card é decorativa).
+  abaixo). Se a URL do CDN falhar (404, `VITE_CDN_URL` ausente etc.), o
+  `@error` troca a imagem pelo placeholder da categoria (gradiente + inicial),
+  o mesmo de post sem capa — nunca o ícone de imagem quebrada.
 
 ## Assets pendentes ⏳
 

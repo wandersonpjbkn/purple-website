@@ -48,6 +48,7 @@ do card e do topo do post, `title`, `excerpt` e `cover` são o
 
   Um de cada por post, no máximo — callout em excesso deixa de destacar.
   Outro tipo (`[!note]`…) vira citação comum.
+
 - **Citação** — linhas `>` consecutivas formam um único bloco.
 - **HTML cru não é aceito** — tags escritas no `.md` aparecem como texto. Links
   só `http(s)`, `mailto`, `tel`, relativo ou `#`; outro esquema vira texto.

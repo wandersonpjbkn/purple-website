@@ -160,3 +160,14 @@ describe('GET /blog/autor/:slug no domínio do site', () => {
     expect(await response.text()).toBe(SHELL)
   })
 })
+
+describe('GET /sitemap-posts.xml', () => {
+  it('gera o sitemap dos posts a partir do R2, como XML', async () => {
+    const response = await worker.fetch(page('/sitemap-posts.xml'), makeEnv({ 'posts/post-a.md': POST_A }), makeCtx())
+    const xml = await response.text()
+
+    expect(response.status).toBe(200)
+    expect(response.headers.get('Content-Type')).toContain('application/xml')
+    expect(xml).toContain('<loc>https://site.example/blog/post-a</loc><lastmod>2026-01-10</lastmod>')
+  })
+})

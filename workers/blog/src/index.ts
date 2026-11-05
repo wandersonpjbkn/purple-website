@@ -2,7 +2,7 @@ import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
 import { timingSafeEqual } from '../../shared/security'
 
 import { markdownToHtml } from './markdown'
-import { SHELL_PATH, buildPostHead, notFoundHead, renderPostPage } from './postPage'
+import { SHELL_PATH, buildPostHead, buildPostsSitemap, notFoundHead, renderPostPage } from './postPage'
 
 import type { Env, BlogPost, PostMeta, RawFrontmatter } from './types'
 
@@ -15,6 +15,7 @@ const POST_TTL_SECONDS = 3600
 
 const json = (body: unknown, status = 200, origin = '*') => jsonResponse(body, status, origin, CORS_METHODS)
 
+const POSTS_SITEMAP_PATH = '/sitemap-posts.xml'
 const AUTHOR_PAGE_PATH = /^\/blog\/autor\/([^/]+)\/?$/
 const POST_PAGE_PATH = /^\/blog\/([^/]+)\/?$/
 
@@ -150,11 +151,25 @@ const fetchShell = async (env: Env): Promise<Response> => {
   return shell
 }
 
-async function findPostMeta(env: Env, ctx: ExecutionContext, origin: string, slug: string): Promise<PostMeta | null> {
+async function getCachedIndex(env: Env, ctx: ExecutionContext, origin: string): Promise<PostMeta[]> {
   const indexResponse = await withEdgeCache(new Request(`${origin}/index`), ctx, INDEX_TTL_SECONDS, async () => ({
     body: await buildIndex(env),
   }))
-  const listed = ((await indexResponse.json()) as PostMeta[]).find(meta => meta.slug === slug)
+  return (await indexResponse.json()) as PostMeta[]
+}
+
+async function handlePostsSitemap(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  const posts = await getCachedIndex(env, ctx, new URL(request.url).origin)
+  return new Response(buildPostsSitemap(posts, env.SITE_ORIGIN), {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': `public, max-age=${INDEX_TTL_SECONDS}`,
+    },
+  })
+}
+
+async function findPostMeta(env: Env, ctx: ExecutionContext, origin: string, slug: string): Promise<PostMeta | null> {
+  const listed = (await getCachedIndex(env, ctx, origin)).find(meta => meta.slug === slug)
   if (listed) return listed
 
   const key = `posts/${slug}.md`
@@ -284,6 +299,10 @@ export default {
     const responseOrigin = allowedOrigins.includes(origin) ? origin : '*'
 
     try {
+      if (url.pathname === POSTS_SITEMAP_PATH) {
+        return await handlePostsSitemap(request, env, ctx)
+      }
+
       if (url.pathname === '/index') {
         const response = await withEdgeCache(request, ctx, INDEX_TTL_SECONDS, async () => ({
           body: await buildIndex(env),

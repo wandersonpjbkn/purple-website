@@ -10,11 +10,11 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 - **Runner: Vitest 3** (`vitest.config.ts` próprio, standalone) + **@vue/test-utils**
   - **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
-- **99 testes** em 20 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
+- **103 testes** em 22 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`). `workers/**` é excluído do
   `vitest.config.ts` da raiz — **cada Worker roda sua própria suíte** (ver
-  abaixo): `workers/blog` com 61 testes e `workers/mail` com 6. Total do repo:
-  **166 testes unitários** em 3 suítes, mais 8 cenários e2e.
+  abaixo): `workers/blog` com 63 testes e `workers/mail` com 6. Total do repo:
+  **172 testes unitários** em 3 suítes, mais 8 cenários e2e.
 - **fake-indexeddb** (devDependency) fornece um IndexedDB em memória para os
   testes de `useBlogCache` — o runtime continua sem dependência nova.
 - **Portões de qualidade ✅** (rodar antes de subir):
@@ -33,6 +33,7 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 | `composables/__tests__/useBlogCache.spec.ts`       | round-trip índice/post no IndexedDB (`fake-indexeddb`); degrada para `null`/no-op sem IndexedDB                                                                                                                                                     |
 | `composables/__tests__/useTypewriter.spec.ts`      | digitação letra a letra, pausa fora da viewport/aba oculta e retomada sem reset, `prefers-reduced-motion`, cleanup no unmount                                                                                                                       |
 | `components/blog/__tests__/CategoryFilter.spec.ts` | Todos + quick pills limitadas, dropdown com todas as categorias (`aria-expanded`), emissão de seleção, Escape fecha devolvendo foco, categoria ativa refletida no trigger                                                                           |
+| `components/blog/__tests__/PostCard.spec.ts`       | capa do CDN com `alt=""` (decorativa); em erro de carga, troca pelo placeholder da categoria                                                                                                                                                        |
 | `composables/__tests__/useMail.spec.ts`            | envio com sucesso; erro quando a API responde `success: false`; timeout (`AbortController`); `reset`                                                                                                                                                |
 | `composables/__tests__/useContactForm.spec.ts`     | validação por campo (nome, e-mail, assunto, mensagem ≥ 10 chars), formulário válido sem erros, `clearForm`                                                                                                                                          |
 | `data/__tests__/services.spec.ts`                  | **integridade do conteúdo publicado**: sem `{{...}}`, sem preços (`R$`), catálogo 7 completo, 3 planos "Sob consulta", ícones referenciados existem em `icons.ts`, hero com `source`                                                                |
@@ -42,6 +43,7 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 | `data/__tests__/footer.spec.ts`                    | tópicos do rodapé apontam para `id` real de `services.catalog`, sem destino repetido                                                                                                                                                                |
 | `scripts/__tests__/dist-server.spec.ts`            | servidor estático do prerender: serve o shell original mesmo depois de `dist/index.html` virar snapshot (o que duplicava o JSON-LD), serve do disco o arquivo que existe, recusa rodar sobre um `dist/` já prerenderizado ou sem build              |
 | `scripts/__tests__/render-routes.spec.ts`          | `render.yaml` tem um rewrite por rota de `ROUTES` (`scripts/shared.mjs`) e mantém a catch-all de SPA por último — sem isso a catch-all engole as rotas e anula o prerender (ver `ARCHITECTURE.md`)                                                  |
+| `scripts/__tests__/sitemap.spec.ts`                | `public/sitemap.xml` lista exatamente `ROUTES` + autores de `team.json`; `robots.txt` declara os dois sitemaps                                                                                                                                      |
 | `stores/__tests__/consent.spec.ts`                 | transições do consentimento LGPD + getters                                                                                                                                                                                                          |
 | `components/__tests__/CookieConsent.spec.ts`       | banner aparece/oculta; aceitar/recusar                                                                                                                                                                                                              |
 | `components/ui/__tests__/BaseCombobox.spec.ts`     | combobox de interesse: abre com a lista completa ao focar, filtra ao digitar, "Nenhum resultado", emite a opção clicada, setas + Enter selecionam a destacada, Esc reverte mantendo o foco, clique fora não emite valor inválido, `focus()` exposto |
@@ -66,7 +68,7 @@ dimensões, JSON-LD com a chave `jsonld` e sem como fechar a tag) e
 `sitePages.spec.ts` (`/blog/:slug` e `/blog/autor/:slug` no domínio do site:
 post do índice, post recém-publicado fora do índice em cache, 404, repasse à
 origem quando o shell falha, métodos/arquivos repassados, snapshot de autor e
-fallback para o shell), **61 testes**. `index.spec.ts` cobre o parser:
+fallback para o shell; `/sitemap-posts.xml` gerado do R2), **63 testes**. `index.spec.ts` cobre o parser:
 `data-label` das tabelas, imagens (CDN, `<figure>` com legenda, `#LxA`,
 esquema perigoso descartado), blockquote de várias linhas num bloco só,
 parágrafo depois de tabela/lista envolvido em `<p>`, `#` rebaixado,
