@@ -7,6 +7,11 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Aviso de cookies não esconde mais o foco** — sem o modal, o aviso fixo
+  podia cobrir o elemento focado (botões do topo da Home e compartilhar do
+  cabeçalho do post, a 390px). Ele publica a própria altura em
+  `--consent-banner-height` (o `body` reserva esse espaço no fim) e rola a
+  página quando o foco cai embaixo dele.
 - **Callouts "Resumo" e "Em números" sem borda lateral** — saíram a borda
   grossa à esquerda, os cantos arredondados só à direita e o título em eyebrow
   em caixa alta; entraram painéis com cantos iguais, título em etiqueta

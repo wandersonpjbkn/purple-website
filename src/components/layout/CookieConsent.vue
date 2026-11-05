@@ -2,6 +2,7 @@
   <Transition name="consent">
     <section
       v-if="!consent.decided"
+      ref="banner"
       class="cookie-consent"
       aria-label="Aviso de cookies"
       @keydown.esc="reject"
@@ -35,12 +36,43 @@
 
 <script setup lang="ts">
 import { useGtm } from '@gtm-support/vue-gtm'
+import { useEventListener, useResizeObserver } from '@vueuse/core'
+import { onUnmounted, useTemplateRef, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useConsentStore } from '@/stores/consent'
 
 const consent = useConsentStore()
+
+const BANNER_HEIGHT_VAR = '--consent-banner-height'
+const FOCUS_GAP_PX = 16
+const banner = useTemplateRef<HTMLElement>('banner')
+
+const releaseSpace = () => document.documentElement.style.removeProperty(BANNER_HEIGHT_VAR)
+
+useResizeObserver(banner, ([entry]) => {
+  const height = entry?.borderBoxSize?.[0]?.blockSize ?? entry?.contentRect.height ?? 0
+  document.documentElement.style.setProperty(BANNER_HEIGHT_VAR, `${Math.ceil(height)}px`)
+})
+
+useEventListener(document, 'focusin', (event: FocusEvent) => {
+  const target = event.target
+  if (!banner.value || !(target instanceof HTMLElement) || banner.value.contains(target)) return
+  const focused = target.getBoundingClientRect()
+  const notice = banner.value.getBoundingClientRect()
+  const covered = focused.bottom > notice.top && focused.top < notice.bottom
+  if (covered) window.scrollBy({ top: focused.bottom - notice.top + FOCUS_GAP_PX, behavior: 'instant' })
+})
+
+watch(
+  () => consent.decided,
+  decided => {
+    if (decided) releaseSpace()
+  }
+)
+
+onUnmounted(releaseSpace)
 
 const accept = () => {
   consent.acceptAnalytics()

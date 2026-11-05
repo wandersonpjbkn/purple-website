@@ -1,6 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { nextTick } from 'vue'
 
 import CookieConsent from '@/components/layout/CookieConsent.vue'
 import { useConsentStore } from '@/stores/consent'
@@ -89,5 +90,107 @@ describe('CookieConsent (banner LGPD)', () => {
 
     wrapper = mount(CookieConsent, { global: { plugins: [pinia], stubs: routerStub } })
     expect(wrapper.find(BANNER).exists()).toBe(false)
+  })
+})
+
+describe('CookieConsent — espaço reservado para o foco', () => {
+  let resizeCallback: ((entries: unknown[]) => void) | undefined
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: (entries: unknown[]) => void) {
+          resizeCallback = callback
+        }
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      }
+    )
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    document.documentElement.style.removeProperty('--consent-banner-height')
+  })
+
+  it('publica a altura do aviso para a página reservar espaço no rodapé', async () => {
+    const banner = mountBanner()
+    await nextTick()
+    resizeCallback?.([
+      { target: banner.find(BANNER).element, contentRect: { height: 0 }, borderBoxSize: [{ blockSize: 120 }] },
+    ])
+
+    expect(document.documentElement.style.getPropertyValue('--consent-banner-height')).toBe('120px')
+  })
+
+  it('libera o espaço quando a escolha é feita', async () => {
+    const banner = mountBanner()
+    await nextTick()
+    resizeCallback?.([
+      { target: banner.find(BANNER).element, contentRect: { height: 0 }, borderBoxSize: [{ blockSize: 120 }] },
+    ])
+
+    await banner
+      .findAll('button')
+      .find(b => b.text().includes('Recusar'))!
+      .trigger('click')
+
+    expect(document.documentElement.style.getPropertyValue('--consent-banner-height')).toBe('')
+  })
+})
+
+describe('CookieConsent — foco não fica atrás do aviso', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+    document.querySelectorAll('[data-test="outside"]').forEach(node => node.remove())
+  })
+
+  const rect = (top: number, bottom: number) => ({
+    top,
+    bottom,
+    left: 0,
+    right: 100,
+    width: 100,
+    height: bottom - top,
+    x: 0,
+    y: top,
+    toJSON: () => ({}),
+  })
+
+  it('rola a página quando o elemento focado está coberto pelo aviso', async () => {
+    const banner = mountBanner()
+    await nextTick()
+    vi.spyOn(banner.find(BANNER).element, 'getBoundingClientRect').mockReturnValue(rect(600, 800))
+    const outside = document.createElement('button')
+    outside.dataset.test = 'outside'
+    document.body.append(outside)
+    vi.spyOn(outside, 'getBoundingClientRect').mockReturnValue(rect(650, 690))
+    const scrollBy = vi.spyOn(window, 'scrollBy').mockImplementation(() => {})
+
+    outside.focus()
+
+    expect(scrollBy).toHaveBeenCalledWith({ top: 106, behavior: 'instant' })
+  })
+
+  it('não rola quando o elemento focado está visível acima do aviso', async () => {
+    const banner = mountBanner()
+    await nextTick()
+    vi.spyOn(banner.find(BANNER).element, 'getBoundingClientRect').mockReturnValue(rect(600, 800))
+    const outside = document.createElement('button')
+    outside.dataset.test = 'outside'
+    document.body.append(outside)
+    vi.spyOn(outside, 'getBoundingClientRect').mockReturnValue(rect(100, 140))
+    const scrollBy = vi.spyOn(window, 'scrollBy').mockImplementation(() => {})
+
+    outside.focus()
+
+    expect(scrollBy).not.toHaveBeenCalled()
   })
 })

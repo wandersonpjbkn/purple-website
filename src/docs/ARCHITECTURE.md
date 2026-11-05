@@ -233,6 +233,9 @@ Solução **autoral e local**, sem biblioteca de consentimento de terceiros:
   sem overlay, sem trava de rolagem e sem roubar o foco. Montado logo depois do
   skip-link em `App.vue`, para ser o segundo ponto de Tab. Esc com o foco dentro
   dele equivale a "Recusar". Enquanto não há escolha, o GTM segue desligado.
+  Enquanto aberto, publica a própria altura em `--consent-banner-height` (o
+  `body` reserva esse espaço no fim da página) e, quando o foco cai num
+  elemento coberto por ele, rola a página para o elemento ficar acima do aviso.
 - **GTM** (`@gtm-support/vue-gtm`, `createGtm`) é registrado em `main.ts` **só se
   houver `VITE_GTM_ID`**, com `enabled` partindo do consentimento já persistido.
   O pacote em si é carregado via `import()` dinâmico dentro desse `if` (não no

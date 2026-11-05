@@ -168,7 +168,12 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   ele é montado logo depois do skip-link (`App.vue`) para ser alcançável no
   segundo Tab. Esc com o foco no banner equivale a "Recusar" (ausência de
   escolha explícita = recusa, padrão seguro sob LGPD); sem escolha, o GTM
-  segue desligado. Aplica
+  segue desligado. Sem o modal, o aviso podia cobrir o elemento focado (WCAG
+  2.4.11, foco não escondido): na Home e no post a 390px, os botões do topo e
+  o compartilhar do cabeçalho ficavam atrás dele. Agora o `body` reserva a
+  altura do aviso no fim da página e o foco que cai sob ele rola a página para
+  cima do aviso. `scroll-padding-bottom` foi testado e não resolve: o Chrome
+  não rola elemento que já está dentro da tela. Aplica
   viés de ancoragem deliberadamente (documentado com comentário permanente
   no próprio componente, por regra do projeto — ver `CONVENTIONS.md` §
   Vieses cognitivos).
