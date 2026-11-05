@@ -1,12 +1,17 @@
 <template>
-  <article class="service-card">
+  <article
+    class="service-card"
+    :class="{ 'service-card--horizontal': horizontal }"
+  >
     <div class="service-card__icon"><BaseIcon :name="service.icon" /></div>
-    <h3>{{ service.title }}</h3>
-    <p>{{ service.summary }}</p>
+    <div class="service-card__body">
+      <h3>{{ service.title }}</h3>
+      <p>{{ service.summary }}</p>
+    </div>
     <RouterLink
-      class="text-link"
+      class="text-link service-card__link"
       :to="`/servicos#${service.id}`"
-      >Saiba mais</RouterLink
+      >Conhecer o serviço</RouterLink
     >
   </article>
 </template>
@@ -17,5 +22,6 @@ import BaseIcon from '@/components/ui/BaseIcon.vue'
 
 defineProps<{
   service: { id: string; icon: string; title: string; summary: string }
+  horizontal?: boolean
 }>()
 </script>

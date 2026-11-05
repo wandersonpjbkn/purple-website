@@ -15,6 +15,12 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
 
 ### Funil de CTAs
 
+- **Link terciário da faixa escura desalinhado** — em `CtaBanner`, o link de
+  conteúdo ("Conhecer os serviços", "Conhecer a abordagem") ficava encostado à
+  esquerda sob dois botões de larguras diferentes. Os botões passaram a ter a
+  mesma largura e o link fica centralizado sob eles: é um botão de texto da
+  mesma pilha de ações (proximidade, alinhamento).
+
 - **Hierarquia de CTA invertida** — o botão de marca (primário) levava ao
   formulário (`/contato`) e o link discreto (terciário) levava ao WhatsApp —
   o inverso do que o dono do produto define como funil (macro conversão =
@@ -154,11 +160,20 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   `ContactPage.vue`.
 - **Mensagem de estado vazio do blog enganosa e sem ação de recuperação** —
   copy corrigida + botão de recuperação em `BlogPage.vue`.
-- **`CookieConsent.vue` não bloqueava a página** — agora tem backdrop, trava
-  `overflow` da página, focus trap real (Tab/Shift+Tab cicla só entre os
-  elementos do banner), `aria-modal="true"` (agora condiz com o
-  comportamento real) e Esc equivale a "Recusar" (decisão de produto:
-  ausência de escolha explícita = recusa, padrão seguro sob LGPD). Aplica
+- **`CookieConsent.vue` não bloqueia a página** — card fixo no rodapé da
+  viewport, sem overlay, sem trava de rolagem, sem focus trap e sem
+  `aria-modal`: é uma região (`<section aria-label>`), não um diálogo.
+  Decisão do dono do produto (2026-11-05), revertendo o modal anterior: o
+  overlay "distrai/perturba demais". Como o foco não é mais levado ao banner,
+  ele é montado logo depois do skip-link (`App.vue`) para ser alcançável no
+  segundo Tab. Esc com o foco no banner equivale a "Recusar" (ausência de
+  escolha explícita = recusa, padrão seguro sob LGPD); sem escolha, o GTM
+  segue desligado. Sem o modal, o aviso podia cobrir o elemento focado (WCAG
+  2.4.11, foco não escondido): na Home e no post a 390px, os botões do topo e
+  o compartilhar do cabeçalho ficavam atrás dele. Agora o `body` reserva a
+  altura do aviso no fim da página e o foco que cai sob ele rola a página para
+  cima do aviso. `scroll-padding-bottom` foi testado e não resolve: o Chrome
+  não rola elemento que já está dentro da tela. Aplica
   viés de ancoragem deliberadamente (documentado com comentário permanente
   no próprio componente, por regra do projeto — ver `CONVENTIONS.md` §
   Vieses cognitivos).
@@ -192,10 +207,13 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   imagem da home em qualquer post: o visitante compartilhava uma coisa e o
   destinatário via outra (correspondência com o mundo real). O Worker do blog
   agora injeta o head do post, com a capa como `og:image`.
-- **Capa no topo do corpo** — a capa só aparecia no card; na página do post o
-  leitor perdia a âncora visual que acabou de clicar (consistência,
-  reconhecimento em vez de memorização). Vai acima do texto, não no hero, para
-  não empurrar título e resumo para baixo da dobra. `width`/`height` +
+- **Capa no cabeçalho, ao lado do título** — a capa só aparecia no card; na
+  página do post o leitor perdia a âncora visual que acabou de clicar
+  (consistência, reconhecimento em vez de memorização). A partir de 900px fica
+  à direita de título, resumo e autoria, na metade do cabeçalho que ficava
+  vazia: não empurra título nem texto para baixo (o texto começa ~145px mais
+  acima em 1366px do que com a capa no topo do corpo). Abaixo de 900px empilha
+  depois da autoria, com até 32rem de largura. `width`/`height` +
   `aspect-ratio: 16 / 9` reservam o espaço (sem CLS); `fetchpriority="high"`
   porque costuma ser o LCP. `alt` vem de `coverAlt`; sem ele, `alt=""` — a capa
   ilustra e o título já está ao lado, repetir o título só faz o leitor de tela
@@ -223,20 +241,58 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   textual de cada célula cobre o significado. O mesmo já valia para o
   `display: block` com rolagem de antes.
 
+- **Compartilhar o post** — junto da autoria no cabeçalho (visível ao chegar,
+  inclusive no celular) e no rodapé do card do artigo (`<footer>` do
+  `<article>`, para quem terminou de ler). Links
+  de saída (LinkedIn, X, WhatsApp) com ícone da rede, porque o ícone é o que diz
+  para onde o post vai (o veto à marca do WhatsApp vale só para o CTA de
+  contato); "Copiar link" com rótulo, porque não sai da página; "Compartilhar"
+  (gaveta nativa) só onde o navegador oferece. Todos com 44px de alvo; o aviso
+  de cópia troca o rótulo do botão e é anunciado por `role="status"`
+  (visibilidade do status), inclusive num segundo clique antes de o aviso
+  sumir (o status é zerado antes de ser reescrito). Visual próprio, distinto do `SocialLink` do rodapé:
+  lá o link leva ao perfil da Purple, aqui leva o post para a rede de quem lê.
+  Contraste: ícone/rótulo `--purple-700` 12,4:1 sobre `--surface`; hover
+  `--purple` 5,8:1 sobre `--purple-50`. A borda `--border` (1,4:1) é
+  decorativa: o ícone/rótulo é o que identifica o controle.
+- **Citação sem caixa, no site inteiro** — a caixa tingida com borda lateral
+  (padrão repetido em muitos sites) deu lugar a texto centralizado entre dois
+  fios, com um traço lime curto no fio de cima. Um estilo só para o post e para
+  a frase de cada pessoa no `TeamCard` (Home e Sobre): mesma função, mesma
+  aparência (consistência). Texto `--purple-800` 16,3:1 sobre `--surface`.
+  Centralizar linhas longas custa um pouco de leitura; os trechos citados são
+  curtos, e no post a largura é limitada a 40ch. Quando a citação fecha uma
+  seção, o `h2` seguinte perde o fio de cima: dois fios a 40px um do outro
+  liam como ruído.
+
+- **Card de serviço no fim do post** — era uma caixa tingida com borda lime e
+  o rótulo "Como a Purple ajuda" acima do título. Passou a ser o mesmo card de
+  serviço da Home e da Abordagem (`ServiceTeaserCard`, versão horizontal):
+  mesma coisa, mesma aparência (consistência; Jakob). Fica abaixo da faixa
+  escura em peso, porque leva à navegação (serviços), não ao contato. O link
+  diz "Conhecer o serviço" em todos os cards de serviço (antes: "Saiba mais"
+  na Home e na Abordagem, "Ver esse serviço" no post), verbo que convida à
+  ação, e cobre o card inteiro: o `cursor: pointer` do card já prometia o
+  clique que só o link entregava.
+
 ### Callouts no corpo do post (2026-11-05)
 
 Só **dois** tipos, de propósito — destaque demais anula o destaque (lei de
-Prägnanz; heurística de design minimalista): `[!summary]` (bloco claro
-`--purple-50` com borda `--purple`, para o "em uma frase" do artigo) e
-`[!stat]` (bloco `--section-dark` com borda `--lime`, para o dado que
-sustenta o argumento). São visualmente distintos entre si e da citação comum
-(fundo `--bg-alt` + borda lime, itálico), para não exigir legenda. Título em
-eyebrow (padrão do site); o `[!stat]` segue a convenção de número: o valor em
-negrito vai em `--on-dark`, maior, e o lima fica só na borda/traço.
+Prägnanz; heurística de design minimalista): `[!summary]` (painel claro
+`--purple-50` com borda fina `--purple-100`, para o "em uma frase" do artigo)
+e `[!stat]` (painel `--section-dark` com um traço `--lime` curto no topo, para
+o dado que sustenta o argumento). Cantos iguais e sem borda lateral: a caixa
+tingida com borda grossa só à esquerda era o mesmo padrão repetido que saiu da
+citação e do card de serviço. São visualmente distintos entre si e da citação
+comum (centralizada entre fios, sem caixa), para não exigir legenda. O título
+("Resumo", "Em números") é uma etiqueta em pílula, não eyebrow em caixa alta;
+o `[!stat]` segue a convenção de número: o valor em negrito vai em
+`--on-dark`, maior (`--text-xl`), e o lima fica no traço e na etiqueta.
 `role="note"` para leitor de tela. Contraste: texto `--on-dark-strong` 13,2:1
-e título `--on-dark-muted` 9,6:1 sobre `--section-dark`; texto `--text`
-17,6:1 e título `--purple-700`/`--purple` ≥5,9:1 sobre `--purple-50`. Tipo
-desconhecido (`[!note]`) cai na citação comum, sem quebrar.
+sobre `--section-dark` e etiqueta `--lime` 8,7:1 sobre o fundo dela; texto
+`--text` 17,6:1 sobre `--purple-50` e etiqueta `--purple-700` 10,2:1 sobre
+`--purple-100`. Tipo desconhecido (`[!note]`) cai na citação comum, sem
+quebrar.
 
 ### SOLID / Clean Code
 
@@ -266,7 +322,8 @@ auditoria de código só podia inferir:
 - **Funil de CTA** (Sobre, Abordagem, Serviços): botão primário → WhatsApp
   (`wa.me`), secundário → `/contato` — confirmado nas 3 páginas.
 - **Cookie consent:** Esc fecha o banner (= Recusar), `overflow` da página
-  trava enquanto está aberto, foco preso ao banner.
+  trava enquanto está aberto, foco preso ao banner. _(Comportamento de
+  2026-07-09; trava e foco preso saíram em 2026-11-05 — ver "Corrigido".)_
 - **Menu mobile:** Esc e clique fora fecham o drawer; item de menu ativo
   ganha destaque visual no header desktop ("você está aqui").
 - **Turnstile degradando bem:** com o CDN da Cloudflare inacessível, o

@@ -58,13 +58,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  align-items: flex-start;
+  align-items: stretch;
+  width: max-content;
+  max-width: 100%;
   position: relative;
   z-index: 1;
   flex-shrink: 0;
 }
 
 .cta-banner__content-link {
+  align-self: center;
   color: var(--on-dark-muted);
   font-size: var(--text-sm);
 }

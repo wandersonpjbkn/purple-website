@@ -112,10 +112,11 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   lugar de um `<select>` nativo. Expõe `focus()` para a página levar o foco ao
   primeiro campo inválido.
 - `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (22 ícones, viewBox 24×24).
+  mapa tipado **`src/components/ui/icons.ts`** (23 ícones, viewBox 24×24).
   Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
-  de marca preenchidos** (`fill: true` — `linkedin` e `medium`; `instagram` é
-  stroke). Nome desconhecido cai num placeholder neutro (degradação graciosa —
+  de marca preenchidos** (`fill: true` — `linkedin`, `medium`, `x` e `whatsapp`;
+  `instagram` é stroke). O glifo do WhatsApp existe só para o compartilhar do
+  post: o CTA de contato não leva a marca do canal. Nome desconhecido cai num placeholder neutro (degradação graciosa —
   coberto por teste). Não introduzir glifos tipográficos (exemplo: `→ ← ✕`).
   ⚠️ `BaseIcon` **herda a cor do pai** (`currentColor`): sobre fundo escuro, o
   contêiner precisa setar `color` (ex.: `--lime`/`--on-dark`), senão o ícone
@@ -139,18 +140,34 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 
 **sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
 `AppFooter`, `CookieConsent` · **forms/** `TurnstileWidget` · **ui/**
-(+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
-`CategoryFilter`.
+(+ `StatCard`, `ServiceTeaserCard` — card de serviço da Home, da Abordagem e
+do fim do post; prop `horizontal` para a versão deitada do post; o link
+"Conhecer o serviço" cobre o card inteiro via `.service-card__link::before`,
+que também vale para o card em destaque da Home) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
+`CategoryFilter`, `PostShare` (compartilhar o post: links de saída para LinkedIn, X e
+WhatsApp, "Copiar link" e, onde o navegador oferece, a gaveta nativa; todos
+em pílula/círculo de `--tap-target-min`, fundo `--surface`, borda `--border`,
+ícone `--purple-700`. Os dois botões são `BaseButton` `secondary` com esse
+visual por cima. Não usa `SocialLink`: aquele leva ao perfil da Purple, este
+leva o post para a rede de quem lê. Usado junto da autoria no cabeçalho do post
+e no fim do artigo; os links levam UTM de `useShareLinks`).
 
 ## Conteúdo do post (`.prose`) ✅
 
 Markdown do blog renderizado em `BlogPostPage.vue` (`.prose`, estilo via
-`:deep()` — conteúdo sem classe própria, exceto o que o parser gera):
-citação (`--bg-alt` + borda lime), `figure`/`figcaption` (`--text-sm`,
+`:deep()` — conteúdo sem classe própria, exceto o que o parser gera). O card
+branco é o `<article class="post-article">`, que envolve o `.prose` e o
+`<footer>` com o compartilhar; o `.prose` cuida só da tipografia, porque o
+`v-html` substitui tudo o que estiver dentro dele:
+citação (estilo global de `blockquote`, ver abaixo, em `--text-lg` e até
+40ch), `figure`/`figcaption` (`--text-sm`,
 `--muted`), tabelas (empilhadas abaixo de `sm` com 3+ colunas) e **callouts**
-`.callout--summary` (`--purple-50` + borda `--purple`) e `.callout--stat`
-(`--section-dark` + borda `--lime`), título com o mixin `eyebrow`. Não criar
-um terceiro tipo de callout sem rever `UX_REVIEW.md`.
+`.callout--summary` (painel `--purple-50` com borda fina `--purple-100`) e
+`.callout--stat` (painel `--section-dark` com traço `--lime` curto no topo),
+ambos com `--radius-lg` nos quatro cantos e sem borda lateral; título em
+etiqueta pílula (`--purple-700` sobre `--purple-100`; `--lime` sobre lima a
+14% no escuro). Não criar um terceiro tipo de callout sem rever
+`UX_REVIEW.md`.
 
 ## Stat grid canônico ✅
 
@@ -166,6 +183,17 @@ Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usa
 
 Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
 (`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e o
+
+## Citação (`blockquote`) ✅
+
+Um estilo para o site inteiro, no elemento, em `base/_typography.scss`: texto
+centralizado entre dois fios `--border`, traço `--lime` curto no meio do fio de
+cima, `--purple-800`, peso 600, sem caixa, sem fundo e sem itálico. Quem usa só
+ajusta tamanho e margem: o corpo do post (`.prose`, `--text-lg`; o `h2` que
+vem logo depois perde o próprio fio, para não empilhar dois) e a frase de cada
+pessoa no `TeamCard` (Home e Sobre, `--text-base`, entre aspas curvas “…”).
+Não voltar à caixa tingida com borda lateral para citação.
+
 `span` interno de `stat-card__number`. A barra do card do hero usa gradiente
 `purple → lime`. Preservar ao criar novos blocos numéricos.
 

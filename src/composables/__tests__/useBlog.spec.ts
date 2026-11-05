@@ -65,7 +65,7 @@ vi.mock('@/composables/useBlogData', async () => {
   }
 })
 
-import { useBlog, formatDate } from '@/composables/useBlog'
+import { useBlog, formatDate, extractHeadings } from '@/composables/useBlog'
 
 beforeAll(() => {
   // jsdom não implementa scrollTo; setPage o usa.
@@ -123,5 +123,24 @@ describe('useBlog', () => {
 describe('formatDate', () => {
   it('formata ISO em pt-BR', () => {
     expect(formatDate('2026-01-15')).toMatch(/2026/)
+  })
+})
+
+describe('extractHeadings', () => {
+  it('lista h2 e h3 com id, nível e texto sem tags', () => {
+    const html = '<h2 id="intro">Intro <em>forte</em></h2><p>x</p><h3 id="detalhe">Detalhe</h3><h4 id="fora">Fora</h4>'
+    expect(extractHeadings(html)).toEqual([
+      { level: 2, id: 'intro', text: 'Intro forte' },
+      { level: 3, id: 'detalhe', text: 'Detalhe' },
+    ])
+  })
+
+  it('decodifica entidades HTML do título', () => {
+    const html = '<h2 id="citacao">&quot;A frase&quot; &amp; o caso &lt;Canva&gt; d&#39;água</h2>'
+    expect(extractHeadings(html)).toEqual([{ level: 2, id: 'citacao', text: `"A frase" & o caso <Canva> d'água` }])
+  })
+
+  it('ignora heading sem id', () => {
+    expect(extractHeadings('<h2>Sem âncora</h2>')).toEqual([])
   })
 })

@@ -5,12 +5,12 @@
       href="#main-content"
       >Pular para o conteúdo</a
     >
+    <CookieConsent />
     <AppHeader />
     <main id="main-content">
       <RouterView />
     </main>
     <AppFooter />
-    <CookieConsent />
   </div>
 </template>
 

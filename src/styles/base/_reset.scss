@@ -19,6 +19,7 @@ body {
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
+  padding-bottom: var(--consent-banner-height, 0px);
 }
 
 a {

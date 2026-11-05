@@ -7,6 +7,62 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Aviso de cookies não esconde mais o foco** — sem o modal, o aviso fixo
+  podia cobrir o elemento focado (botões do topo da Home e compartilhar do
+  cabeçalho do post, a 390px). Ele publica a própria altura em
+  `--consent-banner-height` (o `body` reserva esse espaço no fim) e rola a
+  página quando o foco cai embaixo dele.
+- **Compartilhar mais robusto** — `withShareUtm` devolve a URL como veio
+  quando ela não é absoluta, em vez de lançar erro e derrubar a página; o
+  "Copiar link" volta a ser anunciado num segundo clique antes de o aviso
+  sumir.
+- **Callouts "Resumo" e "Em números" sem borda lateral** — saíram a borda
+  grossa à esquerda, os cantos arredondados só à direita e o título em eyebrow
+  em caixa alta; entraram painéis com cantos iguais, título em etiqueta
+  pílula e, no `[!stat]`, um traço lime curto no topo e o número em
+  `--text-xl`.
+- **Card de serviço no fim do post** — a caixa tingida com borda lime deu
+  lugar ao `ServiceTeaserCard` (prop nova `horizontal`), o mesmo card de
+  serviço da Home e da Abordagem. O link de todos os cards de serviço passou a
+  "Conhecer o serviço" (antes "Saiba mais" e "Ver esse serviço") e agora cobre
+  o card inteiro, que já tinha `cursor: pointer` sem ser clicável.
+- **Compartilhar o post** — `PostShare` junto da autoria no cabeçalho e no
+  rodapé do card do artigo (o card passou do `.prose` para um
+  `<article class="post-article">` que envolve o texto e o `<footer>`): LinkedIn, X e WhatsApp (nova aba), "Copiar link" e, onde o
+  navegador oferece, a gaveta nativa. Links com UTM (`utm_source` = rede,
+  `copy` ou `native`; `utm_medium=social`; `utm_campaign=blog-share`), montados
+  por `useShareLinks` a partir de `SITE_URL` (agora exportado por
+  `usePageMeta`). Ícones novos em `icons.ts`: `x`, `whatsapp`, `link`, `share`.
+- **Citações sem caixa, no site inteiro** — saiu o bloco tingido com borda
+  lime e itálico (no post e na frase de cada pessoa do `TeamCard`, Home e
+  Sobre); entrou um estilo global de `blockquote` em `base/_typography.scss`:
+  texto centralizado entre dois fios, com traço lime curto. Post e card só
+  ajustam tamanho e margem. No post, o `h2` logo depois de uma citação perde o
+  próprio fio (antes eram dois fios empilhados); no `TeamCard`, aspas retas
+  viraram curvas.
+- **Link terciário do `CtaBanner` centralizado** — botões com a mesma largura
+  e o link de conteúdo centralizado sob eles (antes, encostado à esquerda).
+- **Aviso de cookies deixou de bloquear a página** — saíram o overlay roxo,
+  a trava de rolagem, o focus trap, o foco automático e o `aria-modal`; o
+  card no rodapé da viewport fica igual. Motivo (dono do produto): o overlay
+  "distrai/perturba demais". O banner passou a ser montado logo depois do
+  skip-link, para quem navega por teclado chegar nele no segundo Tab. Esc
+  com o foco no banner continua valendo "Recusar". `prerender.mjs` perdeu a
+  limpeza do `overflow` (não há mais trava); `color-audit.mjs` e o e2e
+  fecham o aviso clicando em "Recusar análise" em vez de Esc.
+- **Capa do post no cabeçalho, ao lado do título** — antes ficava no topo do
+  corpo, ao lado do sumário, e ocupava ~520px de altura no desktop antes do
+  texto (um limite de 200px chegou a ser aplicado, mas cortava a foto em
+  faixa). Agora, a partir de 900px, fica à direita de título, resumo e
+  autoria, em 16:9 inteira, ocupando a metade do cabeçalho que estava vazia;
+  o texto do post começa ~145px mais acima em 1366px. Abaixo de 900px empilha
+  depois da autoria (máx. 32rem de largura); no celular a altura não muda.
+- **Sumário do post sem entidade HTML crua** — títulos com aspas, `&`, `<`
+  ou `>` apareciam como `&quot;`/`&amp;` no "Neste artigo" (lateral e
+  mobile): os títulos eram tirados do HTML do post por regex, que removia as
+  tags mas não decodificava as entidades. `extractHeadings` (em
+  `useBlog.ts`) passou a ler o HTML com `DOMParser` e usar o `textContent`
+  de cada `h2[id]`/`h3[id]`.
 - **Sitemap dos posts** — `/sitemap-posts.xml`, gerado pelo Worker do blog a
   partir do índice do R2, declarado no `robots.txt` ao lado do `sitemap.xml`
   estático (que ganhou as páginas de autor e um teste de sincronia com

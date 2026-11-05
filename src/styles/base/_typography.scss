@@ -90,3 +90,37 @@ code {
   border-radius: 6px;
   font-size: 0.875em;
 }
+
+blockquote {
+  position: relative;
+  margin: 0;
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--purple-800);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    width: var(--space-12);
+    height: 3px;
+    background: var(--lime);
+    border-radius: var(--radius-pill);
+    transform: translateX(-50%);
+  }
+
+  p {
+    margin: 0 auto;
+    color: inherit;
+  }
+
+  p + p {
+    margin-top: var(--space-3);
+  }
+}

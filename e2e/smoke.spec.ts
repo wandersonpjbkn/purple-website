@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
+
+const dismissCookieNotice = (page: Page) => page.getByRole('button', { name: 'Recusar análise' }).click()
 
 // Read as JSON via fs, not an ES import — Playwright's test runner executes
 // specs through Node's native ESM loader, which requires import attributes
@@ -51,7 +53,7 @@ test.describe('Funcionalidade: Navegação principal', () => {
     test(`Cenário: visitante abre "${label}" pelo menu`, async ({ page }) => {
       // Dado que o visitante está na Home
       await page.goto('/')
-      await page.keyboard.press('Escape') // fecha o aviso de cookies
+      await dismissCookieNotice(page)
 
       // Quando ele clica no item do menu principal
       await page
@@ -77,7 +79,7 @@ test.describe('Funcionalidade: Formulário de contato', () => {
     )
 
     await page.goto('/contato')
-    await page.keyboard.press('Escape')
+    await dismissCookieNotice(page)
 
     // Quando o visitante preenche o formulário válido e envia
     await page.locator('input[placeholder="Seu nome"]').fill('Visitante de teste')
@@ -94,7 +96,7 @@ test.describe('Funcionalidade: Formulário de contato', () => {
   test('Cenário: campos vazios bloqueiam o envio e focam o primeiro erro', async ({ page }) => {
     // Dado que o visitante está no formulário de contato
     await page.goto('/contato')
-    await page.keyboard.press('Escape')
+    await dismissCookieNotice(page)
 
     // Quando ele envia sem preencher nada
     await page.getByRole('button', { name: /Enviar mensagem/i }).click()
