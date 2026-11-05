@@ -7,6 +7,14 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Aviso de cookies deixou de bloquear a página** — saíram o overlay roxo,
+  a trava de rolagem, o focus trap, o foco automático e o `aria-modal`; o
+  card no rodapé da viewport fica igual. Motivo (dono do produto): o overlay
+  "distrai/perturba demais". O banner passou a ser montado logo depois do
+  skip-link, para quem navega por teclado chegar nele no segundo Tab. Esc
+  com o foco no banner continua valendo "Recusar". `prerender.mjs` perdeu a
+  limpeza do `overflow` (não há mais trava); `color-audit.mjs` e o e2e
+  fecham o aviso clicando em "Recusar análise" em vez de Esc.
 - **Sumário do post sem entidade HTML crua** — títulos com aspas, `&`, `<`
   ou `>` apareciam como `&quot;`/`&amp;` no "Neste artigo" (lateral e
   mobile): os títulos eram tirados do HTML do post por regex, que removia as

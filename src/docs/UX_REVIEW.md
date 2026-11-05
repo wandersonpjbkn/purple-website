@@ -154,11 +154,15 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   `ContactPage.vue`.
 - **Mensagem de estado vazio do blog enganosa e sem ação de recuperação** —
   copy corrigida + botão de recuperação em `BlogPage.vue`.
-- **`CookieConsent.vue` não bloqueava a página** — agora tem backdrop, trava
-  `overflow` da página, focus trap real (Tab/Shift+Tab cicla só entre os
-  elementos do banner), `aria-modal="true"` (agora condiz com o
-  comportamento real) e Esc equivale a "Recusar" (decisão de produto:
-  ausência de escolha explícita = recusa, padrão seguro sob LGPD). Aplica
+- **`CookieConsent.vue` não bloqueia a página** — card fixo no rodapé da
+  viewport, sem overlay, sem trava de rolagem, sem focus trap e sem
+  `aria-modal`: é uma região (`<section aria-label>`), não um diálogo.
+  Decisão do dono do produto (2026-11-05), revertendo o modal anterior: o
+  overlay "distrai/perturba demais". Como o foco não é mais levado ao banner,
+  ele é montado logo depois do skip-link (`App.vue`) para ser alcançável no
+  segundo Tab. Esc com o foco no banner equivale a "Recusar" (ausência de
+  escolha explícita = recusa, padrão seguro sob LGPD); sem escolha, o GTM
+  segue desligado. Aplica
   viés de ancoragem deliberadamente (documentado com comentário permanente
   no próprio componente, por regra do projeto — ver `CONVENTIONS.md` §
   Vieses cognitivos).
@@ -266,7 +270,8 @@ auditoria de código só podia inferir:
 - **Funil de CTA** (Sobre, Abordagem, Serviços): botão primário → WhatsApp
   (`wa.me`), secundário → `/contato` — confirmado nas 3 páginas.
 - **Cookie consent:** Esc fecha o banner (= Recusar), `overflow` da página
-  trava enquanto está aberto, foco preso ao banner.
+  trava enquanto está aberto, foco preso ao banner. _(Comportamento de
+  2026-07-09; trava e foco preso saíram em 2026-11-05 — ver "Corrigido".)_
 - **Menu mobile:** Esc e clique fora fecham o drawer; item de menu ativo
   ganha destaque visual no header desktop ("você está aqui").
 - **Turnstile degradando bem:** com o CDN da Cloudflare inacessível, o

@@ -66,11 +66,6 @@ const run = async () => {
     await page.waitForTimeout(300)
 
     await page.evaluate(() => {
-      // CookieConsent locks body scroll (`overflow: hidden`) while consent is
-      // unset, which is always true in this fresh headless context — strip it
-      // so the frozen snapshot doesn't ship real visitors an unscrollable page.
-      document.body.style.overflow = ''
-
       // The blog failure notice is transient runtime state, not page content:
       // the visitor's browser refetches and renders posts (or its own error).
       // Freezing it here would publish a false claim to every crawler.

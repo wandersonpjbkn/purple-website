@@ -1,21 +1,10 @@
 <template>
-  <Transition name="consent-backdrop">
-    <div
-      v-if="!consent.decided"
-      class="cookie-consent-backdrop"
-      aria-hidden="true"
-    />
-  </Transition>
   <Transition name="consent">
     <section
       v-if="!consent.decided"
-      ref="bannerRef"
       class="cookie-consent"
-      role="dialog"
-      aria-modal="true"
       aria-label="Aviso de cookies"
-      tabindex="-1"
-      @keydown="handleKeydown"
+      @keydown.esc="reject"
     >
       <div class="cookie-consent__inner">
         <p class="cookie-consent__text">
@@ -46,17 +35,12 @@
 
 <script setup lang="ts">
 import { useGtm } from '@gtm-support/vue-gtm'
-import { useIntersectionObserver } from '@vueuse/core'
 import { RouterLink } from 'vue-router'
-import { ref, onUnmounted, watch, nextTick } from 'vue'
 
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useConsentStore } from '@/stores/consent'
 
 const consent = useConsentStore()
-
-const bannerRef = ref<HTMLElement | null>(null)
-const focusBanner = () => nextTick(() => bannerRef.value?.focus())
 
 const accept = () => {
   consent.acceptAnalytics()
@@ -67,63 +51,10 @@ const reject = () => {
   consent.rejectAnalytics()
   useGtm()?.enable(false)
 }
-
-const handleKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape') {
-    reject()
-    return
-  }
-
-  if (event.key !== 'Tab' || !bannerRef.value) return
-
-  const focusable = bannerRef.value.querySelectorAll<HTMLElement>('a[href], button:not(:disabled)')
-  if (focusable.length === 0) return
-
-  const first = focusable[0]!
-  const last = focusable[focusable.length - 1]!
-
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault()
-    last.focus()
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault()
-    first.focus()
-  }
-}
-
-watch(
-  () => consent.decided,
-  decided => {
-    document.body.style.overflow = decided ? '' : 'hidden'
-    if (!decided) focusBanner()
-  },
-  { immediate: true }
-)
-
-// Ad/tracking blockers commonly cosmetic-filter cookie banners (`display: none`)
-// without ever calling accept()/reject() — the store stays `unset` forever, so
-// body scroll stays locked with nothing left on screen to dismiss it. If the
-// banner stops actually rendering while consent is still unset, fail open
-// (reject, the privacy-safe default) so the page stays usable.
-useIntersectionObserver(bannerRef, entries => {
-  const entry = entries[entries.length - 1]
-  if (entry && !entry.isIntersecting && !consent.decided) reject()
-})
-
-onUnmounted(() => {
-  document.body.style.overflow = ''
-})
 </script>
 
 <style scoped lang="scss">
 @use '@/styles/abstracts/mixins' as *;
-
-.cookie-consent-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 99;
-  background: rgba(var(--purple-rgb), 0.35);
-}
 
 .cookie-consent {
   position: fixed;
@@ -192,14 +123,5 @@ onUnmounted(() => {
 .consent-leave-to {
   opacity: 0;
   transform: translateY(1rem);
-}
-
-.consent-backdrop-enter-active,
-.consent-backdrop-leave-active {
-  transition: opacity 0.25s var(--ease);
-}
-.consent-backdrop-enter-from,
-.consent-backdrop-leave-to {
-  opacity: 0;
 }
 </style>

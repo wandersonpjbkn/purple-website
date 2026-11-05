@@ -122,14 +122,12 @@ const run = async () => {
   // prefers-reduced-motion.
   await page.emulateMedia({ reducedMotion: 'reduce' })
 
-  // Primeira navegação: descarta o aviso de cookies. O backdrop
-  // (CookieConsent.vue) cobre 100% da viewport com roxo a 35% de opacidade
-  // até ser decidido — sem isso, cada pixel do site sairia contaminado de
-  // roxo na auditoria. Persiste via pinia-plugin-persistedstate, então não
-  // reaparece nas rotas seguintes.
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('#app > *', { timeout: 15000 })
-  await page.keyboard.press('Escape').catch(() => {})
+  await page
+    .getByRole('button', { name: 'Recusar análise' })
+    .click({ timeout: 5000 })
+    .catch(() => {})
 
   const aggregate = { neutral: 0, purple: 0, lime: 0, other: 0 }
   const rows = []
