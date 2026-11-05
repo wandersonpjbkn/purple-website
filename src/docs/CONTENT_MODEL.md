@@ -1,6 +1,6 @@
 # Content Model (as-built) — site Purple
 
-> Verdade observada no código em **2026-09-05**. Onde mora cada conteúdo e qual
+> Verdade observada no código em **2026-11-05**. Onde mora cada conteúdo e qual
 > é a regra de validação. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) · [`POSITIONING`](POSITIONING.md) ·
@@ -17,6 +17,47 @@ Status: ✅ dado real publicável · ⏳ pendência registrada.
 
 O conteúdo do blog não está versionado neste repositório — vive num bucket R2,
 lido pelo Worker `workers/blog` (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
+
+Frontmatter de post: `title`, `slug` (opcional; padrão = nome do arquivo),
+`excerpt`, `date`, `author` (slug de `team.json`), `category`, `tags[]`,
+`readTime` (opcional; calculado a ≈200 wpm), `featured`, `cover` (caminho
+relativo no CDN, ex.: `blog/post-6.jpg`) e `coverAlt` (opcional). Além de capa
+do card e do topo do post, `title`, `excerpt` e `cover` são o
+`<title>`/description/`og:image` do post — inclusive para preview de link
+(LinkedIn, WhatsApp), que lê o que o Worker injeta.
+
+- **`coverAlt`** — descreve a capa **só quando ela informa algo que o título
+  não diz** (ex.: um gráfico, uma pessoa específica). Sem ele, a capa é tratada
+  como ilustrativa (`alt=""`) e o `og:image:alt` usa o título.
+- **Imagens no corpo** — `![alt](caminho)`. Caminho relativo (ex.:
+  `blog/equipe.jpg`) é resolvido para o CDN; URL absoluta e caminho do site
+  (`/…`) ficam como estão. Dimensões opcionais no fragmento:
+  `blog/grafico.png#1200x800` (evita salto de layout; recomendado). Imagem
+  sozinha no parágrafo vira `<figure>`; o **título** vira legenda:
+  `![Equipe reunida](blog/equipe.jpg#1200x800 "Time da Purple em 2026")`.
+  `alt` descreve a imagem; a legenda complementa (não repetir um no outro).
+- **Callouts** — dois tipos, nada além disso:
+  - `> [!summary]` — "Resumo": a ideia do artigo em uma ou duas frases.
+  - `> [!stat] Título opcional` — "Em números" (ou o título dado): o dado
+    que sustenta o argumento, **com fonte** no próprio texto.
+
+  ```
+  > [!stat] Afastamentos em 2025
+  > **546.254** afastamentos por transtornos mentais (Ministério da Previdência Social).
+  ```
+
+  Um de cada por post, no máximo — callout em excesso deixa de destacar.
+  Outro tipo (`[!note]`…) vira citação comum.
+
+- **Citação** — linhas `>` consecutivas formam um único bloco.
+- **HTML cru não é aceito** — tags escritas no `.md` aparecem como texto. Links
+  só `http(s)`, `mailto`, `tel`, relativo ou `#`; outro esquema vira texto.
+  Use `##` e abaixo para seções (`#` é rebaixado a `##`: o título do post já é
+  o `h1` da página).
+- **Tabelas** — sintaxe GFM (`| a | b |` + linha `| --- | --- |`). O parser
+  rotula cada célula com o texto do cabeçalho da coluna (`data-label`, sem a
+  marcação de negrito/itálico/código/link), usado no empilhamento do mobile:
+  o cabeçalho precisa fazer sentido lido ao lado de cada valor.
 
 ## `src/data/*.json` — fragmentado por domínio ✅
 

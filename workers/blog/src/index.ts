@@ -1,6 +1,9 @@
 import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
 import { timingSafeEqual } from '../../shared/security'
 
+import { markdownToHtml } from './markdown'
+import { SHELL_PATH, buildPostHead, buildPostsSitemap, notFoundHead, renderPostPage } from './postPage'
+
 import type { Env, BlogPost, PostMeta, RawFrontmatter } from './types'
 
 const CORS_METHODS = 'GET, OPTIONS'
@@ -11,6 +14,10 @@ const INDEX_TTL_SECONDS = 300
 const POST_TTL_SECONDS = 3600
 
 const json = (body: unknown, status = 200, origin = '*') => jsonResponse(body, status, origin, CORS_METHODS)
+
+const POSTS_SITEMAP_PATH = '/sitemap-posts.xml'
+const AUTHOR_PAGE_PATH = /^\/blog\/autor\/([^/]+)\/?$/
+const POST_PAGE_PATH = /^\/blog\/([^/]+)\/?$/
 
 const indexCacheKey = (requestUrl: string): Request => {
   const url = new URL(requestUrl)
@@ -65,6 +72,7 @@ const buildMeta = (key: string, fm: RawFrontmatter, body: string): PostMeta => {
     readTime: fm.readTime ?? Math.ceil(wordCount / 200),
     featured: fm.featured ?? false,
     cover: fm.cover ?? '',
+    coverAlt: fm.coverAlt ?? '',
     wordCount,
   }
 }
@@ -95,7 +103,7 @@ async function getPostBySlug(env: Env, slug: string): Promise<BlogPost | null> {
   if (direct) {
     const { fm, body } = parseFrontmatter(await direct.text())
     const meta = buildMeta(`posts/${slug}.md`, fm, body)
-    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body) }
+    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body, { cdnUrl: env.CDN_URL }) }
   }
 
   // Slow path: the frontmatter slug may differ from the file name.
@@ -106,7 +114,7 @@ async function getPostBySlug(env: Env, slug: string): Promise<BlogPost | null> {
 
     const { fm, body } = parseFrontmatter(await file.text())
     const meta = buildMeta(key, fm, body)
-    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body) }
+    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body, { cdnUrl: env.CDN_URL }) }
   }
 
   return null
@@ -123,11 +131,85 @@ async function listPosts(env: Env): Promise<BlogPost[]> {
       if (!file) return null
 
       const { fm, body } = parseFrontmatter(await file.text())
-      return { ...buildMeta(key, fm, body), html: markdownToHtml(body) } as BlogPost
+      return { ...buildMeta(key, fm, body), html: markdownToHtml(body, { cdnUrl: env.CDN_URL }) } as BlogPost
     })
   )
 
   return blogPosts.filter((p): p is BlogPost => p !== null).sort(byDateDesc)
+}
+
+// Site pages (/blog/* on the main domain)
+
+const toSiteOrigin = (request: Request, env: Env): Request => {
+  const url = new URL(request.url)
+  return new Request(`${env.SITE_ORIGIN}${url.pathname}${url.search}`, request)
+}
+
+const fetchShell = async (env: Env): Promise<Response> => {
+  const shell = await fetch(`${env.SITE_ORIGIN}${SHELL_PATH}`)
+  if (!shell.ok) throw new Error(`Shell respondeu ${shell.status}.`)
+  return shell
+}
+
+async function getCachedIndex(env: Env, ctx: ExecutionContext, origin: string): Promise<PostMeta[]> {
+  const indexResponse = await withEdgeCache(new Request(`${origin}/index`), ctx, INDEX_TTL_SECONDS, async () => ({
+    body: await buildIndex(env),
+  }))
+  return (await indexResponse.json()) as PostMeta[]
+}
+
+async function handlePostsSitemap(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  const posts = await getCachedIndex(env, ctx, new URL(request.url).origin)
+  return new Response(buildPostsSitemap(posts, env.SITE_ORIGIN), {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': `public, max-age=${INDEX_TTL_SECONDS}`,
+    },
+  })
+}
+
+async function findPostMeta(env: Env, ctx: ExecutionContext, origin: string, slug: string): Promise<PostMeta | null> {
+  const listed = (await getCachedIndex(env, ctx, origin)).find(meta => meta.slug === slug)
+  if (listed) return listed
+
+  const key = `posts/${slug}.md`
+  const file = await env.POSTS_BUCKET.get(key)
+  if (!file) return null
+
+  const { fm, body } = parseFrontmatter(await file.text())
+  const meta = buildMeta(key, fm, body)
+  return meta.slug === slug ? meta : null
+}
+
+async function handleAuthorPage(env: Env, slug: string): Promise<Response> {
+  const snapshot = await fetch(`${env.SITE_ORIGIN}/blog/autor/${encodeURIComponent(slug)}/index.html`)
+  return snapshot.ok ? snapshot : fetchShell(env)
+}
+
+async function handlePostPage(request: Request, env: Env, ctx: ExecutionContext, slug: string): Promise<Response> {
+  const origin = new URL(request.url).origin
+  const [meta, shell] = await Promise.all([findPostMeta(env, ctx, origin, slug), fetchShell(env)])
+  const config = { siteOrigin: env.SITE_ORIGIN, cdnUrl: env.CDN_URL }
+
+  return meta ? renderPostPage(shell, buildPostHead(meta, config), 200) : renderPostPage(shell, notFoundHead(), 404)
+}
+
+async function handleSitePage(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  const { pathname } = new URL(request.url)
+  const isRead = request.method === 'GET' || request.method === 'HEAD'
+  if (!isRead || pathname.endsWith('/index.html')) return fetch(toSiteOrigin(request, env))
+
+  try {
+    const author = AUTHOR_PAGE_PATH.exec(pathname)?.[1]
+    if (author) return await handleAuthorPage(env, decodeURIComponent(author))
+
+    const slug = POST_PAGE_PATH.exec(pathname)?.[1]
+    if (slug) return await handlePostPage(request, env, ctx, decodeURIComponent(slug))
+  } catch (err) {
+    console.error('[site-page] falha, servindo a origem:', err instanceof Error ? err.message : String(err))
+  }
+
+  return fetch(toSiteOrigin(request, env))
 }
 
 const weakEtag = (payload: string): string => {
@@ -194,6 +276,10 @@ export default {
     const origin = request.headers.get('Origin') ?? ''
     const allowedOrigins = buildAllowedOrigins(env)
 
+    if (url.pathname.startsWith('/blog/')) {
+      return handleSitePage(request, env, ctx)
+    }
+
     if (url.pathname === '/deploy' && request.method === 'POST') {
       return handleDeployRequest(request, env, ctx)
     }
@@ -213,8 +299,14 @@ export default {
     const responseOrigin = allowedOrigins.includes(origin) ? origin : '*'
 
     try {
+      if (url.pathname === POSTS_SITEMAP_PATH) {
+        return await handlePostsSitemap(request, env, ctx)
+      }
+
       if (url.pathname === '/index') {
-        const response = await withEdgeCache(request, ctx, INDEX_TTL_SECONDS, async () => ({ body: await buildIndex(env) }))
+        const response = await withEdgeCache(request, ctx, INDEX_TTL_SECONDS, async () => ({
+          body: await buildIndex(env),
+        }))
         return finalize(response, request, responseOrigin)
       }
 
@@ -272,95 +364,6 @@ export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: strin
   }
 
   return { fm, body }
-}
-
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-}
-
-export function markdownToHtml(md: string): string {
-  let html = md
-
-  html = html.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_, header: string, rows: string) => {
-    const th = header
-      .split('|')
-      .filter(Boolean)
-      .map((c: string) => `<th>${c.trim()}</th>`)
-      .join('')
-    const trs = rows
-      .trim()
-      .split('\n')
-      .map((row: string) => {
-        const tds = row
-          .split('|')
-          .filter(Boolean)
-          .map((c: string) => `<td>${c.trim()}</td>`)
-          .join('')
-        return `<tr>${tds}</tr>`
-      })
-      .join('')
-    return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`
-  })
-
-  // Code blocks (before everything else, so inner content isn't processed)
-  html = html.replace(/```\w*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-
-  html = html.replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
-
-  // Only h2/h3 get ids — that's what BlogPostPage's table of contents extracts.
-  const headingCounters: Record<string, number> = {}
-  html = html.replace(/^(#{2,6}) (.+)$/gm, (_, hashes: string, text: string) => {
-    const level = hashes.length
-    const base = slugify(text)
-    headingCounters[base] = (headingCounters[base] ?? 0) + 1
-    const id = headingCounters[base] > 1 ? `${base}-${headingCounters[base]}` : base
-    return `<h${level} id="${id}">${text}</h${level}>`
-  })
-
-  html = html.replace(/^---$/gm, '<hr>')
-
-  html = html.replace(/^((?:^- .+\n?)+)/gm, (block: string) => {
-    const items = block
-      .trim()
-      .split('\n')
-      .map((l: string) => `<li>${l.replace(/^- /, '')}</li>`)
-      .join('')
-    return `<ul>${items}</ul>`
-  })
-
-  html = html.replace(/^((?:^\d+\. .+\n?)+)/gm, (block: string) => {
-    const items = block
-      .trim()
-      .split('\n')
-      .map((l: string) => `<li>${l.replace(/^\d+\. /, '')}</li>`)
-      .join('')
-    return `<ol>${items}</ol>`
-  })
-
-  html = html.replace(/!\[(.*?)\]\((.+?)\)/g, '<img alt="$1" src="$2">')
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>')
-  // eslint-disable-next-line sonarjs/super-linear-regex -- both groups are bounded by fixed delimiters ], (, ), no backtracking ambiguity; verified empirically.
-  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
-
-  html = html
-    .split(/\n\n+/)
-    .map(block => {
-      block = block.trim()
-      if (!block) return ''
-      if (/^<(h[1-6]|ul|ol|pre|blockquote|table|hr)/.test(block)) return block
-      return `<p>${block.replace(/\n/g, ' ')}</p>`
-    })
-    .join('\n')
-
-  return html
 }
 
 export function countWords(text: string): number {

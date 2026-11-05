@@ -70,18 +70,7 @@
               class="sidebar-box"
             >
               <h3>Neste artigo</h3>
-              <ul>
-                <li
-                  v-for="h in headings"
-                  :key="h.id"
-                >
-                  <a
-                    :href="`#${h.id}`"
-                    :class="{ 'toc-h3': h.level === 3 }"
-                    >{{ h.text }}</a
-                  >
-                </li>
-              </ul>
+              <PostToc :headings="headings" />
             </div>
 
             <div class="sidebar-box">
@@ -95,6 +84,38 @@
           </aside>
 
           <div class="post-body">
+            <img
+              v-if="coverSrc && !coverFailed"
+              class="post-cover"
+              :src="coverSrc"
+              :alt="post.coverAlt ?? ''"
+              width="1200"
+              height="675"
+              fetchpriority="high"
+              decoding="async"
+              @error="coverFailed = true"
+            />
+
+            <details
+              v-if="headings.length"
+              ref="mobileToc"
+              class="post-toc-mobile"
+            >
+              <summary class="post-toc-mobile__summary">
+                <span class="post-toc-mobile__title">Neste artigo</span>
+                <span class="post-toc-mobile__count">{{ headings.length }} seções</span>
+                <BaseIcon
+                  name="chevron-down"
+                  class="post-toc-mobile__icon"
+                />
+              </summary>
+              <PostToc
+                class="post-toc-mobile__list"
+                :headings="headings"
+                @navigate="closeMobileToc"
+              />
+            </details>
+
             <article
               class="prose"
               v-html="post.html"
@@ -207,13 +228,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRouter, useRoute, RouterLink } from 'vue-router'
 
 import { formatDate, getAuthor, usePageMeta, useBlogData, useCdnAsset } from '@/composables'
 import services from '@/data/services.json'
 
-import type { Post, PostMeta } from '@/types/blog'
+import type { Post, PostHeading, PostMeta } from '@/types/blog'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -221,6 +242,7 @@ import BaseIcon from '@/components/ui/BaseIcon.vue'
 import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import PostCard from '@/components/blog/PostCard.vue'
+import PostToc from '@/components/blog/PostToc.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -238,12 +260,15 @@ const slug = computed(() => {
 
 const post = ref<Post | null>(null)
 const state = ref<'loading' | 'ready' | 'not-found'>('loading')
+const coverFailed = ref(false)
+const mobileToc = useTemplateRef<HTMLDetailsElement>('mobileToc')
 
 watch(
   slug,
   async value => {
     if (!value) return
     state.value = 'loading'
+    coverFailed.value = false
     const loaded = await getPost(value)
     // Quick navigation guard: only the latest slug may resolve the state.
     if (slug.value !== value) return
@@ -254,12 +279,22 @@ watch(
 )
 
 const author = computed(() => (post.value ? getAuthor(post.value.author) : undefined))
+const coverSrc = computed(() => useCdnAsset(post.value?.cover))
+
+const closeMobileToc = () => {
+  if (mobileToc.value) mobileToc.value.open = false
+}
 
 usePageMeta(
   computed(() => ({
     title: post.value?.title ?? 'Post',
     description: post.value?.excerpt ?? '',
     type: 'article' as const,
+    publishedAt: post.value?.date || undefined,
+    author: author.value?.name,
+    category: post.value?.category || undefined,
+    image: coverSrc.value,
+    imageAlt: post.value?.coverAlt || undefined,
   }))
 )
 
@@ -288,7 +323,7 @@ const headings = computed(() => {
   const current = post.value
   if (!current) return []
   const re = /<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/gi
-  const result: { level: number; id: string; text: string }[] = []
+  const result: PostHeading[] = []
   let m: RegExpExecArray | null
   while ((m = re.exec(current.html)) !== null) {
     result.push({
@@ -431,8 +466,72 @@ const headings = computed(() => {
   }
 }
 
-.toc-h3 {
-  padding-left: 0.875rem;
+.post-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+  background: var(--bg-alt);
+  margin-bottom: var(--space-6);
+}
+
+.post-toc-mobile {
+  display: none;
+  @include card-surface(0);
+  margin-bottom: var(--space-6);
+
+  @include respond-to(lg) {
+    display: block;
+  }
+
+  &[open] .post-toc-mobile__icon {
+    transform: rotate(180deg);
+  }
+}
+
+.post-toc-mobile__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-target-min);
+  padding: var(--space-3) var(--space-5);
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--purple);
+    outline-offset: 2px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+.post-toc-mobile__title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+
+.post-toc-mobile__count {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.post-toc-mobile__icon {
+  margin-left: auto;
+  color: var(--purple);
+  transition: transform 0.2s var(--ease);
+}
+
+.post-toc-mobile__list {
+  padding: 0 var(--space-5) var(--space-4);
 }
 
 .prose {
@@ -445,6 +544,11 @@ const headings = computed(() => {
   padding: var(--space-10);
   box-shadow: var(--shadow-sm);
   min-width: 0; // avoids overflow in grid
+
+  :deep(h2[id]),
+  :deep(h3[id]) {
+    scroll-margin-top: 96px;
+  }
 
   :deep(h2) {
     font-size: var(--text-xl);
@@ -569,6 +673,48 @@ const headings = computed(() => {
     }
   }
 
+  @include respond-to(sm) {
+    :deep(table:has(th:nth-child(3))) {
+      overflow-x: visible;
+
+      thead {
+        display: none;
+      }
+
+      tbody,
+      tr {
+        display: block;
+      }
+
+      tr {
+        padding: var(--space-3) 0;
+        border-bottom: 1px solid var(--border);
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      td {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        gap: var(--space-3);
+        padding: var(--space-1) 0;
+        border-bottom: none;
+
+        &::before {
+          content: attr(data-label);
+          font-weight: 700;
+          color: var(--text);
+        }
+      }
+
+      tr:hover td {
+        background: none;
+      }
+    }
+  }
+
   :deep(hr) {
     border: none;
     border-top: 1px solid var(--border);
@@ -580,8 +726,72 @@ const headings = computed(() => {
   :deep(p > img),
   :deep(figure img) {
     width: 100%;
+    height: auto;
     border-radius: var(--radius-lg);
+  }
+
+  :deep(p > img) {
     margin: var(--space-6) 0;
+  }
+
+  :deep(figure) {
+    margin: var(--space-8) 0;
+  }
+
+  :deep(figcaption) {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  :deep(.callout) {
+    margin: var(--space-8) 0;
+    padding: var(--space-5) var(--space-6);
+    border-radius: 0 var(--radius) var(--radius) 0;
+
+    p {
+      margin-bottom: var(--space-3);
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :deep(.callout__title) {
+    @include eyebrow;
+  }
+
+  :deep(.callout--summary) {
+    background: var(--purple-50);
+    border-left: 4px solid var(--purple);
+
+    p:not(.callout__title) {
+      color: var(--text);
+    }
+  }
+
+  :deep(.callout--stat) {
+    background: var(--section-dark);
+    border-left: 4px solid var(--lime);
+
+    .callout__title {
+      color: var(--on-dark-muted);
+    }
+
+    p:not(.callout__title) {
+      color: var(--on-dark-strong);
+    }
+
+    strong {
+      color: var(--on-dark);
+      font-size: var(--text-lg);
+    }
+
+    a {
+      color: var(--lime);
+    }
   }
 }
 

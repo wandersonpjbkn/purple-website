@@ -55,8 +55,8 @@ export const usePageMeta = (options: MaybeRefOrGetter<PageMetaOptions>) => {
     ogLocale: SITE.locale,
     ogImage: () => image.value,
     ogImageAlt: () => resolved.value.imageAlt ?? resolved.value.title,
-    ogImageWidth: 1200,
-    ogImageHeight: 630,
+    ogImageWidth: () => (resolved.value.image ? undefined : 1200),
+    ogImageHeight: () => (resolved.value.image ? undefined : 630),
 
     twitterCard: 'summary_large_image',
     twitterSite: SITE.twitterHandle,
@@ -81,6 +81,7 @@ export const usePageMeta = (options: MaybeRefOrGetter<PageMetaOptions>) => {
   useHead({
     script: [
       {
+        key: 'jsonld',
         type: 'application/ld+json',
         innerHTML: () => {
           const base = {

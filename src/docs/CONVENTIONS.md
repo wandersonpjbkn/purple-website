@@ -88,8 +88,8 @@ prop:
 - **O — Aberto/fechado:** estender deve significar **adicionar**, não editar
   código existente. Exemplos: novo ícone = nova entrada em
   `components/ui/icons.ts` (nunca mexer em `BaseIcon.vue`); novo recurso de
-  markdown no blog = novo `replace` em `workers/blog/src/index.ts`
-  (`markdownToHtml` — os passes existentes não mudam).
+  markdown no blog = novo renderer/extensão do `marked` em
+  `workers/blog/src/markdown.ts` (os renderers existentes não mudam).
 - **L — Substituição de Liskov:** variantes de um componente polimórfico
   precisam honrar o mesmo contrato em todo call site. Ex.: `BaseButton` com
   `tag="RouterLink"` sempre recebe `to`; com `tag="a"`, sempre `href` — nenhum
@@ -112,10 +112,16 @@ prop:
 
 ## Comentários ✅
 
-Priorizar **código legível** > comentário. Comentar o **porquê** (decisão,
-contexto não óbvio, armadilha), não o **o quê** (que o código já diz). E
-mesmo neste casos os comentários **não devem** registrar passado (eles
-devem explicar a situação atual). Informações que expliquem revisões,
+Priorizar **código legível** > comentário. Código novo só leva comentário
+de **título de seção**, de uma linha, em inglês (ex.:
+`// Site pages (/blog/* on the main domain)`). O **porquê** de uma decisão
+não óbvia mora na doc de domínio (`ARCHITECTURE`, `CONTENT_MODEL`…), não no
+código; comentários de porquê já existentes são migrados quando o trecho é
+tocado. Exceções: o comentário de viés cognitivo (ver
+[Vieses cognitivos](#vieses-cognitivos-)), a justificativa de um
+`eslint-disable` e as pastas `__tests__/`/`e2e/`. Arquivos de configuração
+(`*.toml`, `*.yaml`) podem explicar o que configuram. Nenhum comentário
+registra passado (explica a situação atual). Informações que expliquem revisões,
 alterações ou decisões passadas devem preferir o [`CHANGELOG`](../../CHANGELOG.md).
 Em testes, comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)) —
 **exceto em `__tests__/` e `e2e/`**, onde o comentário pode ser em português

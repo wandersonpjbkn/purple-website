@@ -8,16 +8,20 @@ import { join } from 'node:path'
 
 import { chromium } from 'playwright-core'
 
-// Rotas estáticas do site (as dinâmicas do blog ficam client-rendered).
+import team from '../src/data/team.json' with { type: 'json' }
+
+// Rotas estáticas do site (os posts do blog ganham meta tags no Worker do blog).
 export const ROUTES = ['/', '/sobre', '/abordagem', '/servicos', '/contato', '/blog', '/faq', '/privacidade']
+
+export const AUTHOR_ROUTES = team.filter(member => member.isAuthor).map(member => `/blog/autor/${member.slug}`)
 
 export const resolveChromium = async () => {
   if (process.env.PRERENDER_CHROMIUM) return process.env.PRERENDER_CHROMIUM
   const base = '/opt/pw-browsers'
   if (existsSync(base)) {
     const dir = (await readdir(base)).find((d) => /^chromium-\d+$/.test(d))
-    const candidate = dir && join(base, dir, 'chrome-linux', 'chrome')
-    if (candidate && existsSync(candidate)) return candidate
+    const candidate = dir && ['chrome-linux', 'chrome-linux64'].map(arch => join(base, dir, arch, 'chrome')).find(existsSync)
+    if (candidate) return candidate
   }
   try {
     return chromium.executablePath()

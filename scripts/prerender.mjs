@@ -16,7 +16,7 @@ import { join, dirname } from 'node:path'
 
 import { chromium } from 'playwright-core'
 
-import { ROUTES, resolveChromium } from './shared.mjs'
+import { ROUTES, AUTHOR_ROUTES, resolveChromium } from './shared.mjs'
 import { createDistServer } from './dist-server.mjs'
 
 const DIST = join(process.cwd(), 'dist')
@@ -24,7 +24,9 @@ const DIST = join(process.cwd(), 'dist')
 const PORT = 4180
 
 // Routes whose snapshot depends on the blog index (fetched at runtime).
-const BLOG_ROUTES = ['/', '/blog']
+const BLOG_ROUTES = ['/', '/blog', ...AUTHOR_ROUTES]
+
+const SKIP_WITHOUT_POSTS = new Set(AUTHOR_ROUTES)
 
 // Posts only: the empty/error states render as soon as the index settles, so
 // accepting them here would cut a slow-but-successful fetch short.
@@ -34,35 +36,31 @@ const waitForPosts = async page =>
     .then(() => true)
     .catch(() => false)
 
+const waitForPostsWithRetry = async page => {
+  if (await waitForPosts(page)) return true
+  await page.reload({ waitUntil: 'domcontentloaded' })
+  await page.waitForSelector('#app > *', { timeout: 15000 })
+  return waitForPosts(page)
+}
+
 const run = async () => {
   const executablePath = await resolveChromium()
   const server = await createDistServer({ dist: DIST, port: PORT })
   const browser = await chromium.launch({ executablePath })
   const page = await browser.newPage()
   const routesWithoutPosts = []
+  const routes = [...ROUTES, ...AUTHOR_ROUTES]
 
-  for (const route of ROUTES) {
+  for (const route of routes) {
     // Don't wait for `networkidle`: external CDNs (fonts, GTM) can hang. The
     // real signal is the app having rendered inside #app.
     await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'domcontentloaded' })
     await page.waitForSelector('#app > *', { timeout: 15000 })
 
-    if (BLOG_ROUTES.includes(route)) {
-      let loaded = await waitForPosts(page)
-
-      // One retry: the index comes from the network at runtime, so a single
-      // hiccup during the build would otherwise freeze an error state into the
-      // snapshot every crawler reads.
-      if (!loaded) {
-        await page.reload({ waitUntil: 'domcontentloaded' })
-        await page.waitForSelector('#app > *', { timeout: 15000 })
-        loaded = await waitForPosts(page)
-      }
-
-      if (!loaded) {
-        console.warn(`[prerender] AVISO: ${route} saiu sem posts — o índice do blog não respondeu.`)
-        routesWithoutPosts.push(route)
-      }
+    if (BLOG_ROUTES.includes(route) && !(await waitForPostsWithRetry(page))) {
+      console.warn(`[prerender] AVISO: ${route} saiu sem posts — o índice do blog não respondeu.`)
+      routesWithoutPosts.push(route)
+      if (SKIP_WITHOUT_POSTS.has(route)) continue
     }
 
     await page.waitForTimeout(300)
@@ -88,7 +86,8 @@ const run = async () => {
 
   await browser.close()
   server.close()
-  console.log(`[prerender] ${ROUTES.length} rotas geradas.`)
+  const skipped = routesWithoutPosts.filter(route => SKIP_WITHOUT_POSTS.has(route))
+  console.log(`[prerender] ${routes.length - skipped.length} de ${routes.length} rotas geradas.`)
 
   // The per-route warning scrolls away in a build log, and a snapshot
   // published without posts must not read as a clean run.

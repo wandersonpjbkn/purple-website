@@ -7,6 +7,9 @@ export interface Env {
   ALLOWED_ORIGIN: string
   ALLOWED_ORIGIN_WWW: string
   ALLOWED_ORIGIN_LAN?: string
+
+  SITE_ORIGIN: string
+  CDN_URL?: string
 }
 
 export interface RawFrontmatter {
@@ -20,6 +23,7 @@ export interface RawFrontmatter {
   readTime?: number
   featured?: boolean
   cover?: string
+  coverAlt?: string
 }
 
 export interface BlogPost {
@@ -33,6 +37,7 @@ export interface BlogPost {
   readTime: number
   featured: boolean
   cover: string
+  coverAlt: string
   html: string
   wordCount: number
 }

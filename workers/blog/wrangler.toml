@@ -2,14 +2,23 @@ name = "purple-blog"
 main = "src/index.ts"
 compatibility_date = "2026-07-07"
 
-# Custom domain the front-end points to (VITE_POSTS_API_URL).
-# Requires purplecomunicacao.com.br to already be on this Cloudflare account.
-routes = [{ pattern = "blog.purplecomunicacao.com.br", custom_domain = true }]
+# Custom domain the front-end points to (VITE_POSTS_API_URL), plus the post and
+# author pages on the main domain (proxied zone), which this Worker serves with
+# per-post meta tags over the SPA shell hosted on Render, and the posts sitemap.
+routes = [
+  { pattern = "blog.purplecomunicacao.com.br", custom_domain = true },
+  { pattern = "purplecomunicacao.com.br/blog/*", zone_name = "purplecomunicacao.com.br" },
+  { pattern = "www.purplecomunicacao.com.br/blog/*", zone_name = "purplecomunicacao.com.br" },
+  { pattern = "purplecomunicacao.com.br/sitemap-posts.xml", zone_name = "purplecomunicacao.com.br" },
+]
 
 # Non-secret config, safe to commit.
 [vars]
 ALLOWED_ORIGIN = "https://purplecomunicacao.com.br"
 ALLOWED_ORIGIN_WWW = "https://www.purplecomunicacao.com.br"
+SITE_ORIGIN = "https://purplecomunicacao.com.br"
+# Same value as the site's VITE_CDN_URL; without it og:image falls back to the default.
+CDN_URL = "https://cdn.purplecomunicacao.com.br"
 
 # Native wrapper with R2 Bucket
 [[r2_buckets]]

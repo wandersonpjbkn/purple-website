@@ -186,6 +186,58 @@ não arriscar esticar a página com conteúdo real do R2 imprevisível.
 horizontal em nenhuma combinação — pendência fechada. Espaçamento/legibilidade
 a 320px conferidos visualmente via screenshot, sem achados novos.
 
+### Página do post (2026-11-05)
+
+- **OG por post** — preview de link (LinkedIn/WhatsApp) mostrava título e
+  imagem da home em qualquer post: o visitante compartilhava uma coisa e o
+  destinatário via outra (correspondência com o mundo real). O Worker do blog
+  agora injeta o head do post, com a capa como `og:image`.
+- **Capa no topo do corpo** — a capa só aparecia no card; na página do post o
+  leitor perdia a âncora visual que acabou de clicar (consistência,
+  reconhecimento em vez de memorização). Vai acima do texto, não no hero, para
+  não empurrar título e resumo para baixo da dobra. `width`/`height` +
+  `aspect-ratio: 16 / 9` reservam o espaço (sem CLS); `fetchpriority="high"`
+  porque costuma ser o LCP. `alt` vem de `coverAlt`; sem ele, `alt=""` — a capa
+  ilustra e o título já está ao lado, repetir o título só faz o leitor de tela
+  ler duas vezes. Se a URL falhar, a imagem some (sem ícone quebrado).
+- **Sumário no mobile** — abaixo de `lg` não havia sumário nenhum. Agora é um
+  `<details>` recolhido no topo do corpo ("Neste artigo · N seções"):
+  recolhido para não empurrar o texto (design minimalista), com a contagem de
+  seções visível para dar noção do tamanho do artigo (visibilidade do status),
+  e `<details>` nativo para teclado/leitor de tela sem ARIA manual. Fecha ao
+  tocar num item, para o salto não deixar o sumário aberto ocupando a tela.
+  Resumo com `--tap-target-min` (44px); itens com ≥24px de alvo (WCAG 2.5.8).
+  Contraste: título `--text` 18,9:1, contagem `--muted` 7,5:1, ícone
+  `--purple` 6,2:1 sobre `--surface`.
+- **Âncora escondida sob o header** — o salto do sumário (desktop e mobile)
+  levava o heading para `top: 0`, atrás do header sticky. `h2[id]`/`h3[id]` da
+  `.prose` ganharam `scroll-margin-top: 96px` (mesmo deslocamento do
+  `scrollBehavior` e do `top` do sumário lateral).
+- **Tabelas no mobile** — abaixo de `sm`, tabelas com 3+ colunas viram uma
+  lista de blocos por linha, cada célula com o rótulo da coluna
+  (`data-label` gerado pelo parser a partir do `<thead>`, exibido via
+  `::before`) — antes era rolagem horizontal, que esconde colunas sem aviso.
+  Tabelas de 2 colunas seguem como tabela (empilhar só repetiria o
+  cabeçalho). Ressalva conhecida: com `display: block`, alguns leitores de
+  tela (VoiceOver/Safari) deixam de anunciar a estrutura de tabela; o rótulo
+  textual de cada célula cobre o significado. O mesmo já valia para o
+  `display: block` com rolagem de antes.
+
+### Callouts no corpo do post (2026-11-05)
+
+Só **dois** tipos, de propósito — destaque demais anula o destaque (lei de
+Prägnanz; heurística de design minimalista): `[!summary]` (bloco claro
+`--purple-50` com borda `--purple`, para o "em uma frase" do artigo) e
+`[!stat]` (bloco `--section-dark` com borda `--lime`, para o dado que
+sustenta o argumento). São visualmente distintos entre si e da citação comum
+(fundo `--bg-alt` + borda lime, itálico), para não exigir legenda. Título em
+eyebrow (padrão do site); o `[!stat]` segue a convenção de número: o valor em
+negrito vai em `--on-dark`, maior, e o lima fica só na borda/traço.
+`role="note"` para leitor de tela. Contraste: texto `--on-dark-strong` 13,2:1
+e título `--on-dark-muted` 9,6:1 sobre `--section-dark`; texto `--text`
+17,6:1 e título `--purple-700`/`--purple` ≥5,9:1 sobre `--purple-50`. Tipo
+desconhecido (`[!note]`) cai na citação comum, sem quebrar.
+
 ### SOLID / Clean Code
 
 Já registrados com detalhe no [`CHANGELOG`](../../CHANGELOG.md): IP de LAN
@@ -258,14 +310,10 @@ uma auditoria futura não gastar ciclo reabrindo:
 
 ## Recomendações — decisão de produto/design ⏳
 
-- **OG por post do blog** — `/blog/:slug` não tem snapshot prerenderizado (os
-  posts são runtime, por decisão de arquitetura), então compartilhar um post no
-  LinkedIn renderiza o meta do fallback, não o do post. Resolver exige
-  prerender por post (conflita com "conteúdo novo sem rebuild") ou um Worker de
-  edge injetando as tags. Decisão de arquitetura, não bug de UI.
 - **Soft 404** — rota inexistente responde HTTP 200 com o HTML da home; o
   visitante com JS vê a `NotFoundPage`, o crawler vê a home. Limitação de
-  static host no Render.
+  static host no Render. **Exceção:** `/blog/<slug-inexistente>` responde 404
+  de verdade (Worker do blog, ver `ARCHITECTURE.md`).
 - **Fontes fracas no `panorama.json`** — parcialmente endereçado: dois dos seis
   stats já citam referência rastreável ("Weehub; Panorama do Bem-Estar
   Corporativo 2026", "ISMA-Brasil, 2019"). Seguem genéricos "Pesquisa Global,
@@ -292,9 +340,6 @@ uma auditoria futura não gastar ciclo reabrindo:
   real de um dos 4 posts publicados ("Calendário de datas especiais..."),
   que por isso é o único hoje sem o CTA contextual "Como a Purple ajuda".
   Aceito como está por ora — gap de conteúdo/dado, não de código.
-- **`markdownToHtml` não escapa HTML bruto** no corpo do markdown — gap real
-  de defesa em profundidade, não corrigido porque não há visibilidade do
-  conteúdo já publicado no bucket R2 para confirmar se algum post depende de
-  HTML bruto (ex.: `<img>` colado à mão) — escapar cegamente arriscaria
-  quebrar imagens de posts já publicados. Checar o conteúdo real do R2 antes
-  de agir.
+- ~~`markdownToHtml` não escapa HTML bruto~~ — resolvido em 2026-11-05: o
+  parser (`marked`) escapa todo HTML cru e descarta links/imagens com esquema
+  fora da allowlist. Conferido contra os 5 posts do R2: nenhum usava HTML cru.
