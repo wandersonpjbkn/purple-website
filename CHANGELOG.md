@@ -24,9 +24,13 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   com o foco no banner continua valendo "Recusar". `prerender.mjs` perdeu a
   limpeza do `overflow` (não há mais trava); `color-audit.mjs` e o e2e
   fecham o aviso clicando em "Recusar análise" em vez de Esc.
-- **Capa do post limitada a 200px de altura** — `max-height: 12.5rem` na
-  `.post-cover`: no desktop ela ocupava ~520px antes do texto; no celular
-  continua ~197px (16:9 já cabia).
+- **Capa do post no cabeçalho, ao lado do título** — antes ficava no topo do
+  corpo, ao lado do sumário, e ocupava ~520px de altura no desktop antes do
+  texto (um limite de 200px chegou a ser aplicado, mas cortava a foto em
+  faixa). Agora, a partir de 900px, fica à direita de título, resumo e
+  autoria, em 16:9 inteira, ocupando a metade do cabeçalho que estava vazia;
+  o texto do post começa ~145px mais acima em 1366px. Abaixo de 900px empilha
+  depois da autoria (máx. 32rem de largura); no celular a altura não muda.
 - **Sumário do post sem entidade HTML crua** — títulos com aspas, `&`, `<`
   ou `>` apareciam como `&quot;`/`&amp;` no "Neste artigo" (lateral e
   mobile): os títulos eram tirados do HTML do post por regex, que removia as

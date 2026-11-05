@@ -202,10 +202,13 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   imagem da home em qualquer post: o visitante compartilhava uma coisa e o
   destinatário via outra (correspondência com o mundo real). O Worker do blog
   agora injeta o head do post, com a capa como `og:image`.
-- **Capa no topo do corpo** — a capa só aparecia no card; na página do post o
-  leitor perdia a âncora visual que acabou de clicar (consistência,
-  reconhecimento em vez de memorização). Vai acima do texto, não no hero, para
-  não empurrar título e resumo para baixo da dobra. `width`/`height` +
+- **Capa no cabeçalho, ao lado do título** — a capa só aparecia no card; na
+  página do post o leitor perdia a âncora visual que acabou de clicar
+  (consistência, reconhecimento em vez de memorização). A partir de 900px fica
+  à direita de título, resumo e autoria, na metade do cabeçalho que ficava
+  vazia: não empurra título nem texto para baixo (o texto começa ~145px mais
+  acima em 1366px do que com a capa no topo do corpo). Abaixo de 900px empilha
+  depois da autoria, com até 32rem de largura. `width`/`height` +
   `aspect-ratio: 16 / 9` reservam o espaço (sem CLS); `fetchpriority="high"`
   porque costuma ser o LCP. `alt` vem de `coverAlt`; sem ele, `alt=""` — a capa
   ilustra e o título já está ao lado, repetir o título só faz o leitor de tela

@@ -15,45 +15,62 @@
           <span aria-current="page">{{ post.title }}</span>
         </nav>
 
-        <div class="post-hero__inner">
-          <div class="post-hero__meta">
+        <div
+          class="post-hero__layout"
+          :class="{ 'post-hero__layout--with-cover': hasCover }"
+        >
+          <div class="post-hero__inner">
+            <div class="post-hero__meta">
+              <RouterLink
+                :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
+                class="post-category-badge"
+                >{{ post.category }}</RouterLink
+              >
+              <span
+                class="post-hero__sep"
+                aria-hidden="true"
+                >·</span
+              >
+              <time :datetime="post.date">{{ formatDate(post.date) }}</time>
+              <span
+                class="post-hero__sep"
+                aria-hidden="true"
+                >·</span
+              >
+              <span>{{ post.readTime }} min de leitura</span>
+            </div>
+
+            <h1>{{ post.title }}</h1>
+            <p class="post-hero__excerpt">{{ post.excerpt }}</p>
+
             <RouterLink
-              :to="`/blog?categoria=${encodeURIComponent(post.category)}`"
-              class="post-category-badge"
-              >{{ post.category }}</RouterLink
+              v-if="author"
+              :to="`/blog/autor/${post.author}`"
+              class="post-hero__author"
             >
-            <span
-              class="post-hero__sep"
-              aria-hidden="true"
-              >·</span
-            >
-            <time :datetime="post.date">{{ formatDate(post.date) }}</time>
-            <span
-              class="post-hero__sep"
-              aria-hidden="true"
-              >·</span
-            >
-            <span>{{ post.readTime }} min de leitura</span>
+              <BaseAvatar
+                :src="useCdnAsset(author.avatar)"
+                :name="author.name"
+                size="md"
+              />
+              <div>
+                <strong>{{ author.name }}</strong>
+                <span>{{ author.role }}</span>
+              </div>
+            </RouterLink>
           </div>
 
-          <h1>{{ post.title }}</h1>
-          <p class="post-hero__excerpt">{{ post.excerpt }}</p>
-
-          <RouterLink
-            v-if="author"
-            :to="`/blog/autor/${post.author}`"
-            class="post-hero__author"
-          >
-            <BaseAvatar
-              :src="useCdnAsset(author.avatar)"
-              :name="author.name"
-              size="md"
-            />
-            <div>
-              <strong>{{ author.name }}</strong>
-              <span>{{ author.role }}</span>
-            </div>
-          </RouterLink>
+          <img
+            v-if="hasCover"
+            class="post-cover"
+            :src="coverSrc"
+            :alt="post.coverAlt ?? ''"
+            width="1200"
+            height="675"
+            fetchpriority="high"
+            decoding="async"
+            @error="coverFailed = true"
+          />
         </div>
       </BaseContainer>
     </section>
@@ -84,18 +101,6 @@
           </aside>
 
           <div class="post-body">
-            <img
-              v-if="coverSrc && !coverFailed"
-              class="post-cover"
-              :src="coverSrc"
-              :alt="post.coverAlt ?? ''"
-              width="1200"
-              height="675"
-              fetchpriority="high"
-              decoding="async"
-              @error="coverFailed = true"
-            />
-
             <details
               v-if="headings.length"
               ref="mobileToc"
@@ -280,6 +285,7 @@ watch(
 
 const author = computed(() => (post.value ? getAuthor(post.value.author) : undefined))
 const coverSrc = computed(() => useCdnAsset(post.value?.cover))
+const hasCover = computed(() => Boolean(coverSrc.value) && !coverFailed.value)
 
 const closeMobileToc = () => {
   if (mobileToc.value) mobileToc.value.open = false
@@ -356,6 +362,18 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
 
 .post-hero__inner {
   max-width: 760px;
+}
+
+.post-hero__layout--with-cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--space-12);
+  align-items: center;
+
+  @include respond-to(md) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
 }
 
 .post-hero__meta {
@@ -455,12 +473,14 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
   display: block;
   width: 100%;
   height: auto;
-  max-height: 12.5rem;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: var(--radius-xl);
   background: var(--bg-alt);
-  margin-bottom: var(--space-6);
+
+  @include respond-to(md) {
+    max-width: 32rem;
+  }
 }
 
 .post-toc-mobile {
