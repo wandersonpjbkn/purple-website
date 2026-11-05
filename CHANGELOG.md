@@ -7,6 +7,17 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Parser do blog trocado de regex para `marked` (Fase 3)** —
+  `workers/blog/src/markdown.ts`. Corrige: imagem com caminho relativo
+  resolvida a partir de `/blog/` (quebrava) — agora vai para o CDN, com
+  `loading="lazy"`, dimensões via `#LxA` e `<figure>`/`<figcaption>`;
+  `<p><figure>`/`<p><div>` aninhados; uma citação por linha `>`; parágrafo
+  depois de tabela/lista saindo sem `<p>` (afetava 4 dos 5 posts
+  publicados); HTML cru e links `javascript:` repassados ao `v-html` — agora
+  escapados/removidos. Callouts `[!summary]` e `[!stat]` novos. Bundle do
+  Worker: +~15 KB gzip. Regressão nos 5 posts: só aspas escapadas e os `<p>`
+  que faltavam.
+
 - **Página do post (Fase 2)** — capa no topo do corpo (`coverAlt` novo no
   frontmatter, `alt=""` quando ausente, dimensões reservadas contra CLS,
   removida se falhar); sumário recolhível (`<details>`) abaixo de `lg`, onde

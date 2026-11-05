@@ -1,6 +1,7 @@
 import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
 import { timingSafeEqual } from '../../shared/security'
 
+import { markdownToHtml } from './markdown'
 import { SHELL_PATH, buildPostHead, notFoundHead, renderPostPage } from './postPage'
 
 import type { Env, BlogPost, PostMeta, RawFrontmatter } from './types'
@@ -101,7 +102,7 @@ async function getPostBySlug(env: Env, slug: string): Promise<BlogPost | null> {
   if (direct) {
     const { fm, body } = parseFrontmatter(await direct.text())
     const meta = buildMeta(`posts/${slug}.md`, fm, body)
-    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body) }
+    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body, { cdnUrl: env.CDN_URL }) }
   }
 
   // Slow path: the frontmatter slug may differ from the file name.
@@ -112,7 +113,7 @@ async function getPostBySlug(env: Env, slug: string): Promise<BlogPost | null> {
 
     const { fm, body } = parseFrontmatter(await file.text())
     const meta = buildMeta(key, fm, body)
-    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body) }
+    if (meta.slug === slug) return { ...meta, html: markdownToHtml(body, { cdnUrl: env.CDN_URL }) }
   }
 
   return null
@@ -129,7 +130,7 @@ async function listPosts(env: Env): Promise<BlogPost[]> {
       if (!file) return null
 
       const { fm, body } = parseFrontmatter(await file.text())
-      return { ...buildMeta(key, fm, body), html: markdownToHtml(body) } as BlogPost
+      return { ...buildMeta(key, fm, body), html: markdownToHtml(body, { cdnUrl: env.CDN_URL }) } as BlogPost
     })
   )
 
@@ -344,108 +345,6 @@ export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: strin
   }
 
   return { fm, body }
-}
-
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-}
-
-const tableCellLabel = (headerCell: string): string =>
-  headerCell
-    .replace(/[*_`[\]]/g, '')
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .trim()
-
-export function markdownToHtml(md: string): string {
-  let html = md
-
-  html = html.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)*)/gm, (_, header: string, rows: string) => {
-    const headerCells = header
-      .split('|')
-      .filter(Boolean)
-      .map((c: string) => c.trim())
-    const labels = headerCells.map(tableCellLabel)
-    const th = headerCells.map((c: string) => `<th>${c}</th>`).join('')
-    const trs = rows
-      .trim()
-      .split('\n')
-      .map((row: string) => {
-        const tds = row
-          .split('|')
-          .filter(Boolean)
-          .map((c: string, i: number) => {
-            const label = labels[i]
-            return label ? `<td data-label="${label}">${c.trim()}</td>` : `<td>${c.trim()}</td>`
-          })
-          .join('')
-        return `<tr>${tds}</tr>`
-      })
-      .join('')
-    return `<table><thead><tr>${th}</tr></thead><tbody>${trs}</tbody></table>`
-  })
-
-  // Code blocks (before everything else, so inner content isn't processed)
-  html = html.replace(/```\w*\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-
-  html = html.replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
-
-  // Only h2/h3 get ids — that's what BlogPostPage's table of contents extracts.
-  const headingCounters: Record<string, number> = {}
-  html = html.replace(/^(#{2,6}) (.+)$/gm, (_, hashes: string, text: string) => {
-    const level = hashes.length
-    const base = slugify(text)
-    headingCounters[base] = (headingCounters[base] ?? 0) + 1
-    const id = headingCounters[base] > 1 ? `${base}-${headingCounters[base]}` : base
-    return `<h${level} id="${id}">${text}</h${level}>`
-  })
-
-  html = html.replace(/^---$/gm, '<hr>')
-
-  html = html.replace(/^((?:^- .+\n?)+)/gm, (block: string) => {
-    const items = block
-      .trim()
-      .split('\n')
-      .map((l: string) => `<li>${l.replace(/^- /, '')}</li>`)
-      .join('')
-    return `<ul>${items}</ul>`
-  })
-
-  html = html.replace(/^((?:^\d+\. .+\n?)+)/gm, (block: string) => {
-    const items = block
-      .trim()
-      .split('\n')
-      .map((l: string) => `<li>${l.replace(/^\d+\. /, '')}</li>`)
-      .join('')
-    return `<ol>${items}</ol>`
-  })
-
-  html = html.replace(/!\[(.*?)\]\((.+?)\)/g, '<img alt="$1" src="$2">')
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>')
-  // eslint-disable-next-line sonarjs/super-linear-regex -- both groups are bounded by fixed delimiters ], (, ), no backtracking ambiguity; verified empirically.
-  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
-
-  html = html
-    .split(/\n\n+/)
-    .map(block => {
-      block = block.trim()
-      if (!block) return ''
-      if (/^<(h[1-6]|ul|ol|pre|blockquote|table|hr)/.test(block)) return block
-      return `<p>${block.replace(/\n/g, ' ')}</p>`
-    })
-    .join('\n')
-
-  return html
 }
 
 export function countWords(text: string): number {

@@ -142,6 +142,16 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 (+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
 `CategoryFilter`.
 
+## Conteúdo do post (`.prose`) ✅
+
+Markdown do blog renderizado em `BlogPostPage.vue` (`.prose`, estilo via
+`:deep()` — conteúdo sem classe própria, exceto o que o parser gera):
+citação (`--bg-alt` + borda lime), `figure`/`figcaption` (`--text-sm`,
+`--muted`), tabelas (empilhadas abaixo de `sm` com 3+ colunas) e **callouts**
+`.callout--summary` (`--purple-50` + borda `--purple`) e `.callout--stat`
+(`--section-dark` + borda `--lime`), título com o mixin `eyebrow`. Não criar
+um terceiro tipo de callout sem rever `UX_REVIEW.md`.
+
 ## Stat grid canônico ✅
 
 Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usam

@@ -1,3 +1,5 @@
+import { escapeHtml } from './markdown'
+
 import type { PostMeta } from './types'
 
 export const SHELL_PATH = '/spa-shell.html'
@@ -23,14 +25,6 @@ export const resolveCoverUrl = (cover: string, cdnUrl: string | undefined): stri
   if (!cover || !cdnUrl) return undefined
   return `${cdnUrl.replace(/\/$/, '')}/${cover.replace(/^\//, '')}`
 }
-
-export const escapeHtml = (value: string): string =>
-  value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
 
 const meta = (attribute: 'name' | 'property', key: string, content: string | number | undefined): string =>
   content === undefined || content === '' ? '' : `<meta ${attribute}="${key}" content="${escapeHtml(String(content))}">`

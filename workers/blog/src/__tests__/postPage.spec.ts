@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
-import { buildPostHead, escapeHtml, notFoundHead, resolveCoverUrl } from '../postPage'
+import { escapeHtml } from '../markdown'
+import { buildPostHead, notFoundHead, resolveCoverUrl } from '../postPage'
 
 import type { PostMeta } from '../types'
 

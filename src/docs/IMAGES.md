@@ -38,6 +38,9 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
   que `VITE_CDN_URL` seja absoluta). Para quem não executa JS, o Worker do blog
   monta a mesma URL com a variável `CDN_URL` (mesmo valor de `VITE_CDN_URL`);
   sem ela, cai na `og-default.jpg`.
+- **Imagens do corpo do post** (markdown): o parser do Worker resolve caminho
+  relativo para `CDN_URL` — mesmo contrato de `useCdnAsset`. Sintaxe e
+  dimensões em [`CONTENT_MODEL`](CONTENT_MODEL.md).
 - **`PostCard.vue`** usa `useCdnAsset(post.cover)` direto no `<img>` da capa do
   post (`alt=""`: o link da capa é `aria-hidden` e o título do card vem logo
   abaixo), **sem** handler de erro: se a URL do CDN quebrar (404, `VITE_CDN_URL`

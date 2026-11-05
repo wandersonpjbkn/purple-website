@@ -223,6 +223,21 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   textual de cada célula cobre o significado. O mesmo já valia para o
   `display: block` com rolagem de antes.
 
+### Callouts no corpo do post (2026-11-05)
+
+Só **dois** tipos, de propósito — destaque demais anula o destaque (lei de
+Prägnanz; heurística de design minimalista): `[!summary]` (bloco claro
+`--purple-50` com borda `--purple`, para o "em uma frase" do artigo) e
+`[!stat]` (bloco `--section-dark` com borda `--lime`, para o dado que
+sustenta o argumento). São visualmente distintos entre si e da citação comum
+(fundo `--bg-alt` + borda lime, itálico), para não exigir legenda. Título em
+eyebrow (padrão do site); o `[!stat]` segue a convenção de número: o valor em
+negrito vai em `--on-dark`, maior, e o lima fica só na borda/traço.
+`role="note"` para leitor de tela. Contraste: texto `--on-dark-strong` 13,2:1
+e título `--on-dark-muted` 9,6:1 sobre `--section-dark`; texto `--text`
+17,6:1 e título `--purple-700`/`--purple` ≥5,9:1 sobre `--purple-50`. Tipo
+desconhecido (`[!note]`) cai na citação comum, sem quebrar.
+
 ### SOLID / Clean Code
 
 Já registrados com detalhe no [`CHANGELOG`](../../CHANGELOG.md): IP de LAN
@@ -325,9 +340,6 @@ uma auditoria futura não gastar ciclo reabrindo:
   real de um dos 4 posts publicados ("Calendário de datas especiais..."),
   que por isso é o único hoje sem o CTA contextual "Como a Purple ajuda".
   Aceito como está por ora — gap de conteúdo/dado, não de código.
-- **`markdownToHtml` não escapa HTML bruto** no corpo do markdown — gap real
-  de defesa em profundidade, não corrigido porque não há visibilidade do
-  conteúdo já publicado no bucket R2 para confirmar se algum post depende de
-  HTML bruto (ex.: `<img>` colado à mão) — escapar cegamente arriscaria
-  quebrar imagens de posts já publicados. Checar o conteúdo real do R2 antes
-  de agir.
+- ~~`markdownToHtml` não escapa HTML bruto~~ — resolvido em 2026-11-05: o
+  parser (`marked`) escapa todo HTML cru e descarta links/imagens com esquema
+  fora da allowlist. Conferido contra os 5 posts do R2: nenhum usava HTML cru.

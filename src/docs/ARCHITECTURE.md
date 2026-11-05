@@ -119,9 +119,18 @@ post nenhum e conteúdo novo aparece sem rebuild no Render.
   `Access-Control-Allow-Origin` (+ `Access-Control-Expose-Headers: ETag`) é
   anexado por request.
 - O parsing continua no Worker — **frontmatter YAML próprio** (não usa lib) e
-  **markdown→HTML por regex** (tabelas GFM com `data-label` do cabeçalho em cada célula, code blocks, blockquotes, headings
-  com `id` de âncora, listas, inline); `readTime` (≈200 wpm) e `wordCount`
-  idem. A listagem do R2 pagina com cursor (suporta >1000 objetos).
+  **markdown→HTML com `marked`** (GFM) em `workers/blog/src/markdown.ts`, com
+  renderers próprios: headings com `id` de âncora (`slugify`, `#` rebaixado a
+  `h2`), tabelas com `data-label` do cabeçalho em cada célula, imagens com
+  caminho relativo resolvido para `CDN_URL` (+ `loading="lazy"`,
+  `decoding="async"`, dimensões via `#LxA`) e `<figure>`/`<figcaption>` quando
+  sozinhas no parágrafo com título, callouts `[!stat]`/`[!summary]`,
+  **HTML cru escapado** (aparece como texto) e links/imagens só com esquema
+  permitido (`http(s)`, `mailto`, `tel`, relativo, `#`; só `http(s)`/relativo
+  em imagem) — o resto vira texto. É o que garante o `v-html` de
+  `BlogPostPage` sem sanitização no front. Uma instância de `Marked` por
+  render (contador de ids de heading por post). `readTime` (≈200 wpm) e
+  `wordCount` idem. A listagem do R2 pagina com cursor (suporta >1000 objetos).
 - **Camada de dados no front:** `useBlogData` (singleton por módulo — Home,
   Blog, Post e Author compartilham um fetch) faz **stale-while-revalidate**
   sobre IndexedDB via `useBlogCache` (DB `purple-blog`, stores `meta` e

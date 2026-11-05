@@ -726,8 +726,72 @@ const headings = computed(() => {
   :deep(p > img),
   :deep(figure img) {
     width: 100%;
+    height: auto;
     border-radius: var(--radius-lg);
+  }
+
+  :deep(p > img) {
     margin: var(--space-6) 0;
+  }
+
+  :deep(figure) {
+    margin: var(--space-8) 0;
+  }
+
+  :deep(figcaption) {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  :deep(.callout) {
+    margin: var(--space-8) 0;
+    padding: var(--space-5) var(--space-6);
+    border-radius: 0 var(--radius) var(--radius) 0;
+
+    p {
+      margin-bottom: var(--space-3);
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :deep(.callout__title) {
+    @include eyebrow;
+  }
+
+  :deep(.callout--summary) {
+    background: var(--purple-50);
+    border-left: 4px solid var(--purple);
+
+    p:not(.callout__title) {
+      color: var(--text);
+    }
+  }
+
+  :deep(.callout--stat) {
+    background: var(--section-dark);
+    border-left: 4px solid var(--lime);
+
+    .callout__title {
+      color: var(--on-dark-muted);
+    }
+
+    p:not(.callout__title) {
+      color: var(--on-dark-strong);
+    }
+
+    strong {
+      color: var(--on-dark);
+      font-size: var(--text-lg);
+    }
+
+    a {
+      color: var(--lime);
+    }
   }
 }
 
