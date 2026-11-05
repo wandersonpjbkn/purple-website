@@ -7,6 +7,8 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Link terciário do `CtaBanner` centralizado** — botões com a mesma largura
+  e o link de conteúdo centralizado sob eles (antes, encostado à esquerda).
 - **Aviso de cookies deixou de bloquear a página** — saíram o overlay roxo,
   a trava de rolagem, o focus trap, o foco automático e o `aria-modal`; o
   card no rodapé da viewport fica igual. Motivo (dono do produto): o overlay

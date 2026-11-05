@@ -15,6 +15,12 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
 
 ### Funil de CTAs
 
+- **Link terciário da faixa escura desalinhado** — em `CtaBanner`, o link de
+  conteúdo ("Conhecer os serviços", "Conhecer a abordagem") ficava encostado à
+  esquerda sob dois botões de larguras diferentes. Os botões passaram a ter a
+  mesma largura e o link fica centralizado sob eles: é um botão de texto da
+  mesma pilha de ações (proximidade, alinhamento).
+
 - **Hierarquia de CTA invertida** — o botão de marca (primário) levava ao
   formulário (`/contato`) e o link discreto (terciário) levava ao WhatsApp —
   o inverso do que o dono do produto define como funil (macro conversão =
