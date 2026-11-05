@@ -231,10 +231,10 @@
 import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useRouter, useRoute, RouterLink } from 'vue-router'
 
-import { formatDate, getAuthor, usePageMeta, useBlogData, useCdnAsset } from '@/composables'
+import { extractHeadings, formatDate, getAuthor, usePageMeta, useBlogData, useCdnAsset } from '@/composables'
 import services from '@/data/services.json'
 
-import type { Post, PostHeading, PostMeta } from '@/types/blog'
+import type { Post, PostMeta } from '@/types/blog'
 
 import BaseContainer from '@/components/ui/BaseContainer.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -319,22 +319,7 @@ const related = computed(() => {
     .slice(0, 3)
 })
 
-const headings = computed(() => {
-  const current = post.value
-  if (!current) return []
-  const re = /<h([23])\s+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/gi
-  const result: PostHeading[] = []
-  let m: RegExpExecArray | null
-  while ((m = re.exec(current.html)) !== null) {
-    result.push({
-      level: parseInt(m[1] ?? '2'),
-      id: m[2] ?? '',
-      // eslint-disable-next-line sonarjs/super-linear-regex -- single unbounded group, no nested/overlapping quantifiers; verified empirically.
-      text: (m[3] ?? '').replace(/<[^>]+>/g, ''),
-    })
-  }
-  return result
-})
+const headings = computed(() => (post.value ? extractHeadings(post.value.html) : []))
 </script>
 
 <style scoped lang="scss">

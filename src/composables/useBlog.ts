@@ -4,7 +4,7 @@ import team from '@/data/team.json'
 
 import { useBlogData } from '@/composables/useBlogData'
 
-import type { PostMeta } from '@/types/blog'
+import type { PostHeading, PostMeta } from '@/types/blog'
 import type { TeamMember } from '@/types/team'
 
 export const formatDate = (iso: string): string => {
@@ -17,6 +17,15 @@ export const formatDate = (iso: string): string => {
 
 export const getAuthor = (slug: string): TeamMember | undefined => {
   return (team as TeamMember[]).find(member => member.slug === slug)
+}
+
+export const extractHeadings = (html: string): PostHeading[] => {
+  const doc = new DOMParser().parseFromString(html, 'text/html')
+  return Array.from(doc.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id]'), heading => ({
+    level: heading.tagName === 'H3' ? 3 : 2,
+    id: heading.id,
+    text: heading.textContent?.trim() ?? '',
+  }))
 }
 
 export const useBlog = (options?: { initialCategory?: Ref<string>; initialQuery?: Ref<string>; perPage?: number }) => {

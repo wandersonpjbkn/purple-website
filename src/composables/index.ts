@@ -1,5 +1,5 @@
 export { usePageMeta } from '@/composables/usePageMeta'
-export { useBlog, formatDate, getAuthor } from '@/composables/useBlog'
+export { useBlog, formatDate, getAuthor, extractHeadings } from '@/composables/useBlog'
 export { useBlogData } from '@/composables/useBlogData'
 export { useBlogCache } from '@/composables/useBlogCache'
 export { useCdnAsset } from '@/composables/useCdnAsset'

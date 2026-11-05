@@ -7,6 +7,12 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Sumário do post sem entidade HTML crua** — títulos com aspas, `&`, `<`
+  ou `>` apareciam como `&quot;`/`&amp;` no "Neste artigo" (lateral e
+  mobile): os títulos eram tirados do HTML do post por regex, que removia as
+  tags mas não decodificava as entidades. `extractHeadings` (em
+  `useBlog.ts`) passou a ler o HTML com `DOMParser` e usar o `textContent`
+  de cada `h2[id]`/`h3[id]`.
 - **Sitemap dos posts** — `/sitemap-posts.xml`, gerado pelo Worker do blog a
   partir do índice do R2, declarado no `robots.txt` ao lado do `sitemap.xml`
   estático (que ganhou as páginas de autor e um teste de sincronia com
