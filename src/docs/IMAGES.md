@@ -32,7 +32,9 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
 - **`BlogPostPage.vue`** exibe a capa no topo do corpo (`<img>` com
   `width="1200" height="675"`, `aspect-ratio: 16 / 9`, `object-fit: cover`,
   `fetchpriority="high"`): a capa ideal é **16:9, ≥1200×675**; outra proporção
-  é cortada pelas bordas. `alt` = `coverAlt` (ou vazio). Em erro de carga, a
+  é cortada pelas bordas. Na página do post a altura é limitada a **200px**
+  (`max-height: 12.5rem`): no desktop a capa vira uma faixa e o corte pega o
+  centro da foto, então o assunto deve ficar no meio do quadro. `alt` = `coverAlt` (ou vazio). Em erro de carga, a
   imagem é removida — nada de ícone quebrado. Também passa a mesma URL como `image` do
   `usePageMeta` — a capa vira `og:image`/`twitter:image` (URL absoluta, desde
   que `VITE_CDN_URL` seja absoluta). Para quem não executa JS, o Worker do blog

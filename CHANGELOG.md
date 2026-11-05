@@ -15,6 +15,9 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   com o foco no banner continua valendo "Recusar". `prerender.mjs` perdeu a
   limpeza do `overflow` (não há mais trava); `color-audit.mjs` e o e2e
   fecham o aviso clicando em "Recusar análise" em vez de Esc.
+- **Capa do post limitada a 200px de altura** — `max-height: 12.5rem` na
+  `.post-cover`: no desktop ela ocupava ~520px antes do texto; no celular
+  continua ~197px (16:9 já cabia).
 - **Sumário do post sem entidade HTML crua** — títulos com aspas, `&`, `<`
   ou `>` apareciam como `&quot;`/`&amp;` no "Neste artigo" (lateral e
   mobile): os títulos eram tirados do HTML do post por regex, que removia as

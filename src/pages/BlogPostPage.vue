@@ -455,6 +455,7 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
   display: block;
   width: 100%;
   height: auto;
+  max-height: 12.5rem;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: var(--radius-xl);
