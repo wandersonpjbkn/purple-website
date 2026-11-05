@@ -1,6 +1,6 @@
 ---
 name: code-conventions-checklist
-description: Checklist das convenções de código deste repositório (site Purple) — idioma, comentários (só-o-porquê, nunca histórico), BaseButton único, tokens antes de valor cru, BEM, ícones via BaseIcon, posse de estilo (scoped/:deep()), DRY, SOLID aplicado a composables/componentes, código morto, viés cognitivo, barrel de composables, rotas por nome, e onde registrar cada tipo de informação (doc de domínio vs CHANGELOG vs UX_REVIEW vs comentário). Use PROATIVAMENTE ao escrever ou revisar qualquer código Vue/TS/SCSS neste repositório, antes de considerar a mudança pronta — fonte completa em src/docs/CONVENTIONS.md.
+description: Checklist das convenções de código deste repositório (site Purple) — idioma, comentários (só títulos de seção de uma linha, nunca histórico), BaseButton único, tokens antes de valor cru, BEM, ícones via BaseIcon, posse de estilo (scoped/:deep()), DRY, SOLID aplicado a composables/componentes, código morto, viés cognitivo, barrel de composables, rotas por nome, e onde registrar cada tipo de informação (doc de domínio vs CHANGELOG vs UX_REVIEW vs comentário). Use PROATIVAMENTE ao escrever ou revisar qualquer código Vue/TS/SCSS neste repositório, antes de considerar a mudança pronta — fonte completa em src/docs/CONVENTIONS.md.
 ---
 
 # Checklist de convenções — site Purple
@@ -20,8 +20,13 @@ sessão nova.
 
 ## Comentários — o mais fácil de infringir
 
-- [ ] Comenta o **porquê** (decisão não óbvia, armadilha), nunca o **quê**
-      (código legível já diz o quê).
+- [ ] Código novo só leva comentário de **título de seção**, de uma linha,
+      em inglês (ex.: `// Site pages (/blog/* on the main domain)`). O
+      porquê de uma decisão não óbvia vai para a doc de domínio, não para o
+      código. Comentário existente de porquê é migrado quando o trecho é
+      tocado.
+- [ ] Exceções: o comentário de viés (abaixo), a justificativa de um
+      `eslint-disable` e as pastas `__tests__/`/`e2e/`.
 - [ ] Nunca narra o passado ("antes fazia X", "foi corrigido de Y para Z",
       "mudou porque...") — isso é `CHANGELOG.md`, não comentário de código.
 - [ ] Exceção única e permanente: viés cognitivo usado deliberadamente numa
@@ -37,8 +42,8 @@ sessão nova.
       domínio nenhuma narra isso.
 - [ ] Achado de heurística/lei de UX, exceção, decisão de produto sobre UI →
       `UX_REVIEW.md`, não citado inline no código.
-- [ ] Decisão não óbvia que precisa sobreviver junto ao código → comentário
-      (regra "Comentários" acima).
+- [ ] Decisão não óbvia que precisa sobreviver junto ao código → doc de
+      domínio (regra "Comentários" acima), não comentário.
 
 ## Vue / UI
 

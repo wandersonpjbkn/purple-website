@@ -5,6 +5,29 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-11-05
+
+- **Posts do blog com meta tags próprias para quem não executa JS** — antes,
+  `/blog/:slug` e `/blog/autor/:slug` caíam na catch-all do Render e recebiam o
+  snapshot da home: preview de LinkedIn/WhatsApp e crawlers sem JS liam
+  título, descrição, `og:image` e JSON-LD da home em qualquer post, e slug
+  inexistente respondia 200 com a home. Decisão (opção "b" da investigação):
+  o Worker `purple-blog` ganhou rotas no domínio principal
+  (`purplecomunicacao.com.br/blog/*`) e serve, via `HTMLRewriter`, o shell do
+  SPA (`/spa-shell.html`, emitido pelo build) com `<title>`, description,
+  canonical, OG, Twitter e JSON-LD do post — post novo fica correto na hora,
+  sem rebuild. Slug inexistente responde 404. Autores passaram a ser
+  prerenderizados no build (`AUTHOR_ROUTES`, de `team.json`) e servidos pelo
+  mesmo Worker. Descartadas: prerender dos slugs no build + deploy hook
+  (deixa post novo sem snapshot até o deploy terminar e depende do fetch do
+  índice no build, que já falha em produção) e rewrite do Render para o
+  Worker (salto extra, sem fallback se o Worker cair).
+- **`og:image` do post passou a ser a capa** — `BlogPostPage` passa
+  `useCdnAsset(post.cover)` (e data, autor e categoria) ao `usePageMeta`;
+  `og:image:width/height` (1200×630) só são emitidos para a imagem padrão.
+  O JSON-LD do `usePageMeta` ganhou a chave `jsonld`, que o SPA usa para
+  reaproveitar o bloco injetado pelo Worker em vez de duplicá-lo.
+
 ## 2026-09-05
 
 - **Bio do Wanderson reescrita** — a versão anterior abria com "Desenvolvedor

@@ -1,6 +1,6 @@
 # Testing & BDD — site Purple
 
-> Estado real em **2026-09-05** + diretrizes para quando houver testes.
+> Estado real em **2026-11-05** + diretrizes para quando houver testes.
 > Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md). Relacionados:
 > [`ARCHITECTURE`](ARCHITECTURE.md) · [`CONTENT_MODEL`](CONTENT_MODEL.md).
 
@@ -13,8 +13,8 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 - **99 testes** em 20 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`). `workers/**` é excluído do
   `vitest.config.ts` da raiz — **cada Worker roda sua própria suíte** (ver
-  abaixo): `workers/blog` com 26 testes e `workers/mail` com 6. Total do repo:
-  **131 testes unitários** em 3 suítes, mais 8 cenários e2e.
+  abaixo): `workers/blog` com 43 testes e `workers/mail` com 6. Total do repo:
+  **148 testes unitários** em 3 suítes, mais 8 cenários e2e.
 - **fake-indexeddb** (devDependency) fornece um IndexedDB em memória para os
   testes de `useBlogCache` — o runtime continua sem dependência nova.
 - **Portões de qualidade ✅** (rodar antes de subir):
@@ -60,8 +60,25 @@ O parsing de markdown (`parseFrontmatter`, `slugify`, `markdownToHtml`,
 suíte, independente da raiz: `workers/blog/vitest.config.ts` (ambiente
 `node`) — `index.spec.ts` (parsing), `routes.spec.ts` (rotas `/index`,
 `/posts/:slug`, edge cache/ETag/304, CORS, `/deploy` com purge; R2 fake em
-memória) e `security.spec.ts` (`timingSafeEqual`), **26 testes**. Roda com
-`cd workers/blog && yarn test`.
+memória), `security.spec.ts` (`timingSafeEqual`), `postPage.spec.ts` (head do
+post: título, canonical, OG com a capa via CDN ou a imagem padrão com
+dimensões, JSON-LD com a chave `jsonld` e sem como fechar a tag) e
+`sitePages.spec.ts` (`/blog/:slug` e `/blog/autor/:slug` no domínio do site:
+post do índice, post recém-publicado fora do índice em cache, 404, repasse à
+origem quando o shell falha, métodos/arquivos repassados, snapshot de autor e
+fallback para o shell), **43 testes**. Roda com `cd workers/blog && yarn test`.
+
+O `HTMLRewriter` só existe no runtime do Workers: em `sitePages.spec.ts` ele é
+um fake que registra o que cada handler faria. A reescrita real é conferida à
+mão, simulando um cliente sem JS:
+
+1. `yarn wrangler r2 object put purple-comunica/posts/<slug>.md --file <md> --local`
+   (em `workers/blog`) para cada post;
+2. `cd workers/blog && yarn wrangler dev --local --var SITE_ORIGIN:http://localhost:4181 --var CDN_URL:<cdn>`;
+3. na raiz, `VITE_POSTS_API_URL=http://localhost:8787 yarn build:static` e
+   servir `dist/` em `4181` (ex.: `python3 -m http.server 4181` dentro de `dist/`);
+4. `curl -A 'facebookexternalhit/1.1' http://localhost:8787/blog/<slug>` e
+   conferir `<title>`, `og:title` e `og:image` (e 404 para slug inexistente).
 
 ### `workers/mail` — suíte própria ✅
 

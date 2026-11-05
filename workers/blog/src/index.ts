@@ -1,6 +1,8 @@
 import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
 import { timingSafeEqual } from '../../shared/security'
 
+import { SHELL_PATH, buildPostHead, notFoundHead, renderPostPage } from './postPage'
+
 import type { Env, BlogPost, PostMeta, RawFrontmatter } from './types'
 
 const CORS_METHODS = 'GET, OPTIONS'
@@ -11,6 +13,9 @@ const INDEX_TTL_SECONDS = 300
 const POST_TTL_SECONDS = 3600
 
 const json = (body: unknown, status = 200, origin = '*') => jsonResponse(body, status, origin, CORS_METHODS)
+
+const AUTHOR_PAGE_PATH = /^\/blog\/autor\/([^/]+)\/?$/
+const POST_PAGE_PATH = /^\/blog\/([^/]+)\/?$/
 
 const indexCacheKey = (requestUrl: string): Request => {
   const url = new URL(requestUrl)
@@ -130,6 +135,66 @@ async function listPosts(env: Env): Promise<BlogPost[]> {
   return blogPosts.filter((p): p is BlogPost => p !== null).sort(byDateDesc)
 }
 
+// Site pages (/blog/* on the main domain)
+
+const toSiteOrigin = (request: Request, env: Env): Request => {
+  const url = new URL(request.url)
+  return new Request(`${env.SITE_ORIGIN}${url.pathname}${url.search}`, request)
+}
+
+const fetchShell = async (env: Env): Promise<Response> => {
+  const shell = await fetch(`${env.SITE_ORIGIN}${SHELL_PATH}`)
+  if (!shell.ok) throw new Error(`Shell respondeu ${shell.status}.`)
+  return shell
+}
+
+async function findPostMeta(env: Env, ctx: ExecutionContext, origin: string, slug: string): Promise<PostMeta | null> {
+  const indexResponse = await withEdgeCache(new Request(`${origin}/index`), ctx, INDEX_TTL_SECONDS, async () => ({
+    body: await buildIndex(env),
+  }))
+  const listed = ((await indexResponse.json()) as PostMeta[]).find(meta => meta.slug === slug)
+  if (listed) return listed
+
+  const key = `posts/${slug}.md`
+  const file = await env.POSTS_BUCKET.get(key)
+  if (!file) return null
+
+  const { fm, body } = parseFrontmatter(await file.text())
+  const meta = buildMeta(key, fm, body)
+  return meta.slug === slug ? meta : null
+}
+
+async function handleAuthorPage(env: Env, slug: string): Promise<Response> {
+  const snapshot = await fetch(`${env.SITE_ORIGIN}/blog/autor/${encodeURIComponent(slug)}/index.html`)
+  return snapshot.ok ? snapshot : fetchShell(env)
+}
+
+async function handlePostPage(request: Request, env: Env, ctx: ExecutionContext, slug: string): Promise<Response> {
+  const origin = new URL(request.url).origin
+  const [meta, shell] = await Promise.all([findPostMeta(env, ctx, origin, slug), fetchShell(env)])
+  const config = { siteOrigin: env.SITE_ORIGIN, cdnUrl: env.CDN_URL }
+
+  return meta ? renderPostPage(shell, buildPostHead(meta, config), 200) : renderPostPage(shell, notFoundHead(), 404)
+}
+
+async function handleSitePage(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  const { pathname } = new URL(request.url)
+  const isRead = request.method === 'GET' || request.method === 'HEAD'
+  if (!isRead || pathname.endsWith('/index.html')) return fetch(toSiteOrigin(request, env))
+
+  try {
+    const author = AUTHOR_PAGE_PATH.exec(pathname)?.[1]
+    if (author) return await handleAuthorPage(env, decodeURIComponent(author))
+
+    const slug = POST_PAGE_PATH.exec(pathname)?.[1]
+    if (slug) return await handlePostPage(request, env, ctx, decodeURIComponent(slug))
+  } catch (err) {
+    console.error('[site-page] falha, servindo a origem:', err instanceof Error ? err.message : String(err))
+  }
+
+  return fetch(toSiteOrigin(request, env))
+}
+
 const weakEtag = (payload: string): string => {
   // djb2 — cheap and stable; only needs to change when the payload changes.
   let hash = 5381
@@ -194,6 +259,10 @@ export default {
     const origin = request.headers.get('Origin') ?? ''
     const allowedOrigins = buildAllowedOrigins(env)
 
+    if (url.pathname.startsWith('/blog/')) {
+      return handleSitePage(request, env, ctx)
+    }
+
     if (url.pathname === '/deploy' && request.method === 'POST') {
       return handleDeployRequest(request, env, ctx)
     }
@@ -214,7 +283,9 @@ export default {
 
     try {
       if (url.pathname === '/index') {
-        const response = await withEdgeCache(request, ctx, INDEX_TTL_SECONDS, async () => ({ body: await buildIndex(env) }))
+        const response = await withEdgeCache(request, ctx, INDEX_TTL_SECONDS, async () => ({
+          body: await buildIndex(env),
+        }))
         return finalize(response, request, responseOrigin)
       }
 

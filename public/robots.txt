@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /spa-shell.html
 
 Sitemap: https://purplecomunicacao.com.br/sitemap.xml

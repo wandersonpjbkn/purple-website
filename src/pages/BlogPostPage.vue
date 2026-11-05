@@ -260,6 +260,10 @@ usePageMeta(
     title: post.value?.title ?? 'Post',
     description: post.value?.excerpt ?? '',
     type: 'article' as const,
+    publishedAt: post.value?.date || undefined,
+    author: author.value?.name,
+    category: post.value?.category || undefined,
+    image: useCdnAsset(post.value?.cover),
   }))
 )
 

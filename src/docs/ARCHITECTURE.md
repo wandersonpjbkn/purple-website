@@ -1,6 +1,6 @@
 # Architecture (as-built) — site Purple
 
-> Verdade técnica observada no repositório em **2026-09-05**. Gerado lendo o
+> Verdade técnica observada no repositório em **2026-11-05**. Gerado lendo o
 > código, não as intenções. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
 > [`POSITIONING`](POSITIONING.md) · [`PROJECT_STATE`](PROJECT_STATE.md).
@@ -91,6 +91,24 @@ post nenhum e conteúdo novo aparece sem rebuild no Render.
   hook do Render — o hook agora é **opcional**: só refresca o snapshot SEO
   prerenderizado do `/blog`, não o conteúdo. O token é comparado em tempo
   constante (`timingSafeEqual`, `workers/shared/security.ts`).
+- **Páginas do blog no domínio principal** (`workers/blog/src/postPage.ts`): o
+  mesmo Worker atende as rotas `purplecomunicacao.com.br/blog/*` e
+  `www.…/blog/*` (zona com proxy da Cloudflare, `wrangler.toml`). Para
+  `/blog/:slug`, busca o shell do SPA em `${SITE_ORIGIN}/spa-shell.html` e,
+  via `HTMLRewriter`, troca o `<title>` e substitui description, canonical,
+  `og:*`, `twitter:*`, `article:*` e o JSON-LD pelos do post (`og:image` =
+  capa via `CDN_URL`, ou a padrão do site); o `<body>` fica intocado (o SPA
+  monta igual a qualquer rota). O post é achado no `/index` em cache e, se
+  ainda não estiver lá (recém-publicado), direto no R2 por
+  `posts/<slug>.md`; slug inexistente responde **404** com o shell. Para
+  `/blog/autor/:slug`, serve o snapshot prerenderizado
+  (`/blog/autor/<slug>/index.html`) e, sem ele, o shell. Pedidos que não são
+  `GET`/`HEAD`, caminhos terminados em `/index.html` e qualquer erro são
+  repassados à origem (Render) — falha do Worker volta ao comportamento da
+  catch-all, nunca quebra a página. O JSON-LD injetado leva `data-hid="jsonld"`,
+  a mesma chave do `usePageMeta`: o unhead reaproveita o bloco ao montar em
+  vez de duplicá-lo. O HTML das páginas não vai para o edge cache (o shell
+  muda a cada deploy, com novos hashes de asset).
 - **Módulos compartilhados entre os dois Workers** (`workers/shared/`):
   `http.ts` (resposta JSON + allowlist de origem/CORS) e `security.ts`
   (`timingSafeEqual`). Não são um pacote publicado — cada Worker importa por
@@ -141,13 +159,20 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 `usePageMeta` (em `composables/usePageMeta.ts`) emite `useSeoMeta` (OG/Twitter) + **JSON-LD** (WebPage/Article) + canonical, lendo `VITE_SITE_URL`.
 
 - **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`index, follow`** (site aberto à indexação desde 2026-07-09). `usePageMeta` não emite `robots` — evita duas fontes divergentes. `public/robots.txt` permite crawling (`Allow: /`) e aponta `Sitemap: https://purplecomunicacao.com.br/sitemap.xml`. **O que é servido em produção não é só esse arquivo:** o Cloudflare injeta na frente dele um preâmbulo de _Content Signals_ (`search=yes,ai-train=no`) e um bloco de `Disallow: /` para crawlers de IA (GPTBot, ClaudeBot, CCBot, Amazonbot, Google-Extended, meta-externalagent…). Googlebot segue liberado; a decisão sobre os crawlers de IA é de negócio e mora no painel do Cloudflare, não neste repo.
+- **Meta tags de post sem JS ✅:** servidas pelo Worker do blog no domínio
+  principal (ver "Blog via Cloudflare Worker + R2"). No cliente, `BlogPostPage`
+  passa capa (`useCdnAsset(post.cover)`), data, autor e categoria ao
+  `usePageMeta`; `og:image:width/height` só saem para a imagem padrão
+  (1200×630) — a capa não tem dimensão conhecida. A montagem do head do post
+  existe em dois lugares (Worker e `usePageMeta`), em runtimes diferentes:
+  mudar um exige espelhar no outro.
 - **`public/sitemap.xml` ✅:** estático, lista as 8 rotas estáticas (mesma lista de `ROUTES` em `scripts/shared.mjs`, usada pelo prerender) — copiado para `dist/` em todo build, sem depender do passo de prerender. Posts do blog (dinâmicos, servidos pelo Worker/R2) não entram no sitemap; descoberta via crawling dos links internos (`/blog` → cada post).
 
 ## Build & deploy
 
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
-- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`), servido por `scripts/dist-server.mjs` e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade). Nas rotas `/` e `/blog`, espera **os cards** (`.post-card`) carregarem do Worker; se não vierem, recarrega a página e tenta uma segunda vez. Persistindo a falha, avisa no log (`[prerender] AVISO: …`) e **segue publicando** — mas remove do snapshot o bloco de erro do blog (`.home-blog-empty`/`.blog-empty`) antes de gravar, junto com o `overflow` travado pelo `CookieConsent`. O motivo é o mesmo nos dois casos: estado transitório de runtime não pode congelar num HTML que crawler lê como conteúdo da página. Os scripts do bundle ficam — o SPA assume no cliente e revalida os posts; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered.
-- **Deploy (Render) ✅:** Static Site conectado ao repo, com **auto-deploy** a cada commit na branch. `render.yaml` é infra-as-code/documentação da config (Build Command, `staticPublishPath: dist`, regras de rota, chaves de `envVars` com `sync: false`); como o serviço foi criado pelo painel e **não é gerenciado por Blueprint**, o arquivo não se aplica sozinho — é referência, sincronizável se decidirem migrar para Blueprint. **Regras de rota — a catch-all sozinha não basta:** o Render só ignora as regras quando existe um recurso no **caminho exato** pedido ("Render does not apply redirect or rewrite rules to a path if a resource exists at that path"), e não faz resolução de índice de diretório. `/blog` não é um recurso — o arquivo é `/blog/index.html` — então uma catch-all `/* → /index.html` sozinha engoliria **todas** as rotas e devolveria a home, com o `<title>`, o `canonical` e as OG tags da home, anulando o prerender inteiro. Por isso `render.yaml` declara **um rewrite por rota prerenderizada** (`/sobre → /sobre/index.html` etc.) **antes** da catch-all, que permanece por último para `/blog/:slug`, `/blog/autor/:slug` e o 404; as mesmas regras estão aplicadas no painel. O teste `scripts/__tests__/render-routes.spec.ts` guarda a correspondência entre `ROUTES` e as regras do arquivo. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command roda o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static`.
+- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`), servido por `scripts/dist-server.mjs` e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade) e de cada autor (`AUTHOR_ROUTES`, derivada dos `isAuthor` de `team.json` em `scripts/shared.mjs`) em `dist/blog/autor/<slug>/index.html`. Nas rotas `/`, `/blog` e de autor, espera **os cards** (`.post-card`) carregarem do Worker; se não vierem, recarrega a página e tenta uma segunda vez. Persistindo a falha, avisa no log (`[prerender] AVISO: …`) e **segue publicando** — mas remove do snapshot o bloco de erro do blog (`.home-blog-empty`/`.blog-empty`) antes de gravar, junto com o `overflow` travado pelo `CookieConsent`. O motivo é o mesmo nos dois casos: estado transitório de runtime não pode congelar num HTML que crawler lê como conteúdo da página. Os scripts do bundle ficam — o SPA assume no cliente e revalida os posts; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta, ou `PRERENDER_CHROMIUM`/`npx playwright install`). Autor sem posts no snapshot **não é gravado** (congelaria "0 posts publicados"); o Worker cai no shell. `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered — as meta tags deles vêm do Worker. **Shell intocado ✅:** o plugin `spa-shell` (`vite.config.ts`) emite uma cópia do `index.html` do Vite como `dist/spa-shell.html` no `vite build`, antes de o prerender sobrescrever o `index.html` com o snapshot da home; é a base que o Worker reescreve por post (`Disallow` em `robots.txt`).
+- **Deploy (Render) ✅:** Static Site conectado ao repo, com **auto-deploy** a cada commit na branch. `render.yaml` é infra-as-code/documentação da config (Build Command, `staticPublishPath: dist`, regras de rota, chaves de `envVars` com `sync: false`); como o serviço foi criado pelo painel e **não é gerenciado por Blueprint**, o arquivo não se aplica sozinho — é referência, sincronizável se decidirem migrar para Blueprint. **Regras de rota — a catch-all sozinha não basta:** o Render só ignora as regras quando existe um recurso no **caminho exato** pedido ("Render does not apply redirect or rewrite rules to a path if a resource exists at that path"), e não faz resolução de índice de diretório. `/blog` não é um recurso — o arquivo é `/blog/index.html` — então uma catch-all `/* → /index.html` sozinha engoliria **todas** as rotas e devolveria a home, com o `<title>`, o `canonical` e as OG tags da home, anulando o prerender inteiro. Por isso `render.yaml` declara **um rewrite por rota prerenderizada** (`/sobre → /sobre/index.html` etc.) **antes** da catch-all, que permanece por último para o 404 e para `/blog/:slug`/`/blog/autor/:slug` quando o Worker do blog não intercepta (rota não configurada ou erro); as mesmas regras estão aplicadas no painel. O teste `scripts/__tests__/render-routes.spec.ts` guarda a correspondência entre `ROUTES` e as regras do arquivo. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command roda o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static`.
 - **Verificado em produção (2026-09-05) ✅:** as 8 rotas estáticas respondem com o snapshot próprio — `<title>`, `canonical` e OG por rota, sem cair na home. Fecha as duas ressalvas anteriores (regras de rota pendentes no painel; prerender no Render "não validado"), que valeram até 2026-08-20.
 
 ### O `dist/` é entrada e saída do mesmo laço ✅

@@ -1,6 +1,6 @@
 # Content Model (as-built) — site Purple
 
-> Verdade observada no código em **2026-09-05**. Onde mora cada conteúdo e qual
+> Verdade observada no código em **2026-11-05**. Onde mora cada conteúdo e qual
 > é a regra de validação. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
 > Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
 > [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) · [`POSITIONING`](POSITIONING.md) ·
@@ -17,6 +17,13 @@ Status: ✅ dado real publicável · ⏳ pendência registrada.
 
 O conteúdo do blog não está versionado neste repositório — vive num bucket R2,
 lido pelo Worker `workers/blog` (ver [`ARCHITECTURE`](ARCHITECTURE.md)).
+
+Frontmatter de post: `title`, `slug` (opcional; padrão = nome do arquivo),
+`excerpt`, `date`, `author` (slug de `team.json`), `category`, `tags[]`,
+`readTime` (opcional; calculado a ≈200 wpm), `featured`, `cover` (caminho
+relativo no CDN, ex.: `blog/post-6.jpg`). Além de capa do card, `title`,
+`excerpt` e `cover` são o `<title>`/description/`og:image` do post — inclusive
+para preview de link (LinkedIn, WhatsApp), que lê o que o Worker injeta.
 
 ## `src/data/*.json` — fragmentado por domínio ✅
 

@@ -29,6 +29,11 @@ e devolve `` `${VITE_CDN_URL}/${path}` `` — ou `undefined` se não houver `pat
   property (`--src`) do `.hero__background`, não num `<img>` — é imagem
   decorativa de fundo, então a ausência do arquivo não deixa nada quebrado
   na tela (o fundo simplesmente não pinta).
+- **`BlogPostPage.vue`** passa `useCdnAsset(post.cover)` como `image` do
+  `usePageMeta` — a capa vira `og:image`/`twitter:image` (URL absoluta, desde
+  que `VITE_CDN_URL` seja absoluta). Para quem não executa JS, o Worker do blog
+  monta a mesma URL com a variável `CDN_URL` (mesmo valor de `VITE_CDN_URL`);
+  sem ela, cai na `og-default.jpg`.
 - **`PostCard.vue`** usa `useCdnAsset(post.cover)` direto no `<img>` da capa do
   post, **sem** handler de erro: se a URL do CDN quebrar (404, `VITE_CDN_URL`
   ausente etc.), aparece o ícone nativo de imagem quebrada em vez de um

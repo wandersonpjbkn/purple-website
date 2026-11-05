@@ -1,12 +1,25 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import svgLoader from 'vite-svg-loader'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+// SPA shell copy
+
+const spaShell = (): Plugin => ({
+  name: 'spa-shell',
+  apply: 'build',
+  enforce: 'post',
+  generateBundle(_, bundle) {
+    const index = bundle['index.html']
+    if (index?.type !== 'asset') return
+    this.emitFile({ type: 'asset', fileName: 'spa-shell.html', source: index.source })
+  },
+})
+
 export default defineConfig({
-  plugins: [vue(), svgLoader(), vueDevTools()],
+  plugins: [vue(), svgLoader(), vueDevTools(), spaShell()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

@@ -1,6 +1,6 @@
 # Project State — Purple (site)
 
-> Observado / decidido até **2026-09-05**. Atualizar conforme avança.
+> Observado / decidido até **2026-11-05**. Atualizar conforme avança.
 > Histórico de decisões e mudanças anteriores: [`CHANGELOG`](../../CHANGELOG.md).
 
 ## Estado atual ✅
@@ -10,6 +10,7 @@
 - **Oferta no site:** catálogo de 7 serviços (formato rico: tagline, descrição, benefícios, processo) + 3 planos mensais recorrentes (Essencial, Cultura Ativa, Employer Branding Completo; permanência mínima 3 meses) + 3 projetos pontuais.
 - **Sem preços publicados:** todos os planos/projetos são "Sob consulta" — venda consultiva; valores só na proposta.
 - **Foco regional discreto:** Americana–SP aparece apenas em contato/footer; o posicionamento não é amarrado à região.
+- **Posts e autores com meta tags próprias sem JS (código pronto, ativação pendente ⏳):** o Worker do blog serve `/blog/:slug` no domínio principal com título/OG/JSON-LD do post sobre o shell do SPA, e os autores são prerenderizados no build (ver `ARCHITECTURE.md`). Só vale em produção depois da configuração manual listada em Pendências.
 - **Site no ar com snapshot por rota:** as 8 rotas estáticas respondem com o HTML prerenderizado próprio (`<title>`, `canonical` e OG por rota) — verificado em produção em 2026-09-05. O prerender roda no Build Command do Render a cada deploy.
 
 ## Em validação 🔬
@@ -17,6 +18,8 @@
 - **Conversão da oferta publicada** — reação real de compradores aos planos "sob consulta" (primeiro ciclo de prospecção outbound).
 
 ## Pendências ⏳
+
+- **Ativar as meta tags de post em produção ⚠️:** (1) preencher `CDN_URL` em `workers/blog/wrangler.toml` com o mesmo valor de `VITE_CDN_URL` (variável no painel é sobrescrita pelo `wrangler deploy`); (2) deploy do site (para publicar `spa-shell.html` e os snapshots de autor) **antes** do `yarn wrangler deploy` do Worker, que cria as rotas `purplecomunicacao.com.br/blog/*` e `www.…/blog/*`; (3) conferir em produção com `curl -A 'facebookexternalhit/1.1' https://purplecomunicacao.com.br/blog/<slug>` (`<title>`, `og:title`, `og:image`) e um slug inexistente (404); (4) reprocessar os links já compartilhados no [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/) e no depurador da Meta — eles guardam o preview antigo (da home). Não verificado: se o subrequest do Worker para o próprio domínio vai direto à origem — os pedidos que poderiam reentrar no Worker (`…/index.html`) já são repassados sem processamento.
 
 - **Snapshot de `/` e `/blog` sem posts em produção ⚠️:** o índice do blog não respondeu durante o build do deploy observado em 2026-09-05, então os dois snapshots foram publicados sem nenhum card. O comportamento é o projetado (não derrubar o deploy por um fetch de terceiro) e o aviso agora é repetido no resumo final do `yarn prerender`, mas a **causa raiz segue não diagnosticada** — o Worker está no ar e o build local traz os posts. Próximo passo: ler o log de build do Render atrás de `[prerender] AVISO:`.
 - **Fonte do `+43%` do card do hero:** os três stats do hero **já citam fonte** (61% sem engajamento — VocêRH, 2025 · 14x mais produtivas — Business Moment, 2024 · 23% mais receita — NOZ, 2025). Falta só o card `home.hero.card` (`+43%` de engajamento após 6 meses de endomarketing estruturado), com `source` vazio — é hoje **o único dado publicado no site sem fonte**, o que contradiz o princípio "toda afirmação cita fonte" do `PRODUCT_VISION.md`. Candidata citada no modelo de negócio: redução de custo de atração com EVP estruturada (ESPM / Jornal Empresas & Negócios, 2026). **Preencher `source` assim que confirmada** — e então apertar o teste em `src/data/__tests__/services.spec.ts` de `toHaveProperty('source')` para exigir string não-vazia.
