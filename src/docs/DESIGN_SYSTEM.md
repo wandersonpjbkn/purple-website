@@ -162,9 +162,12 @@ branco é o `<article class="post-article">`, que envolve o `.prose` e o
 citação (estilo global de `blockquote`, ver abaixo, em `--text-lg` e até
 40ch), `figure`/`figcaption` (`--text-sm`,
 `--muted`), tabelas (empilhadas abaixo de `sm` com 3+ colunas) e **callouts**
-`.callout--summary` (`--purple-50` + borda `--purple`) e `.callout--stat`
-(`--section-dark` + borda `--lime`), título com o mixin `eyebrow`. Não criar
-um terceiro tipo de callout sem rever `UX_REVIEW.md`.
+`.callout--summary` (painel `--purple-50` com borda fina `--purple-100`) e
+`.callout--stat` (painel `--section-dark` com traço `--lime` curto no topo),
+ambos com `--radius-lg` nos quatro cantos e sem borda lateral; título em
+etiqueta pílula (`--purple-700` sobre `--purple-100`; `--lime` sobre lima a
+14% no escuro). Não criar um terceiro tipo de callout sem rever
+`UX_REVIEW.md`.
 
 ## Stat grid canônico ✅
 

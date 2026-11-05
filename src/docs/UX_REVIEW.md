@@ -272,17 +272,21 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
 ### Callouts no corpo do post (2026-11-05)
 
 Só **dois** tipos, de propósito — destaque demais anula o destaque (lei de
-Prägnanz; heurística de design minimalista): `[!summary]` (bloco claro
-`--purple-50` com borda `--purple`, para o "em uma frase" do artigo) e
-`[!stat]` (bloco `--section-dark` com borda `--lime`, para o dado que
-sustenta o argumento). São visualmente distintos entre si e da citação comum
-(centralizada entre fios, sem caixa), para não exigir legenda. Título em
-eyebrow (padrão do site); o `[!stat]` segue a convenção de número: o valor em
-negrito vai em `--on-dark`, maior, e o lima fica só na borda/traço.
+Prägnanz; heurística de design minimalista): `[!summary]` (painel claro
+`--purple-50` com borda fina `--purple-100`, para o "em uma frase" do artigo)
+e `[!stat]` (painel `--section-dark` com um traço `--lime` curto no topo, para
+o dado que sustenta o argumento). Cantos iguais e sem borda lateral: a caixa
+tingida com borda grossa só à esquerda era o mesmo padrão repetido que saiu da
+citação e do card de serviço. São visualmente distintos entre si e da citação
+comum (centralizada entre fios, sem caixa), para não exigir legenda. O título
+("Resumo", "Em números") é uma etiqueta em pílula, não eyebrow em caixa alta;
+o `[!stat]` segue a convenção de número: o valor em negrito vai em
+`--on-dark`, maior (`--text-xl`), e o lima fica no traço e na etiqueta.
 `role="note"` para leitor de tela. Contraste: texto `--on-dark-strong` 13,2:1
-e título `--on-dark-muted` 9,6:1 sobre `--section-dark`; texto `--text`
-17,6:1 e título `--purple-700`/`--purple` ≥5,9:1 sobre `--purple-50`. Tipo
-desconhecido (`[!note]`) cai na citação comum, sem quebrar.
+sobre `--section-dark` e etiqueta `--lime` 8,7:1 sobre o fundo dela; texto
+`--text` 17,6:1 sobre `--purple-50` e etiqueta `--purple-700` 10,2:1 sobre
+`--purple-100`. Tipo desconhecido (`[!note]`) cai na citação comum, sem
+quebrar.
 
 ### SOLID / Clean Code
 

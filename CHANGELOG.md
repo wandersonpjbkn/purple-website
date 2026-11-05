@@ -7,6 +7,11 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Callouts "Resumo" e "Em números" sem borda lateral** — saíram a borda
+  grossa à esquerda, os cantos arredondados só à direita e o título em eyebrow
+  em caixa alta; entraram painéis com cantos iguais, título em etiqueta
+  pílula e, no `[!stat]`, um traço lime curto no topo e o número em
+  `--text-xl`.
 - **Card de serviço no fim do post** — a caixa tingida com borda lime deu
   lugar ao `ServiceTeaserCard` (prop nova `horizontal`), o mesmo card de
   serviço da Home e da Abordagem. O link de todos os cards de serviço passou a
