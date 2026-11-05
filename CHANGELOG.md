@@ -7,6 +7,13 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Citações sem caixa, no site inteiro** — saiu o bloco tingido com borda
+  lime e itálico (no post e na frase de cada pessoa do `TeamCard`, Home e
+  Sobre); entrou um estilo global de `blockquote` em `base/_typography.scss`:
+  texto centralizado entre dois fios, com traço lime curto. Post e card só
+  ajustam tamanho e margem. No post, o `h2` logo depois de uma citação perde o
+  próprio fio (antes eram dois fios empilhados); no `TeamCard`, aspas retas
+  viraram curvas.
 - **Link terciário do `CtaBanner` centralizado** — botões com a mesma largura
   e o link de conteúdo centralizado sob eles (antes, encostado à esquerda).
 - **Aviso de cookies deixou de bloquear a página** — saíram o overlay roxo,

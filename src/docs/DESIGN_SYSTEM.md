@@ -146,7 +146,8 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 
 Markdown do blog renderizado em `BlogPostPage.vue` (`.prose`, estilo via
 `:deep()` — conteúdo sem classe própria, exceto o que o parser gera):
-citação (`--bg-alt` + borda lime), `figure`/`figcaption` (`--text-sm`,
+citação (estilo global de `blockquote`, ver abaixo, em `--text-lg` e até
+40ch), `figure`/`figcaption` (`--text-sm`,
 `--muted`), tabelas (empilhadas abaixo de `sm` com 3+ colunas) e **callouts**
 `.callout--summary` (`--purple-50` + borda `--purple`) e `.callout--stat`
 (`--section-dark` + borda `--lime`), título com o mixin `eyebrow`. Não criar
@@ -166,6 +167,17 @@ Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usa
 
 Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
 (`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e o
+
+## Citação (`blockquote`) ✅
+
+Um estilo para o site inteiro, no elemento, em `base/_typography.scss`: texto
+centralizado entre dois fios `--border`, traço `--lime` curto no meio do fio de
+cima, `--purple-800`, peso 600, sem caixa, sem fundo e sem itálico. Quem usa só
+ajusta tamanho e margem: o corpo do post (`.prose`, `--text-lg`; o `h2` que
+vem logo depois perde o próprio fio, para não empilhar dois) e a frase de cada
+pessoa no `TeamCard` (Home e Sobre, `--text-base`, entre aspas curvas “…”).
+Não voltar à caixa tingida com borda lateral para citação.
+
 `span` interno de `stat-card__number`. A barra do card do hero usa gradiente
 `purple → lime`. Preservar ao criar novos blocos numéricos.
 

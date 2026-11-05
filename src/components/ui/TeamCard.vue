@@ -28,7 +28,7 @@
       <h3>{{ member.name }}</h3>
       <p class="team-card-member__role">{{ member.role }}</p>
       <p>{{ member.bio }}</p>
-      <blockquote v-if="member.quote">"{{ member.quote }}"</blockquote>
+      <blockquote v-if="member.quote">“{{ member.quote }}”</blockquote>
     </div>
   </article>
 </template>
@@ -85,15 +85,8 @@ const memberSocialLinks = computed(() => socialLinksOf(props.member?.social))
   }
 
   blockquote {
-    margin: var(--space-4) 0 0;
-    padding: var(--space-4) var(--space-5);
-    background: var(--bg-alt);
-    border-left: 3px solid var(--lime);
-    border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: var(--text-sm);
-    font-style: italic;
-    color: var(--muted);
-    line-height: 1.65;
+    margin-top: var(--space-6);
+    font-size: var(--text-base);
   }
 }
 

@@ -233,6 +233,16 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   textual de cada célula cobre o significado. O mesmo já valia para o
   `display: block` com rolagem de antes.
 
+- **Citação sem caixa, no site inteiro** — a caixa tingida com borda lateral
+  (padrão repetido em muitos sites) deu lugar a texto centralizado entre dois
+  fios, com um traço lime curto no fio de cima. Um estilo só para o post e para
+  a frase de cada pessoa no `TeamCard` (Home e Sobre): mesma função, mesma
+  aparência (consistência). Texto `--purple-800` 16,3:1 sobre `--surface`.
+  Centralizar linhas longas custa um pouco de leitura; os trechos citados são
+  curtos, e no post a largura é limitada a 40ch. Quando a citação fecha uma
+  seção, o `h2` seguinte perde o fio de cima: dois fios a 40px um do outro
+  liam como ruído.
+
 ### Callouts no corpo do post (2026-11-05)
 
 Só **dois** tipos, de propósito — destaque demais anula o destaque (lei de
@@ -240,7 +250,7 @@ Prägnanz; heurística de design minimalista): `[!summary]` (bloco claro
 `--purple-50` com borda `--purple`, para o "em uma frase" do artigo) e
 `[!stat]` (bloco `--section-dark` com borda `--lime`, para o dado que
 sustenta o argumento). São visualmente distintos entre si e da citação comum
-(fundo `--bg-alt` + borda lime, itálico), para não exigir legenda. Título em
+(centralizada entre fios, sem caixa), para não exigir legenda. Título em
 eyebrow (padrão do site); o `[!stat]` segue a convenção de número: o valor em
 negrito vai em `--on-dark`, maior, e o lima fica só na borda/traço.
 `role="note"` para leitor de tela. Contraste: texto `--on-dark-strong` 13,2:1

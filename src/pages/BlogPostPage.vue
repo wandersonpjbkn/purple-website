@@ -597,16 +597,20 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
   }
 
   :deep(blockquote) {
-    margin: var(--space-8) 0;
-    padding: var(--space-5) var(--space-6);
-    background: var(--bg-alt);
-    border-left: 4px solid var(--lime);
-    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: var(--space-10) 0;
+    padding-block: var(--space-6);
+    font-size: var(--text-lg);
+
     p {
-      color: var(--muted);
-      font-style: italic;
-      margin: 0;
+      max-width: 40ch;
+      color: inherit;
+      line-height: inherit;
     }
+  }
+
+  :deep(blockquote + h2) {
+    padding-top: 0;
+    border-top: none;
   }
 
   :deep(code) {
