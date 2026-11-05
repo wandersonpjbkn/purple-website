@@ -3,9 +3,11 @@ import { useSeoMeta, useHead } from '@unhead/vue'
 import { toValue, type MaybeRefOrGetter } from 'vue'
 import { useRoute } from 'vue-router'
 
+export const SITE_URL: string = import.meta.env.VITE_SITE_URL ?? 'https://purplecomunicacao.com.br'
+
 const SITE = {
   name: 'Purple Comunicação',
-  url: import.meta.env.VITE_SITE_URL ?? 'https://purplecomunicacao.com.br',
+  url: SITE_URL,
   locale: 'pt_BR',
   twitterHandle: '@purplecomunica',
   defaultOgImage: '/og-default.jpg',

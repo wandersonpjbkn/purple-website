@@ -236,6 +236,19 @@ a 320px conferidos visualmente via screenshot, sem achados novos.
   textual de cada célula cobre o significado. O mesmo já valia para o
   `display: block` com rolagem de antes.
 
+- **Compartilhar o post** — junto da autoria no cabeçalho (visível ao chegar,
+  inclusive no celular) e no rodapé do card do artigo (`<footer>` do
+  `<article>`, para quem terminou de ler). Links
+  de saída (LinkedIn, X, WhatsApp) com ícone da rede, porque o ícone é o que diz
+  para onde o post vai (o veto à marca do WhatsApp vale só para o CTA de
+  contato); "Copiar link" com rótulo, porque não sai da página; "Compartilhar"
+  (gaveta nativa) só onde o navegador oferece. Todos com 44px de alvo; o aviso
+  de cópia troca o rótulo do botão e é anunciado por `role="status"`
+  (visibilidade do status). Visual próprio, distinto do `SocialLink` do rodapé:
+  lá o link leva ao perfil da Purple, aqui leva o post para a rede de quem lê.
+  Contraste: ícone/rótulo `--purple-700` 12,4:1 sobre `--surface`; hover
+  `--purple` 5,8:1 sobre `--purple-50`. A borda `--border` (1,4:1) é
+  decorativa: o ícone/rótulo é o que identifica o controle.
 - **Citação sem caixa, no site inteiro** — a caixa tingida com borda lateral
   (padrão repetido em muitos sites) deu lugar a texto centralizado entre dois
   fios, com um traço lime curto no fio de cima. Um estilo só para o post e para

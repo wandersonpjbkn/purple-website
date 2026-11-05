@@ -7,6 +7,13 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-05
 
+- **Compartilhar o post** — `PostShare` junto da autoria no cabeçalho e no
+  rodapé do card do artigo (o card passou do `.prose` para um
+  `<article class="post-article">` que envolve o texto e o `<footer>`): LinkedIn, X e WhatsApp (nova aba), "Copiar link" e, onde o
+  navegador oferece, a gaveta nativa. Links com UTM (`utm_source` = rede,
+  `copy` ou `native`; `utm_medium=social`; `utm_campaign=blog-share`), montados
+  por `useShareLinks` a partir de `SITE_URL` (agora exportado por
+  `usePageMeta`). Ícones novos em `icons.ts`: `x`, `whatsapp`, `link`, `share`.
 - **Citações sem caixa, no site inteiro** — saiu o bloco tingido com borda
   lime e itálico (no post e na frase de cada pessoa do `TeamCard`, Home e
   Sobre); entrou um estilo global de `blockquote` em `base/_typography.scss`:

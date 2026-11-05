@@ -33,8 +33,8 @@ src/
     forms/           TurnstileWidget
     ui/              BaseButton, BaseCombobox, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, SocialLink, StatCard, ServiceTeaserCard, TeamCard
     ui/avatar        BaseAvatar, AvImage, AvInitials
-    blog/            PostCard, PostToc, BlogPagination, CategoryFilter
-  composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useServiceInterest, useWhatsapp, useCtaTracking, useTypewriter (reexport em index.ts)
+    blog/            PostCard, PostToc, PostShare, BlogPagination, CategoryFilter
+  composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useServiceInterest, useWhatsapp, useShareLinks, useCtaTracking, useTypewriter (reexport em index.ts)
   data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
   stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
   styles/            7-1 (abstracts, base, layout, components, sections) + main.scss

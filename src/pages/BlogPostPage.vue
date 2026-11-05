@@ -43,21 +43,30 @@
             <h1>{{ post.title }}</h1>
             <p class="post-hero__excerpt">{{ post.excerpt }}</p>
 
-            <RouterLink
-              v-if="author"
-              :to="`/blog/autor/${post.author}`"
-              class="post-hero__author"
-            >
-              <BaseAvatar
-                :src="useCdnAsset(author.avatar)"
-                :name="author.name"
-                size="md"
+            <div class="post-hero__byline">
+              <RouterLink
+                v-if="author"
+                :to="`/blog/autor/${post.author}`"
+                class="post-hero__author"
+              >
+                <BaseAvatar
+                  :src="useCdnAsset(author.avatar)"
+                  :name="author.name"
+                  size="md"
+                />
+                <div>
+                  <strong>{{ author.name }}</strong>
+                  <span>{{ author.role }}</span>
+                </div>
+              </RouterLink>
+
+              <PostShare
+                :path="postPath"
+                :title="post.title"
+                aria-label="Compartilhar este artigo"
+                role="group"
               />
-              <div>
-                <strong>{{ author.name }}</strong>
-                <span>{{ author.role }}</span>
-              </div>
-            </RouterLink>
+            </div>
           </div>
 
           <img
@@ -121,10 +130,20 @@
               />
             </details>
 
-            <article
-              class="prose"
-              v-html="post.html"
-            />
+            <article class="post-article">
+              <div
+                class="prose"
+                v-html="post.html"
+              />
+
+              <footer class="post-share-end">
+                <h2 class="post-share-end__title">Compartilhe este artigo</h2>
+                <PostShare
+                  :path="postPath"
+                  :title="post.title"
+                />
+              </footer>
+            </article>
 
             <aside
               v-if="relatedService"
@@ -248,6 +267,7 @@ import BaseAvatar from '@/components/ui/avatar/BaseAvatar.vue'
 import CtaBanner from '@/components/sections/CtaBanner.vue'
 import PostCard from '@/components/blog/PostCard.vue'
 import PostToc from '@/components/blog/PostToc.vue'
+import PostShare from '@/components/blog/PostShare.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -286,6 +306,7 @@ watch(
 const author = computed(() => (post.value ? getAuthor(post.value.author) : undefined))
 const coverSrc = computed(() => useCdnAsset(post.value?.cover))
 const hasCover = computed(() => Boolean(coverSrc.value) && !coverFailed.value)
+const postPath = computed(() => (post.value ? `/blog/${post.value.slug}` : ''))
 
 const closeMobileToc = () => {
   if (mobileToc.value) mobileToc.value.open = false
@@ -418,6 +439,14 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
   max-width: 65ch;
 }
 
+.post-hero__byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+}
+
 .post-hero__author {
   display: inline-flex;
   align-items: center;
@@ -540,16 +569,20 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
   padding: 0 var(--space-5) var(--space-4);
 }
 
-.prose {
-  font-size: var(--text-base);
-  line-height: 1.8;
-  color: var(--text);
+.post-article {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: var(--space-10);
   box-shadow: var(--shadow-sm);
-  min-width: 0; // avoids overflow in grid
+  min-width: 0;
+}
+
+.prose {
+  font-size: var(--text-base);
+  line-height: 1.8;
+  color: var(--text);
+  min-width: 0;
 
   :deep(h2[id]),
   :deep(h3[id]) {
@@ -807,6 +840,26 @@ const headings = computed(() => (post.value ? extractHeadings(post.value.html) :
 
 .post-body {
   min-width: 0;
+}
+
+.post-share-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-10);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.post-share-end__title {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--subtle);
 }
 
 .post-service-cta {

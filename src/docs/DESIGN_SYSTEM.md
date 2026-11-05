@@ -112,10 +112,11 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   lugar de um `<select>` nativo. Expõe `focus()` para a página levar o foco ao
   primeiro campo inválido.
 - `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (22 ícones, viewBox 24×24).
+  mapa tipado **`src/components/ui/icons.ts`** (23 ícones, viewBox 24×24).
   Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
-  de marca preenchidos** (`fill: true` — `linkedin` e `medium`; `instagram` é
-  stroke). Nome desconhecido cai num placeholder neutro (degradação graciosa —
+  de marca preenchidos** (`fill: true` — `linkedin`, `medium`, `x` e `whatsapp`;
+  `instagram` é stroke). O glifo do WhatsApp existe só para o compartilhar do
+  post: o CTA de contato não leva a marca do canal. Nome desconhecido cai num placeholder neutro (degradação graciosa —
   coberto por teste). Não introduzir glifos tipográficos (exemplo: `→ ← ✕`).
   ⚠️ `BaseIcon` **herda a cor do pai** (`currentColor`): sobre fundo escuro, o
   contêiner precisa setar `color` (ex.: `--lime`/`--on-dark`), senão o ícone
@@ -140,12 +141,21 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
 **sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
 `AppFooter`, `CookieConsent` · **forms/** `TurnstileWidget` · **ui/**
 (+ `StatCard`, `ServiceTeaserCard`) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
-`CategoryFilter`.
+`CategoryFilter`, `PostShare` (compartilhar o post: links de saída para LinkedIn, X e
+WhatsApp, "Copiar link" e, onde o navegador oferece, a gaveta nativa; todos
+em pílula/círculo de `--tap-target-min`, fundo `--surface`, borda `--border`,
+ícone `--purple-700`. Os dois botões são `BaseButton` `secondary` com esse
+visual por cima. Não usa `SocialLink`: aquele leva ao perfil da Purple, este
+leva o post para a rede de quem lê. Usado junto da autoria no cabeçalho do post
+e no fim do artigo; os links levam UTM de `useShareLinks`).
 
 ## Conteúdo do post (`.prose`) ✅
 
 Markdown do blog renderizado em `BlogPostPage.vue` (`.prose`, estilo via
-`:deep()` — conteúdo sem classe própria, exceto o que o parser gera):
+`:deep()` — conteúdo sem classe própria, exceto o que o parser gera). O card
+branco é o `<article class="post-article">`, que envolve o `.prose` e o
+`<footer>` com o compartilhar; o `.prose` cuida só da tipografia, porque o
+`v-html` substitui tudo o que estiver dentro dele:
 citação (estilo global de `blockquote`, ver abaixo, em `--text-lg` e até
 40ch), `figure`/`figcaption` (`--text-sm`,
 `--muted`), tabelas (empilhadas abaixo de `sm` com 3+ colunas) e **callouts**
