@@ -11,6 +11,17 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   `no-restricted-imports`), toda rota citada em `pages.json`/`footer.json`
   existe no router e todo stat publicado cita fonte (testes em
   `src/data/__tests__`). Só existiam em texto.
+- **Docs só com o que o código não diz** — `src/docs` passou de 11 docs
+  (1.612 linhas) para 8, guardando decisões, regras, produto e operação; o
+  que repetia o código (estrutura, campos, contagens, valores de token,
+  descrição de cada teste) saiu. `IMAGES.md` entrou no `CONTENT_MODEL.md`
+  (guia de autoria). `UX_REVIEW.md` saiu: as decisões de UX em vigor foram
+  para `CONVENTIONS.md` § UX, as recomendações abertas para
+  `PROJECT_STATE.md`, e o histórico das auditorias segue legível no git
+  (`git show cc77d28:src/docs/UX_REVIEW.md`). As skills
+  `code-conventions-checklist`, `design-system-checklist` e
+  `testing-checklist` saíram: repetiam os docs e estavam mais desatualizadas
+  que eles. O `CLAUDE.md` passa a indicar qual doc ler por tipo de mudança.
 - **Workers: secrets do e-mail e falhas no log** — desde o deploy de
   2026-07-09 21:21 UTC o Worker de e-mail estava sem `EMAIL_FROM`/`EMAIL_TO`:
   tinham sido criadas como variáveis no painel, e o `wrangler deploy` as

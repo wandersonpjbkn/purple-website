@@ -1,6 +1,6 @@
 ---
 name: double-diamond-delivery
-description: Processo obrigatório de trabalho neste repositório (site Purple) — leitura de src/docs/*.md e, para mudanças substantivas, o ciclo Double Diamond (discovery/define/develop/deliver) com checklist de testes, docs, contraste, acessibilidade, leis de UX e heurísticas de Nielsen. Use PROATIVAMENTE em toda solicitação feita neste repositório, antes de inspecionar código, propor plano ou implementar qualquer coisa — independente da superfície (extensão, terminal, web).
+description: Processo obrigatório de trabalho neste repositório (site Purple) — leitura dos docs de src/docs/ que o assunto pede e, para mudanças substantivas, o ciclo Double Diamond (discovery/define/develop/deliver) com checklist de testes, docs, contraste, acessibilidade, leis de UX e heurísticas de Nielsen. Use PROATIVAMENTE em toda solicitação feita neste repositório, antes de inspecionar código, propor plano ou implementar qualquer coisa — independente da superfície (extensão, terminal, web).
 ---
 
 # Processo de entrega — site Purple
@@ -9,22 +9,12 @@ Este processo é mandatório para este repositório. Ele existe porque pedir a
 mesma coisa a cada prompt não escala — a instrução mora aqui, não na memória
 da conversa.
 
-**Skills companheiras** (invocadas pelas fases Develop/Deliver abaixo, não
-duplicadas aqui): [`code-conventions-checklist`](../code-conventions-checklist/SKILL.md)
-(de `CONVENTIONS.md`), [`design-system-checklist`](../design-system-checklist/SKILL.md)
-(de `DESIGN_SYSTEM.md`), [`testing-checklist`](../testing-checklist/SKILL.md)
-(de `TESTING.md`). Cada uma é o checklist acionável extraído da doc
-correspondente — a doc continua sendo a fonte de verdade, a skill só evita
-ter que reconstruir o checklist de memória a cada sessão.
+## 0. Sempre, sem exceção: ler os docs do assunto
 
-## 0. Sempre, sem exceção: ler `src/docs/*.md`
-
-Antes de qualquer inspeção de código, plano ou implementação, leia **toda**
-a documentação em [`src/docs/`](../../../src/docs/) (`ARCHITECTURE.md`,
-`CONTENT_MODEL.md`, `CONVENTIONS.md`, `DESIGN_SYSTEM.md`, `IMAGES.md`,
-`POSITIONING.md`, `PRODUCT_VISION.md`, `PROJECT_STATE.md`, `README.md`,
-`TESTING.md`, `UX_REVIEW.md`). Isso vale para **toda** solicitação neste
-repositório — mudança trivial ou não, extensão/CLI/web, não importa.
+Antes de qualquer inspeção de código, plano ou implementação, leia os docs de
+[`src/docs/`](../../../src/docs/) que o tipo de mudança pede (tabela no
+`CLAUDE.md` da raiz). Isso vale para **toda** solicitação neste repositório —
+mudança trivial ou não, extensão/CLI/web, não importa.
 
 ## 1. Escolher o nível de rigor
 
@@ -63,30 +53,28 @@ Na dúvida entre as duas, trate como substantiva.
 
 ## 4. Develop
 
-- Implementar seguindo as skills [`code-conventions-checklist`](../code-conventions-checklist/SKILL.md)
-  (idioma, comentários, BEM, tokens, DRY, SOLID) e
-  [`design-system-checklist`](../design-system-checklist/SKILL.md) (tokens,
-  reuso de componentes Base, proporção 60/30/10) — invocar as duas, não só
-  ler de memória.
+- Implementar seguindo [`CONVENTIONS`](../../../src/docs/CONVENTIONS.md)
+  (idioma, comentários, BEM, tokens, DRY, SOLID, UX) e
+  [`DESIGN_SYSTEM`](../../../src/docs/DESIGN_SYSTEM.md) (tokens, componentes,
+  proporção 60/30/10) — ler os dois, não de memória.
 
 ## 5. Deliver — checklist obrigatório
 
 Nenhum item abaixo é pulado silenciosamente; se não se aplica à mudança,
 diga explicitamente por que não se aplica.
 
-- [ ] **Testes**: invocar [`testing-checklist`](../testing-checklist/SKILL.md);
+- [ ] **Testes**: seguir [`TESTING`](../../../src/docs/TESTING.md);
       escrever/atualizar testes para o comportamento novo/mudado; rodar
       `yarn test`.
 - [ ] **Type-check**: `yarn ts`.
 - [ ] **Lint**: `yarn lint`.
-- [ ] **Conformidade com as docs**: reconferir
-      [`code-conventions-checklist`](../code-conventions-checklist/SKILL.md)
-      e [`design-system-checklist`](../design-system-checklist/SKILL.md) —
-      a entrega infringe alguma regra? As docs precisam ser atualizadas para
+- [ ] **Conformidade com as docs**: reconferir `CONVENTIONS` e
+      `DESIGN_SYSTEM` — a entrega infringe alguma regra? Regra nova que dá
+      para verificar por máquina vira teste ou lint. As docs precisam ser atualizadas para
       refletir a nova realidade (ver "As docs também evoluem" no
       `CLAUDE.md` raiz)?
 - [ ] **Contraste**: combinações de cor novas/alteradas passam WCAG AA (ver
-      tokens em `DESIGN_SYSTEM.md`)?
+      valores em `src/styles/abstracts/_tokens.scss`)?
 - [ ] **Acessibilidade**: operável por teclado, `aria-*` corretos, foco não
       se perde em interações repetidas, alvos de toque ≥
       `--tap-target-min`, semântica de heading coerente.
@@ -97,13 +85,13 @@ diga explicitamente por que não se aplica.
       consistência e padrões, prevenção de erros, reconhecimento em vez de
       memorização, flexibilidade e eficiência, design minimalista,
       recuperação de erros, ajuda e documentação.
-- [ ] Achados e exceções das duas checagens acima vão para `UX_REVIEW.md`
-      (regra já existente em `CONVENTIONS.md` — não citar a heurística/lei
-      inline no código, só no doc).
+- [ ] Decisões de UX que valem para o site vão para `CONVENTIONS.md` § UX;
+      recomendações ainda abertas, para `PROJECT_STATE.md` — nunca citadas
+      inline no código.
 
 ## Docs são fonte de verdade E evoluem
 
-`src/docs/*.md` carrega o estado atual do projeto e deve ser seguido como
+`src/docs/*.md` carrega as decisões e regras do projeto e deve ser seguido como
 guideline inflingível — mas não é dogma incontestável. Quando o Discovery ou
 o Develop revelar que uma instrução do doc não é mais a melhor prática (por
 pesquisa de mercado, por um problema real encontrado, por uma decisão nova

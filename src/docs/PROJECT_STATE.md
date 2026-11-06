@@ -1,28 +1,70 @@
-# Project State — Purple (site)
+# Estado do projeto — Purple (site)
 
-> Observado / decidido até **2026-11-05**. Atualizar conforme avança.
-> Histórico de decisões e mudanças anteriores: [`CHANGELOG`](../../CHANGELOG.md).
+Decisões de produto em vigor, o que está em validação e o que falta fazer.
+Atualizar ao fechar ou abrir uma pendência.
 
-## Estado atual ✅
+## Decidido
 
-- **Arquitetura de camadas:** estratégia → posicionamento → identidade (verbal/visual) → conteúdo+IA → UI → dev. Construir o que **não** depende da aposta; reservar o que depende.
-- **Alvo:** empresas de médio porte (40+ colaboradores) sem área estruturada de comunicação/employer branding. Estratégia "entrega prática antes de consultoria" — ver `POSITIONING.md`.
-- **Oferta no site:** catálogo de 7 serviços (formato rico: tagline, descrição, benefícios, processo) + 3 planos mensais recorrentes (Essencial, Cultura Ativa, Employer Branding Completo; permanência mínima 3 meses) + 3 projetos pontuais.
-- **Sem preços publicados:** todos os planos/projetos são "Sob consulta" — venda consultiva; valores só na proposta.
-- **Foco regional discreto:** Americana–SP aparece apenas em contato/footer; o posicionamento não é amarrado à região.
-- **Posts e autores com meta tags próprias sem JS (código pronto, ativação pendente ⏳):** o Worker do blog serve `/blog/:slug` no domínio principal com título/OG/JSON-LD do post sobre o shell do SPA, e os autores são prerenderizados no build (ver `ARCHITECTURE.md`). Só vale em produção depois da configuração manual listada em Pendências.
-- **Site no ar com snapshot por rota:** as 8 rotas estáticas respondem com o HTML prerenderizado próprio (`<title>`, `canonical` e OG por rota) — verificado em produção em 2026-09-05. O prerender roda no Build Command do Render a cada deploy.
+- **Arquitetura de camadas:** estratégia → posicionamento → identidade
+  (verbal/visual) → conteúdo+IA → UI → dev. Construir o que **não** depende da
+  aposta; reservar o que depende.
+- **Sem preços publicados:** planos e projetos são "Sob consulta"; venda
+  consultiva, valores só na proposta.
+- **Foco regional discreto:** Americana–SP aparece só em contato e rodapé; o
+  posicionamento não é amarrado à região.
+- **Site aberto à indexação** por decisão explícita, mesmo com as pendências
+  de logo e da fonte do card do hero (abaixo) ainda abertas.
 
-## Em validação 🔬
+## Em validação
 
-- **Conversão da oferta publicada** — reação real de compradores aos planos "sob consulta" (primeiro ciclo de prospecção outbound).
+- **Conversão da oferta publicada:** reação real de compradores aos planos
+  "Sob consulta" (primeiro ciclo de prospecção outbound).
 
-## Pendências ⏳
+## Pendências
 
-- **Ativar as meta tags de post em produção ⚠️:** (1) `CDN_URL` já está em `workers/blog/wrangler.toml` (`https://cdn.purplecomunicacao.com.br`; se `VITE_CDN_URL` mudar, mudar lá também — variável no painel é sobrescrita pelo `wrangler deploy`); (2) deploy do site (para publicar `spa-shell.html` e os snapshots de autor) **antes** do `yarn wrangler deploy` do Worker, que cria as rotas `purplecomunicacao.com.br/blog/*`, `www.…/blog/*` e `purplecomunicacao.com.br/sitemap-posts.xml`; (3) conferir em produção com `curl -A 'facebookexternalhit/1.1' https://purplecomunicacao.com.br/blog/<slug>` (`<title>`, `og:title`, `og:image`) e um slug inexistente (404); (4) enviar `https://purplecomunicacao.com.br/sitemap-posts.xml` no Google Search Console (o `robots.txt` já o declara, mas o envio acelera a descoberta); (5) reprocessar os links já compartilhados no [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/) e no depurador da Meta — eles guardam o preview antigo (da home). Não verificado: se o subrequest do Worker para o próprio domínio vai direto à origem — os pedidos que poderiam reentrar no Worker (`…/index.html`) já são repassados sem processamento.
+- **Meta tags de post — divulgação.** As páginas `/blog/:slug` já servem
+  título, Open Graph e JSON-LD do post sem JS (conferido em produção em
+  2026-11-06). Falta: enviar `https://purplecomunicacao.com.br/sitemap-posts.xml`
+  no Google Search Console e reprocessar os links já compartilhados no
+  [Post Inspector do LinkedIn](https://www.linkedin.com/post-inspector/) e no
+  depurador da Meta, que guardam o preview antigo.
+- **Snapshot de `/` e `/blog` sem posts em produção.** O HTML servido não
+  traz nenhum card de post (conferido em 2026-11-06); o comportamento de
+  fallback é o projetado, mas a causa raiz não foi diagnosticada: o Worker
+  está no ar e o build local traz os posts. Próximo passo: ler o log de build
+  do Render atrás de `[prerender] AVISO:`.
+- **Fonte do `+43%` do card do hero** (`home.hero.card.source` vazio): é o
+  único dado publicado sem fonte. Candidata citada no modelo de negócio:
+  redução de custo de atração com EVP estruturada (ESPM / Jornal Empresas &
+  Negócios, 2026). Ao confirmar, preencher e incluir o card em
+  `src/data/__tests__/sources.spec.ts`.
+- **Logo definitivo** substituindo o placeholder em
+  `src/assets/brand/logo-ppl.svg` (ver [`CONTENT_MODEL`](CONTENT_MODEL.md)).
+- **Política de Privacidade:** `privacy.json` é texto-base LGPD e precisa de
+  revisão jurídica; também falta registrar o monitoramento de erros (Sentry,
+  sem dado pessoal — ver [`ARCHITECTURE`](ARCHITECTURE.md)).
+- **Testes:** smoke de render das páginas Sobre, Abordagem, Contato e Blog;
+  a paginação numerada da busca do blog nunca foi exercitada, porque o R2 tem
+  menos posts que o tamanho de página.
 
-- **Snapshot de `/` e `/blog` sem posts em produção ⚠️:** o índice do blog não respondeu durante o build do deploy observado em 2026-09-05, então os dois snapshots foram publicados sem nenhum card. O comportamento é o projetado (não derrubar o deploy por um fetch de terceiro) e o aviso agora é repetido no resumo final do `yarn prerender`, mas a **causa raiz segue não diagnosticada** — o Worker está no ar e o build local traz os posts. Próximo passo: ler o log de build do Render atrás de `[prerender] AVISO:`.
-- **Fonte do `+43%` do card do hero:** os três stats do hero **já citam fonte** (61% sem engajamento — VocêRH, 2025 · 14x mais produtivas — Business Moment, 2024 · 23% mais receita — NOZ, 2025). Falta só o card `home.hero.card` (`+43%` de engajamento após 6 meses de endomarketing estruturado), com `source` vazio — é hoje **o único dado publicado no site sem fonte**, o que contradiz o princípio "toda afirmação cita fonte" do `PRODUCT_VISION.md`. Candidata citada no modelo de negócio: redução de custo de atração com EVP estruturada (ESPM / Jornal Empresas & Negócios, 2026). **Preencher `source` assim que confirmada** — e então apertar o teste em `src/data/__tests__/services.spec.ts` de `toHaveProperty('source')` para exigir string não-vazia.
-- **Imagens:** slots prontos com fallback; arquivos a subir pela dupla — ver `IMAGES.md` ( **logo definitivo** substituindo o placeholder em `src/assets/brand/logo-ppl.svg`).
-- **Política de Privacidade:** `privacy.json` é **texto-base LGPD**; precisa de revisão jurídica antes do go-live.
-- **Go-live SEO:** ✅ **robots `index, follow`** (fonte única em `App.vue`), por decisão explícita — `public/robots.txt` permite crawling e `public/sitemap.xml` lista as 8 rotas estáticas e as páginas de autor (10 URLs). **Os outros 2 itens do checklist de go-live seguem pendentes** e o site já está aberto à indexação com eles em aberto: a fonte vazia em `home.hero.card` (item acima) e o logo placeholder em `src/assets/brand/logo-ppl.svg` (ver `IMAGES.md`). Resolver assim que possível para não deixar essas lacunas expostas a visitantes/crawlers reais.
+## Recomendações abertas (decisão de produto ou design)
+
+- **Soft 404:** rota inexistente responde HTTP 200 com o HTML da Home; quem
+  tem JS vê a página 404, o crawler vê a Home. Limitação de site estático no
+  Render. `/blog/<slug-inexistente>` já responde 404 de verdade (Worker).
+- **Fontes fracas no `panorama.json`:** "Pesquisa Global, 2024" (dois stats)
+  e "Panorama Corporativo 2024" são genéricas, e em `context` "Mindsight" está
+  sem ano e "OMS" sem relatório. Cumpre a regra de fonte, mas enfraquece o
+  argumento de decisão baseada em evidência.
+- **`public/favicon.svg` depende de fonte:** o "p" é um `<text>` em Plus
+  Jakarta Sans; sem a fonte, desenha diferente do PNG/ICO. Converter o glifo
+  em `path` resolve.
+- **Dois padrões de "ver mais" no blog:** "Carregar mais" na lista e
+  paginação numerada na busca.
+- **`/blog` sem CTA de WhatsApp**, diferente das outras páginas do menu.
+  Aceito por ora.
+- **Categoria "Planejamento" sem serviço associado** em
+  `services.json`: o post dessa categoria fica sem o card de serviço no fim.
+  Aceito por ora.
+- **`vite-plugin-pwa` instalado e sem uso** em `vite.config.ts`: remover a
+  dependência ou ativar o PWA.

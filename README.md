@@ -40,8 +40,8 @@ O envio do formulário de contato depende também do Worker em `workers/mail/`
 (Cloudflare Worker + Resend), e o blog depende do Worker em `workers/blog/`
 (Cloudflare Worker + R2). Configuração, secrets e deploy de cada um estão em
 [`workers/mail/README.md`](workers/mail/README.md) e
-[`workers/blog/README.md`](workers/blog/README.md); o contrato completo, em
-[`ARCHITECTURE`](src/docs/ARCHITECTURE.md).
+[`workers/blog/README.md`](workers/blog/README.md); as decisões por trás deles,
+em [`ARCHITECTURE`](src/docs/ARCHITECTURE.md).
 
 ## Rodando o projeto
 

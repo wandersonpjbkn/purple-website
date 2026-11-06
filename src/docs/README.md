@@ -1,38 +1,24 @@
 # Docs — Purple Comunicação (site institucional)
 
-Documentação viva do projeto do site da Purple. Mesma prática dos `/docs`
-orientados a agentes de IA: cada arquivo descreve **o que é verdade hoje**,
-separando o que está **decidido** do que ainda é **hipótese**.
+Estes docs guardam só o que o código não diz: decisões e porquês, regras que
+nenhum lint impõe, produto e como operar o que fica fora do repositório. O
+que o código já mostra (estrutura, campos, contagens, valores de token) não
+se repete aqui. O histórico de mudanças mora no
+[`CHANGELOG`](../../CHANGELOG.md); nenhum doc narra o que mudou.
 
-## Mapa de documentos
+| Doc                                   | Para quê                                                                 |
+| ------------------------------------- | ------------------------------------------------------------------------ |
+| [`PRODUCT_VISION`](PRODUCT_VISION.md) | Quem é a Purple, quem é o cliente, território e oferta                   |
+| [`POSITIONING`](POSITIONING.md)       | Posicionamento validado                                                  |
+| [`PROJECT_STATE`](PROJECT_STATE.md)   | Decisões de produto em vigor, pendências e recomendações abertas         |
+| [`ARCHITECTURE`](ARCHITECTURE.md)     | Decisões técnicas: blog, Workers, SEO, prerender e deploy, consentimento |
+| [`CONVENTIONS`](CONVENTIONS.md)       | Regras de código, estilo e UX (inclui as decisões de UX do site)         |
+| [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md)   | Regras de tokens, cor e componentes                                      |
+| [`CONTENT_MODEL`](CONTENT_MODEL.md)   | Guia de autoria: posts, dados das páginas e imagens                      |
+| [`TESTING`](TESTING.md)               | Política de testes e o que se confere à mão                              |
 
-Histórico de decisões e mudanças já concluídas: [`CHANGELOG.md`](../../CHANGELOG.md)
-(raiz do repo) — nenhum doc abaixo deve narrar o que já mudou, só o que **é**
-hoje.
+## Princípio
 
-**Estratégia** (vêm da reflexão):
-
-- [`PRODUCT_VISION.md`](PRODUCT_VISION.md) — quem é a Purple, quem é o cliente, território de atuação
-- [`POSITIONING.md`](POSITIONING.md) — o posicionamento validado (discovery jul/2026)
-- [`PROJECT_STATE.md`](PROJECT_STATE.md) — decisões tomadas, pendências, o que está em andamento
-
-**Técnicos** (gerados lendo o repositório real — a verdade técnica mora no código):
-
-- [`ARCHITECTURE.md`](ARCHITECTURE.md) — stack, pastas, camadas, blog via Cloudflare Worker + R2, build e deploy
-- [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md) — tokens reais, componentes Base/Ui, BEM e o sistema de ícones
-- [`CONTENT_MODEL.md`](CONTENT_MODEL.md) — `src/data/*.json` (incl. `services.json`), as 6 páginas/IA e a regra de fontes
-- [`CONVENTIONS.md`](CONVENTIONS.md) — convenções de código (idioma, arrow functions, botão único, tokens)
-- [`TESTING.md`](TESTING.md) — estado dos testes hoje + diretrizes BDD (right-sized)
-- [`IMAGES.md`](IMAGES.md) — assets de imagem pendentes: caminhos exatos, specs e como ativar
-- [`UX_REVIEW.md`](UX_REVIEW.md) — auditoria de heurísticas de UX, leis de UX, SOLID e Clean Code
-
-## Convenção de status
-
-✅ decidido / validado · 🟡 hipótese forte (não validada) · 🔬 em validação (discovery) · ⏳ pendente · ⛔ bloqueado (de propósito)
-
-## Princípio (o que separa estes docs dos técnicos)
-
-A verdade mora onde o trabalho aconteceu. Estratégia e visão vêm da reflexão
-(estes arquivos). Detalhe técnico vem do código (gerado observando o repo).
-**Nunca documentar como fato técnico o que não foi observado no código** — doc
-de agente fabricado é pior que doc ausente, porque o agente confia nele.
+**Nunca documentar como fato o que não foi observado.** Doc fabricado é pior
+que doc ausente, porque quem lê confia nele. Regra que dá para verificar por
+máquina vira teste ou lint, não frase.

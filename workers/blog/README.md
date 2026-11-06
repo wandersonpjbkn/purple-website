@@ -40,8 +40,8 @@ API routes check `Origin` against the shared allowlist (`workers/shared/http.ts`
 | `../shared/`      | JSON/CORS helpers, constant-time token comparison and Sentry options, shared with the mail Worker                       |
 
 The rendered HTML is safe for the front's `v-html` because sanitizing happens
-here (`markdown.ts`). The full contract is in `src/docs/ARCHITECTURE.md`
-("Blog via Cloudflare Worker + R2") and the post format in
+here (`markdown.ts`). Why things are built this way is in
+`src/docs/ARCHITECTURE.md` ("Blog"); how to write a post is in
 `src/docs/CONTENT_MODEL.md`.
 
 ## Configuration

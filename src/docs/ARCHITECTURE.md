@@ -1,252 +1,133 @@
-# Architecture (as-built) — site Purple
+# Arquitetura — decisões
 
-> Verdade técnica observada no repositório em **2026-11-05**. Gerado lendo o
-> código, não as intenções. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
-> Estratégia mora em [`PRODUCT_VISION`](PRODUCT_VISION.md) ·
-> [`POSITIONING`](POSITIONING.md) · [`PROJECT_STATE`](PROJECT_STATE.md).
-> Conteúdo: [`CONTENT_MODEL`](CONTENT_MODEL.md) · UI: [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md) ·
-> testes: [`TESTING`](TESTING.md).
+Este doc guarda só o que o código não explica: por que as peças estão
+montadas assim e o que não pode ser afrouxado. Estrutura, rotas, endpoints,
+TTLs e assinaturas se leem no código (`src/router/modules/`,
+`src/composables/index.ts`, `workers/*/src/`) e nos READMEs dos Workers.
 
-Status: ✅ no código · 🟡 presente mas não ativo/coerente · ⏳ ausente (intenção, não fato).
+## Visão geral
 
-## Stack ✅
+SPA em Vue 3 + Vite servida como site estático pelo Render, com prerender das
+rotas fixas para SEO. Dois Cloudflare Workers ficam fora do build do site:
+`workers/blog` (posts em Markdown num bucket R2 e as páginas `/blog/*` do
+domínio principal) e `workers/mail` (formulário de contato). O conteúdo do
+blog não está neste repositório.
 
-- **Vue 3.5** (SFC `<script setup lang="ts">`) + **TypeScript** (`~5.9`).
-- **Vite 7** como bundler/dev server; alias `@ → ./src`.
-- **vue-router 5** em `createWebHistory` (SPA, sem SSR).
-- **@unhead/vue** para `<head>`/SEO.
-- **Sass** (`.scss`, arquitetura 7-1) — sem CSS-in-JS, sem Tailwind.
-- Node: `^20.19.0 || >=22.12.0`. Gerenciador: **Yarn 1** (`yarn.lock`).
+## Blog
 
-## Estrutura de pastas ✅
+- **Posts em runtime.** O front busca o índice e cada post no Worker; o
+  bundle não carrega post nenhum, e post novo aparece sem rebuild no Render.
+- **Fonte única.** Todo o blog, inclusive os destaques da Home, lê de
+  `useBlogData`. Não criar outra fonte de posts.
+- **Falha de rede é silenciosa por design.** O estado mantém o cache (ou a
+  lista vazia); a página mostra skeleton durante a carga e só depois o aviso
+  de erro. O 404 de post nunca pisca enquanto carrega.
+- **O parser é a única barreira contra XSS.** `BlogPostPage` usa `v-html`
+  sem sanitizar no front porque `workers/blog/src/markdown.ts` escapa HTML
+  cru e só aceita esquemas de link permitidos. Mexer no parser pede a
+  regressão de conteúdo descrita em [`TESTING`](TESTING.md).
+- **`/deploy` é opcional para quem publica.** O conteúdo aparece quando o
+  cache do `/index` expira; o `/deploy` só adianta isso no PoP local e chama
+  o hook do Render, que refresca o snapshot SEO de `/blog`. Os TTLs do edge
+  são curtos justamente porque a purga do `/deploy` não alcança os outros
+  datacenters.
+- **Edge cache sem CORS.** As respostas são guardadas sem cabeçalhos CORS, e
+  o `Access-Control-Allow-Origin` é anexado a cada pedido.
 
-```
-src/
-  main.ts            bootstrap (createApp + pinia + unhead + router)
-  App.vue            shell: skip-link / AppHeader / <RouterView/> / AppFooter + head global
-  router/index.ts    monta as rotas dos módulos + catch-all 404; scrollBehavior
-  router/modules/    base.ts (7 rotas institucionais), blog.ts (3 rotas de blog)
-  pages/             Home, About, Abordagem, Services, Blog, BlogPost, Author, Contact, Faq, Privacy, NotFound
-  components/
-    layout/          AppHeader, AppFooter, CookieConsent
-    sections/        CtaBanner, FaqSection, PageHero
-    forms/           TurnstileWidget
-    ui/              BaseButton, BaseCombobox, BaseContainer, BaseIcon (+ icons.ts), BrandLogo, MediaBlock, FeaturePillar, SocialLink, StatCard, ServiceTeaserCard, TeamCard
-    ui/avatar        BaseAvatar, AvImage, AvInitials
-    blog/            PostCard, PostToc, PostShare, BlogPagination, CategoryFilter
-  composables/       usePageMeta, useBlog, useBlogData, useBlogCache, useCdnAsset, useContact, useMail, useTurnstile, useContactForm, useServiceInterest, useWhatsapp, useShareLinks, useCtaTracking, useTypewriter (reexport em index.ts)
-  data/              team, panorama, approach, about, footer, home, services, faq, privacy, pages (.json)
-  stores/            consent.ts  (Pinia + persistedstate — consentimento LGPD)
-  styles/            7-1 (abstracts, base, layout, components, sections) + main.scss
-  types/             team.ts, blog.ts
-  docs/              esta documentação
-public/              robots.txt, sitemap.xml, favicon.{ico,svg,png}, apple-touch-icon.png, og-default.jpg
-```
+### Páginas `/blog/*` no domínio principal
 
-## Camadas / fluxo de boot ✅
+O Worker atende `/blog/*` para que crawler receba título, canonical, Open
+Graph e JSON-LD do post sem executar JS: ele reescreve o `<head>` do shell do
+SPA e deixa o `<body>` intocado.
 
-1. `main.ts` cria o app e registra: **Pinia** (`createPinia` + `pinia-plugin-persistedstate`), **unhead**, **router**.
-2. `App.vue` monta o shell e define head global: `lang="pt-BR"` e **`robots: index, follow`**.
-3. Páginas são componentes de rota (lazy `import()`), cada uma chama `usePageMeta(...)`.
+- **Qualquer falha cai na origem (Render).** O pior caso é o comportamento da
+  catch-all do SPA, nunca uma página quebrada.
+- **O HTML não vai para o edge cache:** o shell muda a cada deploy, com novos
+  hashes de asset.
+- **O JSON-LD injetado usa a mesma chave do `usePageMeta`** (`data-hid`), para
+  o unhead reaproveitar o bloco ao montar em vez de duplicá-lo.
+- **O head do post existe em dois lugares** (Worker e `usePageMeta`), em
+  runtimes diferentes: mudar um exige espelhar no outro.
+  `og:image:width/height` só saem para a imagem padrão, porque a capa não tem
+  dimensão conhecida.
+- **`/sitemap-posts.xml` não é um sitemap index** e não lê o `sitemap.xml` da
+  origem: isso faria o Worker pedir uma URL da própria rota.
 
-**Pinia ✅** — registrado com `pinia-plugin-persistedstate`. Store atual:
-`src/stores/consent.ts` (consentimento LGPD, persistido em localStorage).
+## Formulário de contato e Workers
 
-## Roteamento ✅
+- **O token do Turnstile é revalidado no servidor** (`siteverify`); o widget
+  no navegador sozinho não protege o envio.
+- **Todo valor não público é secret.** Variável criada no painel da
+  Cloudflare é apagada pelo próximo `wrangler deploy`, que substitui as
+  variáveis pelo `[vars]` do `wrangler.toml`. Comandos nos READMEs de
+  `workers/mail` e `workers/blog`.
+- **Resposta de erro nunca carrega o detalhe da exceção.** O motivo vai para
+  o log do Worker, com nome de evento, e para o Sentry pelo mesmo
+  `reportFailure` (`workers/shared/monitoring.ts`). Entrada malformada de
+  quem chama não é falha: responde `400`/`404` (ou cai na origem) sem
+  registrar, para bot não gastar a cota nem levar dado do formulário ao
+  Sentry.
+- **Sentry sem dado pessoal.** Um projeto só para o site, separado por tag
+  `service`, sem tracing e com a coleta do SDK desligada (IP, cookies,
+  cabeçalhos, corpos, query string, variáveis da pilha). Por isso fica fora
+  do aviso de cookies, e a Política de Privacidade deve registrar o
+  monitoramento de erros (pendente, ver [`PROJECT_STATE`](PROJECT_STATE.md)).
+  Decisão do dono (2026-11-06): "esses dados não são importantes para
+  o fluxo e é bom ter isso registrado na politica".
+- **"Pedir proposta" chega com o serviço preenchido:** o `id` vai na query da
+  rota e `useServiceInterest` o resolve para o rótulo do campo.
 
-11 rotas, todas `() => import()`. `src/router/index.ts` só compõe: espalha
-`baseRoutes` (`router/modules/base.ts`, as 7 institucionais) e `blogRoutes`
-(`router/modules/blog.ts`, as 3 do blog), acrescenta a catch-all e define o
-`scrollBehavior`. Os nomes declarados nesses módulos são o que `pages.json` e
-`footer.json` referenciam (ver [`CONVENTIONS`](CONVENTIONS.md) § Roteamento).
+## SEO
 
-| path                | name        | página       |
-| ------------------- | ----------- | ------------ |
-| `/`                 | home        | HomePage     |
-| `/sobre`            | about       | AboutPage    |
-| `/abordagem`        | approach    | ApproachPage |
-| `/servicos`         | services    | ServicesPage |
-| `/blog`             | blog        | BlogPage     |
-| `/blog/autor/:slug` | blog-author | AuthorPage   |
-| `/blog/:slug`       | blog-post   | BlogPostPage |
-| `/contato`          | contact     | ContactPage  |
-| `/faq`              | faq         | FaqPage      |
-| `/privacidade`      | privacy     | PrivacyPage  |
-| `/:pathMatch(.*)*`  | not-found   | NotFoundPage |
+- **`robots` tem fonte única:** só o `App.vue` define a meta; `usePageMeta`
+  não emite, para não haver duas fontes divergentes. O site está aberto à
+  indexação por decisão explícita.
+- **O `robots.txt` servido não é só o do repo.** A Cloudflare injeta na
+  frente um preâmbulo de Content Signals e `Disallow` para crawlers de IA.
+  Essa decisão é de negócio e mora no painel da Cloudflare.
 
-`scrollBehavior` rola ao topo (smooth) a cada navegação (e a âncoras `#id` com offset). São **6 páginas no menu** (Home · Sobre · Abordagem · Serviços · Blog · Contato); `blog-author`/`blog-post` são detalhe; `faq`/`privacy` vivem no rodapé; a catch-all `not-found` renderiza a `NotFoundPage`.
+## Build, prerender e deploy
 
-## Blog via Cloudflare Worker + R2 ✅
+- **O prerender fica fora do `yarn build`** porque precisa de um Chromium;
+  o Render roda `yarn build:static` no Build Command.
+- **Snapshot sem posts não derruba o deploy.** Se o Worker não responde
+  durante o prerender, `/` e `/blog` saem sem cards, o bloco de erro é
+  removido do HTML (estado de runtime não pode congelar como conteúdo) e o
+  script avisa por rota e num resumo final. Autor sem posts não é gravado,
+  para não congelar "0 posts publicados".
+- **`spa-shell.html` é emitido antes de o prerender sobrescrever o
+  `index.html`** com o snapshot da Home; é a base que o Worker reescreve.
+- **Render: um rewrite por rota prerenderizada, antes da catch-all.** O Render
+  só ignora as regras quando existe um recurso no caminho exato e não resolve
+  índice de diretório; uma catch-all sozinha devolveria a Home em toda rota,
+  com o head da Home, anulando o prerender. `render.yaml` documenta as regras,
+  mas o serviço foi criado pelo painel (não é Blueprint): mudar uma regra
+  exige aplicá-la no painel também. `scripts/__tests__/render-routes.spec.ts`
+  guarda a correspondência com as rotas. `.node-version` existe porque o
+  Render nem sempre respeita só o `engines`.
 
-O front busca os posts **em runtime**, direto do Worker (`workers/blog/src/index.ts`):
-o bundle não carrega post nenhum e conteúdo novo aparece sem rebuild no Render.
+### O `dist/` é entrada e saída do mesmo laço
 
-- **Endpoints do Worker** (base = `VITE_POSTS_API_URL`, default
-  `http://localhost:8787`): `GET /index` → array de **metadados** sem `html`
-  (`PostMeta[]`, ordenado por data desc); `GET /posts/:slug` → post completo
-  com `html` (404 se não existir); `GET /` e `GET /posts` → array completo
-  com `html` (nenhum consumidor no front); `POST /deploy` →
-  autenticado por token, purga o cache do `/index` (PoP local) e sempre
-  dispara o hook do Render (`RENDER_DEPLOY_HOOK`, obrigatório). Chamar o
-  `/deploy` é opcional para quem publica: o conteúdo aparece sem ele quando o
-  cache do `/index` expira; o hook só refresca o snapshot SEO prerenderizado
-  do `/blog`. O token é comparado em tempo
-  constante (`timingSafeEqual`, `workers/shared/security.ts`).
-- **Páginas do blog no domínio principal** (`workers/blog/src/postPage.ts`): o
-  mesmo Worker atende as rotas `purplecomunicacao.com.br/blog/*` e
-  `www.…/blog/*` (zona com proxy da Cloudflare, `wrangler.toml`). Para
-  `/blog/:slug`, busca o shell do SPA em `${SITE_ORIGIN}/spa-shell.html` e,
-  via `HTMLRewriter`, troca o `<title>` e substitui description, canonical,
-  `og:*`, `twitter:*`, `article:*` e o JSON-LD pelos do post (`og:image` =
-  capa via `CDN_URL`, ou a padrão do site); o `<body>` fica intocado (o SPA
-  monta igual a qualquer rota). O post é achado no `/index` em cache e, se
-  ainda não estiver lá (recém-publicado), direto no R2 por
-  `posts/<slug>.md`; slug inexistente responde **404** com o shell. Para
-  `/blog/autor/:slug`, serve o snapshot prerenderizado
-  (`/blog/autor/<slug>/index.html`) e, sem ele, o shell. Pedidos que não são
-  `GET`/`HEAD`, caminhos terminados em `/index.html` e qualquer erro são
-  repassados à origem (Render) — falha do Worker volta ao comportamento da
-  catch-all, nunca quebra a página. O JSON-LD injetado leva `data-hid="jsonld"`,
-  a mesma chave do `usePageMeta`: o unhead reaproveita o bloco ao montar em
-  vez de duplicá-lo. O HTML das páginas não vai para o edge cache (o shell
-  muda a cada deploy, com novos hashes de asset).
-- **Módulos compartilhados entre os dois Workers** (`workers/shared/`):
-  `http.ts` (resposta JSON + allowlist de origem/CORS), `security.ts`
-  (`timingSafeEqual`) e `monitoring.ts` (opções do Sentry e `reportFailure`). Não são um pacote publicado — cada Worker importa por
-  caminho relativo.
-- **Edge cache** (`caches.default`): `/index` com `Cache-Control` de 300s e
-  `/posts/:slug` de 3600s, ambos com **ETag fraco** (djb2 do JSON) e resposta
-  `304` para `If-None-Match`. As respostas são cacheadas **sem** headers CORS;
-  `Access-Control-Allow-Origin` (+ `Access-Control-Expose-Headers: ETag`) é
-  anexado por request.
-- O parsing continua no Worker — **frontmatter YAML próprio** (não usa lib) e
-  **markdown→HTML com `marked`** (GFM) em `workers/blog/src/markdown.ts`, com
-  renderers próprios: headings com `id` de âncora (`slugify`, `#` rebaixado a
-  `h2`), tabelas com `data-label` do cabeçalho em cada célula, imagens com
-  caminho relativo resolvido para `CDN_URL` (+ `loading="lazy"`,
-  `decoding="async"`, dimensões via `#LxA`) e `<figure>`/`<figcaption>` quando
-  sozinhas no parágrafo com título, callouts `[!stat]`/`[!summary]`,
-  **HTML cru escapado** (aparece como texto) e links/imagens só com esquema
-  permitido (`http(s)`, `mailto`, `tel`, relativo, `#`; só `http(s)`/relativo
-  em imagem) — o resto vira texto. É o que garante o `v-html` de
-  `BlogPostPage` sem sanitização no front. Uma instância de `Marked` por
-  render (contador de ids de heading por post). `readTime` (≈200 wpm) e
-  `wordCount` idem. A listagem do R2 pagina com cursor (suporta >1000 objetos).
-- **Camada de dados no front:** `useBlogData` (singleton por módulo — Home,
-  Blog, Post e Author compartilham um fetch) faz **stale-while-revalidate**
-  sobre IndexedDB via `useBlogCache` (DB `purple-blog`, stores `meta` e
-  `posts`): índice servido do cache na hora e revalidado em background
-  (throttle de 60s + dedupe de chamadas concorrentes); posts individuais são
-  buscados sob demanda por slug e considerados frescos quando o `stamp`
-  gravado bate com o ETag do índice atual. Sem IndexedDB (Safari privado),
-  degrada para network-only. Tipos em `src/types/blog.ts`.
-- **Falha de rede é silenciosa por design:** o estado
-  mantém o cache (ou lista vazia) com um `console.error`. `BlogPage.vue`
-  mostra skeleton enquanto o índice carrega e a mensagem de "não foi possível
-  carregar" só depois de `isReady`; `BlogPostPage.vue` tem estados
-  `loading | ready | not-found` — o 404 nunca pisca durante a carga.
-- Consumido por `useBlog` (filtro/busca/paginação client-side sobre o índice),
-  `BlogPage`, `BlogPostPage`, `AuthorPage`, `PostCard` **e a Home**
-  (destaques via `posts.slice(0, 3)` reativo).
+O prerender lê e escreve o mesmo diretório. Duas regras fecham esse buraco e
+**não devem ser afrouxadas** (`scripts/__tests__/dist-server.spec.ts` prende
+as duas):
 
-**Fonte única ✅** — todo o blog (inclusive os destaques da Home) lê de
-`useBlogData`; não há outra fonte de posts no repositório.
-
-## Formulário de contato ✅
-
-Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mail transacional no front:
-
-- **`TurnstileWidget.vue`** (`components/forms/`) + **`useTurnstile`** renderizam o widget anti-spam da Cloudflare (`window.turnstile`, script carregado por CDN em `index.html`) usando `VITE_TURNSTILE_SITE_KEY`; emite `verified`/`expired`/`error` com o token do desafio.
-- **`useMail`** (`composables/useMail.ts`) faz `POST` do payload (`contact`, `interest`, `metadata`, `turnstileToken`) para `VITE_CONTACT_API_URL`, com timeout de 10s via `AbortController`.
-- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW` + os `localhost` de dev/preview/prerender, `workers/shared/http.ts`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`), de `EMAIL_FROM` para `EMAIL_TO` (`purplecomunica@gmail.com`). Recusa do Resend responde `500` genérico ao cliente e registra no log do Worker o status e os campos `name` e `message` do erro do Resend (`resend_failed`, visível em `wrangler tail`), nunca o corpo cru; erro inesperado também responde só a mensagem genérica e registra o motivo (`request_failed`). O Worker do blog segue a mesma regra (`posts_failed`, `deploy_failed`, e `deploy_hook_failed` quando o hook do Render falha ou responde fora de 2xx, já depois do `200` do `/deploy`): resposta de erro nunca carrega o detalhe da exceção. **Monitoramento:** os dois Workers são envolvidos por `withSentry` (`@sentry/cloudflare`, flag `nodejs_compat`) com as opções de `workers/shared/monitoring.ts` — um projeto Sentry só (`purple-website`), tag `service` (`mail-worker`/`blog-worker`), sem tracing e com coleta de dados desligada (IP, cookies, cabeçalhos, corpos, query string, variáveis da pilha); sem `SENTRY_DSN` o SDK não liga; `SENTRY_ENVIRONMENT` define o ambiente (padrão `production`). Toda falha registrada passa por `reportFailure`, que grava o log e envia o mesmo evento ao Sentry como erro (o blog também registra `site_page_failed` quando uma página `/blog/*` cai para a origem). Entrada malformada de quem chama não é falha e não vai ao Sentry: corpo que não é JSON responde `400` no mail; slug malformado responde `404` em `/posts/:slug` e cai na origem em `/blog/*`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`, comandos em `workers/mail/README.md`), não pelo `yarn build` do site. Os quatro valores (`TURNSTILE_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO`) são **secrets**: variável criada no painel é apagada pelo próximo `wrangler deploy`.
-- **`useContact`** (`composables/useContact.ts`) continua isolado — só dados estáticos de contato (título/subtítulo/telefone/e-mail/endereço), não tem relação com o envio.
-- **`useServiceInterest`** (`composables/useServiceInterest.ts`) deriva de `services.json` as opções do campo "interesse" (`SERVICE_INTEREST_OPTIONS` = os 7 serviços + os 3 planos + "Orçamento geral"/"Outro") e resolve o `id` vindo da query da rota para o rótulo correspondente (`resolveServiceInterest`) — é o que faz um clique em "Pedir proposta" chegar ao formulário já com o serviço/plano preenchido. Exporta funções puras, não um `useX` com estado.
-- **`BaseCombobox.vue`** (`components/ui/`) renderiza esse campo como combobox filtrável acessível (`role="listbox"`, `aria-activedescendant`, navegação por setas/Enter/Esc, `onClickOutside` para fechar revertendo), no lugar de um `<select>` nativo.
-- **`workers/mail/src/`** separa `validate.ts` (campos obrigatórios) e `emailTemplate.ts` (corpo do e-mail) do `index.ts` — cada um com sua suíte (ver [`TESTING`](TESTING.md)).
-
-## SEO / meta ✅
-
-`usePageMeta` (em `composables/usePageMeta.ts`) emite `useSeoMeta` (OG/Twitter) + **JSON-LD** (WebPage/Article) + canonical, lendo `VITE_SITE_URL`.
-
-- **`robots` tem fonte única ✅:** só o `App.vue` define `robots`, hoje **`index, follow`** (site aberto à indexação desde 2026-07-09). `usePageMeta` não emite `robots` — evita duas fontes divergentes. `public/robots.txt` permite crawling (`Allow: /`, exceto `/spa-shell.html`) e aponta os dois sitemaps (`/sitemap.xml` e `/sitemap-posts.xml`). **O que é servido em produção não é só esse arquivo:** o Cloudflare injeta na frente dele um preâmbulo de _Content Signals_ (`search=yes,ai-train=no`) e um bloco de `Disallow: /` para crawlers de IA (GPTBot, ClaudeBot, CCBot, Amazonbot, Google-Extended, meta-externalagent…). Googlebot segue liberado; a decisão sobre os crawlers de IA é de negócio e mora no painel do Cloudflare, não neste repo.
-- **Meta tags de post sem JS ✅:** servidas pelo Worker do blog no domínio
-  principal (ver "Blog via Cloudflare Worker + R2"). No cliente, `BlogPostPage`
-  passa capa (`useCdnAsset(post.cover)`), data, autor e categoria ao
-  `usePageMeta`; `og:image:width/height` só saem para a imagem padrão
-  (1200×630) — a capa não tem dimensão conhecida. A montagem do head do post
-  existe em dois lugares (Worker e `usePageMeta`), em runtimes diferentes:
-  mudar um exige espelhar no outro.
-- **Sitemaps ✅:** dois, ambos declarados no `robots.txt`.
-  - `public/sitemap.xml` — estático: as 8 rotas de `ROUTES` + as páginas de autor (`AUTHOR_ROUTES`), copiado para `dist/` em todo build. `scripts/__tests__/sitemap.spec.ts` falha se ele sair de sincronia com `ROUTES`/`team.json`.
-  - `/sitemap-posts.xml` — gerado pelo Worker do blog (rota `purplecomunicacao.com.br/sitemap-posts.xml`) a partir do `/index` em cache (300s): um `<url>` por post com `<lastmod>` = `date`. Post novo entra sem deploy do site. Não é um sitemap index nem lê o `sitemap.xml` da origem — evita o Worker fazer subrequest para uma URL da própria rota.
-
-## Build & deploy
-
-- **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
-- **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`), servido por `scripts/dist-server.mjs` e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade) e de cada autor (`AUTHOR_ROUTES`, derivada dos `isAuthor` de `team.json` em `scripts/shared.mjs`) em `dist/blog/autor/<slug>/index.html`. Nas rotas `/`, `/blog` e de autor, espera **os cards** (`.post-card`) carregarem do Worker; se não vierem, recarrega a página e tenta uma segunda vez. Persistindo a falha, avisa no log (`[prerender] AVISO: …`) e **segue publicando** — mas remove do snapshot o bloco de erro do blog (`.home-blog-empty`/`.blog-empty`) antes de gravar: estado transitório de runtime não pode congelar num HTML que crawler lê como conteúdo da página. Os scripts do bundle ficam — o SPA assume no cliente e revalida os posts; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta em `/opt/pw-browsers/chromium-*/chrome-linux{,64}/chrome`, senão o do `playwright-core`; ou `PRERENDER_CHROMIUM`/`npx playwright install`). Autor sem posts no snapshot **não é gravado** (congelaria "0 posts publicados"); o Worker cai no shell. `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered — as meta tags deles vêm do Worker. **Shell intocado ✅:** o plugin `spa-shell` (`vite.config.ts`) emite uma cópia do `index.html` do Vite como `dist/spa-shell.html` no `vite build`, antes de o prerender sobrescrever o `index.html` com o snapshot da home; é a base que o Worker reescreve por post (`Disallow` em `robots.txt`).
-- **Deploy (Render) ✅:** Static Site conectado ao repo, com **auto-deploy** a cada commit na branch. `render.yaml` é infra-as-code/documentação da config (Build Command, `staticPublishPath: dist`, regras de rota, chaves de `envVars` com `sync: false`); como o serviço foi criado pelo painel e **não é gerenciado por Blueprint**, o arquivo não se aplica sozinho — é referência, sincronizável se decidirem migrar para Blueprint. **Regras de rota — a catch-all sozinha não basta:** o Render só ignora as regras quando existe um recurso no **caminho exato** pedido ("Render does not apply redirect or rewrite rules to a path if a resource exists at that path"), e não faz resolução de índice de diretório. `/blog` não é um recurso — o arquivo é `/blog/index.html` — então uma catch-all `/* → /index.html` sozinha engoliria **todas** as rotas e devolveria a home, com o `<title>`, o `canonical` e as OG tags da home, anulando o prerender inteiro. Por isso `render.yaml` declara **um rewrite por rota prerenderizada** (`/sobre → /sobre/index.html` etc.) **antes** da catch-all, que permanece por último para o 404 e para `/blog/:slug`/`/blog/autor/:slug` quando o Worker do blog não intercepta (rota não configurada ou erro); as mesmas regras estão aplicadas no painel. O teste `scripts/__tests__/render-routes.spec.ts` guarda a correspondência entre `ROUTES` e as regras do arquivo. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command roda o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static`.
-- **Verificado em produção (2026-09-05) ✅:** as 8 rotas estáticas respondem com o snapshot próprio — `<title>`, `canonical` e OG por rota, sem cair na home.
-
-### O `dist/` é entrada e saída do mesmo laço ✅
-
-O prerender lê e escreve o mesmo diretório — um snapshot recém-gravado pode
-virar entrada da rota seguinte. Duas regras no código fecham esse buraco, e
-**nenhuma das duas deve ser afrouxada**:
-
-- **O shell é lido uma vez, antes do laço, e servido de memória**
-  (`scripts/dist-server.mjs`). Servir `dist/index.html` a cada request entrega
-  ao browser o que o próprio laço acabou de escrever ali ao capturar `/` — as
-  rotas seguintes bootariam sobre o `<head>` da home. As tags que o app
-  gerencia são substituídas na montagem (o unhead deduplica `canonical`, OG e
-  `description` por chave), mas um `<script>` inline não tem chave que case:
-  o JSON-LD da home sobreviveria e sairia junto com o da rota.
+- **O shell é lido uma vez, antes do laço, e servido de memória.** Servir
+  `dist/index.html` a cada pedido entregaria o snapshot recém-gravado da Home
+  às rotas seguintes; o unhead deduplica as tags com chave, mas o JSON-LD
+  inline da Home sobreviveria junto com o da rota.
 - **Rodar o prerender sobre um `dist/` já prerenderizado é recusado.** Sem
-  isso, `yarn prerender` duas vezes sem `yarn build` no meio faz o snapshot
-  anterior virar shell e o problema volta pela outra porta — inclusive na
-  própria home. A detecção é o ponto de montagem vazio (`<div id="app"></div>`)
-  que o Vite emite e que um snapshot já não tem; o erro diz para rodar
-  `yarn build` antes. `yarn build:static` builda antes de prerenderizar, então
-  a guarda nunca dispara no deploy.
-- `scripts/__tests__/dist-server.spec.ts` prende os dois comportamentos.
+  isso, dois `yarn prerender` seguidos fariam o snapshot anterior virar shell.
 
-### Snapshot publicado sem posts ⚠️
+## Consentimento (LGPD) e GTM
 
-Quando o índice do blog não responde durante o build, `/` e `/blog` saem sem
-nenhum card — é o fallback descrito acima funcionando como projetado (não
-derrubar o deploy inteiro por um fetch de terceiro), **não** um bug. O preço é
-que crawler lê o blog vazio até o próximo deploy bem-sucedido, então a falha
-não pode passar por execução limpa: além do aviso por rota, o script repete no
-fim um resumo nomeando as rotas afetadas. Há uma ocorrência aberta em produção,
-com causa raiz ainda não diagnosticada — rastreada em
-[`PROJECT_STATE`](PROJECT_STATE.md).
-
-## Consentimento LGPD + GTM ✅
-
-Solução **autoral e local**, sem biblioteca de consentimento de terceiros:
-
-- **Store** `src/stores/consent.ts` (Pinia + persistedstate → localStorage): uma
-  categoria opcional `analytics` (`unset | accepted | rejected`); "necessário" é
-  implícito.
-- **Banner** `components/layout/CookieConsent.vue` — aparece enquanto a escolha é
-  `unset`; **Aceitar/Recusar** via `BaseButton`. Rodapé tem "Preferências de
-  cookies" (`consent.reopen()`). **Não bloqueia a página:** card fixo no rodapé
-  da viewport (`<section aria-label="Aviso de cookies">`, região, não diálogo),
-  sem overlay, sem trava de rolagem e sem roubar o foco. Montado logo depois do
-  skip-link em `App.vue`, para ser o segundo ponto de Tab. Esc com o foco dentro
-  dele equivale a "Recusar". Enquanto não há escolha, o GTM segue desligado.
-  Enquanto aberto, publica a própria altura em `--consent-banner-height` (o
-  `body` reserva esse espaço no fim da página) e, quando o foco cai num
-  elemento coberto por ele, rola a página para o elemento ficar acima do aviso.
-- **GTM** (`@gtm-support/vue-gtm`, `createGtm`) é registrado em `main.ts` **só se
-  houver `VITE_GTM_ID`**, com `enabled` partindo do consentimento já persistido.
-  O pacote em si é carregado via `import()` dinâmico dentro desse `if` (não no
-  topo do módulo) — sem `VITE_GTM_ID`, o código do GTM nunca é buscado nem
-  entra no chunk principal. O `import()` é aguardado (`await`) antes de
-  `app.mount()` porque `useGtm()` é chamado de forma síncrona em tempo de
-  `setup()` (ex.: `useCtaTracking.ts`) — registrar o plugin depois do mount
-  faria esse `useGtm()` capturar `undefined` para sempre. O `<script>` do GTM
-  em si **só carrega após opt-in** — o banner chama `useGtm()?.enable(true/false)`.
-
-## Instalado mas inativo (cuidado ao documentar) 🟡
-
-- **vite-plugin-pwa** — dependência presente, **ausente** de `vite.config.ts` (não há PWA ativo).
+- **Solução própria, sem biblioteca de terceiros.** Uma categoria opcional,
+  `analytics`; "necessário" é implícito.
+- **O aviso de cookies não bloqueia a página:** é uma região fixa no rodapé,
+  sem overlay, sem trava de rolagem e sem roubar o foco. Esc com o foco nele
+  equivale a "Recusar". Ele reserva a própria altura no fim da página e rola
+  o elemento focado para cima dele, para nunca esconder o foco.
+- **O GTM é importado e aguardado antes do `mount`.** `useGtm()` roda de forma
+  síncrona no `setup()` dos componentes; registrar o plugin depois do mount
+  faria esse `useGtm()` capturar `undefined` para sempre. Sem `VITE_GTM_ID`, o
+  pacote nunca é buscado. O script do GTM só carrega depois do aceite.
