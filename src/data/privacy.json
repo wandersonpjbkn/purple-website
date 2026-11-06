@@ -1,12 +1,13 @@
 {
-  "updatedAt": "2026-07-06",
+  "updatedAt": "2026-11-06",
   "intro": "Esta Política de Privacidade descreve como a Purple Comunicação coleta, usa e protege os dados pessoais de quem navega neste site ou entra em contato conosco, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018). Este é um texto-base e deve ser revisado por responsável jurídico antes da publicação definitiva.",
   "sections": [
     {
       "title": "1. Quais dados coletamos",
       "paragraphs": [
         "Dados que você nos fornece: nome, e-mail, assunto e mensagem enviados pelo formulário de contato, além de informações que você compartilha ao falar conosco por mensagem ou e-mail.",
-        "Dados coletados automaticamente: informações de navegação e de uso do site coletadas por cookies e ferramentas de análise (por exemplo, Google Tag Manager), quando você autoriza."
+        "Dados coletados automaticamente: informações de navegação e de uso do site coletadas por cookies e ferramentas de análise (por exemplo, Google Tag Manager), quando você autoriza.",
+        "Registros de erro: quando ocorre uma falha no site ou no envio do formulário, registramos informações técnicas sobre o erro no Sentry, serviço de monitoramento de erros, apenas para corrigi-lo. Esse registro não inclui seu endereço IP, cookies nem o conteúdo que você digita, e por isso não depende do seu consentimento de cookies."
       ]
     },
     {
@@ -26,7 +27,7 @@
     {
       "title": "4. Compartilhamento com terceiros",
       "paragraphs": [
-        "Podemos utilizar serviços de terceiros para operar o site e nossas comunicações (por exemplo, provedores de envio de e-mail e de análise de tráfego). Esses parceiros têm acesso aos dados estritamente necessários para a prestação do serviço."
+        "Podemos utilizar serviços de terceiros para operar o site e nossas comunicações (por exemplo, provedores de envio de e-mail, de análise de tráfego e de monitoramento de erros). Esses parceiros têm acesso aos dados estritamente necessários para a prestação do serviço."
       ]
     },
     {

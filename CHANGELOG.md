@@ -57,6 +57,9 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   `SENTRY_AUTH_TOKEN` no build, os source maps sobem ao Sentry e são
   apagados do `dist/`; sem ele, nenhum `.map` é gerado. `@sentry/vue` e
   `@sentry/vite-plugin` fixados em 11.9.0.
+- **Política de Privacidade registra o monitoramento de erros** — seção 1
+  (o que o registro de erro leva e não leva) e seção 4 (monitoramento de
+  erros entre os terceiros).
 - **READMEs dos Workers em inglês** — `workers/mail` e `workers/blog`
   descrevem o que cada Worker faz, rotas, variáveis e secrets, deploy e
   diagnóstico. O README da raiz ganhou `yarn test:e2e` e aponta para eles.

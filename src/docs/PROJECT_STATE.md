@@ -41,8 +41,10 @@ Atualizar ao fechar ou abrir uma pendência.
 - **Logo definitivo** substituindo o placeholder em
   `src/assets/brand/logo-ppl.svg` (ver [`CONTENT_MODEL`](CONTENT_MODEL.md)).
 - **Política de Privacidade:** `privacy.json` é texto-base LGPD e precisa de
-  revisão jurídica; também falta registrar o monitoramento de erros (Sentry,
-  sem dado pessoal — ver [`ARCHITECTURE`](ARCHITECTURE.md)).
+  revisão jurídica.
+- **Sentry sem evento real conferido:** nenhum envio do front nem dos
+  Workers foi visto no painel. Conferir que o primeiro evento chega sem IP,
+  cookies nem conteúdo do formulário, como a Política afirma.
 - **Testes:** smoke de render das páginas Sobre, Abordagem, Contato e Blog;
   a paginação numerada da busca do blog nunca foi exercitada, porque o R2 tem
   menos posts que o tamanho de página.
