@@ -24,6 +24,15 @@ const indexCacheKey = (requestUrl: string): Request => {
   return new Request(`${url.origin}/index`)
 }
 
+async function notifyRender(env: Env): Promise<void> {
+  try {
+    const response = await fetch(env.RENDER_DEPLOY_HOOK, { method: 'POST' })
+    if (!response.ok) console.error('deploy_hook_failed', response.status)
+  } catch (err) {
+    console.error('deploy_hook_failed', err instanceof Error ? err.message : String(err))
+  }
+}
+
 async function handleDeployRequest(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const authToken = request.headers.get('Authorization')
 
@@ -35,11 +44,11 @@ async function handleDeployRequest(request: Request, env: Env, ctx: ExecutionCon
     // Content changed: drop the cached /index (best-effort, local PoP only) and
     // let Render refresh the prerendered /blog SEO snapshot.
     ctx.waitUntil(caches.default.delete(indexCacheKey(request.url)))
-    ctx.waitUntil(fetch(env.RENDER_DEPLOY_HOOK, { method: 'POST' }))
+    ctx.waitUntil(notifyRender(env))
     return json({ success: true, message: 'Deploy disparado no Render com sucesso!' }, 200, '*')
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return json({ success: false, message: 'Erro ao avisar o Render.', error: message }, 500, '*')
+    console.error('deploy_failed', err instanceof Error ? err.message : String(err))
+    return json({ success: false, message: 'Erro ao avisar o Render.' }, 500, '*')
   }
 }
 
@@ -325,8 +334,8 @@ export default {
 
       return json({ success: false, message: 'Rota não encontrada.' }, 404, responseOrigin)
     } catch (err) {
-      const message = err instanceof Error ? err.message : String(err)
-      return json({ success: false, message: 'Erro ao processar posts.', error: message }, 500, origin)
+      console.error('posts_failed', err instanceof Error ? err.message : String(err))
+      return json({ success: false, message: 'Erro ao processar posts.' }, 500, origin)
     }
   },
 }

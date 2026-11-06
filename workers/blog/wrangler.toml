@@ -25,6 +25,3 @@ CDN_URL = "https://cdn.purplecomunicacao.com.br"
 binding = "POSTS_BUCKET"
 bucket_name = "purple-comunica"
 
-# Secrets are NOT set here (this file is committed to git). Set them once via:
-#   yarn wrangler secret put RENDER_DEPLOY_HOOK
-

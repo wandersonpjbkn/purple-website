@@ -70,13 +70,15 @@ export default {
       })
 
       if (!resend.ok) {
+        const failure = (await resend.json().catch(() => ({}))) as { name?: string; message?: string }
+        console.error('resend_failed', resend.status, failure.name, failure.message)
         return json({ success: false, message: 'Erro ao enviar e-mail.' }, 500, origin)
       }
 
       return json({ success: true }, 200, origin)
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      return json({ success: false, message: 'Erro ao processar requisição.', error: message }, 500, origin)
+      console.error('request_failed', error instanceof Error ? error.message : String(error))
+      return json({ success: false, message: 'Erro ao processar requisição.' }, 500, origin)
     }
   },
 }

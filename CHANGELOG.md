@@ -5,6 +5,21 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-11-06
+
+- **Workers: secrets do e-mail e falhas no log** — desde o deploy de
+  2026-07-09 21:21 UTC o Worker de e-mail estava sem `EMAIL_FROM`/`EMAIL_TO`:
+  tinham sido criadas como variáveis no painel, e o `wrangler deploy` as
+  apagou. O Resend recusava o envio e o site mostrava
+  `Erro ao enviar e-mail.`. As duas viraram secrets, e os `wrangler.toml`
+  deixaram de indicar um comando que não existe (`wrangler put`) e uma lista incompleta de
+  secrets. Respostas `500` do mail e do blog não trazem mais a mensagem da
+  exceção (campo `error`, que nenhum consumidor do front lia); o motivo vai
+  para o log do Worker: `resend_failed` (status, `name` e `message` do erro
+  do Resend), `request_failed`, `posts_failed`, `deploy_failed` e
+  `deploy_hook_failed` (hook do Render recusado, depois do `200` do
+  `/deploy`).
+
 ## 2026-11-05
 
 - **Aviso de cookies não esconde mais o foco** — sem o modal, o aviso fixo

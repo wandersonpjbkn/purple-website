@@ -1,11 +1,21 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 import worker from '../index'
 
 import type { Env } from '../types'
 
-const POST_A = ['---', 'title: Post A', 'date: 2026-01-10', 'category: Cultura', '---', 'Corpo do **post A**.'].join('\n')
-const POST_B = ['---', 'title: Post B', 'slug: slug-custom', 'date: 2026-03-01', 'category: RH', '---', 'Corpo do post B.'].join('\n')
+const POST_A = ['---', 'title: Post A', 'date: 2026-01-10', 'category: Cultura', '---', 'Corpo do **post A**.'].join(
+  '\n'
+)
+const POST_B = [
+  '---',
+  'title: Post B',
+  'slug: slug-custom',
+  'date: 2026-03-01',
+  'category: RH',
+  '---',
+  'Corpo do post B.',
+].join('\n')
 
 const makeBucket = (files: Record<string, string>, pageSize = 1000) => ({
   list: vi.fn(({ prefix, cursor }: { prefix: string; cursor?: string }) => {
@@ -21,7 +31,9 @@ const makeBucket = (files: Record<string, string>, pageSize = 1000) => ({
       cursor: truncated ? String(start + pageSize) : undefined,
     })
   }),
-  get: vi.fn((key: string) => Promise.resolve(files[key] === undefined ? null : { text: () => Promise.resolve(files[key]) })),
+  get: vi.fn((key: string) =>
+    Promise.resolve(files[key] === undefined ? null : { text: () => Promise.resolve(files[key]) })
+  ),
 })
 
 const makeEnv = (bucket: ReturnType<typeof makeBucket>): Env =>
@@ -135,7 +147,11 @@ describe('GET /posts/:slug', () => {
 describe('CORS e métodos', () => {
   it('recusa origem não permitida com 403', async () => {
     const env = makeEnv(makeBucket({}))
-    const response = await worker.fetch(request('/index', { headers: { Origin: 'https://malicioso.example' } }), env, makeCtx())
+    const response = await worker.fetch(
+      request('/index', { headers: { Origin: 'https://malicioso.example' } }),
+      env,
+      makeCtx()
+    )
     expect(response.status).toBe(403)
   })
 
@@ -176,8 +192,59 @@ describe('POST /deploy', () => {
 
   it('recusa token inválido com 401', async () => {
     const env = makeEnv(makeBucket({}))
-    const response = await worker.fetch(request('/deploy', { method: 'POST', headers: { Authorization: 'errado' } }), env, makeCtx())
+    const response = await worker.fetch(
+      request('/deploy', { method: 'POST', headers: { Authorization: 'errado' } }),
+      env,
+      makeCtx()
+    )
     expect(response.status).toBe(401)
     expect(cacheStub.delete).not.toHaveBeenCalled()
+  })
+})
+
+describe('falhas inesperadas', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('registra no log quando o hook do Render recusa o deploy', async () => {
+    const pending: Promise<unknown>[] = []
+    const ctx = { waitUntil: vi.fn((p: Promise<unknown>) => pending.push(p)) } as unknown as ExecutionContext
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('erro', { status: 500 })))
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const init = { method: 'POST', headers: { Authorization: 'token-secreto' } }
+
+    await worker.fetch(request('/deploy', init), makeEnv(makeBucket({})), ctx)
+    await Promise.all(pending)
+
+    expect(log).toHaveBeenCalledWith('deploy_hook_failed', 500)
+  })
+
+  it('responde 500 sem o detalhe interno quando o R2 falha e registra o motivo no log', async () => {
+    const bucket = makeBucket({})
+    bucket.list.mockRejectedValue(new Error('R2 indisponível'))
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    const response = await worker.fetch(request('/posts'), makeEnv(bucket), makeCtx())
+
+    expect(response.status).toBe(500)
+    expect(await response.json()).toEqual({ success: false, message: 'Erro ao processar posts.' })
+    expect(log).toHaveBeenCalledWith('posts_failed', 'R2 indisponível')
+  })
+
+  it('responde 500 sem o detalhe interno quando o /deploy falha e registra o motivo no log', async () => {
+    const ctx = {
+      waitUntil: vi.fn(() => {
+        throw new Error('waitUntil indisponível')
+      }),
+    } as unknown as ExecutionContext
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const init = { method: 'POST', headers: { Authorization: 'token-secreto' } }
+
+    const response = await worker.fetch(request('/deploy', init), makeEnv(makeBucket({})), ctx)
+
+    expect(response.status).toBe(500)
+    expect(await response.json()).toEqual({ success: false, message: 'Erro ao avisar o Render.' })
+    expect(log).toHaveBeenCalledWith('deploy_failed', 'waitUntil indisponível')
   })
 })
