@@ -7,6 +7,10 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
 
 ## 2026-11-06
 
+- **Regras de doc viraram trava** — import de composable pelo barrel (lint
+  `no-restricted-imports`), toda rota citada em `pages.json`/`footer.json`
+  existe no router e todo stat publicado cita fonte (testes em
+  `src/data/__tests__`). Só existiam em texto.
 - **Workers: secrets do e-mail e falhas no log** — desde o deploy de
   2026-07-09 21:21 UTC o Worker de e-mail estava sem `EMAIL_FROM`/`EMAIL_TO`:
   tinham sido criadas como variáveis no painel, e o `wrangler deploy` as

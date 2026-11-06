@@ -76,6 +76,25 @@ export default defineConfigWithVueTs(
     },
   },
 
+  {
+    name: 'app/composables-barrel',
+    files: ['src/**/*.{ts,vue}'],
+    ignores: ['src/composables/**', '**/__tests__/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/composables/*'],
+              message: 'Import composables from the @/composables barrel.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   globalIgnores([
     '**/dist/**',
     '**/dist-ssr/**',
