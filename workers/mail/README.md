@@ -27,15 +27,16 @@ On success the response is `{ "success": true }`. The allowed origins live in
 
 ## Configuration
 
-| Name                 | Kind   | Purpose                                    |
-| -------------------- | ------ | ------------------------------------------ |
-| `ALLOWED_ORIGIN`     | var    | Site origin allowed to post                |
-| `ALLOWED_ORIGIN_WWW` | var    | `www` variant of the site origin           |
-| `ALLOWED_ORIGIN_LAN` | local  | Optional LAN origin, `.dev.vars` only      |
-| `TURNSTILE_SECRET`   | secret | Turnstile server-side validation           |
-| `RESEND_API_KEY`     | secret | Resend API authentication                  |
-| `EMAIL_FROM`         | secret | Sender address (domain verified in Resend) |
-| `EMAIL_TO`           | secret | Inbox that receives the contact messages   |
+| Name                 | Kind   | Purpose                                       |
+| -------------------- | ------ | --------------------------------------------- |
+| `ALLOWED_ORIGIN`     | var    | Site origin allowed to post                   |
+| `ALLOWED_ORIGIN_WWW` | var    | `www` variant of the site origin              |
+| `ALLOWED_ORIGIN_LAN` | local  | Optional LAN origin, `.dev.vars` only         |
+| `TURNSTILE_SECRET`   | secret | Turnstile server-side validation              |
+| `RESEND_API_KEY`     | secret | Resend API authentication                     |
+| `EMAIL_FROM`         | secret | Sender address (domain verified in Resend)    |
+| `EMAIL_TO`           | secret | Inbox that receives the contact messages      |
+| `SENTRY_DSN`         | secret | Sentry project DSN; monitoring off without it |
 
 Vars are committed in `wrangler.toml`. **Every other value must be a secret.**
 `wrangler deploy` replaces the Worker's variables with the `[vars]` of
@@ -54,6 +55,7 @@ yarn wrangler secret put TURNSTILE_SECRET
 yarn wrangler secret put RESEND_API_KEY
 yarn wrangler secret put EMAIL_FROM
 yarn wrangler secret put EMAIL_TO
+yarn wrangler secret put SENTRY_DSN
 
 yarn wrangler secret list
 
@@ -71,12 +73,27 @@ yarn ts
 `yarn dev` serves the Worker on `http://localhost:8787`. Tests stub `fetch`, so
 neither Turnstile nor Resend is reached (see `src/docs/TESTING.md`).
 
+## Monitoring (Sentry)
+
+The Worker is wrapped with `withSentry` (`@sentry/cloudflare`, which needs the
+`nodejs_compat` flag in `wrangler.toml`). Options come from
+`workers/shared/monitoring.ts`, shared by both Workers: one Sentry project for
+the whole site, events tagged `service: mail-worker`, no tracing, and data
+collection off (no IP, cookies, headers, request bodies, query strings or
+stack-frame variables). Without `SENTRY_DSN` the SDK stays off, which is the
+case in `yarn dev` and in tests.
+
+Every failure listed under Troubleshooting goes through `reportFailure`: it
+writes the Worker log and sends the same event to Sentry as an error message
+with its details.
+
 ## Troubleshooting
 
 When Resend rejects a message, the client gets `500` with
 `Erro ao enviar e-mail.` and the Worker logs `resend_failed` with Resend's
 status code and the `name` and `message` of its error (never the raw body).
-Watch it live with:
+An unexpected error logs `request_failed`. Both also reach Sentry. Watch the
+log live with:
 
 ```bash
 yarn wrangler tail

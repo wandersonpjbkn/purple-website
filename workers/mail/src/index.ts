@@ -1,14 +1,19 @@
+import * as Sentry from '@sentry/cloudflare'
+
 import { buildEmail } from './emailTemplate'
 import { validateContactRequest } from './validate'
 
 import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
+import { createFailureReporter, monitoringOptions } from '../../shared/monitoring'
 
 import type { ContactRequest, Env } from './types'
 
 const json = (body: unknown, status = 200, origin = '*') => jsonResponse(body, status, origin, 'POST, OPTIONS')
 
-export default {
-  async fetch(request: Request, env: Env) {
+const reportFailure = createFailureReporter(Sentry.captureMessage)
+
+export default Sentry.withSentry((env: Env) => monitoringOptions(env, 'mail-worker'), {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext) {
     const origin = request.headers.get('Origin') ?? ''
     const allowedOrigins = buildAllowedOrigins(env)
 
@@ -71,14 +76,14 @@ export default {
 
       if (!resend.ok) {
         const failure = (await resend.json().catch(() => ({}))) as { name?: string; message?: string }
-        console.error('resend_failed', resend.status, failure.name, failure.message)
+        reportFailure('resend_failed', resend.status, failure.name, failure.message)
         return json({ success: false, message: 'Erro ao enviar e-mail.' }, 500, origin)
       }
 
       return json({ success: true }, 200, origin)
     } catch (error) {
-      console.error('request_failed', error instanceof Error ? error.message : String(error))
+      reportFailure('request_failed', error instanceof Error ? error.message : String(error))
       return json({ success: false, message: 'Erro ao processar requisição.' }, 500, origin)
     }
   },
-}
+})

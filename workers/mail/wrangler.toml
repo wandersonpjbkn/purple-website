@@ -1,6 +1,7 @@
 name = "purple-mail"
 main = "src/index.ts"
 compatibility_date = "2026-07-06"
+compatibility_flags = ["nodejs_compat"]
 
 # Custom domain the front-end points to (VITE_CONTACT_API_URL).
 # Requires purplecomunicacao.com.br to already be on this Cloudflare account.

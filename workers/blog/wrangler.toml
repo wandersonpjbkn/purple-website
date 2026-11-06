@@ -1,6 +1,7 @@
 name = "purple-blog"
 main = "src/index.ts"
 compatibility_date = "2026-07-07"
+compatibility_flags = ["nodejs_compat"]
 
 # Custom domain the front-end points to (VITE_POSTS_API_URL), plus the post and
 # author pages on the main domain (proxied zone), which this Worker serves with

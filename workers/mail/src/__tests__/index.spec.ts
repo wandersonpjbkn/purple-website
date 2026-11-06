@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import * as Sentry from '@sentry/cloudflare'
+
 import worker from '../index'
 
 import type { ContactRequest, Env } from '../types'
@@ -27,6 +29,13 @@ const request = () =>
     body: JSON.stringify(body),
   })
 
+vi.mock('@sentry/cloudflare', async importOriginal => ({
+  ...(await importOriginal<typeof import('@sentry/cloudflare')>()),
+  captureMessage: vi.fn(),
+}))
+
+const ctx = { waitUntil: vi.fn(), passThroughOnException: vi.fn() } as unknown as ExecutionContext
+
 const resendError = { statusCode: 422, name: 'validation_error', message: 'Invalid `from` field.' }
 
 const stubUpstream = () =>
@@ -49,16 +58,20 @@ describe('worker de e-mail', () => {
     stubUpstream()
     const log = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    await worker.fetch(request(), env)
+    await worker.fetch(request(), env, ctx)
 
     expect(log).toHaveBeenCalledWith('resend_failed', 422, 'validation_error', 'Invalid `from` field.')
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('resend_failed', {
+      level: 'error',
+      extra: { details: [422, 'validation_error', 'Invalid `from` field.'] },
+    })
   })
 
   it('responde 500 com mensagem genérica, sem repassar o erro do Resend', async () => {
     stubUpstream()
     vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    const response = await worker.fetch(request(), env)
+    const response = await worker.fetch(request(), env, ctx)
 
     expect(response.status).toBe(500)
     expect(await response.json()).toEqual({ success: false, message: 'Erro ao enviar e-mail.' })
@@ -68,7 +81,7 @@ describe('worker de e-mail', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')))
     const log = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    const response = await worker.fetch(request(), env)
+    const response = await worker.fetch(request(), env, ctx)
 
     expect(response.status).toBe(500)
     expect(await response.json()).toEqual({ success: false, message: 'Erro ao processar requisição.' })

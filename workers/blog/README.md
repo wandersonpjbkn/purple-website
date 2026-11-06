@@ -35,7 +35,7 @@ API routes check `Origin` against the shared allowlist (`workers/shared/http.ts`
 | `src/index.ts`    | Router, R2 listing, frontmatter parsing, edge cache, `/deploy`, posts sitemap                                           |
 | `src/markdown.ts` | Markdown to HTML (`marked`, GFM): heading anchors, tables, CDN images, callouts, escaped raw HTML, URL scheme allowlist |
 | `src/postPage.ts` | Per-post meta tags injected into the SPA shell with `HTMLRewriter`                                                      |
-| `../shared/`      | JSON/CORS helpers and constant-time token comparison, shared with the mail Worker                                       |
+| `../shared/`      | JSON/CORS helpers, constant-time token comparison and Sentry options, shared with the mail Worker                       |
 
 The rendered HTML is safe for the front's `v-html` because sanitizing happens
 here (`markdown.ts`). The full contract is in `src/docs/ARCHITECTURE.md`
@@ -54,6 +54,7 @@ here (`markdown.ts`). The full contract is in `src/docs/ARCHITECTURE.md`
 | `ALLOWED_ORIGIN_LAN` | local  | Optional LAN origin, `.dev.vars` only                          |
 | `BLOG_DEPLOY_TOKEN`  | secret | Token expected in the `Authorization` header of `POST /deploy` |
 | `RENDER_DEPLOY_HOOK` | secret | Render deploy hook URL, refreshes the prerendered `/blog`      |
+| `SENTRY_DSN`         | secret | Sentry project DSN; monitoring off without it                  |
 
 Vars are committed in `wrangler.toml`. **Every other value must be a secret.**
 `wrangler deploy` replaces the Worker's variables with the `[vars]` of
@@ -70,6 +71,7 @@ yarn install
 
 yarn wrangler secret put BLOG_DEPLOY_TOKEN
 yarn wrangler secret put RENDER_DEPLOY_HOOK
+yarn wrangler secret put SENTRY_DSN
 
 yarn wrangler secret list
 
@@ -100,12 +102,28 @@ yarn ts
 `HTMLRewriter` only exists in the Workers runtime, so `sitePages.spec.ts` stubs
 it (see `src/docs/TESTING.md`).
 
+## Monitoring (Sentry)
+
+The Worker is wrapped with `withSentry` (`@sentry/cloudflare`, which needs the
+`nodejs_compat` flag in `wrangler.toml`). Options come from
+`workers/shared/monitoring.ts`, shared by both Workers: one Sentry project for
+the whole site, events tagged `service: blog-worker`, no tracing, and data
+collection off (no IP, cookies, headers, request bodies, query strings or
+stack-frame variables). Without `SENTRY_DSN` the SDK stays off, which is the
+case in `yarn dev` and in tests.
+
+Every failure listed under Troubleshooting goes through `reportFailure`: it
+writes the Worker log and sends the same event to Sentry as an error message
+with its details.
+
 ## Troubleshooting
 
 Error responses never carry exception details. The Worker logs the reason
 instead: `posts_failed` (API routes), `deploy_failed` (`/deploy`) and
 `deploy_hook_failed` (Render hook rejected or unreachable; it runs after
-`/deploy` already answered `200`). Watch them live with:
+`/deploy` already answered `200`) and `site_page_failed` (a `/blog/*` page
+fell back to the Render origin). All of them also reach Sentry. Watch the log
+live with:
 
 ```bash
 yarn wrangler tail

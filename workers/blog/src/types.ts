@@ -8,6 +8,8 @@ export interface Env {
   ALLOWED_ORIGIN_WWW: string
   ALLOWED_ORIGIN_LAN?: string
 
+  SENTRY_DSN?: string
+
   SITE_ORIGIN: string
   CDN_URL?: string
 }

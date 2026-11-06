@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
+import * as Sentry from '@sentry/cloudflare'
+
 import worker from '../index'
 
 import type { Env } from '../types'
@@ -44,6 +46,11 @@ const makeEnv = (bucket: ReturnType<typeof makeBucket>): Env =>
     ALLOWED_ORIGIN: 'https://purplecomunicacao.com.br',
     ALLOWED_ORIGIN_WWW: 'https://www.purplecomunicacao.com.br',
   }) as unknown as Env
+
+vi.mock('@sentry/cloudflare', async importOriginal => ({
+  ...(await importOriginal<typeof import('@sentry/cloudflare')>()),
+  captureMessage: vi.fn(),
+}))
 
 const makeCtx = () => ({ waitUntil: vi.fn() }) as unknown as ExecutionContext
 
@@ -174,8 +181,10 @@ describe('CORS e métodos', () => {
 describe('POST /deploy', () => {
   it('purga o cache do índice e dispara o hook do Render', async () => {
     const env = makeEnv(makeBucket({}))
-    const ctx = makeCtx()
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('ok')))
+    const pending: Promise<unknown>[] = []
+    const ctx = { waitUntil: vi.fn((p: Promise<unknown>) => pending.push(p)) } as unknown as ExecutionContext
+    const hook = vi.fn().mockResolvedValue(new Response('ok'))
+    vi.stubGlobal('fetch', hook)
 
     const response = await worker.fetch(
       request('/deploy', { method: 'POST', headers: { Authorization: 'token-secreto' } }),
@@ -187,7 +196,8 @@ describe('POST /deploy', () => {
     expect(cacheStub.delete).toHaveBeenCalledTimes(1)
     const deleted = cacheStub.delete.mock.calls[0]?.[0] as Request
     expect(new URL(deleted.url).pathname).toBe('/index')
-    expect(ctx.waitUntil).toHaveBeenCalledTimes(2)
+    await Promise.all(pending)
+    expect(hook).toHaveBeenCalledWith('https://render.example/hook', { method: 'POST' })
   })
 
   it('recusa token inválido com 401', async () => {
@@ -230,21 +240,25 @@ describe('falhas inesperadas', () => {
     expect(response.status).toBe(500)
     expect(await response.json()).toEqual({ success: false, message: 'Erro ao processar posts.' })
     expect(log).toHaveBeenCalledWith('posts_failed', 'R2 indisponível')
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('posts_failed', {
+      level: 'error',
+      extra: { details: ['R2 indisponível'] },
+    })
   })
 
   it('responde 500 sem o detalhe interno quando o /deploy falha e registra o motivo no log', async () => {
-    const ctx = {
-      waitUntil: vi.fn(() => {
-        throw new Error('waitUntil indisponível')
-      }),
-    } as unknown as ExecutionContext
+    vi.stubGlobal('caches', {
+      get default() {
+        throw new Error('cache indisponível')
+      },
+    })
     const log = vi.spyOn(console, 'error').mockImplementation(() => {})
     const init = { method: 'POST', headers: { Authorization: 'token-secreto' } }
 
-    const response = await worker.fetch(request('/deploy', init), makeEnv(makeBucket({})), ctx)
+    const response = await worker.fetch(request('/deploy', init), makeEnv(makeBucket({})), makeCtx())
 
     expect(response.status).toBe(500)
     expect(await response.json()).toEqual({ success: false, message: 'Erro ao avisar o Render.' })
-    expect(log).toHaveBeenCalledWith('deploy_failed', 'waitUntil indisponível')
+    expect(log).toHaveBeenCalledWith('deploy_failed', 'cache indisponível')
   })
 })

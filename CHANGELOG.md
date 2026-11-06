@@ -19,6 +19,13 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   do Resend), `request_failed`, `posts_failed`, `deploy_failed` e
   `deploy_hook_failed` (hook do Render recusado, depois do `200` do
   `/deploy`).
+- **Sentry nos Workers** — mail e blog enviam ao projeto `purple-website`
+  (tag `service`) toda falha que já iam para o log, inclusive
+  `site_page_failed`, que antes era um `console.error` sem nome. A coleta de
+  dado pessoal do SDK fica desligada (IP, cookies, cabeçalhos, corpos, query
+  string, variáveis da pilha); sem `SENTRY_DSN` o SDK não liga.
+  `@sentry/cloudflare` fixado em 11.9.0 e flag `nodejs_compat` nos dois
+  `wrangler.toml`.
 - **READMEs dos Workers em inglês** — `workers/mail` e `workers/blog`
   descrevem o que cada Worker faz, rotas, variáveis e secrets, deploy e
   diagnóstico. O README da raiz ganhou `yarn test:e2e` e aponta para eles.

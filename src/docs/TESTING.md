@@ -13,8 +13,8 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 - **130 testes** em 25 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`). `workers/**` é excluído do
   `vitest.config.ts` da raiz — **cada Worker roda sua própria suíte** (ver
-  abaixo): `workers/blog` com 66 testes e `workers/mail` com 9. Total do repo:
-  **205 testes unitários** em 3 suítes, mais 8 cenários e2e.
+  abaixo): `workers/blog` com 66 testes e `workers/mail` com 13. Total do repo:
+  **209 testes unitários** em 3 suítes, mais 8 cenários e2e.
 - **fake-indexeddb** (devDependency) fornece um IndexedDB em memória para os
   testes de `useBlogCache` — o runtime continua sem dependência nova.
 - **Portões de qualidade ✅** (rodar antes de subir):
@@ -65,7 +65,7 @@ O parsing (`parseFrontmatter` e `countWords` em `index.ts`; `slugify` e
 suíte, independente da raiz: `workers/blog/vitest.config.ts` (ambiente
 `node`) — `index.spec.ts` (parsing), `routes.spec.ts` (rotas `/index`,
 `/posts/:slug`, edge cache/ETag/304, CORS, `/deploy` com purge, `500` sem
-detalhe interno e com o motivo no log, falha do hook do Render no log; R2 fake em memória), `security.spec.ts` (`timingSafeEqual`), `postPage.spec.ts` (head do
+detalhe interno e com o motivo no log, falha do hook do Render no log, evento enviado ao Sentry com o SDK em mock; R2 fake em memória), `security.spec.ts` (`timingSafeEqual`), `postPage.spec.ts` (head do
 post: título, canonical, OG com a capa via CDN ou a imagem padrão com
 dimensões, JSON-LD com a chave `jsonld` e sem como fechar a tag) e
 `sitePages.spec.ts` (`/blog/:slug` e `/blog/autor/:slug` no domínio do site:
@@ -97,14 +97,18 @@ mão, simulando um cliente sem JS:
 
 ### `workers/mail` — suíte própria ✅
 
-Mesmo arranjo: `workers/mail/vitest.config.ts` (ambiente `node`), **9 testes**
+Mesmo arranjo: `workers/mail/vitest.config.ts` (ambiente `node`), **13 testes**
 — `validate.spec.ts` (payload completo aceito; falta de nome, de token do
 Turnstile ou de serviço de interesse rejeitada), `emailTemplate.spec.ts`
 (`buildEmail` inclui todos os campos **e escapa HTML** do que veio do
 formulário) e `index.spec.ts` (recusa do Resend registra status, `name` e `message` no
 log e responde `500` com a mensagem genérica, sem repassar o erro; erro
-inesperado idem, com `request_failed`; `fetch` substituído por stub, sem
-rede). Roda com `cd workers/mail && yarn test`.
+inesperado idem, com `request_failed`; o evento também vai ao Sentry, com o
+SDK substituído por mock; `fetch` substituído por stub, sem rede) e
+`monitoring.spec.ts` (opções de `workers/shared/monitoring.ts`: DSN do
+ambiente, tag `service`, coleta de dado pessoal desligada, e `reportFailure`
+gravando o log e enviando ao Sentry; mora na suíte do mail porque
+`workers/shared` não tem suíte própria). Roda com `cd workers/mail && yarn test`.
 Turnstile e Resend reais não são exercitados: dependem de rede e segredos.
 
 ### `e2e/` — smoke Playwright ✅
