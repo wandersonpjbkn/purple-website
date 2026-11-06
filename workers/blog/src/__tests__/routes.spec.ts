@@ -228,6 +228,10 @@ describe('falhas inesperadas', () => {
     await Promise.all(pending)
 
     expect(log).toHaveBeenCalledWith('deploy_hook_failed', 500)
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('deploy_hook_failed', {
+      level: 'error',
+      extra: { details: [500] },
+    })
   })
 
   it('responde 500 sem o detalhe interno quando o R2 falha e registra o motivo no log', async () => {
@@ -260,5 +264,32 @@ describe('falhas inesperadas', () => {
     expect(response.status).toBe(500)
     expect(await response.json()).toEqual({ success: false, message: 'Erro ao avisar o Render.' })
     expect(log).toHaveBeenCalledWith('deploy_failed', 'cache indisponível')
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('deploy_failed', {
+      level: 'error',
+      extra: { details: ['cache indisponível'] },
+    })
+  })
+
+  it('serve a origem para URL de página malformada, sem registrar falha nem enviar ao Sentry', async () => {
+    const origin = vi.fn().mockResolvedValue(new Response('origem'))
+    vi.stubGlobal('fetch', origin)
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const env = { ...makeEnv(makeBucket({})), SITE_ORIGIN: 'https://site.example' } as Env
+
+    const response = await worker.fetch(request('/blog/%E0%A4%A'), env, makeCtx())
+
+    expect(await response.text()).toBe('origem')
+    expect(log).not.toHaveBeenCalled()
+    expect(Sentry.captureMessage).not.toHaveBeenCalled()
+  })
+
+  it('responde 404 a slug de post malformado, sem registrar falha nem enviar ao Sentry', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    const response = await worker.fetch(request('/posts/%E0%A4%A'), makeEnv(makeBucket({})), makeCtx())
+
+    expect(response.status).toBe(404)
+    expect(log).not.toHaveBeenCalled()
+    expect(Sentry.captureMessage).not.toHaveBeenCalled()
   })
 })

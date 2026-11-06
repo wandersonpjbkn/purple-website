@@ -30,9 +30,9 @@ export default Sentry.withSentry((env: Env) => monitoringOptions(env, 'mail-work
     }
 
     try {
-      const body = (await request.json()) as ContactRequest
+      const body = (await request.json().catch(() => null)) as ContactRequest | null
 
-      if (!validateContactRequest(body)) {
+      if (!body || !validateContactRequest(body)) {
         return json({ success: false, message: 'Campos obrigatórios ausentes.' }, 400, origin)
       }
 

@@ -208,17 +208,25 @@ async function handlePostPage(request: Request, env: Env, ctx: ExecutionContext,
   return meta ? renderPostPage(shell, buildPostHead(meta, config), 200) : renderPostPage(shell, notFoundHead(), 404)
 }
 
+const decodeSegment = (segment: string): string | null => {
+  try {
+    return decodeURIComponent(segment)
+  } catch {
+    return null
+  }
+}
+
 async function handleSitePage(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(request.url)
   const isRead = request.method === 'GET' || request.method === 'HEAD'
   if (!isRead || pathname.endsWith('/index.html')) return fetch(toSiteOrigin(request, env))
 
   try {
-    const author = AUTHOR_PAGE_PATH.exec(pathname)?.[1]
-    if (author) return await handleAuthorPage(env, decodeURIComponent(author))
+    const author = decodeSegment(AUTHOR_PAGE_PATH.exec(pathname)?.[1] ?? '')
+    if (author) return await handleAuthorPage(env, author)
 
-    const slug = POST_PAGE_PATH.exec(pathname)?.[1]
-    if (slug) return await handlePostPage(request, env, ctx, decodeURIComponent(slug))
+    const slug = decodeSegment(POST_PAGE_PATH.exec(pathname)?.[1] ?? '')
+    if (slug) return await handlePostPage(request, env, ctx, slug)
   } catch (err) {
     reportFailure('site_page_failed', err instanceof Error ? err.message : String(err))
   }
@@ -327,7 +335,8 @@ export default Sentry.withSentry((env: Env) => monitoringOptions(env, 'blog-work
       const slugMatch = url.pathname.match(/^\/posts\/([^/]+)$/)
       if (slugMatch) {
         const response = await withEdgeCache(request, ctx, POST_TTL_SECONDS, async () => {
-          const post = await getPostBySlug(env, decodeURIComponent(slugMatch[1] ?? ''))
+          const slug = decodeSegment(slugMatch[1] ?? '')
+          const post = slug ? await getPostBySlug(env, slug) : null
           return post ? { body: post } : { body: { success: false, message: 'Post não encontrado.' }, status: 404 }
         })
         return finalize(response, request, responseOrigin)

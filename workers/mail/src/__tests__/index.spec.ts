@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import * as Sentry from '@sentry/cloudflare'
 
@@ -49,9 +49,29 @@ const stubUpstream = () =>
   )
 
 describe('worker de e-mail', () => {
+  beforeEach(() => {
+    vi.mocked(Sentry.captureMessage).mockClear()
+  })
+
   afterEach(() => {
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
+  })
+
+  it('responde 400 a corpo que não é JSON, sem registrar falha nem enviar ao Sentry', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const malformed = new Request('https://mail.purplecomunicacao.com.br/', {
+      method: 'POST',
+      headers: { Origin: env.ALLOWED_ORIGIN },
+      body: '{"contact": {"name": "Ana", "email": "ana@empresa.com"',
+    })
+
+    const response = await worker.fetch(malformed, env, ctx)
+
+    expect(response.status).toBe(400)
+    expect(await response.json()).toEqual({ success: false, message: 'Campos obrigatórios ausentes.' })
+    expect(log).not.toHaveBeenCalled()
+    expect(Sentry.captureMessage).not.toHaveBeenCalled()
   })
 
   it('registra o status e o tipo do erro do Resend quando o envio falha', async () => {
@@ -86,5 +106,9 @@ describe('worker de e-mail', () => {
     expect(response.status).toBe(500)
     expect(await response.json()).toEqual({ success: false, message: 'Erro ao processar requisição.' })
     expect(log).toHaveBeenCalledWith('request_failed', 'network down')
+    expect(Sentry.captureMessage).toHaveBeenCalledWith('request_failed', {
+      level: 'error',
+      extra: { details: ['network down'] },
+    })
   })
 })

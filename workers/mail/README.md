@@ -18,7 +18,7 @@ Wrangler and is not part of the site's `yarn build`.
 | 1    | `OPTIONS` preflight answers right away                                                     | n/a              |
 | 2    | `Origin` is in the allowlist (`ALLOWED_ORIGIN`, `ALLOWED_ORIGIN_WWW`, local dev ports)     | `403`            |
 | 3    | Method is `POST`                                                                           | `405`            |
-| 4    | Required fields are present (`src/validate.ts`)                                            | `400`            |
+| 4    | Body is JSON and required fields are present (`src/validate.ts`)                           | `400`            |
 | 5    | Turnstile token is re-validated server-side (`siteverify`, `TURNSTILE_SECRET`)             | `403`            |
 | 6    | E-mail is sent through the Resend API, body built by `src/emailTemplate.ts` (HTML-escaped) | `500`            |
 
@@ -81,7 +81,9 @@ The Worker is wrapped with `withSentry` (`@sentry/cloudflare`, which needs the
 the whole site, events tagged `service: mail-worker`, no tracing, and data
 collection off (no IP, cookies, headers, request bodies, query strings or
 stack-frame variables). Without `SENTRY_DSN` the SDK stays off, which is the
-case in `yarn dev` and in tests.
+case in `yarn dev` and in tests. `SENTRY_ENVIRONMENT` (optional) tags events,
+defaulting to `production`; set it in `.dev.vars` if you test with a DSN
+locally.
 
 Every failure listed under Troubleshooting goes through `reportFailure`: it
 writes the Worker log and sends the same event to Sentry as an error message

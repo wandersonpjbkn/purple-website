@@ -23,7 +23,11 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   (tag `service`) toda falha que já iam para o log, inclusive
   `site_page_failed`, que antes era um `console.error` sem nome. A coleta de
   dado pessoal do SDK fica desligada (IP, cookies, cabeçalhos, corpos, query
-  string, variáveis da pilha); sem `SENTRY_DSN` o SDK não liga.
+  string, variáveis da pilha); sem `SENTRY_DSN` o SDK não liga, e o ambiente
+  vem de `SENTRY_ENVIRONMENT` (padrão `production`). Para não gastar a cota
+  com bot nem levar o formulário ao Sentry: corpo que não é JSON responde
+  `400` no mail, URL malformada em `/blog/*` cai na origem e em
+  `/posts/:slug` responde `404`, sem registrar falha.
   `@sentry/cloudflare` fixado em 11.9.0 e flag `nodejs_compat` nos dois
   `wrangler.toml`.
 - **READMEs dos Workers em inglês** — `workers/mail` e `workers/blog`
@@ -31,8 +35,7 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   diagnóstico. O README da raiz ganhou `yarn test:e2e` e aponta para eles.
   `PLAYWRIGHT_BROWSERS_PATH` saiu do `.env.example`: nada carrega o `.env`
   no processo do Playwright.
-- **Docs alinhadas ao código** — contagens de testes (130 na raiz, 66 no
-  blog, 9 no mail) e de ícones (26), `ApproachPage`, `isValid` do
+- **Docs alinhadas ao código** — contagens de testes e de ícones (26), `ApproachPage`, `isValid` do
   `useTurnstile`, `faq`/`privacy` em `src/data`, import direto entre
   composables, hook do Render sempre chamado pelo `/deploy`, sitemap com
   10 URLs, fontes do hero e do panorama, lista de alvos de toque e campo de

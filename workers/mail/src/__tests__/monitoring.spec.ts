@@ -23,6 +23,11 @@ describe('monitoringOptions', () => {
     })
   })
 
+  it('usa o ambiente informado e cai em production sem ele', () => {
+    expect(monitoringOptions({ SENTRY_ENVIRONMENT: 'development' }, 'mail-worker').environment).toBe('development')
+    expect(monitoringOptions({}, 'mail-worker').environment).toBe('production')
+  })
+
   it('fica desligado sem DSN', () => {
     expect(monitoringOptions({}, 'mail-worker').dsn).toBeUndefined()
   })

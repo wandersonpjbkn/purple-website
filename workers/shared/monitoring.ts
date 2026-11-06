@@ -1,12 +1,13 @@
 export interface MonitoringEnv {
   SENTRY_DSN?: string
+  SENTRY_ENVIRONMENT?: string
 }
 
 type CaptureMessage = (message: string, context: { level: 'error'; extra: { details: unknown[] } }) => unknown
 
 export const monitoringOptions = (env: MonitoringEnv, service: string) => ({
   dsn: env.SENTRY_DSN,
-  environment: 'production',
+  environment: env.SENTRY_ENVIRONMENT ?? 'production',
   tracesSampleRate: 0,
   initialScope: { tags: { service } },
   dataCollection: {
