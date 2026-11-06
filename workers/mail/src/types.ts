@@ -6,6 +6,9 @@ export interface Env {
   ALLOWED_ORIGIN_WWW: string
   ALLOWED_ORIGIN_LAN?: string
 
+  SENTRY_DSN?: string
+  SENTRY_ENVIRONMENT?: string
+
   EMAIL_FROM: string
   EMAIL_TO: string
 }

@@ -60,36 +60,37 @@ public/              robots.txt, sitemap.xml, favicon.{ico,svg,png}, apple-touch
 `scrollBehavior`. Os nomes declarados nesses módulos são o que `pages.json` e
 `footer.json` referenciam (ver [`CONVENTIONS`](CONVENTIONS.md) § Roteamento).
 
-| path                | name        | página        |
-| ------------------- | ----------- | ------------- |
-| `/`                 | home        | HomePage      |
-| `/sobre`            | about       | AboutPage     |
-| `/abordagem`        | approach    | AbordagemPage |
-| `/servicos`         | services    | ServicesPage  |
-| `/blog`             | blog        | BlogPage      |
-| `/blog/autor/:slug` | blog-author | AuthorPage    |
-| `/blog/:slug`       | blog-post   | BlogPostPage  |
-| `/contato`          | contact     | ContactPage   |
-| `/faq`              | faq         | FaqPage       |
-| `/privacidade`      | privacy     | PrivacyPage   |
-| `/:pathMatch(.*)*`  | not-found   | NotFoundPage  |
+| path                | name        | página       |
+| ------------------- | ----------- | ------------ |
+| `/`                 | home        | HomePage     |
+| `/sobre`            | about       | AboutPage    |
+| `/abordagem`        | approach    | ApproachPage |
+| `/servicos`         | services    | ServicesPage |
+| `/blog`             | blog        | BlogPage     |
+| `/blog/autor/:slug` | blog-author | AuthorPage   |
+| `/blog/:slug`       | blog-post   | BlogPostPage |
+| `/contato`          | contact     | ContactPage  |
+| `/faq`              | faq         | FaqPage      |
+| `/privacidade`      | privacy     | PrivacyPage  |
+| `/:pathMatch(.*)*`  | not-found   | NotFoundPage |
 
 `scrollBehavior` rola ao topo (smooth) a cada navegação (e a âncoras `#id` com offset). São **6 páginas no menu** (Home · Sobre · Abordagem · Serviços · Blog · Contato); `blog-author`/`blog-post` são detalhe; `faq`/`privacy` vivem no rodapé; a catch-all `not-found` renderiza a `NotFoundPage`.
 
 ## Blog via Cloudflare Worker + R2 ✅
 
-O front busca os posts **em runtime**, direto do Worker (`workers/blog/src/index.ts`) —
-não existe mais módulo virtual nem fetch em build-time; o bundle não carrega
-post nenhum e conteúdo novo aparece sem rebuild no Render.
+O front busca os posts **em runtime**, direto do Worker (`workers/blog/src/index.ts`):
+o bundle não carrega post nenhum e conteúdo novo aparece sem rebuild no Render.
 
 - **Endpoints do Worker** (base = `VITE_POSTS_API_URL`, default
   `http://localhost:8787`): `GET /index` → array de **metadados** sem `html`
   (`PostMeta[]`, ordenado por data desc); `GET /posts/:slug` → post completo
   com `html` (404 se não existir); `GET /` e `GET /posts` → array completo
-  **legado** (mantido na transição, remoção futura); `POST /deploy` →
-  autenticado por token, purga o cache do `/index` (PoP local) e dispara o
-  hook do Render — o hook agora é **opcional**: só refresca o snapshot SEO
-  prerenderizado do `/blog`, não o conteúdo. O token é comparado em tempo
+  com `html` (nenhum consumidor no front); `POST /deploy` →
+  autenticado por token, purga o cache do `/index` (PoP local) e sempre
+  dispara o hook do Render (`RENDER_DEPLOY_HOOK`, obrigatório). Chamar o
+  `/deploy` é opcional para quem publica: o conteúdo aparece sem ele quando o
+  cache do `/index` expira; o hook só refresca o snapshot SEO prerenderizado
+  do `/blog`. O token é comparado em tempo
   constante (`timingSafeEqual`, `workers/shared/security.ts`).
 - **Páginas do blog no domínio principal** (`workers/blog/src/postPage.ts`): o
   mesmo Worker atende as rotas `purplecomunicacao.com.br/blog/*` e
@@ -110,8 +111,8 @@ post nenhum e conteúdo novo aparece sem rebuild no Render.
   vez de duplicá-lo. O HTML das páginas não vai para o edge cache (o shell
   muda a cada deploy, com novos hashes de asset).
 - **Módulos compartilhados entre os dois Workers** (`workers/shared/`):
-  `http.ts` (resposta JSON + allowlist de origem/CORS) e `security.ts`
-  (`timingSafeEqual`). Não são um pacote publicado — cada Worker importa por
+  `http.ts` (resposta JSON + allowlist de origem/CORS), `security.ts`
+  (`timingSafeEqual`) e `monitoring.ts` (opções do Sentry e `reportFailure`). Não são um pacote publicado — cada Worker importa por
   caminho relativo.
 - **Edge cache** (`caches.default`): `/index` com `Cache-Control` de 300s e
   `/posts/:slug` de 3600s, ambos com **ETag fraco** (djb2 do JSON) e resposta
@@ -139,7 +140,7 @@ post nenhum e conteúdo novo aparece sem rebuild no Render.
   buscados sob demanda por slug e considerados frescos quando o `stamp`
   gravado bate com o ETag do índice atual. Sem IndexedDB (Safari privado),
   degrada para network-only. Tipos em `src/types/blog.ts`.
-- **Falha de rede é silenciosa por design (agora em runtime):** o estado
+- **Falha de rede é silenciosa por design:** o estado
   mantém o cache (ou lista vazia) com um `console.error`. `BlogPage.vue`
   mostra skeleton enquanto o índice carrega e a mensagem de "não foi possível
   carregar" só depois de `isReady`; `BlogPostPage.vue` tem estados
@@ -157,7 +158,7 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 
 - **`TurnstileWidget.vue`** (`components/forms/`) + **`useTurnstile`** renderizam o widget anti-spam da Cloudflare (`window.turnstile`, script carregado por CDN em `index.html`) usando `VITE_TURNSTILE_SITE_KEY`; emite `verified`/`expired`/`error` com o token do desafio.
 - **`useMail`** (`composables/useMail.ts`) faz `POST` do payload (`contact`, `interest`, `metadata`, `turnstileToken`) para `VITE_CONTACT_API_URL`, com timeout de 10s via `AbortController`.
-- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW` + os `localhost` de dev/preview/prerender, `workers/shared/http.ts`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`) para `purplecomunica@gmail.com`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`), não pelo `yarn build` do site.
+- **`workers/mail/`** — Cloudflare Worker próprio (Wrangler; não faz parte do build do site): valida origem (CORS via `ALLOWED_ORIGIN`/`ALLOWED_ORIGIN_WWW` + os `localhost` de dev/preview/prerender, `workers/shared/http.ts`), valida campos obrigatórios, **revalida o token do Turnstile no servidor** (`siteverify`, com `TURNSTILE_SECRET`) e, se válido, envia o e-mail via **API do Resend** (`RESEND_API_KEY`), de `EMAIL_FROM` para `EMAIL_TO` (`purplecomunica@gmail.com`). Recusa do Resend responde `500` genérico ao cliente e registra no log do Worker o status e os campos `name` e `message` do erro do Resend (`resend_failed`, visível em `wrangler tail`), nunca o corpo cru; erro inesperado também responde só a mensagem genérica e registra o motivo (`request_failed`). O Worker do blog segue a mesma regra (`posts_failed`, `deploy_failed`, e `deploy_hook_failed` quando o hook do Render falha ou responde fora de 2xx, já depois do `200` do `/deploy`): resposta de erro nunca carrega o detalhe da exceção. **Monitoramento:** os dois Workers são envolvidos por `withSentry` (`@sentry/cloudflare`, flag `nodejs_compat`) com as opções de `workers/shared/monitoring.ts` — um projeto Sentry só (`purple-website`), tag `service` (`mail-worker`/`blog-worker`), sem tracing e com coleta de dados desligada (IP, cookies, cabeçalhos, corpos, query string, variáveis da pilha); sem `SENTRY_DSN` o SDK não liga; `SENTRY_ENVIRONMENT` define o ambiente (padrão `production`). Toda falha registrada passa por `reportFailure`, que grava o log e envia o mesmo evento ao Sentry como erro (o blog também registra `site_page_failed` quando uma página `/blog/*` cai para a origem). Entrada malformada de quem chama não é falha e não vai ao Sentry: corpo que não é JSON responde `400` no mail; slug malformado responde `404` em `/posts/:slug` e cai na origem em `/blog/*`. Deploy e secrets são geridos fora deste repo (`wrangler deploy` + `wrangler secret put`, comandos em `workers/mail/README.md`), não pelo `yarn build` do site. Os quatro valores (`TURNSTILE_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO`) são **secrets**: variável criada no painel é apagada pelo próximo `wrangler deploy`.
 - **`useContact`** (`composables/useContact.ts`) continua isolado — só dados estáticos de contato (título/subtítulo/telefone/e-mail/endereço), não tem relação com o envio.
 - **`useServiceInterest`** (`composables/useServiceInterest.ts`) deriva de `services.json` as opções do campo "interesse" (`SERVICE_INTEREST_OPTIONS` = os 7 serviços + os 3 planos + "Orçamento geral"/"Outro") e resolve o `id` vindo da query da rota para o rótulo correspondente (`resolveServiceInterest`) — é o que faz um clique em "Pedir proposta" chegar ao formulário já com o serviço/plano preenchido. Exporta funções puras, não um `useX` com estado.
 - **`BaseCombobox.vue`** (`components/ui/`) renderiza esse campo como combobox filtrável acessível (`role="listbox"`, `aria-activedescendant`, navegação por setas/Enter/Esc, `onClickOutside` para fechar revertendo), no lugar de um `<select>` nativo.
@@ -184,7 +185,7 @@ Fluxo **Turnstile → Worker → Resend**, sem dependência de serviço de e-mai
 - **Build ✅:** `yarn build` = `vue-tsc --build` (type-check) + `vite build` → `dist/` (SPA estática). `yarn dev`, `yarn preview`, `yarn lint`, `yarn format`.
 - **Prerender estático (SEO) ✅:** `yarn prerender` (`scripts/prerender.mjs`) sobe o `dist/` num Chromium headless (`playwright-core`), servido por `scripts/dist-server.mjs` e grava o HTML renderizado de cada rota estática em `dist/<rota>/index.html` (Home, Sobre, Abordagem, Serviços, Contato, Blog, FAQ, Privacidade) e de cada autor (`AUTHOR_ROUTES`, derivada dos `isAuthor` de `team.json` em `scripts/shared.mjs`) em `dist/blog/autor/<slug>/index.html`. Nas rotas `/`, `/blog` e de autor, espera **os cards** (`.post-card`) carregarem do Worker; se não vierem, recarrega a página e tenta uma segunda vez. Persistindo a falha, avisa no log (`[prerender] AVISO: …`) e **segue publicando** — mas remove do snapshot o bloco de erro do blog (`.home-blog-empty`/`.blog-empty`) antes de gravar: estado transitório de runtime não pode congelar num HTML que crawler lê como conteúdo da página. Os scripts do bundle ficam — o SPA assume no cliente e revalida os posts; crawlers recebem o conteúdo + `<title>`/meta por página. **Não** faz parte de `yarn build`: requer um Chromium (auto-detecta em `/opt/pw-browsers/chromium-*/chrome-linux{,64}/chrome`, senão o do `playwright-core`; ou `PRERENDER_CHROMIUM`/`npx playwright install`). Autor sem posts no snapshot **não é gravado** (congelaria "0 posts publicados"); o Worker cai no shell. `yarn build:static` = `build` + `prerender`. Posts de blog (dinâmicos) seguem client-rendered — as meta tags deles vêm do Worker. **Shell intocado ✅:** o plugin `spa-shell` (`vite.config.ts`) emite uma cópia do `index.html` do Vite como `dist/spa-shell.html` no `vite build`, antes de o prerender sobrescrever o `index.html` com o snapshot da home; é a base que o Worker reescreve por post (`Disallow` em `robots.txt`).
 - **Deploy (Render) ✅:** Static Site conectado ao repo, com **auto-deploy** a cada commit na branch. `render.yaml` é infra-as-code/documentação da config (Build Command, `staticPublishPath: dist`, regras de rota, chaves de `envVars` com `sync: false`); como o serviço foi criado pelo painel e **não é gerenciado por Blueprint**, o arquivo não se aplica sozinho — é referência, sincronizável se decidirem migrar para Blueprint. **Regras de rota — a catch-all sozinha não basta:** o Render só ignora as regras quando existe um recurso no **caminho exato** pedido ("Render does not apply redirect or rewrite rules to a path if a resource exists at that path"), e não faz resolução de índice de diretório. `/blog` não é um recurso — o arquivo é `/blog/index.html` — então uma catch-all `/* → /index.html` sozinha engoliria **todas** as rotas e devolveria a home, com o `<title>`, o `canonical` e as OG tags da home, anulando o prerender inteiro. Por isso `render.yaml` declara **um rewrite por rota prerenderizada** (`/sobre → /sobre/index.html` etc.) **antes** da catch-all, que permanece por último para o 404 e para `/blog/:slug`/`/blog/autor/:slug` quando o Worker do blog não intercepta (rota não configurada ou erro); as mesmas regras estão aplicadas no painel. O teste `scripts/__tests__/render-routes.spec.ts` guarda a correspondência entre `ROUTES` e as regras do arquivo. `.node-version` (`22.22.3`) fixa a versão do Node no build (Render nem sempre respeita só o `engines` do `package.json`). Build Command roda o prerender a cada deploy: `(npx playwright-core install-deps chromium || true) && npx playwright-core install chromium && yarn build:static`.
-- **Verificado em produção (2026-09-05) ✅:** as 8 rotas estáticas respondem com o snapshot próprio — `<title>`, `canonical` e OG por rota, sem cair na home. Fecha as duas ressalvas anteriores (regras de rota pendentes no painel; prerender no Render "não validado"), que valeram até 2026-08-20.
+- **Verificado em produção (2026-09-05) ✅:** as 8 rotas estáticas respondem com o snapshot próprio — `<title>`, `canonical` e OG por rota, sem cair na home.
 
 ### O `dist/` é entrada e saída do mesmo laço ✅
 

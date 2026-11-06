@@ -5,6 +5,44 @@ Histórico de decisões e mudanças relevantes do projeto. Os docs em
 menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra em
 [`src/docs/README.md`](src/docs/README.md).
 
+## 2026-11-06
+
+- **Workers: secrets do e-mail e falhas no log** — desde o deploy de
+  2026-07-09 21:21 UTC o Worker de e-mail estava sem `EMAIL_FROM`/`EMAIL_TO`:
+  tinham sido criadas como variáveis no painel, e o `wrangler deploy` as
+  apagou. O Resend recusava o envio e o site mostrava
+  `Erro ao enviar e-mail.`. As duas viraram secrets, e os `wrangler.toml`
+  deixaram de indicar um comando que não existe (`wrangler put`) e uma lista incompleta de
+  secrets. Respostas `500` do mail e do blog não trazem mais a mensagem da
+  exceção (campo `error`, que nenhum consumidor do front lia); o motivo vai
+  para o log do Worker: `resend_failed` (status, `name` e `message` do erro
+  do Resend), `request_failed`, `posts_failed`, `deploy_failed` e
+  `deploy_hook_failed` (hook do Render recusado, depois do `200` do
+  `/deploy`).
+- **Sentry nos Workers** — mail e blog enviam ao projeto `purple-website`
+  (tag `service`) toda falha que já iam para o log, inclusive
+  `site_page_failed`, que antes era um `console.error` sem nome. A coleta de
+  dado pessoal do SDK fica desligada (IP, cookies, cabeçalhos, corpos, query
+  string, variáveis da pilha); sem `SENTRY_DSN` o SDK não liga, e o ambiente
+  vem de `SENTRY_ENVIRONMENT` (padrão `production`). Para não gastar a cota
+  com bot nem levar o formulário ao Sentry: corpo que não é JSON responde
+  `400` no mail, URL malformada em `/blog/*` cai na origem e em
+  `/posts/:slug` responde `404`, sem registrar falha.
+  `@sentry/cloudflare` fixado em 11.9.0 e flag `nodejs_compat` nos dois
+  `wrangler.toml`.
+- **READMEs dos Workers em inglês** — `workers/mail` e `workers/blog`
+  descrevem o que cada Worker faz, rotas, variáveis e secrets, deploy e
+  diagnóstico. O README da raiz ganhou `yarn test:e2e` e aponta para eles.
+  `PLAYWRIGHT_BROWSERS_PATH` saiu do `.env.example`: nada carrega o `.env`
+  no processo do Playwright.
+- **Docs alinhadas ao código** — contagens de testes e de ícones (26), `ApproachPage`, `isValid` do
+  `useTurnstile`, `faq`/`privacy` em `src/data`, import direto entre
+  composables, hook do Render sempre chamado pelo `/deploy`, sitemap com
+  10 URLs, fontes do hero e do panorama, lista de alvos de toque e campo de
+  interesse do formulário. Trechos do `DESIGN_SYSTEM.md` que estavam
+  fora de ordem voltaram para as seções certas, e frases que narravam
+  histórico saíram das docs.
+
 ## 2026-11-05
 
 - **Aviso de cookies não esconde mais o foco** — sem o modal, o aviso fixo

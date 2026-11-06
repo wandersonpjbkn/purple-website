@@ -1,4 +1,7 @@
+import * as Sentry from '@sentry/cloudflare'
+
 import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
+import { createFailureReporter, monitoringOptions } from '../../shared/monitoring'
 import { timingSafeEqual } from '../../shared/security'
 
 import { markdownToHtml } from './markdown'
@@ -7,6 +10,8 @@ import { SHELL_PATH, buildPostHead, buildPostsSitemap, notFoundHead, renderPostP
 import type { Env, BlogPost, PostMeta, RawFrontmatter } from './types'
 
 const CORS_METHODS = 'GET, OPTIONS'
+
+const reportFailure = createFailureReporter(Sentry.captureMessage)
 
 // Deliberately short TTLs: cache.delete on /deploy only purges the local PoP,
 // so other datacenters self-heal within s-maxage.
@@ -24,6 +29,15 @@ const indexCacheKey = (requestUrl: string): Request => {
   return new Request(`${url.origin}/index`)
 }
 
+async function notifyRender(env: Env): Promise<void> {
+  try {
+    const response = await fetch(env.RENDER_DEPLOY_HOOK, { method: 'POST' })
+    if (!response.ok) reportFailure('deploy_hook_failed', response.status)
+  } catch (err) {
+    reportFailure('deploy_hook_failed', err instanceof Error ? err.message : String(err))
+  }
+}
+
 async function handleDeployRequest(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const authToken = request.headers.get('Authorization')
 
@@ -35,11 +49,11 @@ async function handleDeployRequest(request: Request, env: Env, ctx: ExecutionCon
     // Content changed: drop the cached /index (best-effort, local PoP only) and
     // let Render refresh the prerendered /blog SEO snapshot.
     ctx.waitUntil(caches.default.delete(indexCacheKey(request.url)))
-    ctx.waitUntil(fetch(env.RENDER_DEPLOY_HOOK, { method: 'POST' }))
+    ctx.waitUntil(notifyRender(env))
     return json({ success: true, message: 'Deploy disparado no Render com sucesso!' }, 200, '*')
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    return json({ success: false, message: 'Erro ao avisar o Render.', error: message }, 500, '*')
+    reportFailure('deploy_failed', err instanceof Error ? err.message : String(err))
+    return json({ success: false, message: 'Erro ao avisar o Render.' }, 500, '*')
   }
 }
 
@@ -194,19 +208,27 @@ async function handlePostPage(request: Request, env: Env, ctx: ExecutionContext,
   return meta ? renderPostPage(shell, buildPostHead(meta, config), 200) : renderPostPage(shell, notFoundHead(), 404)
 }
 
+const decodeSegment = (segment: string): string | null => {
+  try {
+    return decodeURIComponent(segment)
+  } catch {
+    return null
+  }
+}
+
 async function handleSitePage(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(request.url)
   const isRead = request.method === 'GET' || request.method === 'HEAD'
   if (!isRead || pathname.endsWith('/index.html')) return fetch(toSiteOrigin(request, env))
 
   try {
-    const author = AUTHOR_PAGE_PATH.exec(pathname)?.[1]
-    if (author) return await handleAuthorPage(env, decodeURIComponent(author))
+    const author = decodeSegment(AUTHOR_PAGE_PATH.exec(pathname)?.[1] ?? '')
+    if (author) return await handleAuthorPage(env, author)
 
-    const slug = POST_PAGE_PATH.exec(pathname)?.[1]
-    if (slug) return await handlePostPage(request, env, ctx, decodeURIComponent(slug))
+    const slug = decodeSegment(POST_PAGE_PATH.exec(pathname)?.[1] ?? '')
+    if (slug) return await handlePostPage(request, env, ctx, slug)
   } catch (err) {
-    console.error('[site-page] falha, servindo a origem:', err instanceof Error ? err.message : String(err))
+    reportFailure('site_page_failed', err instanceof Error ? err.message : String(err))
   }
 
   return fetch(toSiteOrigin(request, env))
@@ -270,7 +292,7 @@ const finalize = (response: Response, request: Request, origin: string): Respons
   return new Response(response.body, { status: response.status, headers })
 }
 
-export default {
+export default Sentry.withSentry((env: Env) => monitoringOptions(env, 'blog-worker'), {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url)
     const origin = request.headers.get('Origin') ?? ''
@@ -313,7 +335,8 @@ export default {
       const slugMatch = url.pathname.match(/^\/posts\/([^/]+)$/)
       if (slugMatch) {
         const response = await withEdgeCache(request, ctx, POST_TTL_SECONDS, async () => {
-          const post = await getPostBySlug(env, decodeURIComponent(slugMatch[1] ?? ''))
+          const slug = decodeSegment(slugMatch[1] ?? '')
+          const post = slug ? await getPostBySlug(env, slug) : null
           return post ? { body: post } : { body: { success: false, message: 'Post não encontrado.' }, status: 404 }
         })
         return finalize(response, request, responseOrigin)
@@ -325,11 +348,11 @@ export default {
 
       return json({ success: false, message: 'Rota não encontrada.' }, 404, responseOrigin)
     } catch (err) {
-      const message = err instanceof Error ? err.message : String(err)
-      return json({ success: false, message: 'Erro ao processar posts.', error: message }, 500, origin)
+      reportFailure('posts_failed', err instanceof Error ? err.message : String(err))
+      return json({ success: false, message: 'Erro ao processar posts.' }, 500, origin)
     }
   },
-}
+})
 
 export function parseFrontmatter(raw: string): { fm: RawFrontmatter; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/m)

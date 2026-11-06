@@ -1,14 +1,19 @@
+import * as Sentry from '@sentry/cloudflare'
+
 import { buildEmail } from './emailTemplate'
 import { validateContactRequest } from './validate'
 
 import { jsonResponse, buildAllowedOrigins } from '../../shared/http'
+import { createFailureReporter, monitoringOptions } from '../../shared/monitoring'
 
 import type { ContactRequest, Env } from './types'
 
 const json = (body: unknown, status = 200, origin = '*') => jsonResponse(body, status, origin, 'POST, OPTIONS')
 
-export default {
-  async fetch(request: Request, env: Env) {
+const reportFailure = createFailureReporter(Sentry.captureMessage)
+
+export default Sentry.withSentry((env: Env) => monitoringOptions(env, 'mail-worker'), {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext) {
     const origin = request.headers.get('Origin') ?? ''
     const allowedOrigins = buildAllowedOrigins(env)
 
@@ -25,9 +30,9 @@ export default {
     }
 
     try {
-      const body = (await request.json()) as ContactRequest
+      const body = (await request.json().catch(() => null)) as ContactRequest | null
 
-      if (!validateContactRequest(body)) {
+      if (!body || !validateContactRequest(body)) {
         return json({ success: false, message: 'Campos obrigatórios ausentes.' }, 400, origin)
       }
 
@@ -70,13 +75,15 @@ export default {
       })
 
       if (!resend.ok) {
+        const failure = (await resend.json().catch(() => ({}))) as { name?: string; message?: string }
+        reportFailure('resend_failed', resend.status, failure.name, failure.message)
         return json({ success: false, message: 'Erro ao enviar e-mail.' }, 500, origin)
       }
 
       return json({ success: true }, 200, origin)
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      return json({ success: false, message: 'Erro ao processar requisição.', error: message }, 500, origin)
+      reportFailure('request_failed', error instanceof Error ? error.message : String(error))
+      return json({ success: false, message: 'Erro ao processar requisição.' }, 500, origin)
     }
   },
-}
+})

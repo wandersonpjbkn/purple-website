@@ -16,6 +16,7 @@
     "wrangler": "^4"
   },
   "dependencies": {
+    "@sentry/cloudflare": "11.9.0",
     "marked": "18.1.3"
   }
 }

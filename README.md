@@ -38,8 +38,10 @@ O site sobe sem essas variáveis, mas contato, WhatsApp, imagens via CDN, posts 
 
 O envio do formulário de contato depende também do Worker em `workers/mail/`
 (Cloudflare Worker + Resend), e o blog depende do Worker em `workers/blog/`
-(Cloudflare Worker + R2) — ver [`ARCHITECTURE`](src/docs/ARCHITECTURE.md)
-para como configurá-los e publicá-los.
+(Cloudflare Worker + R2). Configuração, secrets e deploy de cada um estão em
+[`workers/mail/README.md`](workers/mail/README.md) e
+[`workers/blog/README.md`](workers/blog/README.md); o contrato completo, em
+[`ARCHITECTURE`](src/docs/ARCHITECTURE.md).
 
 ## Rodando o projeto
 
@@ -61,6 +63,7 @@ yarn dev
 | `yarn ts`           | `vue-tsc --build`              | Só checagem de tipos                                                      |
 | `yarn test`         | `vitest run`                   | Roda os testes uma vez                                                    |
 | `yarn test:watch`   | `vitest`                       | Roda os testes em modo watch                                              |
+| `yarn test:e2e`     | `playwright test`              | Smoke e2e (sobe `yarn dev` e o Worker do blog; ver `TESTING`)             |
 | `yarn lint`         | `eslint . --fix --cache`       | Lint com autofix                                                          |
 | `yarn format`       | `prettier --write src/`        | Formata o código-fonte                                                    |
 

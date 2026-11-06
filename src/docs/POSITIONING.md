@@ -23,7 +23,7 @@ porte (40+ colaboradores) que não têm área estruturada para isso.**
 ### Onde vive no site
 
 - **Hero** → `src/data/home.json` (`hero`): título com typewriter, stats com
-  valor+sinal e card visual (fontes pendentes de confirmação — ver
+  valor+sinal (com fonte) e card visual (fonte do card pendente — ver
   `PROJECT_STATE.md`).
 - **Oferta** → `src/data/services.json`: catálogo de 7 serviços (formato rico) +
   3 planos recorrentes **sem preço publicado** ("Sob consulta") + projetos
@@ -36,7 +36,7 @@ de dados na Home, blog), sem ser o produto nem o headline. O gatilho legal
 (NR-1) pode ser usado pontualmente como argumento comercial, mas a entrada é
 pelo prático (LinkedIn/comunicados), não pela urgência legal.
 
-## Visão de longo prazo _(inalterada)_
+## Visão de longo prazo
 
 A "consultoria de alinhamento entre pessoas, cultura e comunicação" segue como
 **horizonte de crescimento**, não ponto de entrada. Entra-se pela execução

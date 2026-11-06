@@ -1,6 +1,7 @@
 name = "purple-blog"
 main = "src/index.ts"
 compatibility_date = "2026-07-07"
+compatibility_flags = ["nodejs_compat"]
 
 # Custom domain the front-end points to (VITE_POSTS_API_URL), plus the post and
 # author pages on the main domain (proxied zone), which this Worker serves with
@@ -24,7 +25,4 @@ CDN_URL = "https://cdn.purplecomunicacao.com.br"
 [[r2_buckets]]
 binding = "POSTS_BUCKET"
 bucket_name = "purple-comunica"
-
-# Secrets are NOT set here (this file is committed to git). Set them once via:
-#   yarn wrangler secret put RENDER_DEPLOY_HOOK
 
