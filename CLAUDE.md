@@ -7,19 +7,17 @@ terminal ou web).
 ## Documentação como fonte de verdade
 
 Antes de inspecionar código, propor um plano ou implementar qualquer mudança,
-leia **sempre** a documentação em [`src/docs/*.md`](src/docs/):
+leia **sempre** os docs de [`src/docs/`](src/docs/) que o tipo de mudança pede.
+Eles guardam só o que o código não diz (decisões, regras, produto,
+operação); o mapa completo está em [`src/docs/README.md`](src/docs/README.md).
 
-- `ARCHITECTURE.md`
-- `CONTENT_MODEL.md`
-- `CONVENTIONS.md`
-- `DESIGN_SYSTEM.md`
-- `IMAGES.md`
-- `POSITIONING.md`
-- `PRODUCT_VISION.md`
-- `PROJECT_STATE.md`
-- `README.md`
-- `TESTING.md`
-- `UX_REVIEW.md`
+| Mudança                                            | Ler                                                       |
+| -------------------------------------------------- | --------------------------------------------------------- |
+| Qualquer código (Vue, TS, SCSS, Workers, testes)   | `CONVENTIONS.md`, `TESTING.md`                            |
+| UI, estilo ou componente                           | + `DESIGN_SYSTEM.md`                                      |
+| Blog, Workers, SEO, build, deploy ou consentimento | + `ARCHITECTURE.md`                                       |
+| Conteúdo: posts, `src/data/*.json`, imagens        | `CONTENT_MODEL.md`                                        |
+| Copy, oferta, posicionamento ou decisão de produto | `PRODUCT_VISION.md`, `POSITIONING.md`, `PROJECT_STATE.md` |
 
 O que estiver determinado nesses documentos deve ser tratado como **guideline
 inflingível** — a fonte de verdade do projeto tem prioridade sobre convenções

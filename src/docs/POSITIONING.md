@@ -1,10 +1,8 @@
 # Positioning — Purple Comunicação
 
-> **Status: ✅ validado pela discovery (modelo de negócio, jul/2026).** Este doc
-> registra o posicionamento confirmado. Histórico de hipóteses anteriores:
-> [`CHANGELOG`](../../CHANGELOG.md).
+Posicionamento validado pela discovery do modelo de negócio (jul/2026).
 
-## O posicionamento validado ✅
+## O posicionamento validado
 
 **Execução de comunicação interna + employer branding para empresas de médio
 porte (40+ colaboradores) que não têm área estruturada para isso.**
@@ -20,16 +18,7 @@ porte (40+ colaboradores) que não têm área estruturada para isso.**
 - **Diferencial de fundo:** psicologia (Wanderson) + execução de comunicação
   (Suelen) — "diagnóstico antes da ação" continua sendo o jeito Purple.
 
-### Onde vive no site
-
-- **Hero** → `src/data/home.json` (`hero`): título com typewriter, stats com
-  valor+sinal (com fonte) e card visual (fonte do card pendente — ver
-  `PROJECT_STATE.md`).
-- **Oferta** → `src/data/services.json`: catálogo de 7 serviços (formato rico) +
-  3 planos recorrentes **sem preço publicado** ("Sob consulta") + projetos
-  pontuais.
-
-## Território de marca ✅
+## Território de marca
 
 "Ambientes de trabalho saudáveis" segue como pano de fundo da marca (panorama
 de dados na Home, blog), sem ser o produto nem o headline. O gatilho legal

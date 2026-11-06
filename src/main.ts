@@ -4,6 +4,7 @@ import { createHead } from '@unhead/vue/client'
 import persisteStorage from 'pinia-plugin-persistedstate'
 
 import router from '@/router'
+import { setupSentry } from '@/plugins/sentry'
 import { useConsentStore } from '@/stores/consent'
 
 import App from '@/App.vue'
@@ -11,6 +12,8 @@ import App from '@/App.vue'
 import '@/styles/main.scss'
 
 const app = createApp(App)
+void setupSentry(app)
+
 const pinia = createPinia()
 const head = createHead()
 

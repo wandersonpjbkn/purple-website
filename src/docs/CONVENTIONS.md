@@ -1,8 +1,7 @@
-# Code Conventions — site Purple
+# Convenções — site Purple
 
-> As-built + acordadas com a dupla. Valem para todo código novo; o existente é
-> migrado quando tocado. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
-> Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) · [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
+Regras de código, estilo e UX que valem para todo código novo; o existente é
+migrado quando tocado. O que um lint ou teste já impõe está marcado como tal.
 
 ## Idioma ✅
 
@@ -33,9 +32,7 @@
   `class="button primary"` à mão. **Não se aplica** a controle estrutural sem
   variante de marca (paginação, trigger de accordion, seletor de card, botão
   de menu) — esses são `<button>` com estilo próprio, co-localizado no
-  componente (ver "Posse de estilo" abaixo); é o padrão já seguido em
-  `BlogPagination.vue`, `FaqSection.vue`, `AppHeader.vue`, `CategoryFilter.vue`
-  e `ServicesPage.vue`.
+  componente (ver "Posse de estilo" abaixo).
 - **Tokens primeiro:** cor/espaçamento/tipografia vêm de `_tokens.scss`
   (`--space-*`, `--text-*`, etc.), não valores crus. Ver [`DESIGN_SYSTEM`](DESIGN_SYSTEM.md).
 - **BEM** para classes; **ícones via `BaseIcon`** (nunca emoji no markup ou glifo
@@ -81,9 +78,7 @@ prop:
 
 - **S — Responsabilidade única:** lógica pura (validação, formatação, cálculo)
   vive num **composable testável**, não dentro do `<script setup>` de uma
-  página. Exemplos já seguidos: `useBlog` (filtro/paginação do blog),
-  `useMail` (envio ao Worker), `useContactForm` (validação do formulário de contato).
-  Um componente de página pode **orquestrar** vários composables, mas não deve
+  página. Um componente de página pode **orquestrar** vários composables, mas não deve
   **conter** a lógica que poderia ser testada isoladamente.
 - **O — Aberto/fechado:** estender deve significar **adicionar**, não editar
   código existente. Exemplos: novo ícone = nova entrada em
@@ -99,11 +94,9 @@ prop:
   código morto (ver [Código morto](#código-morto-)).
 - **D — Inversão de dependência:** um módulo de alto nível não deve depender
   direto de um detalhe de baixo nível — a dependência passa por uma
-  abstração local. Exemplo já seguido: `useMail` isola o `fetch()` ao Worker
-  de contato (`VITE_CONTACT_API_URL`) atrás de `{ status, errorMsg, send, reset }`;
-  `useTurnstile` isola o `window.turnstile` (script carregado via CDN) atrás de
-  `{ token, status, isValid, render, reset, remove }` — nenhuma página toca essas APIs de
-  baixo nível diretamente. **Não se aplica** ao acesso a `src/data/*.json` —
+  abstração local (ex.: `useMail` isola o `fetch()` ao Worker de contato,
+  `useTurnstile` isola o `window.turnstile`); nenhuma página toca essas APIs
+  de baixo nível diretamente. **Não se aplica** ao acesso a `src/data/*.json` —
   essa é a fonte única de conteúdo por decisão arquitetural (ver
   [`CONTENT_MODEL`](CONTENT_MODEL.md)), não um detalhe de baixo nível a
   inverter. **Não confundir com [DRY](#sem-duplicação-dry-)** (acima): DRY é
@@ -127,27 +120,89 @@ Em testes, comentar só quando ajuda. Idioma: inglês (ver [Idioma](#idioma-)) �
 **exceto em `__tests__/` e `e2e/`**, onde o comentário pode ser em português
 (bypass documentado em [Idioma](#idioma-)).
 
+## Onde registrar o quê ✅
+
+- **Como o sistema funciona hoje e por quê** → o doc do assunto em
+  `src/docs/` (só o que o código não mostra).
+- **Histórico de decisões e mudanças concluídas** → `CHANGELOG.md`; nenhum
+  doc narra o que mudou.
+- **Decisão de UX que vale para o site** → seção [UX](#ux-) deste doc;
+  **recomendação ainda aberta** → [`PROJECT_STATE`](PROJECT_STATE.md). Nunca
+  citada inline no código.
+- **Regra verificável por máquina** → teste ou lint, não frase.
+
 ## Código morto ✅
 
 Código, dado ou trecho de documentação sem uso é **removido ao ser encontrado**
 — não se mantém "só porque pode ser útil depois". Só permanece se houver um
 comentário explícito justificando por que precisa ficar (ex.: `// keep: ...`).
 
-## Dados ✅
-
-`src/data/*.json` é a fonte de dados estáticos, **fragmentada por domínio**
-(`team`, `panorama`, `approach`, `about`, `footer`, `home`, `services`, `pages`,
-`faq`, `privacy`)
-— sem um arquivo "site" genérico. Toda afirmação factual carrega `source` (ver
-[`CONTENT_MODEL`](CONTENT_MODEL.md)).
-
 ## UX ✅
 
 Toda UI nova ou alterada segue as heurísticas de Nielsen e as leis de UX
 usuais (Jakob, Fitts, Hick, Miller) e contraste WCAG AA. Isso é regra do
 projeto, não algo a justificar comentário por comentário no código — a
-heurística/lei não aparece citada inline; achados e exceções ficam
-registrados em [`UX_REVIEW`](UX_REVIEW.md).
+heurística/lei não aparece citada inline. Decisões de UX que valem para o site
+inteiro ficam abaixo; recomendações ainda abertas, em
+[`PROJECT_STATE`](PROJECT_STATE.md).
+
+### Funil de CTAs (decisão do dono do produto, 2026-07-09)
+
+- **Macro-conversão = WhatsApp, primário; micro I = formulário, secundário;
+  micro II = navegação de conteúdo, terciário.**
+- **Cor não marca tipo de conversão.** `purple` é o primário padrão; `lime` é
+  primário só quando o fundo não comporta `purple` por contraste. A cor é
+  contraste e marca, nunca um código para "isto é o WhatsApp".
+- **Por bloco:** macro + micro juntos (macro em destaque), ou micro I + micro
+  II. Nunca micro em destaque com macro subordinado.
+- **Peso, não contagem:** macro pesa ~2–3× uma micro; tela com muitas macros
+  fica desequilibrada, então nem todo bloco precisa de WhatsApp.
+- **Página-destino não convida à saída.** Contato e Serviços já são destino
+  de conversão: sem CTA de saída acima da dobra ou no mesmo bloco. Por isso o
+  hero de Serviços tem só o WhatsApp e os cards "Pedir proposta" têm só o
+  formulário — intencional, não lacuna.
+
+### Mesma função, mesmo componente
+
+- **Catálogo de serviços é master-detail:** cards seletores de altura fixa e
+  um painel de detalhe único abaixo, com anterior/próximo (mesmo padrão da
+  paginação do blog, sem wraparound). Acordeão por item tem custo alto quando
+  o conteúdo é longo, e um grid de acordeões fazia o card vizinho mudar de
+  posição sob o cursor. A navegação fica fora da `<Transition>` do conteúdo
+  para o foco não se perder a cada troca. O FAQ continua multi-open: lista de
+  uma coluna, respostas curtas.
+- **Card de serviço** é o mesmo `ServiceTeaserCard` na Home, na Abordagem e no
+  fim do post, com o mesmo texto de link ("Conhecer o serviço") cobrindo o
+  card inteiro.
+- **Citação** tem um estilo só no site (post e `TeamCard`): centralizada entre
+  fios, sem caixa tingida nem borda lateral.
+- **Callouts do post são só dois** (`[!summary]` e `[!stat]`): destaque demais
+  anula o destaque. Um terceiro tipo pede revisão desta seção.
+- **Compartilhar o post** usa ícone da rede porque o ícone diz para onde o
+  post vai; o veto à marca do WhatsApp vale só para o CTA de contato. O visual
+  é distinto do `SocialLink` do rodapé: lá o link leva ao perfil da Purple,
+  aqui leva o post para a rede de quem lê.
+
+### Página do post
+
+- **Capa sem título repetido no `alt`:** sem `coverAlt`, `alt=""`; o título já
+  está ao lado.
+- **Tabelas de 3+ colunas viram blocos por linha no celular**, cada célula com
+  o rótulo da coluna. Ressalva conhecida: com `display: block`, alguns leitores
+  de tela (VoiceOver/Safari) deixam de anunciar a tabela; o rótulo textual
+  cobre o significado.
+
+### Verificado e correto — não reabrir
+
+Uma leitura do HTML sem executar JS acusa estes itens como falha, mas eles
+estão certos:
+
+- **H1 rotativo do hero:** as variantes do typewriter são `aria-hidden`, e um
+  `span.sr-only` traz a lista completa.
+- **Links de rede social:** texto vazio com `aria-label` descritivo e ícone
+  SVG (WCAG 2.4.4 atendido).
+- **"Um espaço para pessoas, feito por pessoas":** o espaço duplo é um
+  `<br />` intencional.
 
 ## Vieses cognitivos ✅
 
@@ -162,7 +217,8 @@ deve ser removido, mesmo em refino futuro (é a única exceção à regra de
 
 ## Composables ✅
 
-Todo composable em `src/composables/` é reexportado por
+Imposto por lint (`no-restricted-imports` em `eslint.config.ts`). Todo
+composable em `src/composables/` é reexportado por
 `src/composables/index.ts`; código de aplicação sempre importa de
 `@/composables`, nunca por caminho direto ao arquivo (`@/composables/useX`)
 — exceções: os próprios testes unitários do composable, que podem importar
@@ -172,7 +228,8 @@ barrel do qual ele mesmo faz parte.
 
 ## Roteamento e listas de navegação ✅
 
-- Listas voltadas a menu/rodapé (`pages.json`, `footer.json`'s `legal`)
+- Imposto por teste (`src/data/__tests__/routes.spec.ts`). Listas voltadas a
+  menu/rodapé (`pages.json`, `footer.json`'s `legal`)
   referenciam rotas por **nome** (`routeName`, o `name` já declarado em
   `router/modules/*`), nunca por `path` hardcoded fora de `router/modules/*`
   — resolvido via `RouterLink :to="{ name: routeName }"`. Evita quebra

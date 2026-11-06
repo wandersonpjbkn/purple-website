@@ -1,202 +1,63 @@
-# Design System (as-built) — site Purple
+# Design system — site Purple
 
-> Verdade observada no código em **2026-09-05**. É um site de poucas páginas:
-> isto é um **conjunto de tokens + componentes Base**, não um design system de
-> produto. Histórico de mudanças: [`CHANGELOG`](../../CHANGELOG.md).
-> Relacionados: [`ARCHITECTURE`](ARCHITECTURE.md) ·
-> [`CONTENT_MODEL`](CONTENT_MODEL.md) · [`POSITIONING`](POSITIONING.md).
+Site de poucas páginas: um conjunto de tokens e componentes Base, não um
+design system de produto. Valores de token estão em
+`src/styles/abstracts/_tokens.scss`, mixins em `abstracts/_mixins.scss` e cada
+componente em `src/components/`. Este doc guarda só as regras e os porquês.
 
-Status: ✅ no código · 🟡 parcial/provisório · ⏳ pendente.
+## Tokens
 
-## Fonte única de tokens ✅
+- **Tokens antes de valor cru.** Cor, tipografia, espaçamento, raio e sombra
+  vêm de `_tokens.scss`. Valor fora da escala: decidir entre arredondar para
+  a escala existente ou acrescentar o valor a ela; nunca escrever o valor
+  solto.
+- **Lime é cor de marca co-titular do roxo, não acento pontual:**
+  "resultado / positivo / ação secundária". `--lime` puro não passa contraste
+  como texto sobre fundo claro; para texto e link, `--lime-ink`.
+- **`--section-dark` é mais claro e quente que `--purple-900`**, para
+  suavizar o contraste com as seções claras; `--purple-900` fica para
+  acentos.
+- **Um vermelho só:** `--danger*` é a fonte única do erro de validação.
+- **O passo intermediário de raio e sombra não se chama `-md`:** é o token sem
+  sufixo (`--radius`, `--shadow`).
+- **Fonte local, sem Google Fonts:** Plus Jakarta Sans servida do próprio
+  site, para tirar a cadeia `googleapis.com → gstatic.com` do caminho crítico
+  de renderização.
+- **Breakpoints são mobile-last** (`respond-to` usa `max-width`).
 
-Tudo em **`src/styles/abstracts/_tokens.scss`** como CSS custom properties em
-`:root`. Editar cor/tipografia/espaçamento = editar este arquivo.
+## Proporção 60/30/10 — neutro/roxo/lima
 
-**Cor — paleta de marca**
-`--purple-900 #1a0533` · `-800 #2d0b55` · `-700 #4a1280` · `-600 #6b1faa` ·
-`--purple #8b2fcc` · `-400 #a855d4` · `-100 #f0e4fb` · `-50 #faf5ff`.
-**Lime é cor de marca co-titular do roxo (não acento pontual).** Papel no
-sistema: "resultado / positivo / ação secundária".
-`--lime #c5e22e` · `--lime-dark #9bb81f` · `--lime-light #e8f79a` · `--lime-ink #5f7213`
-(verde escurecido para **texto/link sobre fundo claro** — `--lime` puro não passa
-contraste em texto). Canais RGB para `rgba()`: `--purple-rgb`, `--lime-rgb`,
-`--bg-rgb`, `--on-dark-rgb`.
+Neutro ≈ 60% (fundo, blocos claros, cards, header/footer), roxo ≈ 30% (texto,
+headings, botões primários, poucas seções escuras), lima ≤ 10% (detalhes,
+ícones, sublinhados, botão do CTA; nunca fundo de seção inteira). Conferir com
+`yarn color-audit`, que gera um relatório por rota a partir de screenshot: não
+é teste e não roda na CI.
 
-**Fundo escuro das seções:** `--section-dark #241047` (roxo profundo, porém mais
-quente/claro que `--purple-900`, para suavizar o contraste com as seções claras)
-e `--section-dark-2 #2d1556` (cards de stat). `--purple-900` fica para acentos.
+## Componentes
 
-**Cor — sobre fundo escuro** (`--on-dark #fff`, `--on-dark-strong .88`,
-`--on-dark-muted .74`, `--on-dark-subtle .55`, `--on-dark-surface .06`,
-`--on-dark-border .1` — muted/subtle subidos para passar AA nas legendas).
+- **Um caminho de botão:** CTA com variante de marca é sempre `BaseButton`
+  (regra completa em [`CONVENTIONS`](CONVENTIONS.md)).
+- **Ícone é sempre `BaseIcon`**, nunca emoji nem glifo tipográfico
+  (`→ ← ✕`). Ícone novo é uma entrada nova em `icons.ts`. Glifos de marca são
+  preenchidos; o resto é traço.
+- **`BaseIcon` herda a cor do pai** (`currentColor`): sobre fundo escuro, o
+  contêiner precisa definir `color`, senão o ícone some (escuro sobre escuro).
+- **O glifo do WhatsApp existe só para o compartilhar do post:** o CTA de
+  contato não leva a marca do canal.
+- **Imagem nunca aparece quebrada:** `MediaBlock` e `BaseAvatar` têm fallback
+  (gradiente e inicial).
+- **Estatística sobre fundo escuro tem um padrão só:** `.stat-grid` +
+  `StatCard`. Número de destaque separa valor (cor de texto) e sinal ou sufixo
+  (`%`, `x`) em `--lime`; preservar isso em blocos numéricos novos.
 
-**Texto/superfície:** `--ink`, `--text`, `--muted`, `--subtle` · `--surface`,
-`--surface-soft`, `--bg`, `--bg-alt` · `--border`, `--border-subtle`.
+## Nomes — BEM
 
-**Erro:** `--danger`, `--danger-bg`, `--danger-border`, `--danger-rgb` — fonte
-única do vermelho de validação (formulário de contato); não escrever outro
-vermelho à mão.
+`bloco__elemento--modificador`. Utilitários sem BEM sancionados: `.lead`,
+`.section-eyebrow` (+ `--lime`), `.text-link`, `.section-block` (+ `--alt`,
+`--sm`, `--dark`).
 
-**Tipografia:** `--font: 'Plus Jakarta Sans'` — variable font self-hosted
-(`src/assets/fonts/plus-jakarta-sans-latin{,-italic}.woff2`, `@font-face` em
-`src/styles/base/_fonts.scss`, subset latin cobre acentuação pt-BR), sem Google Fonts: evita a cadeia
-externa `googleapis.com → gstatic.com` no caminho crítico de renderização.
-Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1.08`
-→ `-lg 1.2` → `-xl 1.5` → `-2xl 2` → `-3xl 2.8rem`.
-**Headings** (h1–h4) ficam em `base/_typography.scss` com `clamp()` fluido.
+## Tema escuro
 
-**Espaçamento:** escala `--space-1 .25rem` … `--space-20 5rem` (número = rem×4).
-
-**Forma/elevação:** `--radius-sm` · `--radius` (padrão, 16px) · `--radius-lg`
-· `--radius-xl` · `--radius-pill`; `--shadow-sm` · `--shadow` (padrão) ·
-`--shadow-lg` · `--shadow-glow`. Note que o passo intermediário **não** se
-chama `-md`: é o token sem sufixo.
-
-**Alvo de toque:** `--tap-target-min: 44px` — piso de área clicável para
-controles só-ícone (hambúrguer, redes sociais, limpar busca).
-
-**Layout/movimento:** `--container 1200px`, `--ease`, `--ease-out`.
-
-> Novos estilos devem preferir os tokens sempre que o valor existir na escala.
-> Caso o novo estilo não possua correspondência com a escala, analisar
-> implementação: faz sentido "arredondar" para caber na escala
-> existente ou se faz sentido atualizar a escala existente com o novo
-> valor.
-
-## Proporção 60/30/10 — neutro/roxo/lima ✅ (regra de composição)
-
-Composição visual do site segue **neutro ≈ 60% dominante** (fundo de página,
-blocos claros, cards, header/footer) · **roxo ≈ 30% secundário** (tinta de
-texto/heading, botões primários, um punhado de seções de fundo escuro — CTA,
-panorama, 1 card em destaque) · **lima ≤ 10% acento** (nunca fundo de seção
-inteira — só detalhes, ícones, sublinhados, botão do CTA). Conferir/reconferir
-com `yarn color-audit` (`scripts/color-audit.mjs`): relatório de proporção por
-rota, feito sobre screenshot full-page — **não é teste** (não faz assertions,
-não roda em `yarn test`/CI).
-
-## Arquitetura SCSS ✅
-
-7-1 em `src/styles/`, orquestrada por `main.scss` na ordem
-`abstracts → base → layout → components → sections`. `vite.config.ts` injeta
-`@use "sass:map"` e `@use "sass:math"` em todo `.scss`.
-
-**Posse de estilo:** `src/styles/*` é só para o que é global (reset, tokens,
-layout, primitivos compartilhados). Estilo de um único componente mora **no
-componente** (scoped + `:deep()`), para não virar uma camada frouxa sobrescrita
-por scoped de página. Regra completa em [`CONVENTIONS`](CONVENTIONS.md).
-
-`abstracts/_mixins.scss` traz: `respond-to($bp)` (breakpoints `xl 1280 · lg 1024
-· md 900 · sm 640 · xs 420`, **mobile-last/`max-width`**), `card-surface`,
-`card-hover`, `top-accent-line`, `radial-glow`, `eyebrow`, `line-clamp`.
-
-## Convenção de nomes — BEM ✅
-
-`bloco__elemento--modificador` (ex.: `service-card__icon`,
-`hero__stat-divider`, `section-block--alt`, `feature-pillar--dark`). Utilitários
-sem BEM: `.lead`, `.section-eyebrow` (+ `--lime`), `.text-link`, `.section-block`
-(+ `--alt`, `--sm`).
-
-## Componentes ✅
-
-**ui/**
-
-- `BaseButton` — `<component :is="tag">` polimórfico; `variant: primary |
-secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink"`.
-  **Caminho único de botão** — não escrever `class="button primary"` à mão.
-- `BaseContainer` — wrapper `.container` (largura/centralização).
-- `BaseCombobox` — combobox filtrável acessível (`role="listbox"`,
-  `aria-activedescendant`, setas/Enter/Esc, fecha revertendo por
-  `onClickOutside`), usado no campo "interesse" do formulário de contato no
-  lugar de um `<select>` nativo. Expõe `focus()` para a página levar o foco ao
-  primeiro campo inválido.
-- `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (26 ícones, viewBox 24×24).
-  Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
-  de marca preenchidos** (`fill: true` — `linkedin`, `medium`, `x` e `whatsapp`;
-  `instagram` é stroke). O glifo do WhatsApp existe só para o compartilhar do
-  post: o CTA de contato não leva a marca do canal. Nome desconhecido cai num placeholder neutro (degradação graciosa —
-  coberto por teste). Não introduzir glifos tipográficos (exemplo: `→ ← ✕`).
-  ⚠️ `BaseIcon` **herda a cor do pai** (`currentColor`): sobre fundo escuro, o
-  contêiner precisa setar `color` (ex.: `--lime`/`--on-dark`), senão o ícone
-  herda `--text` e some (escuro-sobre-escuro).
-- `BrandLogo` — logo inline (via `vite-svg-loader`) a partir de
-  `src/assets/brand/logo-ppl.svg`, com fallback ao wordmark textual; recolorível
-  por CSS. Usado no header e no footer.
-- `MediaBlock` — slot de imagem com fallback: `<img>` opcional sobre o gradiente
-  decorativo do `.visual-block`; em erro/ausência do arquivo, só o gradiente
-  aparece (nunca broken image). Assets pendentes em [`IMAGES`](IMAGES.md).
-- `FeaturePillar` (`icon`/`title`/`description` + `dark`), `TeamCard`.
-- `SocialLink` — âncora só-ícone para rede social (`href`/`icon`/`label`,
-  tamanhos `sm|md`); o `md` usa `--tap-target-min`, e o `aria-label` é o que dá
-  nome acessível ao link (o conteúdo é SVG). Usado no rodapé, nos cards de time
-  e na página de autor — os três montam a lista com `socialLinksOf` +
-  `SOCIAL_NETWORK_LABELS` de `src/types/team.ts`, fonte única do rótulo por
-  rede.
-- `BaseAvatar` (`ui/avatar/`) — imagem com **fallback de inicial** ao falhar o
-  load (compõe `AvImage` + `AvInitials`); tamanhos `sm/md/lg/xl`. **Estilo
-  co-localizado** (scoped + `:deep()`), não global.
-
-**sections/** `CtaBanner`, `FaqSection`, `PageHero` · **layout/** `AppHeader`,
-`AppFooter`, `CookieConsent` · **forms/** `TurnstileWidget` · **ui/**
-(+ `StatCard`, `ServiceTeaserCard` — card de serviço da Home, da Abordagem e
-do fim do post; prop `horizontal` para a versão deitada do post; o link
-"Conhecer o serviço" cobre o card inteiro via `.service-card__link::before`,
-que também vale para o card em destaque da Home) · **blog/** `PostCard`, `PostToc` (lista do sumário do post, usada no sumário lateral e no `<details>` do mobile; emite `navigate` ao clicar), `BlogPagination`,
-`CategoryFilter`, `PostShare` (compartilhar o post: links de saída para LinkedIn, X e
-WhatsApp, "Copiar link" e, onde o navegador oferece, a gaveta nativa; todos
-em pílula/círculo de `--tap-target-min`, fundo `--surface`, borda `--border`,
-ícone `--purple-700`. Os dois botões são `BaseButton` `secondary` com esse
-visual por cima. Não usa `SocialLink`: aquele leva ao perfil da Purple, este
-leva o post para a rede de quem lê. Usado junto da autoria no cabeçalho do post
-e no fim do artigo; os links levam UTM de `useShareLinks`).
-
-## Conteúdo do post (`.prose`) ✅
-
-Markdown do blog renderizado em `BlogPostPage.vue` (`.prose`, estilo via
-`:deep()` — conteúdo sem classe própria, exceto o que o parser gera). O card
-branco é o `<article class="post-article">`, que envolve o `.prose` e o
-`<footer>` com o compartilhar; o `.prose` cuida só da tipografia, porque o
-`v-html` substitui tudo o que estiver dentro dele:
-citação (estilo global de `blockquote`, ver abaixo, em `--text-lg` e até
-40ch), `figure`/`figcaption` (`--text-sm`,
-`--muted`), tabelas (empilhadas abaixo de `sm` com 3+ colunas) e **callouts**
-`.callout--summary` (painel `--purple-50` com borda fina `--purple-100`) e
-`.callout--stat` (painel `--section-dark` com traço `--lime` curto no topo),
-ambos com `--radius-lg` nos quatro cantos e sem borda lateral; título em
-etiqueta pílula (`--purple-700` sobre `--purple-100`; `--lime` sobre lima a
-14% no escuro). Não criar um terceiro tipo de callout sem rever
-`UX_REVIEW.md`.
-
-## Stat grid canônico ✅
-
-Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usam
-**um** padrão: o layout `.stat-grid` em `src/styles/sections/_stats.scss`
-(`--stat-cols`, hairline de 1px via `gap` + `--on-dark-border`; modificador
-`--cols-3`) e o card é o componente **`StatCard.vue`** (dono do estilo `.stat-card`
-\+ `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
-(panorama, `--cols-3`) e na Sobre (dados).
-
-## Números com valor + sinal em lime ✅ (convenção de exibição)
-
-Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
-(`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e o
-`span` interno de `stat-card__number`. A barra do card do hero usa gradiente
-`purple → lime`. Preservar ao criar novos blocos numéricos.
-
-## Citação (`blockquote`) ✅
-
-Um estilo para o site inteiro, no elemento, em `base/_typography.scss`: texto
-centralizado entre dois fios `--border`, traço `--lime` curto no meio do fio de
-cima, `--purple-800`, peso 600, sem caixa, sem fundo e sem itálico. Quem usa só
-ajusta tamanho e margem: o corpo do post (`.prose`, `--text-lg`; o `h2` que
-vem logo depois perde o próprio fio, para não empilhar dois) e a frase de cada
-pessoa no `TeamCard` (Home e Sobre, `--text-base`, entre aspas curvas “…”).
-Não voltar à caixa tingida com borda lateral para citação.
-
-## Tema escuro ✅
-
-Não há toggle claro/escuro. "Dark" = seções de fundo `--section-dark` que usam os
-tokens `--on-dark-*` para texto/bordas. O modificador `.section-block--dark`
-(em `layout/_grid.scss`) aplica o fundo **e** o contexto de texto on-dark aos
-filhos (`h2`/`.lead`), evitando repetir cor inline em cada seção escura.
+Não há alternância claro/escuro. "Escuro" é uma seção com fundo
+`--section-dark` e texto `--on-dark-*`; `.section-block--dark` aplica o fundo
+e o contexto de texto aos filhos, para não repetir cor em cada seção.
