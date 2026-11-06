@@ -61,7 +61,7 @@ do card e do topo do post, `title`, `excerpt` e `cover` são o
 
 ## `src/data/*.json` — fragmentado por domínio ✅
 
-Não há mais um `site.json` genérico: cada domínio tem seu arquivo.
+Não há um `site.json` genérico: cada domínio tem seu arquivo.
 
 - **`team.json`** — array de pessoas: `slug`, `name`, `role`, `bio`, `quote`, `avatar`, `social` (`{ linkedin?, instagram?, medium? }`), `isAuthor`, `isVisibleTeamMember`. **Fonte única do time E dos autores do blog**; `isAuthor` marca quem assina posts, `isVisibleTeamMember` controla quem aparece nos cards de time (Home/Sobre).
 - **`panorama.json`** — seção de dados de mercado da Home: `eyebrow`, `title`, `subtitle`, `stats[]`, `context[]`.

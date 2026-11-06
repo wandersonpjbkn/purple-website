@@ -102,7 +102,7 @@ prop:
   abstração local. Exemplo já seguido: `useMail` isola o `fetch()` ao Worker
   de contato (`VITE_CONTACT_API_URL`) atrás de `{ status, errorMsg, send, reset }`;
   `useTurnstile` isola o `window.turnstile` (script carregado via CDN) atrás de
-  `{ token, status, render, reset, remove }` — nenhuma página toca essas APIs de
+  `{ token, status, isValid, render, reset, remove }` — nenhuma página toca essas APIs de
   baixo nível diretamente. **Não se aplica** ao acesso a `src/data/*.json` —
   essa é a fonte única de conteúdo por decisão arquitetural (ver
   [`CONTENT_MODEL`](CONTENT_MODEL.md)), não um detalhe de baixo nível a
@@ -136,7 +136,8 @@ comentário explícito justificando por que precisa ficar (ex.: `// keep: ...`).
 ## Dados ✅
 
 `src/data/*.json` é a fonte de dados estáticos, **fragmentada por domínio**
-(`team`, `panorama`, `approach`, `about`, `footer`, `home`, `services`, `pages`)
+(`team`, `panorama`, `approach`, `about`, `footer`, `home`, `services`, `pages`,
+`faq`, `privacy`)
 — sem um arquivo "site" genérico. Toda afirmação factual carrega `source` (ver
 [`CONTENT_MODEL`](CONTENT_MODEL.md)).
 
@@ -164,8 +165,10 @@ deve ser removido, mesmo em refino futuro (é a única exceção à regra de
 Todo composable em `src/composables/` é reexportado por
 `src/composables/index.ts`; código de aplicação sempre importa de
 `@/composables`, nunca por caminho direto ao arquivo (`@/composables/useX`)
-— exceção: os próprios testes unitários do composable, que podem importar
-direto o módulo que testam.
+— exceções: os próprios testes unitários do composable, que podem importar
+direto o módulo que testam, e um composable que usa outro, que importa pelo
+caminho do arquivo (`useBlog` → `@/composables/useBlogData`), sem passar pelo
+barrel do qual ele mesmo faz parte.
 
 ## Roteamento e listas de navegação ✅
 

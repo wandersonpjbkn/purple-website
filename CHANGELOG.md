@@ -24,6 +24,14 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   diagnóstico. O README da raiz ganhou `yarn test:e2e` e aponta para eles.
   `PLAYWRIGHT_BROWSERS_PATH` saiu do `.env.example`: nada carrega o `.env`
   no processo do Playwright.
+- **Docs alinhadas ao código** — contagens de testes (130 na raiz, 66 no
+  blog, 9 no mail) e de ícones (26), `ApproachPage`, `isValid` do
+  `useTurnstile`, `faq`/`privacy` em `src/data`, import direto entre
+  composables, hook do Render sempre chamado pelo `/deploy`, sitemap com
+  10 URLs, fontes do hero e do panorama, lista de alvos de toque e campo de
+  interesse do formulário. Trechos do `DESIGN_SYSTEM.md` que estavam
+  fora de ordem voltaram para as seções certas, e frases que narravam
+  histórico saíram das docs.
 
 ## 2026-11-05
 

@@ -134,7 +134,9 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
 ### Acessibilidade / heurísticas de Nielsen
 
 - **Opções do formulário de contato não batiam com o catálogo real** —
-  select agora renderiza `services.catalog` diretamente.
+  o campo de interesse (`BaseCombobox`) lista `SERVICE_INTEREST_OPTIONS`
+  (`useServiceInterest`): os 7 serviços do catálogo, os 3 planos,
+  "Orçamento geral" e "Outro".
 - **Contraste insuficiente** (botão WhatsApp do hero de Contato; 3 vermelhos
   de erro diferentes) — corrigidos; erro unificado em tokens
   `--danger`/`--danger-bg`/`--danger-border`/`--danger-rgb`.
@@ -142,8 +144,8 @@ Status: ✅ corrigido · ⏳ recomendação registrada, não implementada (decis
   rodapé e Contato** — corrigidos.
 - **Alvos de toque abaixo de 44×44px** — token `--tap-target-min` criado em
   `_tokens.scss` e aplicado em `AppHeader.vue` (hambúrguer), `BlogPage.vue`
-  (limpar busca), `AppFooter.vue` (cookies + redes sociais),
-  `ServicesPage.vue` ("Saiba mais").
+  (limpar busca), `SocialLink.vue` (redes sociais, inclusive no rodapé),
+  `ServicesPage.vue`, `BlogPostPage.vue` e `PostShare.vue`.
 - **Sem tecla Esc / clique-fora no menu mobile** — Esc fecha o menu;
   clique-fora usa `onClickOutside` do `@vueuse/core` (primeiro uso real da
   dependência no projeto).
@@ -371,7 +373,7 @@ uma auditoria futura não gastar ciclo reabrindo:
   visitante com JS vê a `NotFoundPage`, o crawler vê a home. Limitação de
   static host no Render. **Exceção:** `/blog/<slug-inexistente>` responde 404
   de verdade (Worker do blog, ver `ARCHITECTURE.md`).
-- **Fontes fracas no `panorama.json`** — parcialmente endereçado: dois dos seis
+- **Fontes fracas no `panorama.json`** — parcialmente endereçado: três dos seis
   stats já citam referência rastreável ("Weehub; Panorama do Bem-Estar
   Corporativo 2026", "ISMA-Brasil, 2019"). Seguem genéricos "Pesquisa Global,
   2024" (em dois stats) e "Panorama Corporativo 2024", e em `context` continuam
@@ -395,7 +397,7 @@ uma auditoria futura não gastar ciclo reabrindo:
 - **Categoria "Planejamento" sem serviço associado** — `services.json` não
   tem nenhum `catalog[].blogCategories` contendo `"Planejamento"`, categoria
   real de um dos 4 posts publicados ("Calendário de datas especiais..."),
-  que por isso é o único hoje sem o CTA contextual "Como a Purple ajuda".
+  que por isso é o único hoje sem o card de serviço no fim do post.
   Aceito como está por ora — gap de conteúdo/dado, não de código.
 - ~~`markdownToHtml` não escapa HTML bruto~~ — resolvido em 2026-11-05: o
   parser (`marked`) escapa todo HTML cru e descarta links/imagens com esquema

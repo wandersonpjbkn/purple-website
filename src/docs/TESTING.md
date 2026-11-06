@@ -10,11 +10,11 @@ Status: ✅ existe no repo · ⏳ proposto (não existe ainda).
 
 - **Runner: Vitest 3** (`vitest.config.ts` próprio, standalone) + **@vue/test-utils**
   - **jsdom**. Roda com **`yarn test`** (`vitest run`) ou `yarn test:watch`.
-- **103 testes** em 22 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
+- **130 testes** em 25 arquivos `*.spec.ts`, co-locados em `__tests__/` (já
   excluídos do build app pelo `tsconfig.app.json`). `workers/**` é excluído do
   `vitest.config.ts` da raiz — **cada Worker roda sua própria suíte** (ver
-  abaixo): `workers/blog` com 63 testes e `workers/mail` com 6. Total do repo:
-  **172 testes unitários** em 3 suítes, mais 8 cenários e2e.
+  abaixo): `workers/blog` com 66 testes e `workers/mail` com 9. Total do repo:
+  **205 testes unitários** em 3 suítes, mais 8 cenários e2e.
 - **fake-indexeddb** (devDependency) fornece um IndexedDB em memória para os
   testes de `useBlogCache` — o runtime continua sem dependência nova.
 - **Portões de qualidade ✅** (rodar antes de subir):
@@ -64,14 +64,14 @@ O parsing (`parseFrontmatter` e `countWords` em `index.ts`; `slugify` e
 `markdownToHtml` em `markdown.ts`) roda no Worker, não no front-end — por isso tem sua própria
 suíte, independente da raiz: `workers/blog/vitest.config.ts` (ambiente
 `node`) — `index.spec.ts` (parsing), `routes.spec.ts` (rotas `/index`,
-`/posts/:slug`, edge cache/ETag/304, CORS, `/deploy` com purge; R2 fake em
-memória), `security.spec.ts` (`timingSafeEqual`), `postPage.spec.ts` (head do
+`/posts/:slug`, edge cache/ETag/304, CORS, `/deploy` com purge, `500` sem
+detalhe interno e com o motivo no log, falha do hook do Render no log; R2 fake em memória), `security.spec.ts` (`timingSafeEqual`), `postPage.spec.ts` (head do
 post: título, canonical, OG com a capa via CDN ou a imagem padrão com
 dimensões, JSON-LD com a chave `jsonld` e sem como fechar a tag) e
 `sitePages.spec.ts` (`/blog/:slug` e `/blog/autor/:slug` no domínio do site:
 post do índice, post recém-publicado fora do índice em cache, 404, repasse à
 origem quando o shell falha, métodos/arquivos repassados, snapshot de autor e
-fallback para o shell; `/sitemap-posts.xml` gerado do R2), **63 testes**. `index.spec.ts` cobre o parser:
+fallback para o shell; `/sitemap-posts.xml` gerado do R2), **66 testes**. `index.spec.ts` cobre o parser:
 `data-label` das tabelas, imagens (CDN, `<figure>` com legenda, `#LxA`,
 esquema perigoso descartado), blockquote de várias linhas num bloco só,
 parágrafo depois de tabela/lista envolvido em `<p>`, `#` rebaixado,
@@ -81,9 +81,7 @@ desconhecido vira citação).
 
 **Regressão de conteúdo publicado:** ao mexer no parser, comparar o HTML de
 todos os posts do R2 antes × depois (HEAD × working tree) e explicar cada
-diferença. A troca da regex pelo `marked` (2026-11-05) mudou só aspas
-escapadas no texto (`"` → `&quot;`, render idêntico) e parágrafos depois de
-tabela/lista, que antes saíam sem `<p>`. Roda com `cd workers/blog && yarn test`.
+diferença. Roda com `cd workers/blog && yarn test`.
 
 O `HTMLRewriter` só existe no runtime do Workers: em `sitePages.spec.ts` ele é
 um fake que registra o que cada handler faria. A reescrita real é conferida à
@@ -99,13 +97,15 @@ mão, simulando um cliente sem JS:
 
 ### `workers/mail` — suíte própria ✅
 
-Mesmo arranjo: `workers/mail/vitest.config.ts` (ambiente `node`), **6 testes**
+Mesmo arranjo: `workers/mail/vitest.config.ts` (ambiente `node`), **9 testes**
 — `validate.spec.ts` (payload completo aceito; falta de nome, de token do
-Turnstile ou de serviço de interesse rejeitada) e `emailTemplate.spec.ts`
+Turnstile ou de serviço de interesse rejeitada), `emailTemplate.spec.ts`
 (`buildEmail` inclui todos os campos **e escapa HTML** do que veio do
-formulário). Roda com `cd workers/mail && yarn test`. A revalidação do
-Turnstile no `siteverify` e a chamada ao Resend não são exercitadas —
-dependem de rede/segredos.
+formulário) e `index.spec.ts` (recusa do Resend registra status, `name` e `message` no
+log e responde `500` com a mensagem genérica, sem repassar o erro; erro
+inesperado idem, com `request_failed`; `fetch` substituído por stub, sem
+rede). Roda com `cd workers/mail && yarn test`.
+Turnstile e Resend reais não são exercitados: dependem de rede e segredos.
 
 ### `e2e/` — smoke Playwright ✅
 
@@ -127,7 +127,7 @@ envio e o foco vai para o primeiro campo inválido).
   host também é interceptado e respondido com um mock (`{ success: true }`),
   então o "envio simulado" nunca sai do browser.
 - `e2e/tsconfig.json` (referenciado em `tsconfig.json`) dá ao smoke o mesmo
-  lib DOM do app; `vitest.config.ts` já excluía `e2e/**` desde antes.
+  lib DOM do app; `vitest.config.ts` exclui `e2e/**`.
 
 ### Ainda pendente ⏳
 

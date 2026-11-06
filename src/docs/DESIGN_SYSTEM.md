@@ -29,7 +29,7 @@ e `--section-dark-2 #2d1556` (cards de stat). `--purple-900` fica para acentos.
 
 **Cor — sobre fundo escuro** (`--on-dark #fff`, `--on-dark-strong .88`,
 `--on-dark-muted .74`, `--on-dark-subtle .55`, `--on-dark-surface .06`,
-`--on-dark-border .1` — muted/subtle subidos para passar AA nas legendas) e marca
+`--on-dark-border .1` — muted/subtle subidos para passar AA nas legendas).
 
 **Texto/superfície:** `--ink`, `--text`, `--muted`, `--subtle` · `--surface`,
 `--surface-soft`, `--bg`, `--bg-alt` · `--border`, `--border-subtle`.
@@ -40,9 +40,8 @@ vermelho à mão.
 
 **Tipografia:** `--font: 'Plus Jakarta Sans'` — variable font self-hosted
 (`src/assets/fonts/plus-jakarta-sans-latin{,-italic}.woff2`, `@font-face` em
-`src/styles/base/_fonts.scss`, subset latin cobre acentuação pt-BR). Não vem
-mais do Google Fonts — evita a cadeia externa `googleapis.com → gstatic.com`
-no caminho crítico de renderização.
+`src/styles/base/_fonts.scss`, subset latin cobre acentuação pt-BR), sem Google Fonts: evita a cadeia
+externa `googleapis.com → gstatic.com` no caminho crítico de renderização.
 Escala de corpo/UI: `--text-xs .75rem` → `-sm .875` → `-base 1` → `-lead 1.08`
 → `-lg 1.2` → `-xl 1.5` → `-2xl 2` → `-3xl 2.8rem`.
 **Headings** (h1–h4) ficam em `base/_typography.scss` com `clamp()` fluido.
@@ -112,7 +111,7 @@ secondary | ghost | lime`; `.button--lg`; só passa `to` quando `tag="RouterLink
   lugar de um `<select>` nativo. Expõe `focus()` para a página levar o foco ao
   primeiro campo inválido.
 - `BaseIcon` — **sistema de ícones real ✅**: renderiza por `name` a partir do
-  mapa tipado **`src/components/ui/icons.ts`** (23 ícones, viewBox 24×24).
+  mapa tipado **`src/components/ui/icons.ts`** (26 ícones, viewBox 24×24).
   Famílias: stroke (`currentColor`, width 1.75, caps/joins redondos) e **glifos
   de marca preenchidos** (`fill: true` — `linkedin`, `medium`, `x` e `whatsapp`;
   `instagram` é stroke). O glifo do WhatsApp existe só para o compartilhar do
@@ -175,14 +174,15 @@ Estatísticas sobre fundo escuro (número + sufixo + label [+ body] + fonte) usa
 **um** padrão: o layout `.stat-grid` em `src/styles/sections/_stats.scss`
 (`--stat-cols`, hairline de 1px via `gap` + `--on-dark-border`; modificador
 `--cols-3`) e o card é o componente **`StatCard.vue`** (dono do estilo `.stat-card`
-
-- `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
-  (panorama, `--cols-3`) e na Sobre (dados).
+\+ `--highlight`; props `number/suffix/label/body/source/highlight`). Usado na Home
+(panorama, `--cols-3`) e na Sobre (dados).
 
 ## Números com valor + sinal em lime ✅ (convenção de exibição)
 
 Números de destaque separam **valor** (cor de texto padrão) e **sinal/sufixo**
 (`%`, `x`) em `var(--lime)` — classes `hero__stat-sign`, `hero__card-sign` e o
+`span` interno de `stat-card__number`. A barra do card do hero usa gradiente
+`purple → lime`. Preservar ao criar novos blocos numéricos.
 
 ## Citação (`blockquote`) ✅
 
@@ -193,9 +193,6 @@ ajusta tamanho e margem: o corpo do post (`.prose`, `--text-lg`; o `h2` que
 vem logo depois perde o próprio fio, para não empilhar dois) e a frase de cada
 pessoa no `TeamCard` (Home e Sobre, `--text-base`, entre aspas curvas “…”).
 Não voltar à caixa tingida com borda lateral para citação.
-
-`span` interno de `stat-card__number`. A barra do card do hero usa gradiente
-`purple → lime`. Preservar ao criar novos blocos numéricos.
 
 ## Tema escuro ✅
 
