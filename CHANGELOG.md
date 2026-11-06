@@ -45,6 +45,18 @@ menção ao que já mudou/foi decidido pertence aqui, não lá — ver a regra e
   `/posts/:slug` responde `404`, sem registrar falha.
   `@sentry/cloudflare` fixado em 11.9.0 e flag `nodejs_compat` nos dois
   `wrangler.toml`.
+- **Sentry no front** — o site envia ao mesmo projeto `purple-website`
+  (tag `service: frontend`) os erros não tratados, só no host de
+  `VITE_SITE_URL`: o snapshot do prerender (`localhost:4180`), o
+  `vite preview` e o modo dev não enviam. Coleta de dado pessoal desligada
+  como nos Workers e sem as props dos componentes junto do erro
+  (`attachProps`), sem tracing, sem a sessão por visita
+  (`BrowserSession`) e só com erros vindos dos scripts do próprio site
+  (`allowUrls`). O SDK é carregado sob demanda: no import estático ele
+  dobrava o chunk de entrada (36,7 → 76,3 KB gzip). Com
+  `SENTRY_AUTH_TOKEN` no build, os source maps sobem ao Sentry e são
+  apagados do `dist/`; sem ele, nenhum `.map` é gerado. `@sentry/vue` e
+  `@sentry/vite-plugin` fixados em 11.9.0.
 - **READMEs dos Workers em inglês** — `workers/mail` e `workers/blog`
   descrevem o que cada Worker faz, rotas, variáveis e secrets, deploy e
   diagnóstico. O README da raiz ganhou `yarn test:e2e` e aponta para eles.

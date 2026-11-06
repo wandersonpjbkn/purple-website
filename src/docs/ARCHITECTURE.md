@@ -68,12 +68,23 @@ SPA e deixa o `<body>` intocado.
   registrar, para bot não gastar a cota nem levar dado do formulário ao
   Sentry.
 - **Sentry sem dado pessoal.** Um projeto só para o site, separado por tag
-  `service`, sem tracing e com a coleta do SDK desligada (IP, cookies,
-  cabeçalhos, corpos, query string, variáveis da pilha). Por isso fica fora
-  do aviso de cookies, e a Política de Privacidade deve registrar o
-  monitoramento de erros (pendente, ver [`PROJECT_STATE`](PROJECT_STATE.md)).
-  Decisão do dono (2026-11-06): "esses dados não são importantes para
-  o fluxo e é bom ter isso registrado na politica".
+  `service` (`mail-worker`, `blog-worker`, `frontend`), sem tracing e com a
+  coleta do SDK desligada (IP, cookies, cabeçalhos, corpos, query string,
+  variáveis da pilha). Por isso fica fora do aviso de cookies, e a Política
+  de Privacidade registra o monitoramento de erros. Decisão do dono
+  (2026-11-06): "esses dados não são importantes para o fluxo e é bom ter
+  isso registrado na politica". No front, a mesma razão tira a sessão por
+  visita (`BrowserSession`), porque só erro é enviado e nunca contagem de
+  visitas, e as props dos componentes (`attachProps`), que levariam o valor
+  de um campo do formulário junto do erro.
+- **No front, o Sentry só liga no host de `VITE_SITE_URL`.** O prerender
+  roda o build de produção num Chromium em `localhost`; sem essa guarda, o
+  erro do snapshot (Worker fora do ar, por exemplo) iria ao Sentry como se
+  fosse de visitante. O SDK é importado sob demanda para não pesar no chunk
+  de entrada de quem nunca o usa.
+- **Source map só com `SENTRY_AUTH_TOKEN`.** `hidden` só tira o comentário
+  do bundle; o `.map` em `dist/` seria servido publicamente pelo Render.
+  Por isso ele só é gerado quando o plugin vai subi-lo e apagá-lo.
 - **"Pedir proposta" chega com o serviço preenchido:** o `id` vai na query da
   rota e `useServiceInterest` o resolve para o rótulo do campo.
 

@@ -33,6 +33,10 @@ cp .env.example .env
 | `VITE_BASE_ADDRESS`       | Endereço exibido na página de Contato                             |
 | `VITE_CDN_URL`            | Base da CDN para imagens de blog/time                             |
 | `VITE_POSTS_API_URL`      | URL do Cloudflare Worker que serve os posts do blog (R2)          |
+| `VITE_SENTRY_DSN`         | DSN do Sentry; só envia no host de `VITE_SITE_URL`                |
+
+No build do Render, `SENTRY_AUTH_TOKEN` (sem prefixo `VITE_`, fica fora do
+bundle) sobe os source maps ao Sentry; sem ele, o build não gera `.map`.
 
 O site sobe sem essas variáveis, mas contato, WhatsApp, imagens via CDN, posts do blog e analytics ficam degradados.
 
